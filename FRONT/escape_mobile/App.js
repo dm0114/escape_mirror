@@ -10,7 +10,8 @@ import MainScreen from './src/screens/MainScreen';
 
 const RootContainer = styled.View`
   flex: 1;
-  margin: 20px 20px 0px 20px;
+  padding: 20px 20px 0px 20px;
+  background-color: #212121;
 `
 
 export default function App() {
