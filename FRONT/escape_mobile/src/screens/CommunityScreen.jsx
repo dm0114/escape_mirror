@@ -47,5 +47,6 @@ const MainReservationView = styled.View`
 `
 
 const MainText = styled.Text`
+  font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
 `
