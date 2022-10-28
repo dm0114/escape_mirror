@@ -1,21 +1,31 @@
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+
+import { ThemeProvider } from 'styled-components';
+import styled from 'styled-components/native';
+import theme from './theme';
+
+import LoadingScreen from './src/components/LoadingScreen';
+import MainScreen from './src/screens/MainScreen';
+
+const RootContainer = styled.View`
+  flex: 1;
+  margin: 20px 20px 0px 20px;
+`
 
 export default function App() {
-  return (
-    <View style={styles.container}>
+  const [loading, SetLoading] = useState(false)
+
+  useEffect(() => {
+    // api 함수 호출
+  }, [])
+
+  return loading ? <LoadingScreen /> : (
+    <ThemeProvider theme={theme}>
+      <RootContainer>
+        <MainScreen />
+      </RootContainer>
       <StatusBar style="auto" />
-      <Text>제발nnnnㅠ</Text>
-    </View>
+    </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
