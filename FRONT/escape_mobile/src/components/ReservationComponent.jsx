@@ -20,7 +20,7 @@ export default function ReservationComponent() {
 const ReservationContainer = styled.View`
   ${({ theme }) => theme.common.flexCenterRow}
   
-  background-color: green;
+  background-color: #fff;
   border-radius: 8px;
   margin-bottom: 12px;
   padding: 20px;
@@ -37,11 +37,15 @@ const TimeContainer = styled.View`
 `
 
 const ThemeTitle = styled.Text`
+  font-family: "SUIT-SemiBold";
   font-size: ${({ theme }) => theme.fontSizes.body};
+  margin-bottom: 4px;
 `
 const CafeTitle = styled.Text`
+  font-family: "SUIT-Medium";
   font-size: ${({ theme }) => theme.fontSizes.caption1};
 `
 const TimeText = styled.Text`
+  font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
 `
