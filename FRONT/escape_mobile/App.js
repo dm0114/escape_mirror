@@ -6,7 +6,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Text>제발nnnnㅠ</Text>
+      <Text>드디어 된다ㅏㅏㅏ</Text>
     </View>
   );
 }
