@@ -10,7 +10,7 @@ export default function SearchScreen() {
 
   return loading ? <LoadingScreen /> : (
     <Container>
-      <SearchView flex={1}><Text>1</Text></SearchView>
+      <SearchView flex={1}></SearchView>
       <SearchView flex={1}></SearchView>
       <SearchView flex={1}></SearchView>
     </Container>

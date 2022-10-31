@@ -12,6 +12,9 @@ import MainScreen from './src/screens/MainScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import CommunityScreen from './src/screens/CommunityScreen';
 
+import Login from './src/screens/login/test';
+import FindPwScreen from './src/screens/login/FindPwScreen';
+
 const RootContainer = styled.View`
   flex: 1;
   padding: 20px 20px 0px 20px;
@@ -64,7 +67,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <RootContainer>
-        <SearchScreen />
+        <Login />
       </RootContainer>
       <StatusBar style="auto" />
     </ThemeProvider>
