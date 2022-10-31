@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,6 +23,10 @@ public class Theme {
     @ManyToOne
     @JoinColumn(name="store_id")
     private Store store;
+
+    @OneToMany(mappedBy = "theme")
+    private List<ThemeTime> themeTimes = new ArrayList<>();
+
 
     @Column
     @NotNull
