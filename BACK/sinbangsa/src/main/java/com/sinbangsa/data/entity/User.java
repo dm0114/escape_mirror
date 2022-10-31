@@ -35,6 +35,10 @@ public class User {
     @OneToMany(mappedBy = "likeThemeUser")
     private List<LikeTheme> likeThemes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "storeRelationUser")
+    private List<UserStoreRelation> storeRelations = new ArrayList<>();
+
+
     @Column
     @NotNull
     private String email;
