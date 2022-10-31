@@ -21,7 +21,7 @@ public class Store {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User storeUser;
 
     @OneToMany(mappedBy = "store")
     private List<Theme> themes = new ArrayList<>();

@@ -20,14 +20,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  long id;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "storeUser")
     private List<Store> stores = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "reservationUser")
+    private List<Reservation> reservations = new ArrayList<>();
 
     @Column
     @NotNull
     private String email;
+
 
     @Column
     @NotNull
