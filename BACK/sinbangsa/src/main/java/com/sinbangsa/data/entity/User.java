@@ -32,6 +32,9 @@ public class User {
     @OneToMany(mappedBy = "reservationUser")
     private List<Reservation> reservations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "likeThemeUser")
+    private List<LikeTheme> likeThemes = new ArrayList<>();
+
     @Column
     @NotNull
     private String email;

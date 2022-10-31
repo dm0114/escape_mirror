@@ -26,6 +26,7 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<Theme> themes = new ArrayList<>();
 
+
     @Column
     @NotNull
     private String storeName;
