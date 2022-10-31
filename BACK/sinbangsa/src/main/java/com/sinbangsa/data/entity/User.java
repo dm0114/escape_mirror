@@ -20,6 +20,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  long id;
 
+    @OneToMany(mappedBy = "user")
+    private List<Store> stores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "articleUser")
+    private List<Article> articles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "commentUser")
+    private List<Comment> comments = new ArrayList<>();
+
+
     @Column
     @NotNull
     private String email;
@@ -51,8 +61,5 @@ public class User {
 
     @Column
     private String Title;
-
-    @OneToMany(mappedBy = "userId")
-    private List<Article> articles = new ArrayList<>();
 
 }
