@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,24 +13,34 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  long id;
+    private long storeId;
 
-    @OneToMany(mappedBy = "user")
-    private List<Store> stores = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-
-
-    @Column
-    @NotNull
-    private String email;
+    @OneToMany(mappedBy = "store")
+    private List<Theme> themes = new ArrayList<>();
 
     @Column
     @NotNull
-    private boolean admin;
+    private String storeName;
+
+    @Column
+    @NotNull
+    private String address;
+
+    @Column
+    @NotNull
+    private String mapX;
+
+    @Column
+    @NotNull
+    private String mapY;
 
     @Column
     @NotNull
@@ -39,22 +48,15 @@ public class User {
 
     @Column
     @NotNull
-    private LocalDate birth;
+    private String poster;
 
     @Column
     @NotNull
-    private String password;
+    private String homepage;
 
     @Column
-    private String auth;
+    @NotNull
+    private String region;
 
-    @Column
-    private String profile;
-
-    @Column
-    private Integer grade = 0;
-
-    @Column
-    private String Title;
 
 }
