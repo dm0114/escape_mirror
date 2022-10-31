@@ -19,6 +19,14 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long reservationId;
 
+    @ManyToOne
+    @JoinColumn(name = "themetime_id")
+    private ThemeTime themeTime;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User reservationUser;
+
     @Column
     @NotNull
     private Date date;

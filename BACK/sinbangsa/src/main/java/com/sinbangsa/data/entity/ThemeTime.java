@@ -17,6 +17,10 @@ public class ThemeTime {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "theme_id")
+    private Theme theme;
+
     @Column
     @NotNull
     private String time;
