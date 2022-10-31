@@ -7,6 +7,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -49,5 +51,8 @@ public class User {
 
     @Column
     private String Title;
+
+    @OneToMany(mappedBy = "userId")
+    private List<Article> articles = new ArrayList<>();
 
 }
