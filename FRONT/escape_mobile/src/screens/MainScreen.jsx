@@ -42,9 +42,6 @@ const MainTextView = styled.View`
   justify-content: center;
   align-items: center;
 `
-const MainReservationView = styled.View`
-  flex: ${props=> props.flex};
-`
 
 const MainText = styled.Text`
   font-family: "SUIT-Bold";
