@@ -17,16 +17,22 @@ export const getPreloading = (mapX, mapY) => {
 const getSearch = ({ queryKey }) => {
   const [_, query] = queryKey
   console.log(query);
-  return fetch(`${BASE_URL}/mocks/db`).then((res) => res.json())
+  return fetch(`${BASE_URL}/mocks/db`,{
+    // headers : {
+    //      Authorization : //토큰 추가
+    // }
+}).then((res) => res.json())
 }
 
 const getCafeDetail = () => {
   // api/book/store/{storeId}
+  // 헤더에 토큰 추가
   fetch(`${BASE_URL}/mocks/db`).then((res) => res.json());
 }
 
 const getThemeDetail = () => {
   // api/book/theme/{themeId}
+  // 헤더에 토큰 추가
   fetch(`${BASE_URL}/mocks/db`).then((res) => res.json());
 
 }
@@ -35,25 +41,32 @@ export const searchApi = { getSearch, getCafeDetail, getThemeDetail };
 
 
 // 예약
-export const getReservationTime = (themeId) => {
+const getMypageActs = (themeId) => {
+  // api/mypage/acts
+  return fetch(`${BASE_URL}/mocksTheme/db`).then((res) => res.json())
+}
+
+const getReservationTime = (themeId) => {
   // api/reservation
   fetch(`${BASE_URL}/mocks/db`)
 }
 
-export const getReservationDate = (themeId, date) => {
+const getReservationDate = (themeId, date) => {
   // api/reservation/date
   fetch(`${BASE_URL}/mocks/db`)
 }
 
-export const postReservation = ({themeId, reservationDate, reservationTime}) => {
+const postReservation = ({themeId, reservationDate, reservationTime}) => {
   // api/reservation
   fetch(`${BASE_URL}/mocks/db`)
 }
 
-export const getSearchUser = () => {
+const getSearchUser = () => {
   // api/reservation
   fetch(`${BASE_URL}/mocks/db`)
 }
+
+export const reservationApi = { getMypageActs, getReservationTime, getReservationDate, postReservation, getSearchUser};
 
 
 // 양도

@@ -14,7 +14,7 @@ import { searchApi } from "../apis/api";
 export default function SearchScreen() {
   const [query, setQuery] = useState("");
   const { isLoading, isFetching, data, refetch } = useQuery(
-    ["searchCafeAndTheme", query],
+    ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch,
     { enabled: false, });
 

@@ -3,15 +3,21 @@ import React from 'react';
 import styled from 'styled-components/native';
 import theme from '../../theme';
 
-export default function ReservationComponent() {
+export default function ReservationComponent({
+  reservationId,
+  themeName,
+  storeName,
+  date,
+  reserveTime
+}) {
   return (
     <ReservationContainer>
       <TextContainer>
-        <ThemeTitle>테마이름</ThemeTitle>
-        <CafeTitle>카페이름</CafeTitle>
+        <ThemeTitle>{themeName}</ThemeTitle>
+        <CafeTitle>{storeName}</CafeTitle>
       </TextContainer>
       <TimeContainer>
-        <TimeText>22:22:22</TimeText>
+        <TimeText>{date}</TimeText>
       </TimeContainer>
     </ReservationContainer>
   )
