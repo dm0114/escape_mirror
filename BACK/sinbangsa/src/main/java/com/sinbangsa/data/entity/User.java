@@ -74,4 +74,10 @@ public class User {
     @Column
     private String Title;
 
+    @Column
+    private String username;
+
+    @Column
+    private String nickname;
+
 }
