@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 public class ThemeTime {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @ManyToOne

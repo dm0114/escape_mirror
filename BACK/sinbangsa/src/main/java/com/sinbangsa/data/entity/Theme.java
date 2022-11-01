@@ -17,7 +17,6 @@ import java.util.List;
 public class Theme {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @ManyToOne
