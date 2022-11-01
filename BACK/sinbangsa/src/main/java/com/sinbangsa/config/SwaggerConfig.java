@@ -1,32 +1,32 @@
 package com.sinbangsa.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Configuration
-@EnableSwagger2
-public class SwaggerConfig {
+@EnableWebMvc
+public class SwaggerConfig implements WebMvcConfigurer {
+
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.OAS_30)
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
-                .apiInfo(getApiInfo())
-                .select()
+                .apiInfo(apiInfo()).select()
                 .apis(RequestHandlerSelectors.basePackage("com.sinbangsa.controller"))
-                .paths(PathSelectors.ant("/**"))
-                .build();
+                .paths(PathSelectors.any())
+                .build()
+                .useDefaultResponseMessages(false);
     }
 
     private Set<String> getConsumeContentTypes() {
@@ -41,12 +41,12 @@ public class SwaggerConfig {
         produces.add("application/json;charset=UTF-8");
         return produces;
     }
-
-    private ApiInfo getApiInfo() {
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("API")
-                .description("[신비한 방탈출 사전] REST API")
+                .title("신비한 방탈출 사전 API")
+                .description("신비한 방탈출 사전 API입니다.")
                 .version("1.0")
                 .build();
     }
+
 }
