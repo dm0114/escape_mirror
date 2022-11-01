@@ -16,7 +16,6 @@ import java.util.List;
 public class Store {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long storeId;
 
     @ManyToOne
