@@ -3,6 +3,8 @@ import styled from "styled-components/native";
 
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
+import { ScrollView } from "react-native-gesture-handler";
+import { Text, View } from "react-native";
 
 function ThemeDetailScreen() {
   const [query, setQuery] = useState("");
@@ -40,6 +42,17 @@ function ThemeDetailScreen() {
         usedHint: 3,
         clearTime: "76:52",
       },
+      {
+        reviewId: 5,
+        User: "리뷰 작성자",
+        content: "리뷰 내용",
+        star: 8,
+        reviewImg: "리뷰이미지 링크",
+        created_at: "2022-08-08",
+        clearDate: "2022-08-01",
+        usedHint: 3,
+        clearTime: "76:52",
+      }
     ],
     noHintRanking: [
       {
@@ -56,7 +69,7 @@ function ThemeDetailScreen() {
     ],
   };
   return (
-    <>
+    <MainContainer>
       <Container>
         {/* themeImg 넣기 */}
         <CafeImage />
@@ -76,20 +89,54 @@ function ThemeDetailScreen() {
         <Title>스탯</Title>
       </RowContainer>
       <SubTitle>{ThemeDatas.description}</SubTitle>
-      {/* <Title>리뷰</Title>
-        <SubTitle>{ThemeDatas.reviews}</SubTitle>
-        <Title>힌트 랭킹</Title>
-        <SubTitle>{ThemeDatas.hintRanking}</SubTitle>
+      <Title>리뷰</Title>
+      <View>
+        {ThemeDatas.reviews.map((item) => {
+          return (
+            <TmpContainer key={item.reviewId}>
+              <Text>{item.User}</Text>
+              <Text>{item.content}</Text>
+              <Text>{item.star}</Text>
+              <Text>{item.reviewImg}</Text>
+              <Text>{item.created_at}</Text>
+              <Text>{item.clearDate}</Text>
+              <Text>{item.usedHint}</Text>
+              <Text>{item.clearTime}</Text>
+            </TmpContainer>
+          )})}
+      </View>       
+        <Title>힌트 랭킹</Title>        
+        <View>{
+          ThemeDatas.hintRanking.map((item, index) => {
+                  return (
+                    <TmpContainer key={index}>
+                      <Text>{item.userNickname}</Text>
+                      <Text>{item.clearTime}</Text>
+                      <Text>{item.usedHint}</Text>
+                    </TmpContainer>
+                  )})
+        }</View>
         <Title>노힌트 랭킹</Title>
-        <SubTitle>{ThemeDatas.noHintRanking}</SubTitle> */}
+        <View>{
+          ThemeDatas.noHintRanking.map((item, index) => {
+                  return (
+                    <TmpContainer key={index}>
+                      <Text>{item.userNickname}</Text>
+                      <Text>{item.clearTime}</Text>
+                    </TmpContainer>
+                  )})
+        }</View>
       {/* store LikeButton 추가 */}
       <ButtonContainer />
-    </>
+    </MainContainer>
   );
 }
 
 export default ThemeDetailScreen;
 
+const MainContainer = styled.ScrollView`
+  
+`
 const Container = styled.View`
   flex-direction: row;
   margin-bottom: 16px;
@@ -127,3 +174,7 @@ const ButtonContainer = styled.TouchableOpacity`
   border-radius: 40px;
   background-color: #f9dc87;
 `;
+
+const TmpContainer = styled.View`
+  background-color: #fff;
+`

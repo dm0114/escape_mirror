@@ -27,7 +27,7 @@ const getSearch = ({ queryKey }) => {
 const getCafeDetail = () => {
   // api/book/store/{storeId}
   // 헤더에 토큰 추가
-  fetch(`${BASE_URL}/mocks/db`).then((res) => res.json());
+  return fetch(`${BASE_URL}/mocksCafe/db`).then((res) => res.json());
 }
 
 const getThemeDetail = () => {
