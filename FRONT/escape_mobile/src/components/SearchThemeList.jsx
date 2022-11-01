@@ -10,14 +10,12 @@ export default function SearchThemeList({
   storeName,
   themeImg,
   likeCount,
-  star
+  star,
 }) {
-  const navigation = useNavigation();
-  const goToDetail = () => {
-     navigation.navigate('Stack', { screen: "ThemeDetailScreen" })
-  }
+  const navigation = useNavigation()
+  
   return (
-    <TouchableOpacity onPress={goToDetail}>
+    <TouchableOpacity onPress={() => {navigation.navigate('ThemeDetailScreen')}}>
       <Container>
         {/* themeImg 넣기 */}
         <CafeImage />
