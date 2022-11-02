@@ -1,4 +1,5 @@
 const BASE_URL = "https://my-json-server.typicode.com/dm0114";
+const BASE_URL2 = "https://my-json-server.typicode.com/dm0113";
 // const BASE_URL = "https://k7c104.p.ssafy.io:8080";
 
 
@@ -88,3 +89,20 @@ const putReservationTransfer = (reservationId,targetId) => {
 export const reservationApi = { getMypageActs, getReservationDetail, getReservationTime, getReservationDate, 
   postReservation, getSearchUser, putReservationTransfer};
 
+
+
+// 커뮤니티
+const getCommunityList = (head, page) => {
+  // api/community
+  return fetch(`${BASE_URL2}/communityList/db`).then((res) => res.json())
+}
+const getCommunitySearch = (searchWord) => {
+  // api/community/search
+  return fetch(`${BASE_URL2}/communitySearch/db`).then((res) => res.json())
+}
+const getCommunityDetail = (articleId) => {
+  // api/community/{articleId}
+  return fetch(`${BASE_URL2}/communityDetail/db`).then((res) => res.json())
+}
+
+export const communityApi = { getCommunityList, getCommunitySearch, getCommunityDetail};

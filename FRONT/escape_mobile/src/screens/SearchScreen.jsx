@@ -18,6 +18,7 @@ export default function SearchScreen() {
     searchApi.getSearch,
     { enabled: false, });
 
+
   const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
     if (query === "") {

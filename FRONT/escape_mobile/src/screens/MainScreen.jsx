@@ -47,4 +47,5 @@ const MainText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
   color: #fff;
+  line-height: ${({ theme }) => theme.fontSizes.title2};
 `
