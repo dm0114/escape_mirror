@@ -10,6 +10,20 @@ const fontSizes = {
   caption2: '11px'
 };
 
+const fontHeight = {
+  title1 : '42px',
+  title2 : '33px',
+  title3 : '30px',
+  body : '25px',
+  caption1 : '18px',
+  caption2 : '16px'
+}
+
+const screenMargin = {
+  marginBottom: '20px',
+  titleLeftMargin: '20px'
+}
+
 // 자주 사용하는 색을 객체로 만들자.
 const colors = {
   // black: "#000000",
@@ -34,8 +48,10 @@ const common = {
 // theme 객체에 감싸서 반환한다.
 const theme = {
   fontSizes,
+  fontHeight,
   colors,
   common,
+  screenMargin
 };
 
 export default theme;
