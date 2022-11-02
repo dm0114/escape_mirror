@@ -57,7 +57,7 @@ public class UserService implements IUserService{
 
 
 
-    public UserDto login(UserDto loginUser) throws RuntimeException, NoSuchAlgorithmException {
+    public User login(UserDto loginUser) throws RuntimeException, NoSuchAlgorithmException {
         LOGGER.debug("[getLoginResult] 회원 정보 요청 ");
 
         User user = userRepository.getByEmail(loginUser.getEmail());
@@ -70,10 +70,7 @@ public class UserService implements IUserService{
             throw new RuntimeException();
         }
         LOGGER.debug("[getLoginResult] 패스워드 일치 확인");
-
-
-
-
+        return user;
     }
 
 

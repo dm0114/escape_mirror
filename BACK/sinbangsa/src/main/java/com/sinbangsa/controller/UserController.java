@@ -2,6 +2,7 @@ package com.sinbangsa.controller;
 
 
 import com.sinbangsa.data.dto.UserDto;
+import com.sinbangsa.data.entity.User;
 import com.sinbangsa.service.UserService;
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
@@ -54,10 +55,12 @@ public class UserController {
         try {
             LOGGER.debug("[login] 로그인 시도 중", userDto.getEmail());
 
-            UserDto loginUser = userService.login(userDto);
-        } catch () {
+            User loginUser = userService.login(userDto);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
 
+        return new ResponseEntity<>();
 
     }
 }
