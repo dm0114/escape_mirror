@@ -1,52 +1,37 @@
-import React from 'react'
+import React, { useState } from "react";
+import styled from "styled-components/native";
 
-import styled from 'styled-components/native';
-import theme from '../../theme';
+import { useQuery } from "@tanstack/react-query";
+import { communityApi } from "../apis/api";
+import { Text, TouchableOpacity, View } from "react-native";
+import LoadingScreen from '../screens/LoadingScreen'
 
-import ReservationComponent from '../components/ReservationComponent';
+export default function CommunityScreen({navigation}) {
+  const [query, setQuery] = useState("");
+  const { isLoading, data } = useQuery(
+    ["CommunityList", query],
+    communityApi.getCommunityList
+  );
 
-export default function CommunityScreen() {
   return (
-    <Container>
-      <MainView flex={1}>
-        <MainTextView flex={1}>
-          <MainText>
-            안녕하세요, {}님.{"\n"}
-            오랜만에 저택으로 돌아오셨네요.{"\n"}
-            받으신 초대장 목록을 보여드릴게요.
-          </MainText>
-        </MainTextView>
-        <ReservationComponent />
-      </MainView>
-      <MainView flex={2} backgroundColor="blue">
-        <MainText>
-          안녕하세요, {}님.{"\n"}
-          오랜만에 저택으로 돌아오셨네요.{"\n"}
-          받으신 초대장 목록을 보여드릴게요.
-        </MainText>
-      </MainView>
-    </Container>
+    isLoading ? <LoadingScreen /> :
+    <View>
+      <Text>동료들과 이야기를 나눠보세요</Text>
+      <Text>토글1</Text>
+      <Text>토글2</Text>
+      <Text>토글3</Text>
+      {data.articles.map((item) => {
+        return (
+          <TouchableOpacity 
+            key={item.articleId}
+            onPress={() =>{ navigation.navigate('CommunityDetailScreen', 
+            {articleId: item.articleId })}}
+          >
+            <Text>{item.Title}</Text>
+            <Text>{item.writerName}</Text>
+          </TouchableOpacity>
+        )
+      })}
+    </View>
   );
 }
-
-const Container = styled.View`
-  flex: 1;
-`
-const MainView = styled.View`
-  flex: ${props=> props.flex};
-  background-color: ${props => props.backgroundColor};
-`
-
-const MainTextView = styled.View`
-  flex: ${props=> props.flex};
-  justify-content: center;
-  align-items: center;
-`
-const MainReservationView = styled.View`
-  flex: ${props=> props.flex};
-`
-
-const MainText = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title2};
-`
