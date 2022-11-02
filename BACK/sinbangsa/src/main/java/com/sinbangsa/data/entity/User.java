@@ -1,5 +1,6 @@
 package com.sinbangsa.data.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -41,7 +43,7 @@ public class User {
     @OneToMany(mappedBy = "bookUser")
     private List<Book> books = new ArrayList<>();
 
-    @Column
+    @Column(unique = true)
     @NotNull
     private String email;
 
