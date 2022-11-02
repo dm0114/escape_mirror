@@ -6,8 +6,8 @@ import Constants from 'expo-constants';
 export default function LoginForm() {
   const { register, setValue, handleSubmit, control, reset, formState: { errors } } = useForm({
     defaultValues: {
-      loginId: '이메일을 입력해주세요',
-      loginPw: '비밀번호를 입력해주세요'
+      loginId: '',
+      loginPw: '',
     }
   });
   const onSubmit = data => {
@@ -47,6 +47,7 @@ export default function LoginForm() {
             onBlur={onBlur}
             onChangeText={value => onChange(value)}
             value={value}
+            secureTextEntry
           />
         )}
         name="LoginPw"

@@ -12,8 +12,7 @@ import MainScreen from './src/screens/MainScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import CommunityScreen from './src/screens/CommunityScreen';
 
-import Login from './src/screens/login/test';
-import FindPwScreen from './src/screens/login/FindPwScreen';
+import Login from './src/screens/Login/FindIdScreen'
 
 const RootContainer = styled.View`
   flex: 1;

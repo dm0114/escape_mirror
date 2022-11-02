@@ -11,38 +11,45 @@ export default function SignupScreen() {
       <SignUpView>
         {/* 프로필 이미지 */}
         <ProfileImg></ProfileImg>
+
+
         {/* 이름 */}
         <NameText>이름</NameText>
-        <NameTextInput/>
-        {/* 닉네임 */}
+
+
+
+        {/* 닉네임  - 중복검사*/}
         <NickText>닉네임</NickText>
-        <NickTextInput/>
+
         <NickCertBtn />
-        {/* 닉네임 유효성 검사 */}
 
-        {/* 이메일 */}
+        {/* 생일 - 유효성 검사 1995-09-07 */}
+
+
+        {/* 이메일  - 중복검사, 유효성검사*/}
         <EmailText>이메일</EmailText>
-        <EmailTextInput/>
+
         <EmailCertBtn />
-        {/* 이메일 유효성 검사 */}
+
         
-        {/* 비밀번호 */}
+        {/* 비밀번호 - ****형태로 */}
         <PwText>비밀번호</PwText>
-        <PwTextInput />
+
         
-        {/* 비밀번호 유효성 검사 */}
 
-        {/* 핸드폰 번호 */}
+
+        {/* 핸드폰 번호 - 유효성 검사 010-2424-0624 */}
         <PhoneText>핸드폰 번호</PhoneText>
-        <PhoneTextInput/>
-        {/* 핸드폰 번호 유효성 검사 */}
 
-        {/* 핸드폰 인증 */}
+
+        {/* 핸드폰 인증 & 인증번호창 */}
         <PhoneCertBtn>
           <PhoneCertText>
             핸드폰 인증
           </PhoneCertText>
         </PhoneCertBtn>
+
+
         {/* 가입하기 버튼 */}
         <SignUpBtn>
           <SignUpText>
@@ -91,21 +98,21 @@ const PwText = styled(NameText)`
 const PhoneText = styled(NameText)`
 `
 
-const NameTextInput = styled.TextInput`
-  border-radius: 10px;
-  background-color: white;
-  color: black;
-  margin: 10px 0;
-  padding: 10px 0;
-`
-const NickTextInput = styled(NameTextInput)`
-`
-const EmailTextInput = styled(NameTextInput)`
-`
-const PwTextInput = styled(NameTextInput)`
-`
-const PhoneTextInput = styled(NameTextInput)`
-`
+// const NameTextInput = styled.TextInput`
+//   border-radius: 10px;
+//   background-color: white;
+//   color: black;
+//   margin: 10px 0;
+//   padding: 10px 0;
+// `
+// const NickTextInput = styled(NameTextInput)`
+// `
+// const EmailTextInput = styled(NameTextInput)`
+// `
+// const PwTextInput = styled(NameTextInput)`
+// `
+// const PhoneTextInput = styled(NameTextInput)`
+// `
 
 const NickCertBtn = styled.TouchableOpacity`
   border-radius: 10px;
