@@ -6,13 +6,13 @@ import { searchApi } from "../apis/api";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "react-native";
 
-function ThemeDetailScreen() {
+function ThemeDetailScreen({navigation}) {
   const [query, setQuery] = useState("");
   const { isLoading, data } = useQuery(
     ["ThemeDetail", query],
     searchApi.getThemeDetail
   );
-
+  
   const ThemeDatas = {
     themeId: 3,
     themeName: "비밀의 가족",
@@ -127,7 +127,16 @@ function ThemeDetailScreen() {
                   )})
         }</View>
       {/* store LikeButton 추가 */}
-      <ButtonContainer />
+      <ButtonContainer
+        onPress={() => {navigation.navigate('PostReservationScreen', {
+          themeName: ThemeDatas.themeName,
+          leadtime: ThemeDatas.leadtime,
+          price: ThemeDatas.price,
+          themeImg: ThemeDatas.themeImg,
+        })}}
+      >
+        <Text>예약하기</Text>
+      </ButtonContainer>
     </MainContainer>
   );
 }

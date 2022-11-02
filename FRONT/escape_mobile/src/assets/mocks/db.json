@@ -1,19 +1,4 @@
 {
-"reservations":[{
-  "reservationId":3,
-  "themeName": "베타테스터",
-  "storeName": "에스케이퍼스",
-  "date":"2022-10-29",
-  "reserveTime":"16:20"
-  }],
-"books":[{
-  "bookId" : 3,
-  "themeName":"비밀의 가족",
-  "storeName":"비밀의 화원",
-  "isClear":false,
-  "isReview": false,
-  "doneDate": "2022-06-05",
-  "usedHint": 0,
-  "clearTime": "56:43"
-  }]
+  "storeAddress": "광주 어딘가",
+  "themeImg": "S3 주소"
 }
