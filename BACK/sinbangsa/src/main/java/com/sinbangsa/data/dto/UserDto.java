@@ -1,16 +1,14 @@
 package com.sinbangsa.data.dto;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@NoArgsConstructor
+
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class UserDto {
 
     private String username;
@@ -26,5 +24,7 @@ public class UserDto {
     private String profileImg;
 
     private String email;
+
+
 
 }
