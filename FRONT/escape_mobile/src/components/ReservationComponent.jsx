@@ -39,8 +39,8 @@ export default function ReservationComponent({
 const ReservationContainer = styled.TouchableOpacity`
   ${({ theme }) => theme.common.flexCenterRow}
   background-color: #fff;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  border-radius: 10px;
+  margin-bottom: 20px;
   padding: 20px;
 `
 
