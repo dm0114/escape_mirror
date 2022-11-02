@@ -1,0 +1,19 @@
+{
+  "articles": [
+    {
+      "articleId": 3,
+      "Title": "게시글 제목",
+      "writerName": "글쓴이"
+    },
+    {
+      "articleId": 4,
+      "Title": "게시글 제목",
+      "writerName": "글쓴이"
+    },
+    {
+      "articleId": 5,
+      "Title": "게시글 제목",
+      "writerName": "글쓴이"
+    }
+  ]
+}

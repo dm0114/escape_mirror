@@ -7,10 +7,13 @@ import { ThemeProvider } from 'styled-components';
 import styled from 'styled-components/native';
 import theme from './theme';
 
-import LoadingScreen from './src/components/LoadingScreen';
-import MainScreen from './src/screens/MainScreen';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+
+import { NavigationContainer } from '@react-navigation/native';
+import Root from './src/navigation/Root';
 import SearchScreen from './src/screens/SearchScreen';
-import CommunityScreen from './src/screens/CommunityScreen';
+
 
 import Login from './src/screens/Login/FindIdScreen'
 
@@ -19,6 +22,8 @@ const RootContainer = styled.View`
   padding: 20px 20px 0px 20px;
   background-color: #212121;
 `
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -64,11 +69,17 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <RootContainer>
-        <Login />
-      </RootContainer>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <RootContainer>
+          <NavigationContainer>
+            <Root />
+            {/* <MainScreen /> */}
+          </NavigationContainer>
+        </RootContainer>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

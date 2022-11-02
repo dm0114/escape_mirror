@@ -3,23 +3,41 @@ import React from 'react';
 import styled from 'styled-components/native';
 import theme from '../../theme';
 
-export default function ReservationComponent() {
+import { useNavigation } from '@react-navigation/native';
+
+
+export default function ReservationComponent({
+  reservationId,
+  themeName,
+  storeName,
+  date,
+  reserveTime
+}) {
+  const navigation = useNavigation()
+
   return (
-    <ReservationContainer>
+    <ReservationContainer 
+      onPress={() => {navigation.navigate('ReservationDetailScreen', {
+        reservationId: reservationId,
+        themeName: themeName,
+        storeName: storeName,
+        date: date,
+        reserveTime: reserveTime
+      })}}
+      >
       <TextContainer>
-        <ThemeTitle>테마이름</ThemeTitle>
-        <CafeTitle>카페이름</CafeTitle>
+        <ThemeTitle>{themeName}</ThemeTitle>
+        <CafeTitle>{storeName}</CafeTitle>
       </TextContainer>
       <TimeContainer>
-        <TimeText>22:22:22</TimeText>
+        <TimeText>{date}</TimeText>
       </TimeContainer>
     </ReservationContainer>
   )
 }
 
-const ReservationContainer = styled.View`
+const ReservationContainer = styled.TouchableOpacity`
   ${({ theme }) => theme.common.flexCenterRow}
-  
   background-color: #fff;
   border-radius: 8px;
   margin-bottom: 12px;
