@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BookDto {
+public class ReviewDto {
 
     long themeId;
 
@@ -28,7 +28,7 @@ public class BookDto {
 
     int feelHorror;
 
-    int lock;
+    int locker;
 
     String content;
 

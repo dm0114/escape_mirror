@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -59,18 +60,15 @@ public class ThemeReview {
 
     @Column
     @NotNull
-    private Date createAt;
+    private LocalDate createAt;
 
     @Column
-    @NotNull
     private int usedHint;
 
     @Column
-    @NotNull
     private String clearTime;
 
     @Column
-    @NotNull
     private Date clearDate;
 
 
