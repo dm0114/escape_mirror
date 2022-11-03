@@ -6,23 +6,24 @@ import com.sinbangsa.data.entity.Reservation;
 import com.sinbangsa.data.repository.ReservationRepository;
 import com.sinbangsa.data.repository.ThemeTimeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
+
 
 @Service
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final ReservationRepository reservationRepository;
 
     private final ThemeTimeRepository themeTimeRepository;
 
     @Transactional
-    public void makeReservation(ReservationDto reservationDto) {
+    public boolean createReservation(ReservationDto reservationDto) {
 
         Reservation reservation = new Reservation();
 
@@ -31,19 +32,19 @@ public class ReservationServiceImpl implements ReservationService {
             reservation.setThemeTime(themeTimeRepository
                     .findById(reservationDto.getThemeTimeId()));
 
+            // 기존 예약 내역에 이미 데이터가 있는지 확인
             if (!reservationRepository.existsByThemeTimeIdAndDate(
                     reservationDto.getThemeTimeId(), reservationDto.getReservationDate())) {
                 reservationRepository.save(reservation);
+
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 예약");
+                return false;
             }
 
-        } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "예약 실패");
+        } catch (Exception e) {
+            return false;
         }
-
-
-
+        return true;
 
     }
 }

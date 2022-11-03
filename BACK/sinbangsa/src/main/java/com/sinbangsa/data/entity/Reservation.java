@@ -33,6 +33,6 @@ public class Reservation {
 
     @Column
     @NotNull
-    private Boolean accept;
+    private Boolean accept=false;
 
 }

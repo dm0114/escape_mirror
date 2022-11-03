@@ -13,25 +13,25 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice
-public class CustomExceptionHandler {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(CustomExceptionHandler.class);
-
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleException(RuntimeException e, HttpServletRequest request) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-
-        LOGGER.error("Advice 내 handleExcepiton호출, {}, {}", request.getRequestURI(), e.getMessage());
-
-        Map<String, String> map = new HashMap<>();
-        map.put("error type", httpStatus.getReasonPhrase());
-        map.put("code", "400");
-        map.put("message", e.getMessage());
-
-        return new ResponseEntity<>(map, responseHeaders, httpStatus);
-
-    }
-
-}
+//@RestControllerAdvice
+//public class CustomExceptionHandler {
+//
+//    private final Logger LOGGER = LoggerFactory.getLogger(CustomExceptionHandler.class);
+//
+//    @ExceptionHandler(value = RuntimeException.class)
+//    public ResponseEntity<Map<String, String>> handleException(RuntimeException e, HttpServletRequest request) {
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+//
+//        LOGGER.error("Advice 내 handleExcepiton호출, {}, {}", request.getRequestURI(), e.getMessage());
+//
+//        Map<String, String> map = new HashMap<>();
+//        map.put("error type", httpStatus.getReasonPhrase());
+//        map.put("code", "400");
+//        map.put("message", e.getMessage());
+//
+//        return new ResponseEntity<>(map, responseHeaders, httpStatus);
+//
+//    }
+//
+//}
