@@ -1,8 +1,11 @@
-import React from 'react';
-import {View, Text, FlatList, ImageBackground, Pressable} from 'react-native';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
+import {View, Text, FlatList, ImageBackground, Pressable,  StyleSheet, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient'
 import theme from '../../../theme';
+import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
+import { BlurView } from "@react-native-community/blur";
+
 
 const test = [
     {
@@ -19,13 +22,13 @@ const test = [
     },
     {
         'storeId': 3,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
+        'storeImg': 'https://user-images.githubusercontent.com/97578425/199650505-b0a49a60-800f-4e0e-95b5-301fb88a726e.png',
         'storeName': '카페 이름',
         'isClear':false,
     },
     {
         'storeId': 4,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
+        'storeImg': 'https://user-images.githubusercontent.com/97578425/199650505-b0a49a60-800f-4e0e-95b5-301fb88a726e.png',
         'storeName': '카페 이름',
         'isClear':false,
     },
@@ -34,38 +37,72 @@ const test = [
         'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
         'storeName': '카페 이름',
         'isClear':false,
-    }
+    },
+    {
+        'storeId': 6,
+        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
+        'storeName': '카페 이름',
+        'isClear':false,
+    },
+    {
+        'storeId': 7,
+        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
+        'storeName': '카페 이름',
+        'isClear':false,
+    },
 ]
 
 const testImg = 'https://media.4-paws.org/1/e/d/6/1ed6da75afe37d82757142dc7c6633a532f53a7d/VIER%20PFOTEN_2019-03-15_001-2886x1999-1920x1330.jpg';
+const testUnity = 'https://user-images.githubusercontent.com/97578425/199651092-ce04c889-71c8-431f-bfae-1732e4c72f8c.png'
+
+const windowHeight = Dimensions.get('window').height*0.85;
 
 export default function RegionBook({navigation, route}){
-    const {num} = route.params
+    const {num, name} = route.params;
+    const [isCafeOn, setIsCafeOn] = useState(null);
+
+    const bottomSheetRef = useRef(null);
+
+    // variables
+    const snapPoints = useMemo(() => ['3%', '85%'], []);
+
     return(
-        <>
-            <View stlye={{justifyContent:'space-around'}}>
-                <RoomNumber>ROOM {num}</RoomNumber>
-                <ThemeList
-                numColumns={2}
-                data={test}
-                renderItem={(obj) => 
-                    <Pressable style={{flex:0.5, position:'relative'}}>
-                        <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
-                        style={[obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                            : {marginRight:10}, {height:150, width:166, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
-                        <ThemeView
-                            source={{uri:obj.item.storeImg}}
-                            resizeMode="cover"
-                            imageStyle={{borderRadius:10}}
-                            style={
-                                obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                            : {marginRight:10}}><ThemeTitle>{obj.item.storeName}</ThemeTitle>
-                        </ThemeView>
-                    </Pressable>
-            }
-                />
+        <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
+            <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column'}}>
+                <View>
+                    <RoomNumber>ROOM {num}</RoomNumber>
+                </View>
+                <BottomSheet
+                    ref={bottomSheetRef}
+                    index={0}
+                    snapPoints={snapPoints}
+                    backgroundStyle={styles.bottomSheet}
+                >
+                    {/* <BlurView blurType='light' style={styles.blur}> */}
+                        <BottomSheetFlatList
+                        numColumns={2}
+                        data={test}
+                        contentContainerStyle={styles.flatListStyle}
+                        renderItem={(obj) => 
+                            <Pressable style={{flex:0.5, position:'relative'}}>
+                                <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+                                style={[obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+                                    : {marginRight:10}, {height:150, width:186, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
+                                <ThemeView
+                                    source={{uri:obj.item.storeImg}}
+                                    resizeMode="cover"
+                                    imageStyle={{borderRadius:10}}
+                                    style={
+                                        obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+                                    : {marginRight:10}}><ThemeTitle>{obj.item.storeName}</ThemeTitle>
+                                </ThemeView>
+                            </Pressable>
+                    }
+                        />
+                    {/* </BlurView> */}
+                </BottomSheet>
             </View>
-        </>
+        </ImageBackground>
     )
 }
 
@@ -73,13 +110,12 @@ const RoomNumber = styled.Text`
     color:white;
     font-family: 'Classic';
     font-size: ${({theme}) => theme.fontSizes.title1};
-    margin: auto auto 50px auto;
+    margin: 45px auto auto auto;
 `
 
-const ThemeList = styled.FlatList`
-    background-color: red;
-    padding:${({theme}) => theme.screenMargin.padding};
-`
+// const ThemeList = styled.BottomSheetFlatList`
+//     padding: ${({theme}) => theme.screenMargin.padding};
+// `
 
 const ThemeView = styled.ImageBackground`
     flex:0.5;
@@ -101,11 +137,18 @@ const ThemeTitle = styled.Text`
     left:20px;
 `
 
-const Overlay = styled.View`
-    height:150px;
-    width:185px;
-    border-radius: 10px;
-    position: absolute;
-    z-index: 5;
-`
-
+const styles = StyleSheet.create({
+    flatListStyle : {
+        paddingLeft:20,
+        paddingRight:20,
+        paddingTop:10,
+        paddingBottom:10,
+    },
+    // blur : {
+    //     width:'100%', 
+    //     height:'100%'
+    // },
+    bottomSheet : {
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    }
+})
