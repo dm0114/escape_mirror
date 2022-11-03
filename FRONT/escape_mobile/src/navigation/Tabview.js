@@ -4,6 +4,8 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import CommunityScreen from "../screens/CommunityScreen";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
+import Login from '../screens/Login/SignupScreen';
+import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
@@ -23,7 +25,7 @@ const FourthRoute = () => (
 );
 
 const FifthRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#ff4081" }} />
+  <Mypage />
 );
 
 const renderScene = SceneMap({

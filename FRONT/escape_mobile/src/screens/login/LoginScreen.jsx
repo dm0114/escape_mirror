@@ -44,7 +44,8 @@ export default function LoginScreen() {
   console.log('errors', errors);
 
   return (
-    <Container
+    <KeyboardAvoidingView>
+    <LoginPaddingView
       behavior={Platform.select({ ios: 'padding', android: undefined })}
     >
       {/* 로고이미지 */}
@@ -122,56 +123,18 @@ export default function LoginScreen() {
       </LoginFindView>
      
         </LoginContainer>
-      </LoginView> 
-
-
-
-
-
-      {/* { formError ? <View><Text style={{color: 'red'}}>There was a problem with loading the form. Please try again later.</Text></View> :
-       <>
-        <FormProvider {...methods}>
-        <LoginTextInput
-          name="email"
-          label="Email"
-          placeholder="jon.doe@email.com"
-          keyboardType="email-address"
-          rules={{
-            required: 'Email is required!',
-            pattern: {
-              value: /\b[\w\\.+-]+@[\w\\.-]+\.\w{2,4}\b/,
-              message: 'Must be formatted: john.doe@email.com',
-            },
-          }}
-          setFormError={setError}
-         />
-        <LoginTextInput
-          name="password"
-          label="Password"
-          secureTextEntry
-          placeholder="**********"
-          rules={{ required: 'Password is required!' }}
-          setFormError={setError}
-        />
-      </FormProvider>
-      </>
-      }
-      <Button
-          title="Login"
-          color="#ec5990"
-          onPress={methods.handleSubmit(SubmitHandler, SubmitErrorHandler)}
-        /> */}
-      
-
-    </Container>
+      </LoginView>
+      </LoginPaddingView>
+      </KeyboardAvoidingView>
   )
 }
 const LoginText = styled.Text`
   color: white;
 `
 /* const Container = styled.View ` */
-const Container = styled.KeyboardAvoidingView `
+const LoginPaddingView = styled.View `
   flex: 1;
+  padding: 80px 20px 0px 20px;
   /* width:SCREEN_WIDTH, */
 `
 // const LogoView = styled.View`
@@ -242,7 +205,7 @@ const LoginTxtInput = styled.TextInput`
   /* height: 40; */
   /* padding: 10; */
   border-radius: 10px;
-  padding: 15px 0;
+  padding: 8px 0;
   margin: 5px 0;
 `
 
@@ -275,3 +238,38 @@ const LoginTxtInput = styled.TextInput`
 //     borderRadius: 4,
 //   },
 // });
+
+
+      {/* { formError ? <View><Text style={{color: 'red'}}>There was a problem with loading the form. Please try again later.</Text></View> :
+       <>
+        <FormProvider {...methods}>
+        <LoginTextInput
+          name="email"
+          label="Email"
+          placeholder="jon.doe@email.com"
+          keyboardType="email-address"
+          rules={{
+            required: 'Email is required!',
+            pattern: {
+              value: /\b[\w\\.+-]+@[\w\\.-]+\.\w{2,4}\b/,
+              message: 'Must be formatted: john.doe@email.com',
+            },
+          }}
+          setFormError={setError}
+         />
+        <LoginTextInput
+          name="password"
+          label="Password"
+          secureTextEntry
+          placeholder="**********"
+          rules={{ required: 'Password is required!' }}
+          setFormError={setError}
+        />
+      </FormProvider>
+      </>
+      }
+      <Button
+          title="Login"
+          color="#ec5990"
+          onPress={methods.handleSubmit(SubmitHandler, SubmitErrorHandler)}
+        /> */}
