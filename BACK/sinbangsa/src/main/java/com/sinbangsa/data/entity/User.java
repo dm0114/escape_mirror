@@ -43,6 +43,9 @@ public class User {
     @OneToMany(mappedBy = "bookUser")
     private List<Book> books = new ArrayList<>();
 
+    @OneToMany(mappedBy = "reviewUser")
+    private List<ThemeReview> themeReviews = new ArrayList<>();
+
     @Column
     @NotNull
     private String email;
