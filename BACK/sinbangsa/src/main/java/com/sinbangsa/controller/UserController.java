@@ -4,7 +4,6 @@ package com.sinbangsa.controller;
 import com.sinbangsa.data.dto.UserDto;
 import com.sinbangsa.service.UserService;
 import com.sinbangsa.service.UserServiceImpl;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
