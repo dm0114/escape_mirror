@@ -4,11 +4,12 @@ package com.sinbangsa.controller;
 import com.sinbangsa.data.dto.UserDto;
 import com.sinbangsa.service.UserService;
 import com.sinbangsa.service.UserServiceImpl;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
