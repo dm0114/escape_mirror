@@ -44,10 +44,10 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //토큰 기반이므로 세션 사용 x
                 // 인증처리에서는 세션을 사용하지 않는다는 뜻
                 .and()
-                .authorizeRequests() //요청에 관해 인증체크
-                .antMatchers("/api/**").authenticated()
-                .anyRequest().permitAll() // 나머지 요청 전부 접근가능
-                .and()
+//                .authorizeRequests() //요청에 관해 인증체크
+//                .antMatchers("/api/**").authenticated()
+//                .anyRequest().permitAll() // 나머지 요청 전부 접근가능
+//                .and()
                 .formLogin().disable()
                 .cors()
                 .and()
