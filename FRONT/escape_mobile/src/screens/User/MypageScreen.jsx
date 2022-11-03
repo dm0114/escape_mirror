@@ -11,12 +11,15 @@ import { Ionicons } from '@expo/vector-icons';
 //수정할 것 : 프로필 사진, 닉네임 명, 비밀번호
 //이 상태에 회원탈퇴와 로그아웃까지
 export default function MypageScreen() {
+  //edit가 False일 때 : 마이페이지 뷰 
+  //edit가 True일 때 : 수정페이지 뷰
+  const [edit, setEdit] = useState(false);
 
   return (
     <Container>
 
       
-      {/* 배경 flex 나누기 */}
+      {/* edit가 FALSE일 때 배경 flex 나누기 */}
       <View flex={1.2} style={{ backgroundColor: "tomato" }}>
       </View>
 
@@ -68,8 +71,21 @@ export default function MypageScreen() {
           </FunctionRow2>
 
         </FunctionView>
-
       </MypageView>
+
+      {/* edit가 TRUE일 때, 수정 뷰 */}
+      {/* 프로필 사진 수정 */}
+
+      {/* 확인 버튼 */}
+
+      {/* 업적명 & 닉네임명 */}
+
+      {/* 기존 비밀번호 & 새로운 비밀번호 & 비밀번호 확인 */}
+
+      {/* 회원 탈퇴하기 */}
+
+      {/* 로그아웃 */}
+
     </Container>
   )
 }
