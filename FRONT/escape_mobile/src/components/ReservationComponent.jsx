@@ -46,12 +46,10 @@ const ReservationContainer = styled.TouchableOpacity`
 
 
 const TextContainer = styled.View`
-  flex: 1;
 `
 
 const TimeContainer = styled.View`
-  flex: 1;
-  align-items: flex-end;
+  margin-left: auto;
 `
 
 const ThemeTitle = styled.Text`

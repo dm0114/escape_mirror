@@ -14,8 +14,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Root from './src/navigation/Root';
 import SearchScreen from './src/screens/SearchScreen';
 
-
-import Login from './src/screens/Login/FindIdScreen'
+// import Login from './src/screens/Login/FindIdScreen'
 
 const RootContainer = styled.View`
   flex: 1;
@@ -51,7 +50,7 @@ export default function App() {
           "SUIT-Regular": require("./src/assets/fonts/SUIT-Regular.otf"),
           "SUIT-SemiBold": require("./src/assets/fonts/SUIT-SemiBold.otf"),
         });
-
+        
       } catch (e) {
         console.warn(e);
 

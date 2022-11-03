@@ -13,13 +13,90 @@ export default function CommunityScreen({navigation}) {
     communityApi.getCommunityList
   );
 
+  const SearchResult = () => {
+    if (!isLoading && !isFetching) {
+      const CafeRoute = () => (
+        <CafeListScroll
+          data={data.storeList}
+          contentContainerStyle={{ paddingTop: 40 }}
+          renderItem={({ item }) => (
+            <SearchCafeList
+              storeId={item.storeId}
+              storeName={item.storeName}
+              storeImg={item.storeImg}
+              storeAddress={item.storeAddress}
+              likeCount={item.likeCount}
+            />
+          )}
+        />
+      );
+
+      const ThemeRoute = () => (
+        <ThemeListScroll
+          data={data.themeList}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingTop: 40,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <SearchThemeList
+              themeId={item.themeId}
+              themeName={item.themeName}
+              storeName={item.storeName}
+              themeImg={item.themeImg}
+              likeCount={item.likeCount}
+              star={item.star}
+            />
+          )}
+        />
+      );
+
+      const layout = useWindowDimensions();
+
+      const [index, setIndex] = React.useState(0);
+      const [routes] = React.useState([
+        { key: "Cafe", title: "카페 검색 결과" },
+        { key: "Theme", title: "테마 검색 결과" },
+      ]);
+
+      return (
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={SceneMap({
+            Cafe: CafeRoute,
+            Theme: ThemeRoute,
+          })}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          renderTabBar={(props) => (
+            <TabBar {...props} style={{ backgroundColor: null }} />
+          )}
+        />
+      );
+    } else if (isLoading && isFetching) return <LoadingScreen />;
+    else {
+      return (
+        <>
+          <SearchView flex={1}>
+            <SubText>지금 주변에서 인기 있는 곳</SubText>
+            {/* 이미지 및 슬라이더 추가 */}
+          </SearchView>
+        </>
+      );
+    }
+  };
+
   return (
     isLoading ? <LoadingScreen /> :
     <View>
-      <Text>동료들과 이야기를 나눠보세요</Text>
+      <MainText>동료들과 이야기를 나눠보세요</MainText>
       <Text>토글1</Text>
       <Text>토글2</Text>
       <Text>토글3</Text>
+      {/* 커뮤니티는 토글로 필터링 */}
       {data.articles.map((item) => {
         return (
           <TouchableOpacity 
@@ -35,3 +112,13 @@ export default function CommunityScreen({navigation}) {
     </View>
   );
 }
+
+const MainText = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.title2};
+  color: #fff;
+  line-height: ${({ theme }) => theme.fontHeight.title2};
+  margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
+  margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
+`;
+

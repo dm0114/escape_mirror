@@ -3,11 +3,12 @@ import { View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import CommunityScreen from "../screens/CommunityScreen";
 import MainScreen from "../screens/MainScreen";
+import ReservationScreen from "../screens/ReservationScreen";
 import SearchScreen from "../screens/SearchScreen";
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
-  <MainScreen />
+  <ReservationScreen />
 );
 
 const SecondRoute = () => (
@@ -39,7 +40,7 @@ export default function TabViewExample() {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "first", icon: ":"},
+    { key: "first"},
     { key: "second"},
     { key: "third"},
     { key: "fourth"},
