@@ -56,7 +56,7 @@ public class Theme {
     @NotNull
     private int leadtime;
 
-    @Column
+    @Column(length = 1500)
     @NotNull
     private String description;
 
