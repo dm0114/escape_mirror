@@ -43,6 +43,10 @@ public class User {
     @OneToMany(mappedBy = "bookUser")
     private List<Book> books = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "reviewUser")
+    private List<ThemeReview> themeReviews = new ArrayList<>();
+
     @Column(unique = true)
     @NotNull
     private String email;
