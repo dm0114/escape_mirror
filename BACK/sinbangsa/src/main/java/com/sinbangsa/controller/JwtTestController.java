@@ -4,24 +4,22 @@ import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.UserRepository;
 import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
-public class test {
+@RequestMapping("/api/jwt")
+public class JwtTestController {
 
     private final UserRepository userRepository;
+
     private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("/testjwt")
     @ResponseBody
-    public String jwt(@RequestParam String email){
-        User user = userRepository.getByEmail(email);
-
-        String token = jwtTokenProvider.createToken(user.getEmail());
-
+    @GetMapping("/test")
+    private String jwtTest(@RequestParam String email){
+        System.out.println("1");
+        String token = jwtTokenProvider.createAccessToken(email);
         return token;
     }
 }

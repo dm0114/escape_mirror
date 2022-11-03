@@ -1,4 +1,4 @@
-package com.sinbangsa.config;
+package config;
 
 import com.sinbangsa.utils.JwtAuthenticationFilter;
 import com.sinbangsa.utils.JwtTokenProvider;
@@ -14,11 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
-
+@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Configuration
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;

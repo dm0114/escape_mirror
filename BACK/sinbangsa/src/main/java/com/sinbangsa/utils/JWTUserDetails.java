@@ -2,7 +2,6 @@ package com.sinbangsa.utils;
 
 import com.sinbangsa.data.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
