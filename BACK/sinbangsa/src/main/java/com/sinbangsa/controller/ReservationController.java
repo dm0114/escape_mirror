@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,12 +32,19 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createReservation(@RequestBody ReservationDto reservationDto) {
+    public ResponseEntity<Map<String,Object>> createReservation(@RequestBody ReservationDto reservationDto) {
+        HashMap<String, Object> resultMap = new HashMap<>();
 
-        reservationService.makeReservation(reservationDto);
 
+        boolean result = reservationService.createReservation(reservationDto);
+        if (!result) {
+            resultMap.put("message", FAIL);
 
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        resultMap.put("message", SUCCESS);
+
+        return new ResponseEntity<>(resultMap, HttpStatus.CREATED);
     }
 
 }
