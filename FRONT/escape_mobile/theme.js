@@ -21,7 +21,9 @@ const fontHeight = {
 
 const screenMargin = {
   marginBottom: '20px',
-  titleLeftMargin: '20px'
+  titleLeftMargin: '20px',
+  padding: '20px',
+  gloablPadding: '80px 20px 0px 20px'
 }
 
 // 자주 사용하는 색을 객체로 만들자.

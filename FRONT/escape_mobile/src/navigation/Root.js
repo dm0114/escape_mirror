@@ -11,8 +11,8 @@ import ReservationScreen from '../screens/ReservationScreen';
 import ReservationDetailScreen from '../screens/ReservationDetailScreen';
 import ReservationTransfer from '../screens/ReservationTransfer';
 import PostReservationScreen from '../screens/PostReservationScreen';
-import RegionBook from '../screens/RegionBook';
-import Book from '../screens/Book';
+import RegionBook from '../screens/Book/RegionBook';
+import Book from '../screens/Book/Book';
 
 import CommunityScreen from '../screens/CommunityScreen';
 import CommunityDetailScreen from '../screens/CommunityDetailScreen';
@@ -35,8 +35,6 @@ const Root = () =>
       
       <Nav.Screen name="TabViewExample" component={TabViewExample} />
       <Nav.Screen name="SearchScreen" component={SearchScreen} />
-      <Nav.Screen name="ThemeDetailScreen" component={ThemeDetailScreen} />
-      <Nav.Screen name="CafeDetailScreen" component={CafeDetailScreen} />
 
       <Nav.Screen name="ReservationScreen" component={ReservationScreen} />
       <Nav.Screen name="PostReservationScreen" component={PostReservationScreen} />
