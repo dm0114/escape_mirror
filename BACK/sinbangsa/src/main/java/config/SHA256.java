@@ -1,4 +1,4 @@
-package com.sinbangsa.config;
+package config;
 
 
 import java.security.MessageDigest;

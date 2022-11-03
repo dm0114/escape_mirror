@@ -1,7 +1,7 @@
 package com.sinbangsa.service;
 
 
-import com.sinbangsa.config.SHA256;
+import config.SHA256;
 import com.sinbangsa.data.dto.UserDto;
 import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.UserRepository;
