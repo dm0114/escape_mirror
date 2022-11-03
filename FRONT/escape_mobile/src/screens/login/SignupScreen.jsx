@@ -20,12 +20,12 @@ export default function SignupScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     > */}
       
-      <TitleText>회원 가입</TitleText>
       <SignUpView>
+      <TitleText>회원 가입</TitleText>
         {/* 프로필 이미지 */}
         <ProfileView>
           <ProfileImg>
-            <Ionicons name="camera-outline" size={24} color="black" />
+            <Ionicons name="camera-outline" size={60} color="black" /> 
           </ProfileImg>
         </ProfileView>
 
@@ -51,7 +51,7 @@ export default function SignupScreen() {
         
         {/* 비밀번호 - ****형태로 */}
         <PwText>비밀번호</PwText>
-        
+        <InputFormCompo/>
 
 
         {/* 핸드폰 번호 - 유효성 검사 010-2424-0624 */}
@@ -83,7 +83,11 @@ export default function SignupScreen() {
 //   flex: 1;
 //   /* ${({ theme }) => theme.common.flexCenterColumn}; */
 // `
+
+
 const SignUpView = styled.View`
+  flex: 1;
+  padding:80px 20px 0px 20px;
 `
 
 const TitleText = styled.Text`
@@ -99,6 +103,8 @@ const ProfileView = styled.View`
 `
 
 const ProfileImg = styled.TouchableOpacity`
+  justify-content: center;
+  align-items: center;
   background-color: white;
   width: 150px;
   height: 150px;

@@ -36,6 +36,7 @@ export default function FindIdScreen() {
 
 const Container = styled.KeyboardAvoidingView `
   flex: 1;
+  padding: 80px 20px 0px 20px;
   /* ${({ theme }) => theme.common.flexCenterColumn}; */
 `
 

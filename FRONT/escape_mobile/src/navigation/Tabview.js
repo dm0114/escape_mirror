@@ -5,6 +5,7 @@ import CommunityScreen from "../screens/CommunityScreen";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
 import Login from '../screens/Login/SignupScreen';
+import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
@@ -24,7 +25,7 @@ const FourthRoute = () => (
 );
 
 const FifthRoute = () => (
-  <Login />
+  <Mypage />
 );
 
 const renderScene = SceneMap({

@@ -23,6 +23,7 @@ export default function PutFindPwScreen() {
 
 const Container = styled.KeyboardAvoidingView `
   flex: 1;
+  padding: 80px 20px 0px 20px;
   /* width:SCREEN_WIDTH, */
 `
 const TitleText = styled.Text`

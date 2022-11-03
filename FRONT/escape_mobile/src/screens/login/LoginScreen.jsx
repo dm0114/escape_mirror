@@ -44,7 +44,8 @@ export default function LoginScreen() {
   console.log('errors', errors);
 
   return (
-    <Container
+    <KeyboardAvoidingView>
+    <LoginPaddingView
       behavior={Platform.select({ ios: 'padding', android: undefined })}
     >
       {/* 로고이미지 */}
@@ -123,15 +124,17 @@ export default function LoginScreen() {
      
         </LoginContainer>
       </LoginView>
-    </Container>
+      </LoginPaddingView>
+      </KeyboardAvoidingView>
   )
 }
 const LoginText = styled.Text`
   color: white;
 `
 /* const Container = styled.View ` */
-const Container = styled.KeyboardAvoidingView `
+const LoginPaddingView = styled.View `
   flex: 1;
+  padding: 80px 20px 0px 20px;
   /* width:SCREEN_WIDTH, */
 `
 // const LogoView = styled.View`
