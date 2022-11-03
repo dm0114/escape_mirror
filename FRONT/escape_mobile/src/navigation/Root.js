@@ -11,6 +11,8 @@ import ReservationScreen from '../screens/ReservationScreen';
 import ReservationDetailScreen from '../screens/ReservationDetailScreen';
 import ReservationTransfer from '../screens/ReservationTransfer';
 import PostReservationScreen from '../screens/PostReservationScreen';
+import RegionBook from '../screens/Book/RegionBook';
+import Book from '../screens/Book/Book';
 
 import CommunityScreen from '../screens/CommunityScreen';
 import CommunityDetailScreen from '../screens/CommunityDetailScreen';
@@ -23,7 +25,7 @@ const Nav = createStackNavigator()
 const Root = () => 
   // <Nav.Navigator screenOptions={{ presentation: "modal", headerShown: false }}>
   <Nav.Navigator
-    initialRouteName="TabViewExample"
+    initialRouteName="Book"
     screenOptions={{
       cardStyle: { backgroundColor: '#212121' },
       headerShown: false
@@ -33,17 +35,17 @@ const Root = () =>
       
       <Nav.Screen name="TabViewExample" component={TabViewExample} />
       <Nav.Screen name="SearchScreen" component={SearchScreen} />
-      <Nav.Screen name="ThemeDetailScreen" component={ThemeDetailScreen} />
-      <Nav.Screen name="CafeDetailScreen" component={CafeDetailScreen} />
 
       <Nav.Screen name="ReservationScreen" component={ReservationScreen} />
       <Nav.Screen name="PostReservationScreen" component={PostReservationScreen} />
       <Nav.Screen name="ReservationDetailScreen" component={ReservationDetailScreen} />
       <Nav.Screen name="ReservationTransfer" component={ReservationTransfer} />
-
+      <Nav.Screen name="ThemeDetailScreen" component={ThemeDetailScreen} />
+      <Nav.Screen name="CafeDetailScreen" component={CafeDetailScreen} />
+      <Nav.Screen name="RegionBook" component={RegionBook} />
+      <Nav.Screen name="Book" component={Book} />
       <Nav.Screen name="CommunityScreen" component={CommunityScreen} />
       <Nav.Screen name="CommunityDetailScreen" component={CommunityDetailScreen} />
-
       <Nav.Screen name="Stack" component={Stack} />
   </Nav.Navigator>
 
