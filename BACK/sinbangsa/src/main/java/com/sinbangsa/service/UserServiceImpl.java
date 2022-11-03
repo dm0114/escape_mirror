@@ -20,9 +20,6 @@ public class UserServiceImpl implements UserService {
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
 
-
-
-
     @Transactional
     public boolean join(UserDto userDto) {
         SHA256 sha256 = new SHA256();
