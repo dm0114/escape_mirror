@@ -63,12 +63,15 @@ public class ThemeReview {
     private LocalDate createAt;
 
     @Column
+    @NotNull
     private int usedHint;
 
     @Column
+    @NotNull
     private String clearTime;
 
     @Column
+    @NotNull
     private Date clearDate;
 
 
