@@ -11,14 +11,12 @@ import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 import TabViewEx from "../navigation/TmpTabView";
 
-function ThemeDetailScreen() {
-  const navigation = useNavigation()
-  const [data, setDatas] = useState("");
-  // const { isLoading, data } = useQuery(
-  //   ["ThemeDetail", query],
-  //   searchApi.getThemeDetail
-  // );
-
+function ThemeDetailScreen({navigation, route}) {
+  const {themeId} = route.params;
+  const { isLoading, data } = useQuery(
+    ["ThemeDetail", themeId],
+    searchApi.getThemeDetail
+  );
   const ThemeDatas = {
     themeId: 3,
     themeName: "비밀의 가족",

@@ -7,34 +7,77 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
-import LoadingScreen from "./LoadingScreen";
-import SearchThemeList from "../components/SearchThemeList";
-
-function CafeDetailScreen() {
-  const [query, setQuery] = useState("");
+// <<<<<<< HEAD
+function CafeDetailScreen({ navigation: { navigate }, route }) {
+  const {storeId} = route.params;
   const { isLoading, isFetching, data, refetch } = useQuery(
-    ["CafeDetail", query], //토큰 추가
-    searchApi.getCafeDetail
-  );
+    ["CafeDetail", storeId], //토큰 추가
+    searchApi.getCafeDetail);
+    return (
+      isLoading ? <LoadingScreen/> : 
+      <MainContainer>
+        <Container>
+          {/* themeImg 넣기 */}
+          <CafeImage />
+          <TextContainer>
+            <Title>{data.store.storeName}</Title>
+            <SubTitle>{data.store.Address}</SubTitle>
+            <SubTitle>{data.store.mapX}</SubTitle>
+            <SubTitle>{data.store.mapY}</SubTitle>
+            
+              <SubTitle>{data.store.tel}분 | </SubTitle>
+              <SubTitle>난이도 {data.store.storeImg} | </SubTitle>
+              <SubTitle>{data.store.homepage} </SubTitle>
+            
+            <SubTitle>{data.store.region}</SubTitle>
+            <SubTitle>{data.store.isClear ? <Text>Clear</Text> : <Text>Fail</Text> }</SubTitle>
+          </TextContainer>
+        </Container>
+        <Title>테마 종류</Title>
+        <View>
+          {data.store.themeList.map((item) => {
+            return (
+              <TmpContainer key={item.themeId}>
+                <Text>{item.themeName}</Text>
+                <Text>{item.themeImg}</Text>
+                <Text>{item.likeCount}</Text>
+                <Text>{item.star}</Text>
+              </TmpContainer>
+            )})}
+        </View>
+        {/* store LikeButton 추가 */}
+        <ButtonContainer />
+      </MainContainer>
+// =======
+// import LoadingScreen from "./LoadingScreen";
+// import SearchThemeList from "../components/SearchThemeList";
 
-  const HeaderTabView = () => {
-    const FirstRoute = () => (
-      <FlatList
-        data={data?.themeList}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 40 }}
-        numColumns={2}
-        renderItem={({ item }) => (
-          <SearchThemeList
-            themeId={item.themeId}
-            themeName={item.themeName}
-            storeName={item.storeName}
-            themeImg={item.themeImg}
-            likeCount={item.likeCount}
-            star={item.star}
-          />
-        )}
-      />
+// function CafeDetailScreen() {
+//   const [query, setQuery] = useState("");
+//   const { isLoading, isFetching, data, refetch } = useQuery(
+//     ["CafeDetail", query], //토큰 추가
+//     searchApi.getCafeDetail
+//   );
+
+//   const HeaderTabView = () => {
+//     const FirstRoute = () => (
+//       <FlatList
+//         data={data?.themeList}
+//         showsVerticalScrollIndicator={false}
+//         contentContainerStyle={{ paddingTop: 40 }}
+//         numColumns={2}
+//         renderItem={({ item }) => (
+//           <SearchThemeList
+//             themeId={item.themeId}
+//             themeName={item.themeName}
+//             storeName={item.storeName}
+//             themeImg={item.themeImg}
+//             likeCount={item.likeCount}
+//             star={item.star}
+//           />
+//         )}
+//       />
+// >>>>>>> 09f2011bcaa63bb7392a3379a5ea6d85bdc242af
     );
 
     const SecondRoute = () => (
