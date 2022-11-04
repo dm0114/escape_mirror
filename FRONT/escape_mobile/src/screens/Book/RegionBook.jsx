@@ -1,11 +1,56 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import {View, Text, FlatList, ImageBackground, Pressable,  StyleSheet, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient'
 import theme from '../../../theme';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
-import { BlurView } from "@react-native-community/blur";
+import RNPickerSelect from 'react-native-picker-select';
 
+const RegionList = {
+    // 서울
+    '02':[
+        '강남',
+        '홍대',
+        '신촌',
+        '건대',
+        '대학로',
+        '강북',
+        '신림', 
+        '기타'
+    ],
+    // 경기
+    '031':[
+        '부천', 
+        '일산',
+        '수원',
+        '안양',
+        '인천',
+        '기타'
+    ],
+    // 충청 
+    '04?':[
+        '대전',
+        '천안',
+        '청주',
+        '기타'
+    ],
+    // 경상 
+    '05!':[
+        '대구',
+        '부산',
+        '기타'
+    ],
+    // 전라 
+    '06$':[
+        '전주',
+        '광주',
+        '기타'
+    ],
+    // 강원 
+    '033':[],
+    // 제주 
+    '064':[]
+}
 
 const test = [
     {
@@ -55,16 +100,20 @@ const test = [
 const testImg = 'https://media.4-paws.org/1/e/d/6/1ed6da75afe37d82757142dc7c6633a532f53a7d/VIER%20PFOTEN_2019-03-15_001-2886x1999-1920x1330.jpg';
 const testUnity = 'https://user-images.githubusercontent.com/97578425/199651092-ce04c889-71c8-431f-bfae-1732e4c72f8c.png'
 
-const windowHeight = Dimensions.get('window').height*0.85;
-
 export default function RegionBook({navigation, route}){
     const {num, name} = route.params;
     const [isCafeOn, setIsCafeOn] = useState(null);
+    const [selectRegion, setSelectRegion] = useState(`${name}/null`);
+    const [cafeSet, setCafeSet] = useState(null);
+    const itemsList = RegionList[num].map((item) => {
+        return {label:item, value:item}
+    })
 
     const bottomSheetRef = useRef(null);
-
     // variables
     const snapPoints = useMemo(() => ['3%', '85%'], []);
+
+    useEffect(()=>{console.log(selectRegion)}, [selectRegion])
 
     return(
         <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
@@ -78,7 +127,16 @@ export default function RegionBook({navigation, route}){
                     snapPoints={snapPoints}
                     backgroundStyle={styles.bottomSheet}
                 >
-                    {/* <BlurView blurType='light' style={styles.blur}> */}
+                    <View>
+                        <RNPickerSelect
+                            style={{inputAndroid: styles.rnpicker}}
+                            onValueChange={(value) => setSelectRegion(`${name}/${value}`)}
+                            items={itemsList}
+                            useNativeAndroidPickerStyle={false}
+                            placeholder={{label:'세부지역을 선택해주세요', 'value':null}}
+                        />
+                    </View>
+                    { selectRegion !== `${name}/null` ? 
                         <BottomSheetFlatList
                         numColumns={2}
                         data={test}
@@ -99,6 +157,9 @@ export default function RegionBook({navigation, route}){
                             </Pressable>
                     }
                         />
+                        : <Text>문구</Text>
+                    }
+                    
                     {/* </BlurView> */}
                 </BottomSheet>
             </View>
@@ -150,5 +211,17 @@ const styles = StyleSheet.create({
     // },
     bottomSheet : {
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    },
+    rnpicker:{
+        width:'90%',
+        height:50,
+        marginLeft:'auto',
+        marginRight:'auto',
+        marginTop:20,
+        marginBottom:20,
+        backgroundColor:'white',
+        borderRadius:10,
+        paddingLeft:20,
+        paddingRight:20
     }
 })
