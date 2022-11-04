@@ -15,7 +15,7 @@ export default function ReservationScreen() {
     ["searchCafeAndTheme"], //토큰 추가
     reservationApi.getMypageActs
   );
-
+ 
   return isLoading ? (
     <LoadingScreen />
   ) : (
