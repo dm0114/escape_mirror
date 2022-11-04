@@ -29,7 +29,7 @@ public class Reservation {
 
     @Column
     @NotNull
-    private Date date;
+    private String date;
 
     @Column
     @NotNull

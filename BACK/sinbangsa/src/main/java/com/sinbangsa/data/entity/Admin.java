@@ -1,33 +1,33 @@
 package com.sinbangsa.data.entity;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class UserStoreRelation {
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne
-    private User storeRelationUser;
-
-    @ManyToOne
-    private Store userRelationStore;
+    @OneToMany(mappedBy = "storeAdmin")
+    private List<Store> stores;
 
     @Column
-    private int rtype;
+    private String adminName;
 
     @Column
-    private int clearCount;
+    private String userId;
+
+    @Column
+    private String password;
 
 }

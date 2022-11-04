@@ -37,7 +37,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = new Reservation();
 
         try {
-            reservation.setDate(reservationDto.getReservationDate());
+//            reservation.setDate(reservationDto.getReservationDate());
             reservation.setThemeTime(themeTimeRepository
                     .findById(reservationDto.getThemeTimeId()));
 
