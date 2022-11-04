@@ -110,7 +110,6 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
       <HeaderTabView />
     </>
   );
-}
 
 const Container = styled.View`
   flex-direction: row;
