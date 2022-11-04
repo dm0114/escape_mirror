@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImpl.class);
     private final ReservationRepository reservationRepository;
 
     private final ThemeTimeRepository themeTimeRepository;

@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     private final ReviewRepository reviewRepository;
 
