@@ -13,7 +13,7 @@ COPY --from=build /var/jenkins_home/workspace/frontend_admin_deploy/FRONT/escape
 COPY --from=build /var/jenkins_home/workspace/frontend_admin_deploy/FRONT/escape_web/privkey.pem /etc/letsencrypt/live/k7c104.p.ssafy.io/privkey.pem
 
 EXPOSE 80
-CMD ["nginx", "-g","daemon off;"]
+ENTRYPOINT ["nginx", "-g","daemon off;"]
 
 
 # WORKDIR "/usr/src/app"
