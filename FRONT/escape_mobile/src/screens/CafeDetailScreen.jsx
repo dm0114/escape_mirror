@@ -7,6 +7,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
+// <<<<<<< HEAD
 function CafeDetailScreen({ navigation: { navigate }, route }) {
   const {storeId} = route.params;
   const { isLoading, isFetching, data, refetch } = useQuery(
@@ -47,6 +48,36 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
         {/* store LikeButton 추가 */}
         <ButtonContainer />
       </MainContainer>
+// =======
+// import LoadingScreen from "./LoadingScreen";
+// import SearchThemeList from "../components/SearchThemeList";
+
+// function CafeDetailScreen() {
+//   const [query, setQuery] = useState("");
+//   const { isLoading, isFetching, data, refetch } = useQuery(
+//     ["CafeDetail", query], //토큰 추가
+//     searchApi.getCafeDetail
+//   );
+
+//   const HeaderTabView = () => {
+//     const FirstRoute = () => (
+//       <FlatList
+//         data={data?.themeList}
+//         showsVerticalScrollIndicator={false}
+//         contentContainerStyle={{ paddingTop: 40 }}
+//         numColumns={2}
+//         renderItem={({ item }) => (
+//           <SearchThemeList
+//             themeId={item.themeId}
+//             themeName={item.themeName}
+//             storeName={item.storeName}
+//             themeImg={item.themeImg}
+//             likeCount={item.likeCount}
+//             star={item.star}
+//           />
+//         )}
+//       />
+// >>>>>>> 09f2011bcaa63bb7392a3379a5ea6d85bdc242af
     );
 
     const SecondRoute = () => (
@@ -110,6 +141,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
       <HeaderTabView />
     </>
   );
+}
 
 const Container = styled.View`
   flex-direction: row;
