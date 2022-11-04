@@ -6,6 +6,7 @@ import com.sinbangsa.data.dto.ThemeTimeDto;
 import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.service.ReservationService;
 import com.sinbangsa.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/reservation")
 @RequiredArgsConstructor
+@Api(value = "예약 API", tags = {"예약하기, 예약내역"})
 public class ReservationController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
