@@ -5,8 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import { communityApi } from "../apis/api";
 import { Text, TouchableOpacity, View } from "react-native";
 import LoadingScreen from '../screens/LoadingScreen'
+import { useNavigation } from "@react-navigation/native";
 
-export default function CommunityScreen({navigation}) {
+export default function CommunityScreen() {
+  const navigation = useNavigation();
   const [query, setQuery] = useState("");
   const { isLoading, data } = useQuery(
     ["CommunityList", query],
@@ -99,26 +101,48 @@ export default function CommunityScreen({navigation}) {
       {/* 커뮤니티는 토글로 필터링 */}
       {data.articles.map((item) => {
         return (
-          <TouchableOpacity 
+          <ArticleComponent
             key={item.articleId}
-            onPress={() =>{ navigation.navigate('CommunityDetailScreen', 
-            {articleId: item.articleId })}}
+            // onPress={() => {navigation.navigate('CommunityDetailScreen', 
+            // {articleId: item.articleId })}}
+            onPress={() => {navigation.navigate('CommunityDetailScreen', {articleId:item.articleId})}}
+            style={{ backgroundColor: "#FBFBFB"}}
           >
-            <Text>{item.Title}</Text>
-            <Text>{item.writerName}</Text>
-          </TouchableOpacity>
+            <ArticleTitle>{item.Title}</ArticleTitle>
+            <ArticleWriter>{item.writerName}</ArticleWriter>
+          </ArticleComponent>
         )
       })}
     </View>
   );
 }
+// 뷰
 
+// 요소
+const ArticleComponent = styled.TouchableOpacity`
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+`
+
+// 텍스트
 const MainText = styled.Text`
   font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title2};
+  font-size: ${({ theme }) => theme.fontSizes.title3};
   color: #fff;
-  line-height: ${({ theme }) => theme.fontHeight.title2};
+  line-height: ${({ theme }) => theme.fontHeight.title3};
   margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
   margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
 `;
 
+const ArticleTitle = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.title3};
+  line-height: ${({ theme }) => theme.fontHeight.title3};
+`
+const ArticleWriter = styled.Text`
+  font-family: "SUIT-SemiBold";
+  font-size: ${({ theme }) => theme.fontSizes.caption1};
+  line-height: ${({ theme }) => theme.fontHeight.caption1};
+  color: #999;
+`
