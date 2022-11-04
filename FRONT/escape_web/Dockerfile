@@ -4,6 +4,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+RUN ls -a
 FROM nginx:stable-alpine as production-stage
 # # RUN mkdir ./build
 COPY --from=build /var/jenkins_home/workspace/sinbangsa_front_web/FRONT/escape_web/build /usr/share/nginx/html
