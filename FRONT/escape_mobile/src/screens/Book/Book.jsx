@@ -76,6 +76,7 @@ const RegionBtn = styled.TouchableOpacity`
 
 const Container = styled.View`
     flex:1;
+    padding-top:40px;
 `
 
 const TwoRegion = styled.View`

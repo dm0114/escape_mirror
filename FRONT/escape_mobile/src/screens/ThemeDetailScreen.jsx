@@ -6,10 +6,10 @@ import { searchApi } from "../apis/api";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "react-native";
 
-function ThemeDetailScreen({navigation}) {
-  const [query, setQuery] = useState("");
+function ThemeDetailScreen({navigation, route}) {
+  const {themeId} = route.params;
   const { isLoading, data } = useQuery(
-    ["ThemeDetail", query],
+    ["ThemeDetail", themeId],
     searchApi.getThemeDetail
   );
   

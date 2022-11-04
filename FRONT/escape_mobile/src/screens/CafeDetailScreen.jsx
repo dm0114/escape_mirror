@@ -6,10 +6,10 @@ import LoadingScreen from "./LoadingScreen";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
-function CafeDetailScreen({ navigation: { navigate } }) {
-  const [query, setQuery] = useState("");
+function CafeDetailScreen({ navigation: { navigate }, route }) {
+  const {storeId} = route.params;
   const { isLoading, isFetching, data, refetch } = useQuery(
-    ["CafeDetail", query], //토큰 추가
+    ["CafeDetail", storeId], //토큰 추가
     searchApi.getCafeDetail);
     return (
       isLoading ? <LoadingScreen/> : 
