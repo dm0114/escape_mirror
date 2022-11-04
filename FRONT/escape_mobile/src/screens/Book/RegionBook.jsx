@@ -6,6 +6,9 @@ import theme from '../../../theme';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import RNPickerSelect from 'react-native-picker-select';
 
+import {Checkbox} from 'native-base';
+import {Picker} from 'react-native-ui-lib';
+
 const RegionList = {
     // 서울
     '02':[
@@ -198,13 +201,26 @@ export default function RegionBook({navigation, route}){
                     :   
                     <>
                         <View>
-                            {itemsList.length ? <RNPickerSelect
-                            style={{inputAndroid: styles.rnpicker}}
-                            onValueChange={(value) => setSelectRegion(`${name}/${value}`)}
-                            items={itemsList}
-                            useNativeAndroidPickerStyle={false}
-                            placeholder={{label:'세부지역을 선택해주세요', 'value':null}}
-                        />
+                            {itemsList.length ? 
+                            <>
+                            <Checkbox value="test" accessibilityLabel="This is a dummy checkbox" />
+                            <Picker
+                            value={selectRegion}
+                            placeholder={'Placeholder'}
+                            onChange={() => setSelectRegion}
+                            >
+                            {itemsList.map((item, index) => (
+                            <Picker.Item key={index} value={item} label={item}/>
+                            ))}
+                            </Picker>
+                            </>
+                        //     <RNPickerSelect
+                        //     style={{inputAndroid: styles.rnpicker}}
+                        //     onValueChange={(value) => setSelectRegion(`${name}/${value}`)}
+                        //     items={itemsList}
+                        //     useNativeAndroidPickerStyle={false}
+                        //     placeholder={{label:'세부지역을 선택해주세요', 'value':null}}
+                        // />
                             :
                             null
                             }

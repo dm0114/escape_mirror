@@ -4,7 +4,7 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import CommunityScreen from "../screens/CommunityScreen";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
-import Login from '../screens/Login/SignupScreen';
+// import Login from '../screens/Login/SignupScreen';
 import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
