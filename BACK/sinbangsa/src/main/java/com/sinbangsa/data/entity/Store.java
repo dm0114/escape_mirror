@@ -19,8 +19,9 @@ public class Store {
     private long storeId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User storeUser;
+    @JoinColumn(name = "admin")
+    private Admin storeAdmin;
+
 
     @OneToMany(mappedBy = "store")
     private List<Theme> themes = new ArrayList<>();

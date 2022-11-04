@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -37,7 +38,7 @@ public class Book {
 
     @Column
     @NotNull
-    private Date doneDate;
+    private LocalDate doneDate;
 
     @Column
     @NotNull

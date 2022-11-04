@@ -28,15 +28,13 @@ public class UserServiceImpl implements UserService {
         try {
             user.setUsername(userDto.getUsername());
             user.setNickname(userDto.getNickname());
-            user.setPassword(sha256.encrypt(userDto.getPassword()));
             user.setEmail(userDto.getEmail());
-            user.setTel(userDto.getTel());
-            user.setBirth(userDto.getBirth());
+
 
             userRepository.save(user);
             return true;
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
 
