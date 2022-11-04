@@ -74,5 +74,34 @@ public class ReservationServiceImpl implements ReservationService {
 
         }
 
+    @Transactional(readOnly = true)
+    public List<Long> canReserve(long themeId, String date) {
+        LOGGER.info("[ReservationService] canReserve 호출");
+        List<Long> themeTimeIdList = new ArrayList<>();
+
+
+        // 테마 예약시간
+        List<ThemeTime> themeTimes = themeTimeRepository.findAllByThemeId(themeId);
+
+        for (ThemeTime them : themeTimes) {
+            long themeTimeId = them.getId();
+
+            // 예약된 내역
+            List<Reservation> reservedList = reservationRepository.findAllByThemeTimeIdAndDate(themeTimeId, date);
+            boolean flag = true;
+            for (Reservation reserved : reservedList) {
+                if (reserved.getThemeTime().getId() == themeTimeId) {
+                    flag = false;
+                }
+            }
+            if (flag) {
+                themeTimeIdList.add(them.getId());
+            }
+        }
+        return themeTimeIdList;
+
+
+    }
+
 
 }

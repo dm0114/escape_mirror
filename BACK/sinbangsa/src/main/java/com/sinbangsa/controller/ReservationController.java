@@ -63,4 +63,14 @@ public class ReservationController {
         return new ResponseEntity<List<ThemeTimeDto>>(result, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/date")
+    @ApiOperation(value = "날짜별 예약현황")
+    public ResponseEntity<List<Long>> canReserve(@RequestParam long themeId, String date) {
+        LOGGER.info("[ReservationController] canReserve 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        List<Long> result = reservationService.canReserve(themeId,date);
+        LOGGER.info("[ReservationController] canReserveList 반환 성공");
+        return new ResponseEntity<List<Long>>(result, headers, HttpStatus.OK);
+    }
 }

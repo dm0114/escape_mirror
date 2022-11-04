@@ -14,4 +14,5 @@ public interface ThemeTimeRepository extends JpaRepository<ThemeTime, Long> {
 
     List<ThemeTime> findAllByThemeId(long themeId);
 
+
 }

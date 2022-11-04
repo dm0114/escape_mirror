@@ -11,4 +11,6 @@ public interface ReservationService {
     boolean createReservation(ReservationDto reservationDto);
 
     List<ThemeTimeDto> getThemeTime(long themeId);
+
+    List<Long> canReserve(long themeId, String date);
 }
