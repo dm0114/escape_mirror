@@ -1,5 +1,5 @@
 FROM node:16.15.0 as build
-WORKDIR /var/jenkins_home/workspace//FRONT/escape_web
+WORKDIR /var/jenkins_home/workspace/frontend_admin_deploy/FRONT/escape_web
 COPY package*.json ./
 RUN npm install
 COPY . .
