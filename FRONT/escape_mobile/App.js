@@ -15,7 +15,6 @@ import Root from './src/navigation/Root';
 import SearchScreen from './src/screens/SearchScreen';
 
 
-// import Login from './src/screens/Login/FindIdScreen'
 
 const RootContainer = styled.View`
   flex: 1;
@@ -51,7 +50,7 @@ export default function App() {
           "SUIT-SemiBold": require("./src/assets/fonts/SUIT-SemiBold.otf"),
           "Classic" : require("./src/assets/fonts/Cafe24Classictype.ttf")
         });
-
+        
       } catch (e) {
         console.warn(e);
 

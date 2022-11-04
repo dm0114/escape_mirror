@@ -1,5 +1,7 @@
 import React from 'react'
 import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 import styled from 'styled-components/native';
 
 export default function SearchCafeList({
@@ -9,13 +11,9 @@ export default function SearchCafeList({
   storeAddress,
   likeCount
 }) {
-  // const navigation = useNavigation();
-  // const goToDetail = () => {
-  //    navigation.navigate('Stack', {screen: "CafeDetailScreen"})
-  // }
+  const navigation = useNavigation()
   return (
-    <TouchableOpacity>
-    {/* <TouchableOpacity onPress={goToDetail}> */}
+    <TouchableOpacity onPress={() => {navigation.navigate('CafeDetailScreen')}}>
       <Container>
         {/* storeImg 넣기 */}
         <CafeImage />
@@ -41,14 +39,14 @@ const TextContainer = styled.View`
 
 // 추후 이미지 태그로 대체
 const CafeImage = styled.View`
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   border-radius: 50px;
   background-color: gray;
 `
 const Title = styled.Text`
   font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.body};
+  font-size: ${({ theme }) => theme.fontSizes.title3};
   color: #fff;
   margin-bottom: 8px;
 `

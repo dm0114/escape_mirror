@@ -9,6 +9,7 @@ import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
+  
   <MainScreen />
 );
 
@@ -41,7 +42,7 @@ export default function TabViewExample() {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "first", icon: ":"},
+    { key: "first"},
     { key: "second"},
     { key: "third"},
     { key: "fourth"},
