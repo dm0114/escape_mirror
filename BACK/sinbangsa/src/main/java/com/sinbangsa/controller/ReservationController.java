@@ -17,10 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/reservation")
@@ -58,7 +58,7 @@ public class ReservationController {
     public ResponseEntity<List<ThemeTimeDto>> getThemeTime(@RequestParam long themeId) {
         LOGGER.info("[ReservationController] getThemeTime 호출");
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         List<ThemeTimeDto> result = reservationService.getThemeTime(themeId);
         return new ResponseEntity<List<ThemeTimeDto>>(result, headers, HttpStatus.OK);
     }
@@ -72,5 +72,16 @@ public class ReservationController {
         List<Long> result = reservationService.canReserve(themeId,date);
         LOGGER.info("[ReservationController] canReserveList 반환 성공");
         return new ResponseEntity<List<Long>>(result, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/searchuser")
+    @ApiOperation(value = "닉네임 유효성 검사")
+    public ResponseEntity<Long> validateNickname(@RequestParam String nickname) {
+        LOGGER.info("[ReservationController] validateNickname 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        Long result = reservationService.validateNickname(nickname);
+        LOGGER.info("[ReservationController] validateNickname 반환 성공");
+        return new ResponseEntity<Long>(result, headers, HttpStatus.OK);
     }
 }

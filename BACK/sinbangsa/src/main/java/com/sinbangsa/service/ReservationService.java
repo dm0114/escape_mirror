@@ -13,4 +13,6 @@ public interface ReservationService {
     List<ThemeTimeDto> getThemeTime(long themeId);
 
     List<Long> canReserve(long themeId, String date);
+
+    Long validateNickname(String nickname);
 }
