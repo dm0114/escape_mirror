@@ -16,4 +16,4 @@ CMD ["nginx", "-g","daemon off;"]
 # COPY package.json ./
 # RUN npm install
 # COPY ./ ./
-CMD  ["npm","run","start"]
+# CMD  ["npm","run","start"]
