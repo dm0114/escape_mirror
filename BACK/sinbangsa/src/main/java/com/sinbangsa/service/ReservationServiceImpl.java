@@ -5,9 +5,11 @@ import com.sinbangsa.data.dto.ReservationDto;
 import com.sinbangsa.data.dto.ThemeTimeDto;
 import com.sinbangsa.data.entity.Reservation;
 import com.sinbangsa.data.entity.ThemeTime;
+import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.ReservationRepository;
 import com.sinbangsa.data.repository.ThemeRepository;
 import com.sinbangsa.data.repository.ThemeTimeRepository;
+import com.sinbangsa.data.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ThemeTimeRepository themeTimeRepository;
 
-    private final ThemeRepository themeRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public boolean createReservation(ReservationDto reservationDto) {
@@ -72,7 +74,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return themeTimes;
 
-        }
+    }
 
     @Transactional(readOnly = true)
     public List<Long> canReserve(long themeId, String date) {
@@ -103,5 +105,18 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Transactional(readOnly = true)
+    public Long validateNickname(String nickname) {
+        LOGGER.info("[ReservationService] validateNickname 호출");
+        Long userId = (long) 0;
 
+        if (userRepository.existsByNickname(nickname)) {
+            userId = userRepository.findByNickname(nickname).getId();
+        }
+        return userId;
+
+
+
+
+    }
 }
