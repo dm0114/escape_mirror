@@ -14,6 +14,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import Root from './src/navigation/Root';
 import SearchScreen from './src/screens/SearchScreen';
 
+import { NativeBaseProvider } from "native-base";
+
 
 
 const RootContainer = styled.View`
@@ -73,7 +75,9 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <RootContainer>
           <NavigationContainer>
-            <Root />
+            <NativeBaseProvider>
+              <Root />
+            </NativeBaseProvider>
             {/* <MainScreen /> */}
           </NavigationContainer>
         </RootContainer>
