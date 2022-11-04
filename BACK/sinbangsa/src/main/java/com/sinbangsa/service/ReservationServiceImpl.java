@@ -2,7 +2,9 @@ package com.sinbangsa.service;
 
 
 import com.sinbangsa.data.dto.ReservationDto;
+import com.sinbangsa.data.dto.ThemeTimeDto;
 import com.sinbangsa.data.entity.Reservation;
+import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.data.repository.ReservationRepository;
 import com.sinbangsa.data.repository.ThemeTimeRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 
 @Service
@@ -46,5 +49,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return true;
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<ThemeTimeDto> getThemeTime(long themeId) {
+        LOGGER.info("[ReservationService] getThemeTime 호출");
+        return List<ThemeTime> ThemeTimeList = themeTimeRepository.findByThemeId_theme(themeId);
     }
 }

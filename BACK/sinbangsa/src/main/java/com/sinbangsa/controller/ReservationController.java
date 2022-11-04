@@ -2,6 +2,8 @@ package com.sinbangsa.controller;
 
 
 import com.sinbangsa.data.dto.ReservationDto;
+import com.sinbangsa.data.dto.ThemeTimeDto;
+import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.service.ReservationService;
 import com.sinbangsa.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,12 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,6 +45,12 @@ public class ReservationController {
         resultMap.put("message", SUCCESS);
 
         return new ResponseEntity<>(resultMap, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ThemeTime>> getThemeTime(@RequestParam long themeId) {
+        LOGGER.info("[ReservationController] getThemeTime 호출");
+        return new ResponseEntity<List<ThemeTime>>(reservationService.getThemeTime(themeId),HttpStatus.OK);
     }
 
 }
