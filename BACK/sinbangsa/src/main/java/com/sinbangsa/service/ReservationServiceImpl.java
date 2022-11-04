@@ -6,6 +6,7 @@ import com.sinbangsa.data.dto.ThemeTimeDto;
 import com.sinbangsa.data.entity.Reservation;
 import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.data.repository.ReservationRepository;
+import com.sinbangsa.data.repository.ThemeRepository;
 import com.sinbangsa.data.repository.ThemeTimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,6 +26,8 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
 
     private final ThemeTimeRepository themeTimeRepository;
+
+    private final ThemeRepository themeRepository;
 
     @Transactional
     public boolean createReservation(ReservationDto reservationDto) {
@@ -54,6 +58,21 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional(readOnly = true)
     public List<ThemeTimeDto> getThemeTime(long themeId) {
         LOGGER.info("[ReservationService] getThemeTime 호출");
-        return List<ThemeTime> ThemeTimeList = themeTimeRepository.findByThemeId_theme(themeId);
-    }
+        List<ThemeTimeDto> themeTimes = new ArrayList<>();
+
+        List<ThemeTime> themeTimerepos = themeTimeRepository.findAllByThemeId((themeId));
+
+        for (ThemeTime them : themeTimerepos) {
+            ThemeTimeDto themeTimeDto = new ThemeTimeDto();
+
+            themeTimeDto.setTime(them.getTime());
+            themeTimeDto.setThemeTimeId(them.getId());
+
+            themeTimes.add(themeTimeDto);
+        }
+        return themeTimes;
+
+        }
+
+
 }
