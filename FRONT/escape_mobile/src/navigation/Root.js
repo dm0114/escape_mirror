@@ -25,7 +25,7 @@ const Nav = createStackNavigator()
 const Root = () => 
   // <Nav.Navigator screenOptions={{ presentation: "modal", headerShown: false }}>
   <Nav.Navigator
-    initialRouteName="TabViewExample"
+    initialRouteName="Book"
     screenOptions={{
       cardStyle: { backgroundColor: '#212121' },
       headerShown: false

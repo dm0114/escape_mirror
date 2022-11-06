@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import styled from "styled-components/native";
-import theme from "../../theme";
-
-import SearchBar from "../components/SearchBar";
-import SearchCafeList from "../components/SearchCafeList";
-import SearchThemeList from "../components/SearchThemeList";
-import LoadingScreen from "./LoadingScreen";
+import { useWindowDimensions } from "react-native";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
+
+import SearchCafeList from "../components/SearchCafeList";
+import SearchThemeList from "../components/SearchThemeList";
+import LoadingScreen from "./LoadingScreen";
 
 export default function SearchScreen() {
   const [query, setQuery] = useState("");
   const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch,
-    { enabled: false, });
-
+    { enabled: false }
+  );
 
   const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
@@ -29,10 +29,10 @@ export default function SearchScreen() {
 
   const SearchResult = () => {
     if (!isLoading && !isFetching) {
-      return toggle ? (
+      const CafeRoute = () => (
         <CafeListScroll
           data={data.storeList}
-          ListHeaderComponent={<SubText>카페 검색 결과</SubText>}
+          contentContainerStyle={{ paddingTop: 40 }}
           renderItem={({ item }) => (
             <SearchCafeList
               storeId={item.storeId}
@@ -43,12 +43,18 @@ export default function SearchScreen() {
             />
           )}
         />
-      ) : (
+      );
+
+      const ThemeRoute = () => (
         <ThemeListScroll
           data={data.themeList}
-          ListHeaderComponent={<SubText>테마 검색 결과</SubText>}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: 30 }}
+          contentContainerStyle={{
+            paddingTop: 40,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          numColumns={2}
           renderItem={({ item }) => (
             <SearchThemeList
               themeId={item.themeId}
@@ -61,13 +67,41 @@ export default function SearchScreen() {
           )}
         />
       );
+
+      const layout = useWindowDimensions();
+
+      const [index, setIndex] = React.useState(0);
+      const [routes] = React.useState([
+        { key: "Cafe", title: "카페 검색 결과" },
+        { key: "Theme", title: "테마 검색 결과" },
+      ]);
+
+      return (
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={SceneMap({
+            Cafe: CafeRoute,
+            Theme: ThemeRoute,
+          })}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          renderTabBar={(props) => (
+            <TabBar {...props} style={{ backgroundColor: null }} />
+          )}
+        />
+      );
     } else if (isLoading && isFetching) return <LoadingScreen />;
     else {
-      return null;
+      return (
+        <>
+          <SearchView flex={1}>
+            <SubText>지금 주변에서 인기 있는 곳</SubText>
+            {/* 이미지 및 슬라이더 추가 */}
+          </SearchView>
+        </>
+      );
     }
-  }
-
-  const [toggle, setToggle] = useState(false);
+  };
 
   return (
     <>
@@ -83,17 +117,13 @@ export default function SearchScreen() {
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
       />
-      <SearchView flex={1}>
-        <SubText>지금 주변에서 인기 있는 곳</SubText>
-        {/* 이미지 및 슬라이더 추가 */}
-      </SearchView>
-      {<SearchResult />}
+      <SearchResult />
     </>
   );
 }
 
 const Container = styled.View`
-  flex: 1;
+  background-color: red;
 `;
 
 const TextContainer = styled.View`
@@ -114,6 +144,9 @@ const MainText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
   color: #fff;
+  line-height: ${({ theme }) => theme.fontHeight.title2};
+  margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
+  margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
 `;
 
 const SubText = styled.Text`
