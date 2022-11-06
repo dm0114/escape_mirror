@@ -77,7 +77,11 @@ export default function MypageScreen() {
 
 
   function EditScreen() {
-    const [nick,setNick] = useState('명탐정 셜록')
+    const [nick, setNick] = useState('명탐정 셜록');
+    const [isModalVisible, setModalVisible] = useState(false);
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+    };
     return (
       <>
         {/* edit가 TRUE일 때, 수정 뷰 */}
@@ -120,11 +124,19 @@ export default function MypageScreen() {
 
         <UserView>
           {/* 회원 탈퇴하기 */}
-          <EscapeTxt>회원 탈퇴</EscapeTxt>
+          <EscapeTxt onPress={toggleModal}>회원 탈퇴</EscapeTxt>
           <EscapeTxt>|</EscapeTxt>
           {/* 로그아웃 */}
           <LogOutTxt>로그아웃</LogOutTxt>
         </UserView>
+
+        {/* 회원탈퇴 Modal */}
+        <Modal isVisible={isModalVisible}>
+          <View>
+            <Text>Hello!</Text>
+            <Button title="Hide modal" onPress={toggleModal} />
+          </View>
+        </Modal>
 
         
       </>

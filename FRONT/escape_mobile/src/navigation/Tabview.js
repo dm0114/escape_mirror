@@ -4,24 +4,28 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import CommunityScreen from "../screens/CommunityScreen";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
-import Login from '../screens/Login/SignupScreen';
+import Login from '../screens/Login/PutFindPwScreen';
+import SignupScreen from '../screens/Login/SignupScreen';
+import FindIdScreen from '../screens/Login/FindIdScreen';
+import FindPwScreen from '../screens/Login/FindPwScreen';
 import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
-  <MainScreen />
+  // <MainScreen />
+  <MainScreen/>
 );
 
 const SecondRoute = () => (
-  <SearchScreen />
+  <SignupScreen />
 );
 
 const ThirdRoute = () => (
-  <CommunityScreen />
+  <FindIdScreen />
 );
 
 const FourthRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
+  <FindPwScreen/>
 );
 
 const FifthRoute = () => (
