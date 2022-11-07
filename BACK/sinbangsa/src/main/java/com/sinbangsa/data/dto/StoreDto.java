@@ -18,9 +18,8 @@ public class StoreDto {
 
     private String storeName;
 
-    private boolean isClear;
+    private int clearCnt;
 
-    private String successRate;
-
+    private int totalTheme;
 
 }

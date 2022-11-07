@@ -1,13 +1,11 @@
 package com.sinbangsa.service;
 
 
-import com.sinbangsa.data.dto.BookDto;
 import com.sinbangsa.data.dto.StoreDetailDto;
 import com.sinbangsa.data.dto.StoreDto;
 import com.sinbangsa.data.dto.ThemeDetailDto;
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
-import com.sinbangsa.data.entity.ThemeReview;
 import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -35,43 +33,39 @@ public class BookServiceImpl implements BookService {
 
     private final ThemeReviewRepository themeReviewRepository;
 
-//    public List<BookDto> getCafeList(String region) {
-//        LOGGER.info("[BookService] getCafeList 호출");
-//        List<StoreDto> cafeList = new ArrayList<>();
-//
-//        String state;
-//        String city;
-//        String[] strList = region.split("/");
-//        state = strList[0];
-//        city = strList[1];
-//        if (city == "전체") {
-//            region = state;
-//        }
-//
-//        List<Store> cafesRepo = storeRepository.findAllByRegionContaining(region);
-//
-//        for (Store cafe : cafesRepo) {
-//            StoreDto storeDto = new StoreDto();
-//            storeDto.setStoreId(cafe.getStoreId());
-//            storeDto.setStoreImg(cafe.getPoster());
-//            storeDto.setStoreName(cafe.getStoreName());
-//            List<Theme> themes = cafe.getThemes();
-//            for (Theme theme : themes) {
-//                long themeId = theme.getId();
-//                long userId = (long) 1; //유저 ID 필요
-//
-//
-//            }
-//
-//        }
-//
-//
-//
-//
-//
-//    }
+    public List<StoreDto> getStoreList(String region) {
+        LOGGER.info("[BookService] getCafeList 호출");
+        List<StoreDto> cafeList = new ArrayList<>();
 
-    public StoreDetailDto getCafeDetail(Long storeId) {
+        String state;
+        String city;
+        String[] strList = region.split("/");
+        state = strList[0];
+        city = strList[1];
+        if (city == "전체") {
+            region = state;
+        }
+        List<StoreDto> stores = new ArrayList<>();
+        List<Store> storesRepo = storeRepository.findAllByRegionContaining(region);
+
+        // 임시
+        long userId = (long) 1;
+        User userRepo = userRepository.findById(userId);
+
+        for (Store storeRepo : storesRepo) {
+            StoreDto storeDto = new StoreDto();
+            storeDto.setStoreId(storeRepo.getStoreId());
+            storeDto.setStoreImg(storeRepo.getPoster());
+            storeDto.setStoreName(storeRepo.getStoreName());
+            storeDto.setClearCnt(bookRepository.getClearCnt(userRepo, storeRepo));
+            storeDto.setTotalTheme(themeRepository.countByStore(storeRepo));
+            stores.add(storeDto);
+        }
+
+        return stores;
+    }
+
+    public StoreDetailDto getStoreDetail(Long storeId) {
         LOGGER.info("[BookService] getCafeDetail 호출");
 
         StoreDetailDto storeDetailDto = new StoreDetailDto();
@@ -92,7 +86,6 @@ public class BookServiceImpl implements BookService {
         long userId = (long) 1;
         User userRepo = userRepository.findById(userId);
         storeDetailDto.setClearCnt(bookRepository.getClearCnt(userRepo, storeRepo));
-        System.out.println(storeDetailDto.getClearCnt());
         storeDetailDto.setTotalTheme(themeRepository.countByStore(storeRepo));
 
         List<ThemeDetailDto> themeDetailDtoList = new ArrayList<>();
@@ -109,8 +102,6 @@ public class BookServiceImpl implements BookService {
             } else {
                 themeDetailDto.setStar((int) Math.round(themeReviewRepository.getAvgStar(themeRepo)));
             }
-
-
 
 
             themeDetailDtoList.add(themeDetailDto);
