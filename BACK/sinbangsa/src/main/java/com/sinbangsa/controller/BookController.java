@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor
-@Api(value = "도감 API", tags = {"지역별 카페 리스트"})
+@Api(value = "도감 API", tags = {"도감 API"})
 public class BookController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
