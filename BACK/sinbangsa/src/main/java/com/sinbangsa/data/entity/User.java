@@ -22,14 +22,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
 
-    @OneToMany(mappedBy = "storeUser")
-    private List<Store> stores = new ArrayList<>();
-
-    @OneToMany(mappedBy = "articleUser")
-    private List<Article> articles = new ArrayList<>();
-
-    @OneToMany(mappedBy = "commentUser")
-    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "reservationUser")
     private List<Reservation> reservations = new ArrayList<>();
@@ -51,39 +43,20 @@ public class User {
     @NotNull
     private String email;
 
-
-    @Column
-    @NotNull
-    private boolean admin;
-
-    @Column
-    @NotNull
-    private String tel;
-
-    @Column
-    @NotNull
-    private LocalDate birth;
-
-    @Column
-    @NotNull
-    private String password;
-
-    @Column
-    private String auth;
-
     @Column
     private String profile;
 
     @Column
     private Integer grade = 0;
 
-    @Column
-    private String Title;
 
     @Column
     private String username;
 
     @Column
     private String nickname;
+
+    @Column
+    private String refreshToken;
 
 }
