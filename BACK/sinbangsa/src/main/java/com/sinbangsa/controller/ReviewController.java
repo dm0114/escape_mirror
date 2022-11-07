@@ -26,7 +26,7 @@ import java.nio.charset.Charset;
 @Api(value = "리뷰 API", tags = {"리뷰작성"})
 public class ReviewController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     private static final String SUCCESS = "success";
 
