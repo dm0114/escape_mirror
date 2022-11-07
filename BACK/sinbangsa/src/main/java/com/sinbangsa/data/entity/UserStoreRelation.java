@@ -19,9 +19,11 @@ public class UserStoreRelation {
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User storeRelationUser;
 
     @ManyToOne
+    @JoinColumn(name = "store_id")
     private Store userRelationStore;
 
     @Column

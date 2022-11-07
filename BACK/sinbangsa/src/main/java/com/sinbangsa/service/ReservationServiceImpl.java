@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImpl.class);
     private final ReservationRepository reservationRepository;
 
     private final ThemeTimeRepository themeTimeRepository;
@@ -40,6 +40,8 @@ public class ReservationServiceImpl implements ReservationService {
 //            reservation.setDate(reservationDto.getReservationDate());
             reservation.setThemeTime(themeTimeRepository
                     .findById(reservationDto.getThemeTimeId()));
+            // 임시 token 생성 후 수정 필요
+            reservation.setReservationUser(userRepository.findById(1));
 
             // 기존 예약 내역에 이미 데이터가 있는지 확인
             if (!reservationRepository.existsByThemeTimeIdAndDate(
