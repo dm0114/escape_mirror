@@ -12,4 +12,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findAllByRegion(String region);
 
     List<Store> findAllByRegionContaining(String region);
+
+    Store findByStoreId(long storeId);
 }

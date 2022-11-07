@@ -1,6 +1,7 @@
 package com.sinbangsa.data.repository;
 
 
+import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.ThemeTime;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,8 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     Theme findById(long id);
 
+    List<Theme> findAllByStore(Store store);
+
+    int countByStore(Store store);
 
 }
