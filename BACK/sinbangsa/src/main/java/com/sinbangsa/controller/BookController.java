@@ -1,11 +1,12 @@
 package com.sinbangsa.controller;
 
 
-import com.sinbangsa.data.dto.BookDto;
+
 import com.sinbangsa.data.dto.StoreDetailDto;
-import com.sinbangsa.data.dto.ThemeTimeDto;
+import com.sinbangsa.data.dto.StoreDto;
 import com.sinbangsa.service.BookService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,25 +33,27 @@ public class BookController {
 
     private final BookService bookService;
 
-//    @GetMapping("/store")
-//    public ResponseEntity<List<BookDto>> getCafeList(@RequestParam String region) {
-//        LOGGER.info("[BookController] getCafeList 호출");
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-//        List<ThemeTimeDto> result = bookService.
-//        return new ResponseEntity<List<ThemeTimeDto>>(result, headers, HttpStatus.OK);
-//
-//
-//    }
+    @GetMapping("/store")
+    @ApiOperation(value = "지역별 카페리스트")
+    public ResponseEntity<List<StoreDto>> getStoreList(@RequestParam String region) {
+        LOGGER.info("[BookController] getCafeList 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        List<StoreDto> result = bookService.getStoreList(region);
+        return new ResponseEntity<List<StoreDto>>(result, headers, HttpStatus.OK);
+
+
+    }
 
 
     @GetMapping("/store/{storeId}")
+    @ApiOperation(value = "가게 상세정보")
     public ResponseEntity<StoreDetailDto> getStoreDetail(@PathVariable Long storeId) {
         System.out.println(storeId);
         LOGGER.info("[BookController] getStoreDetail 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        StoreDetailDto result = bookService.getCafeDetail(storeId);
+        StoreDetailDto result = bookService.getStoreDetail(storeId);
         return new ResponseEntity<StoreDetailDto>(result, headers, HttpStatus.OK);
     }
 
