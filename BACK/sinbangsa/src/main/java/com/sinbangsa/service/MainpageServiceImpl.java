@@ -39,7 +39,7 @@ public class MainpageServiceImpl implements MainpageService{
             searchStore.setStoreId(store.getStoreId());
             searchStore.setStoreName(store.getStoreName());
             searchStore.setStoreImg(store.getPoster());
-            searchStore.setLikeCount(userStoreRelationRepository.countAllByUserRelationStore(store));
+            searchStore.setLikeCount(userStoreRelationRepository.countByUserRelationStore(store));
 
             List<Theme> themeList;
             themeList = themeRepository.findAllByStore(store);
@@ -50,19 +50,27 @@ public class MainpageServiceImpl implements MainpageService{
                 maximumReview.put(theme,count);
             }
 
-            Theme maxTheme = Collections.max(maximumReview.entrySet(), (m1, m2) -> m2.getValue() - m1.getValue()).getKey();
+            Theme maxTheme = null;
+            for (Theme key : maximumReview.keySet()) {
+                if (maxTheme == null || maximumReview.get(key) > maximumReview.get(maxTheme)) {
+                    maxTheme = key;
+                }
+            }
+
+
             MainpageDto.MostReviewedThemeDto mostReviewedTheme = new MainpageDto.MostReviewedThemeDto();
             mostReviewedTheme.setThemeId(maxTheme.getId());
             mostReviewedTheme.setThemeName(maxTheme.getThemeName());
             mostReviewedTheme.setThemeImg(maxTheme.getPoster());
-            mostReviewedTheme.setStar(themeReviewRepository.getAvgStar(maxTheme.getId()));
 
-//            List<ThemeReview> themeReviews = new ArrayList<>();
-//            themeReviews = themeReviewRepository.getThemeReviewsByReviewTheme(maxTheme);
+            if (maximumReview.get(maxTheme) == 0 ){
+                mostReviewedTheme.setStar(-1);
+            } else {
+                mostReviewedTheme.setStar(themeReviewRepository.getAvgStar(maxTheme));
+            }
             searchStore.setMostReviewedTheme(mostReviewedTheme);
             lStoreDto.add(searchStore);
         }
-
         searchResult.setStoreList(lStoreDto);
 
         List<Theme> rplThemeList = themeRepository.findAllByThemeNameContaining(searchWord);
@@ -71,8 +79,14 @@ public class MainpageServiceImpl implements MainpageService{
             searchTheme.setThemeId(theme.getId());
             searchTheme.setThemeName(theme.getThemeName());
             searchTheme.setThemeImg(theme.getPoster());
-            searchTheme.setStar(themeReviewRepository.getAvgStar(theme.getId()));
-            searchTheme.setRandomReview(themeReviewRepository.randomReview(theme).getContent());
+            if (themeReviewRepository.countAllByReviewTheme(theme) == 0) {
+                searchTheme.setStar(-1);
+                searchTheme.setRandomReview("리뷰가 없습니다.");
+            } else {
+                searchTheme.setStar(themeReviewRepository.getAvgStar(theme));
+                searchTheme.setRandomReview(themeReviewRepository.randomReview(theme).getContent());
+            }
+
 
             lThemeDto.add(searchTheme);
         }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserStoreRelationRepository extends JpaRepository<UserStoreRelation, Long> {
-    int countAllByUserRelationStore(Store store);
+    int countByUserRelationStore(Store store);
 
 }
