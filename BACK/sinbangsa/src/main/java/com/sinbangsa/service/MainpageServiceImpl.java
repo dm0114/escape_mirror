@@ -1,18 +1,15 @@
 package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.MainpageDto;
-import com.sinbangsa.data.entity.Store;
-import com.sinbangsa.data.entity.Theme;
-import com.sinbangsa.data.entity.ThemeReview;
-import com.sinbangsa.data.repository.StoreRepository;
-import com.sinbangsa.data.repository.ThemeRepository;
-import com.sinbangsa.data.repository.ThemeReviewRepository;
-import com.sinbangsa.data.repository.UserStoreRelationRepository;
+import com.sinbangsa.data.dto.PreLoadingDto;
+import com.sinbangsa.data.entity.*;
+import com.sinbangsa.data.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -23,6 +20,8 @@ public class MainpageServiceImpl implements MainpageService{
     private final UserStoreRelationRepository userStoreRelationRepository;
     private final ThemeRepository themeRepository;
     private final ThemeReviewRepository themeReviewRepository;
+    private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
 
     @Override
     public MainpageDto getSearchResult(String searchWord) {
@@ -30,8 +29,6 @@ public class MainpageServiceImpl implements MainpageService{
         MainpageDto searchResult = new MainpageDto();
         List<MainpageDto.LStoreDto> lStoreDto = new ArrayList<>();
         List<MainpageDto.LThemeDto> lThemeDto = new ArrayList<>();
-//        MainpageDto.MostReviewedThemeDto mostReviewedThemeDtos = new MainpageDto.MostReviewedThemeDto();
-//        MainpageDto.RandomReviewDto randomReviewDto = new MainpageDto.RandomReviewDto();
 
         List<Store> rplStorelist = storeRepository.findAllByStoreNameContaining(searchWord);
         for (Store store : rplStorelist){
@@ -94,5 +91,21 @@ public class MainpageServiceImpl implements MainpageService{
         searchResult.setThemelist(lThemeDto);
 
         return searchResult;
+    }
+
+    @Override
+    public PreLoadingDto getPreLoading(){
+        LOGGER.info("[MainpageService] getPreLoading 호출");
+        PreLoadingDto preLoading = new PreLoadingDto();
+        List<PreLoadingDto.ReservationDto> reservationList = new ArrayList<>();
+
+        // 토큰 전까지 임시 user
+        User user = userRepository.findById(1);
+
+        // 해당 유저의 앞으로 예약
+        List<Reservation> upcommingReservation = reservationRepository.findAllByReservationUserAndDateAfter(user, LocalDate.now());
+        
+        // reservation entity date -> LocalDate 형식으로 바꾸기
+        
     }
 }
