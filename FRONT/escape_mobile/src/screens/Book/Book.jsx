@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
 import { Dimensions } from 'react-native';
+import { WebView } from 'react-native-webview';
  
 // 화면 너비, 높이 구하는 방법
 const windowWidth = Dimensions.get('window').width;
@@ -14,11 +15,10 @@ const Tel = ['02', '031', '04?', '05!', '06$', '033', '064']
 export default function Book({navigation}){
     return(
         <>
-        {/* <Test 
-        width={windowWidth}
-        height={windowHeight}
-        style={{position: 'absolute', top:0 , left: 0, elevation: 3, zIndex: 4, backgroundColor: 'red'}}></Test> */}
         <Container>
+            <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/main/book/'}}/>
+        </Container>
+        {/* <Container>
             <TwoRegion>
                 <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
                     num:Tel[0],
@@ -55,7 +55,7 @@ export default function Book({navigation}){
                     name:Region[6]
                 })}}><RegionTitle>{Tel[6]}</RegionTitle></RegionBtn>
             </TwoRegion>
-        </Container>
+        </Container> */}
         </>
     )
 }
