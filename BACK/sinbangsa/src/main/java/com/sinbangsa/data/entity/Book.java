@@ -30,7 +30,7 @@ public class Book {
 
     @Column
     @NotNull
-    private long clear;
+    private int clear;
 
     @Column
     @NotNull

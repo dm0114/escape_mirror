@@ -25,10 +25,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/reservation")
 @RequiredArgsConstructor
-@Api(value = "예약 API", tags = {"예약하기, 테마예약가능시간"})
+@Api(value = "예약 API",tags = {"예약 API"})
 public class ReservationController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
     private static final String SUCCESS = "success";
 

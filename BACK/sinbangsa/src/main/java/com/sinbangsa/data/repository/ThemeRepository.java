@@ -15,5 +15,6 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     Theme findById(long id);
     List<Theme> findAllByStore(Store store);
     List<Theme> findAllByThemeNameContaining(String searchWord);
+    int countByStore(Store store);
 
 }
