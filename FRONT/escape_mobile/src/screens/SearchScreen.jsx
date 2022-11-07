@@ -7,6 +7,9 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+
 import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
@@ -18,6 +21,16 @@ export default function SearchScreen() {
     searchApi.getSearch,
     { enabled: false }
   );
+
+  // const onScroll = (e) => {
+  //   const {contentSize, layoutMeasurement, contentOffset} = e.nativeEvent;
+  //   const distanceFromBottom = contentSize.height - layoutMeasurement.height - contentOffset.y;
+  //   if (distanceFromBottom < 72) {
+  //     console.log('바닥이 가까워요.');
+  //   } else {
+  //     console.log('바닥과 멀어졌어요.');
+  //   }
+  // };
 
   const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
@@ -32,7 +45,11 @@ export default function SearchScreen() {
       const CafeRoute = () => (
         <CafeListScroll
           data={data.storeList}
-          contentContainerStyle={{ paddingTop: 40 }}
+          contentContainerStyle={{
+            paddingTop: 40,
+            marginLeft: 20,
+            marginRight: 20,
+          }}
           renderItem={({ item }) => (
             <SearchCafeList
               storeId={item.storeId}
@@ -51,10 +68,9 @@ export default function SearchScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingTop: 40,
-            marginLeft: "auto",
-            marginRight: "auto",
+            marginLeft: 20,
+            marginRight: 20,
           }}
-          numColumns={2}
           renderItem={({ item }) => (
             <SearchThemeList
               themeId={item.themeId}
@@ -116,18 +132,23 @@ export default function SearchScreen() {
         placeholder="카페 또는 테마를 입력하세요."
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
+        autoComplete ='off'
+        caretHidden={true}
       />
       <SearchResult />
     </>
   );
 }
 
-const Container = styled.View`
-  background-color: red;
+const MainContainer = styled.View`
+
 `;
 
 const TextContainer = styled.View`
   justify-content: center;
+  padding-left: ${({ theme }) => theme.screenMargin.padding};
+  padding-right: ${({ theme }) => theme.screenMargin.padding};
+  padding-top: ${({ theme }) => theme.screenMargin.paddingTop};
 `;
 
 const ThemeListScroll = styled.FlatList``;
@@ -158,7 +179,7 @@ const SubText = styled.Text`
 const SearchTextInput = styled.TextInput`
   background-color: #fff;
   padding: 8px 16px;
-  margin: 16px;
+  margin: 0px 20px 20px 20px;
   border-color: #fff;
   border-radius: 20px;
 
