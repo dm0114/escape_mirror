@@ -10,6 +10,7 @@ import Theme from '@pages/Theme';
 import Home from '@pages/Home';
 import { css } from '@emotion/react';
 import NotFound from '@pages/NotFound';
+import UnityMainBook from '@pages/UnityMainBook';
 
 const style = css`
   color:pink;
@@ -27,6 +28,7 @@ function App() {
           <Route path="/admin/reservation" element={<Reservation />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />}/>
+          <Route path="/unity/main/book" element={<UnityMainBook />}/>
         </Routes>
         </BrowserRouter>
       </div>
