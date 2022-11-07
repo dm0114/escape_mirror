@@ -5,6 +5,7 @@ import com.sinbangsa.data.dto.ReviewDto;
 import com.sinbangsa.data.entity.ThemeReview;
 import com.sinbangsa.data.repository.ReviewRepository;
 import com.sinbangsa.data.repository.ThemeRepository;
+import com.sinbangsa.data.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,13 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     private final ReviewRepository reviewRepository;
 
     private final ThemeRepository themeRepository;
+
+    private final UserRepository userRepository;
 
     @Transactional
     public boolean createReview(ReviewDto reviewDto) {
@@ -40,10 +43,12 @@ public class ReviewServiceImpl implements ReviewService {
             themeReview.setLocker(reviewDto.getLocker());
             themeReview.setContent(reviewDto.getContent());
             themeReview.setCreateAt(LocalDate.now());
-            // usedHint, clearTime, clear Date,
+            // 임시 유저정보 token 완료 후 변경 필요
+            themeReview.setReviewUser(userRepository.findById(1));
+
+            // 관리자 테마 클리어 승인 후 usedHint, clearTime, clear Date,
             // jwt 토큰 완료 후 reviewUser 넣어야함
 
-            reviewRepository.save(themeReview);
         } catch (Exception e) {
             return false;
         }
