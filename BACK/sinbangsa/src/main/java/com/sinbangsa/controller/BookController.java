@@ -34,7 +34,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/store")
-    @ApiOperation(value = "지역별 카페리스트")
+    @ApiOperation(value = "도감 API")
     public ResponseEntity<List<StoreDto>> getStoreList(@RequestParam String region) {
         LOGGER.info("[BookController] getCafeList 호출");
         HttpHeaders headers = new HttpHeaders();

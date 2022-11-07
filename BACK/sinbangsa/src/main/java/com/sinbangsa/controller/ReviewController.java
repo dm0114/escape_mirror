@@ -23,7 +23,7 @@ import java.nio.charset.Charset;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
-@Api(value = "리뷰 API", tags = {"리뷰작성"})
+@Api(value = "리뷰 API", tags = {"리뷰 API"})
 public class ReviewController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
