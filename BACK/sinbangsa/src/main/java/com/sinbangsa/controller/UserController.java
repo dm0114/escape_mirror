@@ -29,20 +29,22 @@ public class UserController {
     private final UserService userService;
 
     @ResponseBody
-    @GetMapping("/kakao")
+    @GetMapping("/kakao/code")
     public void kakaoCode(@RequestParam String code){
         System.out.println(code);
     }
-    @ApiOperation(value = "카카오 회원관리")
-    @PostMapping("/kakao/api")
-    public ResponseEntity<String> kakao(@RequestBody KakaoCodeDto kakaocodedto){
-        String code = kakaocodedto.getCode();
-        System.out.println(code);
-        KakaoTokenDto kakaoToken = userService.getAccessTokenByCode(code);
-//        User user = userService.getProfile(kakaoToken);
-        return new ResponseEntity<>(String.valueOf(kakaoToken),HttpStatus.OK);
 
-    }
+
+//    @ApiOperation(value = "카카오 회원관리")
+//    @PostMapping("/kakao/token")
+//    public ResponseEntity<String> kakao(@RequestBody KakaoCodeDto kakaocodedto){
+//        String code = kakaocodedto.getCode();
+//        System.out.println(code);
+//        KakaoTokenDto kakaoToken = userService.getAccessTokenByCode(code);
+////        User user = userService.getProfile(kakaoToken);
+//        return new ResponseEntity<>(String.valueOf(kakaoToken),HttpStatus.OK);
+//
+//    }
 
     //회원가입
 //    @ApiOperation(value = "유저 회원가입")

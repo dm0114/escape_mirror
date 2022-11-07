@@ -1,9 +1,6 @@
 package com.sinbangsa.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -58,5 +55,14 @@ public class User {
 
     @Column
     private String refreshToken;
+
+    @Builder
+    public User(String email, String profile,String username, String nickname){
+        this.email = email;
+        this.profile = profile;
+        this.username = username;
+        this.nickname = nickname;
+    }
+
 
 }

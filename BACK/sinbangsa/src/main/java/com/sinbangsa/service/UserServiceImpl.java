@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.BodyInserter;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
+
 
 import java.security.NoSuchAlgorithmException;
 
@@ -33,65 +31,56 @@ public class UserServiceImpl implements UserService {
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
 
-    @Value("${kakao.restApi.key}")
-    private String kakaoKey;
 
-    @Value("${kakao.redirectUri}")
-    private String kakaoRedirectUri;
-
-    @Value("${kakao.clientSecret}")
-    private String kakaoClientSecret;
-
-
-    public KakaoTokenDto getAccessTokenByCode(String code){
-
-        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", kakaoKey);
-        params.add("redirect_uri", kakaoRedirectUri);
-        params.add("code", code);
-        params.add("client_secret", kakaoClientSecret);
-
-        System.out.println(params);
-
-        String url = "https://kauth.kakao.com/oauth/token";
-
-        WebClient wc = WebClient.create(url);
-        String response = wc.post()
-                .uri(url)
-                .body(BodyInserters.fromFormData(params))
-                .header("Content-type","application/x-www-form-urlencoded")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        KakaoTokenDto kakaoToken = null;
-
-        try{
-            kakaoToken = objectMapper.readValue(response, KakaoTokenDto.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return kakaoToken;
-    }
-
-    public User getProfile(KakaoTokenDto kakaoToken){
-
-        String uri = "https://kapi.kakao.com/v2/user/me";
-
-        WebClient wc = WebClient.create(uri);
-        String response = wc.post()
-                .uri(uri)
-                .header("Authorization","Bearer "+ kakaoToken)
-                .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
-        return null;
-    }
+//    public KakaoTokenDto getAccessTokenByCode(String code){
+//
+//        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//        params.add("grant_type", "authorization_code");
+//        params.add("client_id", kakaoKey);
+//        params.add("redirect_uri", kakaoRedirectUri);
+//        params.add("code", code);
+//        params.add("client_secret", kakaoClientSecret);
+//
+//        System.out.println(params);
+//
+//        String url = "https://kauth.kakao.com/oauth/token";
+//
+//        WebClient wc = WebClient.create(url);
+//        String response = wc.post()
+//                .uri(url)
+//                .body(BodyInserters.fromFormData(params))
+//                .header("Content-type","application/x-www-form-urlencoded")
+//                .retrieve()
+//                .bodyToMono(String.class)
+//                .block();
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        KakaoTokenDto kakaoToken = null;
+//
+//        try{
+//            kakaoToken = objectMapper.readValue(response, KakaoTokenDto.class);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return kakaoToken;
+//    }
+//
+//    public User getProfile(KakaoTokenDto kakaoToken){
+//
+//        String uri = "https://kapi.kakao.com/v2/user/me";
+//
+//        WebClient wc = WebClient.create(uri);
+//        String response = wc.post()
+//                .uri(uri)
+//                .header("Authorization","Bearer "+ kakaoToken)
+//                .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
+//                .retrieve()
+//                .bodyToMono(String.class)
+//                .block();
+//
+//        return null;
+//    }
 //    @Transactional
 //    public boolean join(UserDto userDto) {
 //        SHA256 sha256 = new SHA256();
