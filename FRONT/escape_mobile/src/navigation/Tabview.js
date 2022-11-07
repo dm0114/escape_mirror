@@ -5,7 +5,7 @@ import CommunityScreen from "../screens/CommunityScreen";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
 
-import Login from '../screens/Login/PutFindPwScreen';
+import Login from '../screens/Login/LoginScreen';
 import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
@@ -16,15 +16,15 @@ const FirstRoute = () => (
 );
 
 const SecondRoute = () => (
-  <SignupScreen />
+  <SearchScreen />
 );
 
 const ThirdRoute = () => (
-  <FindIdScreen />
+  <Login />
 );
 
 const FourthRoute = () => (
-  <FindPwScreen/>
+  <View style={{ flex: 1, backgroundColor: "#673ab7" }}/>
 );
 
 const FifthRoute = () => (
