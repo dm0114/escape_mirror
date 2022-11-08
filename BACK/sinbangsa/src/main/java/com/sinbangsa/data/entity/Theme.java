@@ -32,6 +32,9 @@ public class Theme {
     @OneToMany(mappedBy = "reviewTheme")
     private List<ThemeReview> themeReviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "userRelationTheme")
+    private List<UserThemeRelation> userRelations = new ArrayList<>();
+
     @Column
     @NotNull
     private String themeName;
