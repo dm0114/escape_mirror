@@ -2,6 +2,7 @@ package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.AdminStoreDto;
 import com.sinbangsa.data.dto.StoreRegesterDto;
+import com.sinbangsa.data.dto.ThemeListDto;
 import com.sinbangsa.data.entity.Admin;
 import com.sinbangsa.service.AdministratorService;
 import io.swagger.annotations.Api;
@@ -79,6 +80,17 @@ public class AdministratorController {
             return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(result, headers, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/theme")
+    @ApiOperation(value = "테마 리스트")
+    public ResponseEntity<List<ThemeListDto>> getThemeList(@RequestParam Long storeId){
+        LOGGER.info("[AdministratorController] getThemeList 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        List<ThemeListDto> themeList = administratorService.getThemeList(storeId);
+        return new ResponseEntity<>(themeList, headers, HttpStatus.OK);
     }
 
 

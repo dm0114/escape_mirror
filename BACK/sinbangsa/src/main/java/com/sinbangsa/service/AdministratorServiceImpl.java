@@ -2,11 +2,15 @@ package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.AdminStoreDto;
 import com.sinbangsa.data.dto.StoreRegesterDto;
+import com.sinbangsa.data.dto.ThemeListDto;
 import com.sinbangsa.data.entity.Admin;
 import com.sinbangsa.data.entity.Store;
+import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.repository.AdministratorRepository;
 import com.sinbangsa.data.repository.StoreRepository;
+import com.sinbangsa.data.repository.ThemeRepository;
 import com.sinbangsa.exception.AccessDeniedException;
+import com.sinbangsa.exception.ThemeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final Logger LOGGER = LoggerFactory.getLogger(AdministratorServiceImpl.class);
     private final AdministratorRepository administratorRepository;
     private final StoreRepository storeRepository;
+    private final ThemeRepository themeRepository;
 
     public List<AdminStoreDto> getAdminStoreDetail(long adminId){
         LOGGER.info("[AdministratorService] getAdminStoreDetail 호출");
@@ -105,5 +110,26 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
     };
+
+    public List<ThemeListDto> getThemeList(long storeId){
+        LOGGER.info("[AdministratorService] getThemeList 호출");
+        List<Theme> themeList = storeRepository.findByStoreId(storeId).getThemes();
+        List<ThemeListDto> themeListDtoList = new ArrayList<>();
+        for (Theme theme : themeList) {
+            ThemeListDto gTheme = new ThemeListDto();
+            gTheme.setThemeId(theme.getId());
+            gTheme.setThemeTitle(theme.getThemeName());
+            gTheme.setThemeImg(theme.getPoster());
+
+            themeListDtoList.add(gTheme);
+        }
+
+        if (themeListDtoList.size() == 0) {
+            throw new ThemeNotFoundException();
+        }else {
+            return themeListDtoList;
+        }
+
+    }
 
 }
