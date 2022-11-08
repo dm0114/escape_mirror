@@ -1,9 +1,8 @@
 package com.sinbangsa.service;
 
 
-import com.sinbangsa.data.dto.StoreDetailDto;
-import com.sinbangsa.data.dto.StoreDto;
-import com.sinbangsa.data.dto.ThemeDetailDto;
+import com.sinbangsa.data.dto.*;
+import com.sinbangsa.data.entity.Book;
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.User;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -65,8 +65,8 @@ public class BookServiceImpl implements BookService {
         return stores;
     }
 
-    public StoreDetailDto getStoreDetail(Long storeId) {
-        LOGGER.info("[BookService] getCafeDetail 호출");
+    public StoreDetailDto getStoreDetail(long storeId) {
+        LOGGER.info("[BookService] getStoreDetail 호출");
 
         StoreDetailDto storeDetailDto = new StoreDetailDto();
 
@@ -108,8 +108,58 @@ public class BookServiceImpl implements BookService {
 
         }
         storeDetailDto.setThemeDetailDtoList(themeDetailDtoList);
-        LOGGER.info("[BookService] getCafeDetail 성공");
+        LOGGER.info("[BookService] getStoreDetail 성공");
         return storeDetailDto;
+    }
+
+    public List<ThemeForThemeListDto> getThemeList(long storeId) {
+        LOGGER.info("[BookService] getThemeList 호출");
+
+        List<ThemeForThemeListDto> themeList = new ArrayList<>();
+        Store storeRepo = storeRepository.findByStoreId(storeId);
+        List<Theme> themesRepo = themeRepository.findAllByStore(storeRepo);
+        // 임시
+        User userRepo = userRepository.findById((long) 1);
+
+        try {
+            for (Theme themeRepo : themesRepo) {
+                ThemeForThemeListDto theme = new ThemeForThemeListDto();
+                theme.setThemeId(themeRepo.getId());
+                theme.setThemeImg(themeRepo.getPoster());
+                theme.setThemeName(themeRepo.getThemeName());
+                Book bookRepo = bookRepository.findByBookThemeAndBookUser(themeRepo, userRepo).orElse(null);
+                if (bookRepo == null) {
+                    theme.setIsClear(0);
+                } else {
+                    theme.setIsClear(bookRepo.getClear());
+                }
+
+                themeList.add(theme);
+            }
+            LOGGER.info("[BookService] getThemeList 성공");
+            return themeList;
+        } catch (Exception e) {
+            throw e;
+        }
+
+
+    }
+
+
+    public ThemeDetailInfoDto getThemeDetail(long themeId) {
+        LOGGER.info("[BookService] getThemeDetail 호출");
+
+        ThemeDetailInfoDto themeDetailInfoDto = new ThemeDetailInfoDto();
+        try {
+//            Theme storeRepo = themeRepository.getReferenceById(themeId);
+
+        } catch (Exception e) {
+
+        }
+
+
+        return themeDetailInfoDto;
+
     }
 
 
