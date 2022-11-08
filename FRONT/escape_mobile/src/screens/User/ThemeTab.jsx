@@ -73,7 +73,11 @@ export default function ThemeTab() {
   function RenderTheme({ item }) {
     return (
       <RenderView>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+          navigation.navigate("ThemeDetailScreen", { themeId: item.themeId });
+          }}
+        >
           <Image source={{ uri: item.themeImg }} style={styles.tinyImage} />
         </TouchableOpacity>
       </RenderView>
