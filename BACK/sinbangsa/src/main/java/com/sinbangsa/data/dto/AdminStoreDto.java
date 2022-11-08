@@ -11,10 +11,10 @@ import lombok.Setter;
 @Setter
 public class AdminStoreDto {
     private Long storeId;
+    private String StoreName;
     private String storeImg;
     private String address;
     private String region;
-    private String description;
     private String tel;
     private String homepage;
 

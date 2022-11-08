@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface AdministratorService {
     List<AdminStoreDto> getAdminStoreDetail(long adminId);
-    Boolean registerStoreDetail(StoreRegesterDto storeRegesterDto, Long adminId);
+    Boolean registerStoreDetail(StoreRegesterDto storeRegesterDto, long adminId);
+    Boolean updateStoreDetail(AdminStoreDto adminStoreDto, long adminId);
 }

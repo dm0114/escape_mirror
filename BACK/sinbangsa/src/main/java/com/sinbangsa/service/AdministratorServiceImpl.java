@@ -6,6 +6,7 @@ import com.sinbangsa.data.entity.Admin;
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.repository.AdministratorRepository;
 import com.sinbangsa.data.repository.StoreRepository;
+import com.sinbangsa.exception.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +34,13 @@ public class AdministratorServiceImpl implements AdministratorService {
             adminStoreList = admin.getStores();
             for (Store adminStore : adminStoreList) {
                 AdminStoreDto adminStoreDetail = new AdminStoreDto();
+                adminStoreDetail.setStoreId(adminStore.getStoreId());
                 adminStoreDetail.setStoreImg(adminStore.getPoster());
                 adminStoreDetail.setAddress(adminStore.getAddress());
                 adminStoreDetail.setRegion(adminStore.getRegion());
                 adminStoreDetail.setTel(adminStore.getTel());
                 adminStoreDetail.setHomepage(adminStore.getHomepage());
-
+                adminStoreDetail.setStoreName(adminStore.getStoreName());
                 adminStoreDtos.add(adminStoreDetail);
             }
 
@@ -47,7 +49,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     };
 
-    public Boolean registerStoreDetail(StoreRegesterDto storeRegesterDto, Long adminId){
+    public Boolean registerStoreDetail(StoreRegesterDto storeRegesterDto, long adminId){
         LOGGER.info("[AdministratorService] registerStoreDetail 호출");
         // admin token 발급 후 수정 필요
         Admin admin = administratorRepository.getAdminById(adminId).orElse(null);
@@ -76,4 +78,32 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
     };
+
+    public Boolean updateStoreDetail(AdminStoreDto adminStoreDto, long adminId){
+        LOGGER.info("[AdministratorService] updateStoreDetail 호출");
+
+        Store updateStore = storeRepository.findByStoreId(adminStoreDto.getStoreId());
+
+        if (adminId != updateStore.getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        try {
+            updateStore.setStoreName(adminStoreDto.getStoreName());
+            updateStore.setPoster(adminStoreDto.getStoreImg());
+            updateStore.setAddress(adminStoreDto.getAddress());
+            updateStore.setRegion(adminStoreDto.getRegion());
+            updateStore.setTel(adminStoreDto.getTel());
+            updateStore.setHomepage(adminStoreDto.getHomepage());
+
+            storeRepository.save(updateStore);
+            LOGGER.info("[updateStoreDetail] 수정 됨");
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    };
+
 }
