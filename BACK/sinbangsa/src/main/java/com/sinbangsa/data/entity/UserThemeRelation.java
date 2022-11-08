@@ -1,5 +1,6 @@
 package com.sinbangsa.data.entity;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserStoreRelation {
+public class UserThemeRelation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,11 +21,9 @@ public class UserStoreRelation {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User storeRelationUser;
+    private User themeRelationUser;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store userRelationStore;
-
-
+    @JoinColumn(name = "theme_id")
+    private Store userRelationTheme;
 }

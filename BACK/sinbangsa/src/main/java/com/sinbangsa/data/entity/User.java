@@ -32,6 +32,9 @@ public class User {
     @OneToMany(mappedBy = "storeRelationUser")
     private List<UserStoreRelation> storeRelations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "themeRelationUser")
+    private List<UserThemeRelation> themeRelations = new ArrayList<>();
+
     @OneToMany(mappedBy = "bookUser")
     private List<Book> books = new ArrayList<>();
 
@@ -56,7 +59,5 @@ public class User {
     @Column
     private String nickname;
 
-    @Column
-    private String refreshToken;
 
 }
