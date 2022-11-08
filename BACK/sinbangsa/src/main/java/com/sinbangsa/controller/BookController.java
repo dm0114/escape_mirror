@@ -76,5 +76,13 @@ public class BookController {
         return new ResponseEntity<ThemeDetailInfoDto>(result, headers, HttpStatus.OK);
     }
 
-
+    @PostMapping("/theme/{themeId}/like")
+    @ApiOperation(value = "테마 찜하기")
+    public ResponseEntity<Boolean> themeLike(@PathVariable long themeId) {
+        LOGGER.info("[BookController] themeLike 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        boolean result = true;
+        return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+    }
 }

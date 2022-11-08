@@ -162,5 +162,13 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    public Boolean themeLike(long themeId) {
+        LOGGER.info("[BookService] themeLike 호출");
+
+
+        return true;
+    }
+
+
 
 }
