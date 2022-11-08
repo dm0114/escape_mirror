@@ -13,6 +13,8 @@ import java.util.List;
 @Getter
 @Setter
 public class PreLoadingDto {
+    @Getter
+    @Setter
     public static class ReservationDto{
         long reservationId;
         String themeName;

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -103,9 +104,21 @@ public class MainpageServiceImpl implements MainpageService{
         User user = userRepository.findById(1);
 
         // 해당 유저의 앞으로 예약
-        List<Reservation> upcommingReservation = reservationRepository.findAllByReservationUserAndDateAfter(user, LocalDate.now());
-        
-        // reservation entity date -> LocalDate 형식으로 바꾸기
-        
+        List<Reservation> upcommingReservation = reservationRepository.findAllByReservationUser(user);
+
+        for (Reservation reservation : upcommingReservation){
+            PreLoadingDto.ReservationDto userReservtion = new PreLoadingDto.ReservationDto();
+            userReservtion.setReservationId(reservation.getReservationId());
+            userReservtion.setThemeName(reservation.getThemeTime().getTheme().getThemeName());
+            userReservtion.setStoreName(reservation.getThemeTime().getTheme().getStore().getStoreName());
+            userReservtion.setReservationTime(reservation.getThemeTime().getTime());
+            userReservtion.setReservationDate(reservation.getDate());
+
+            reservationList.add(userReservtion);
+        }
+
+        preLoading.setReservationList(reservationList);
+        return preLoading;
+
     }
 }
