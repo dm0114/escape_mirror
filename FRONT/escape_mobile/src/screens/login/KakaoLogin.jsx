@@ -56,7 +56,7 @@ const KakaoLogin = ({navigation: {navigate}}) => {
       console.log('access code :: ' + authCode);
 
       await axios
-        .post('http://localhost:8082', {
+        .post('http://localhost:8080/api/user/kakao', {
           params: {
             code: authCode,
           },
@@ -80,7 +80,8 @@ const KakaoLogin = ({navigation: {navigate}}) => {
         scalesPageToFit={false}
         style={{marginTop: 30}}
         source={{
-          uri: 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=0c63b5d77d9ab6952f145147cd352307&redirect_uri=http://localhost:8082',
+          uri: 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=0c63b5d77d9ab6952f145147cd352307&redirect_uri=http://localhost:8080/api/user/kakao'
+          // uri: 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=0c63b5d77d9ab6952f145147cd352307&redirect_uri=http://localhost:8082',
         }}
         injectedJavaScript={runFirst}
         javaScriptEnabled={true}
