@@ -58,9 +58,28 @@ public class AdministratorController {
         long adminId = 234212;
 
         boolean result = administratorService.registerStoreDetail(storeResgesterDto, adminId);
-        return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
-
-
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/store")
+    @ApiOperation(value = "카페 상세정보 수정")
+    public ResponseEntity<Boolean> updateStoreDetail(@RequestBody AdminStoreDto adminStoreDto){
+        LOGGER.info("[AdministratorController] updateStoreDetail 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+        boolean result = administratorService.updateStoreDetail(adminStoreDto, adminId);
+
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.NO_CONTENT);
+    }
+
 
 }
