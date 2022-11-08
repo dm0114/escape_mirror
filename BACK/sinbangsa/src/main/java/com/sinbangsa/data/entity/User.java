@@ -53,8 +53,6 @@ public class User {
     @Column
     private String nickname;
 
-    @Column
-    private String refreshToken;
 
     @Builder
     public User(String email, String profile,String username, String nickname){
