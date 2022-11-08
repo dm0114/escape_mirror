@@ -1,6 +1,7 @@
 package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.AdminStoreDto;
+import com.sinbangsa.data.dto.StoreRegesterDto;
 import com.sinbangsa.data.entity.Admin;
 import com.sinbangsa.service.AdministratorService;
 import io.swagger.annotations.Api;
@@ -12,12 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class AdministratorController {
     @GetMapping("/store")
     @ApiOperation(value = "카페 상세정보")
     public ResponseEntity<List<AdminStoreDto>> getAdminStoreDetail(){
-        LOGGER.info("[MainpageController] preLoading 호출");
+        LOGGER.info("[AdministratorController] preLoading 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         // 어드민 아이디 토큰에서 가져오기
@@ -45,4 +46,21 @@ public class AdministratorController {
 
         return new ResponseEntity<>(adminStoreDetail, headers, HttpStatus.OK);
     }
+
+    @PostMapping("/store")
+    @ApiOperation(value = "카페 상세정보 등록")
+    public ResponseEntity<Boolean> registerStoreDetail(@RequestBody StoreRegesterDto storeResgesterDto){
+        LOGGER.info("[AdministratorController] registerStoreDetail 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+
+        boolean result = administratorService.registerStoreDetail(storeResgesterDto, adminId);
+        return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+
+
+    }
+
 }
