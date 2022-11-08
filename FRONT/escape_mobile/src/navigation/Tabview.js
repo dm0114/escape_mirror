@@ -23,7 +23,7 @@ const ThirdRoute = () => (
 
 
 const FourthRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }}/>
+  <Login/>
 );
 
 const FifthRoute = () => <Mypage />;

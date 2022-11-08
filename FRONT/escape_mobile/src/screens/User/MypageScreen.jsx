@@ -7,6 +7,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useNavigation } from '@react-navigation/native';
 import Modal from "react-native-modal";
 import { Input, Stack, Center, NativeBaseProvider } from "native-base";
+//카메라, 앨범 접근 라이브러리
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 
 // 마이페이지
@@ -74,11 +76,21 @@ export default function MypageScreen() {
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
+
+    function ShowPicker() {
+        //launchImageLibrary : 사용자 앨범 접근
+    launchImageLibrary({}, (res)=>{
+      alert(res.assets[0].uri)
+      const formdata = new FormData()
+      formdata.append('file', res.assets[0].uri);
+      console.log(res);
+    })
+    }
     return (
       <MypageContainer>
         {/* edit가 TRUE일 때, 수정 뷰 */}
         {/* 프로필 사진 수정 */}
-        <ProfileEditView>
+        <ProfileEditView onPress={ShowPicker}>
           <ProfileEditImg>
             <Ionicons name="camera-outline" size={60} color="black" /> 
           </ProfileEditImg>
