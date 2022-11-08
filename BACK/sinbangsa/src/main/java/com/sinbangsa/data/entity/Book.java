@@ -29,23 +29,18 @@ public class Book {
 
 
     @Column
-    @NotNull
     private int clear;
 
     @Column
-    @NotNull
     private Boolean review;
 
     @Column
-    @NotNull
     private LocalDate doneDate;
 
     @Column
-    @NotNull
     private int usedHint;
 
     @Column
-    @NotNull
     private String clearTime;
 
 }

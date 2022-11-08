@@ -36,35 +36,27 @@ public class Theme {
     private List<UserThemeRelation> userRelations = new ArrayList<>();
 
     @Column
-    @NotNull
     private String themeName;
 
     @Column
-    @NotNull
     private String genre;
 
     @Column
-    @NotNull
     private String capacity;
 
     @Column
-    @NotNull
     private String price;
 
     @Column
-    @NotNull
-    private String difficulty;
+    private int difficulty;
 
     @Column
-    @NotNull
     private int leadtime;
 
     @Column(length = 1500)
-    @NotNull
     private String description;
 
     @Column
-    @NotNull
     private String poster;
 
 }

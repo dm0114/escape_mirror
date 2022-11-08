@@ -30,12 +30,10 @@ public class ThemeReview {
     private User reviewUser;
 
     @Column
-    @NotNull
     private String content;
 
 
     @Column
-    @NotNull
     private int star;
 
     @Column
@@ -64,7 +62,6 @@ public class ThemeReview {
     private LocalDateTime createAt;
 
     @Column
-    @NotNull
     private int usedHint;
 
     @Column
