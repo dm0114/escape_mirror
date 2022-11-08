@@ -12,7 +12,7 @@ export default function MainScreen() {
       "themeName": "테마이름",
       "storeName": "카페이름",
       "date":"22-02-08",
-      "reserveTime":"예약 시간"
+      "reserveTime":"16:20"
       }
     ],
   }
@@ -42,6 +42,9 @@ export default function MainScreen() {
 
 const MainContainer = styled.View`
   flex: 1;
+  padding-left: ${({ theme }) => theme.screenMargin.padding};
+  padding-right: ${({ theme }) => theme.screenMargin.padding};
+  padding-top: ${({ theme }) => theme.screenMargin.paddingTop};
 `
 const MainText = styled.Text`
   font-family: "SUIT-Bold";
