@@ -22,19 +22,20 @@ public class JwtTestController {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @ResponseBody
-    @GetMapping("/test")
-    private String jwtTest(@RequestParam String email){
-        System.out.println("1");
-        String token = jwtTokenProvider.createAccessToken(email);
-        return token;
-    }
-
-    @ResponseBody
-    @PostMapping("/signup")
-    public ResponseEntity<KakaoLoginDto> signup(@RequestBody String email){
-        String kakaoToken = kakaoTokenDto.getAccess_token();
-        System.out.println(kakaoToken);
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
+//    @ResponseBody
+//    @GetMapping("/test")
+//    private String jwtTest(@RequestParam String email){
+//        System.out.println("1");
+//        String token = jwtTokenProvider.createAccessToken(email);
+//        return token;
+//    }
+//
+//    @ResponseBody
+//    @PostMapping("/signup")
+//    public ResponseEntity<KakaoLoginDto> signup(@RequestBody String email){
+//        String kakaoToken = kakao
+//        System.out.println(kakaoToken);
+//        return new ResponseEntity<>(null, HttpStatus.OK);
+//    }
+//}
 }

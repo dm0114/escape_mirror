@@ -1,11 +1,9 @@
 package com.sinbangsa.controller;
 
 
-import com.sinbangsa.data.dto.KakaoCodeDto;
 import com.sinbangsa.data.dto.KakaoTokenDto;
-import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.dto.KakaoUserDto;
 import com.sinbangsa.service.UserService;
-import com.sinbangsa.service.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,16 +33,17 @@ public class UserController {
     }
 
 
-//    @ApiOperation(value = "카카오 회원관리")
-//    @PostMapping("/kakao")
-//    public ResponseEntity<String> kakao(@RequestBody KakaoCodeDto kakaocodedto){
-//        String code = kakaocodedto.getCode();
-//        System.out.println(code);
-//        KakaoTokenDto kakaoToken = userService.getAccessTokenByCode(code);
-////        User user = userService.getProfile(kakaoToken);
-//        return new ResponseEntity<>(String.valueOf(kakaoToken),HttpStatus.OK);
-//
-//    }
+    @ApiOperation(value = "카카오 회원관리")
+    @PostMapping("/kakao")
+    public ResponseEntity<String> kakao(@RequestBody KakaoTokenDto kakaoTokenDto){
+        System.out.println("123");
+        String kakaoToken = kakaoTokenDto.getAccess_token();
+        System.out.println("start?");
+        KakaoUserDto kakaoUserDto = userService.getProfile(kakaoToken);
+        System.out.println(kakaoUserDto);
+        return new ResponseEntity<>(null,HttpStatus.OK);
+
+    }
 
     //회원가입
 //    @ApiOperation(value = "유저 회원가입")

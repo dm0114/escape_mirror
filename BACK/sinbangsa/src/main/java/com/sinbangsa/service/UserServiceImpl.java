@@ -4,7 +4,7 @@ package com.sinbangsa.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinbangsa.data.dto.KakaoTokenDto;
-import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.dto.KakaoUserDto;
 import com.sinbangsa.data.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -72,18 +72,17 @@ public class UserServiceImpl implements UserService {
         return kakaoToken;
     }
 
-    public User getProfile(KakaoTokenDto kakaoToken){
+    public KakaoUserDto getProfile(String kakaotoken){
 
-        String uri = "https://kapi.kakao.com/v2/user/me";
 
-        WebClient wc = WebClient.create(uri);
-        String response = wc.post()
-                .uri(uri)
-                .header("Authorization","Bearer "+ kakaoToken)
-                .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
+        String response = WebClient.create().get()
+                .uri("https://kapi.kakao.com/v2/user/me")
+                .header("Authorization","Bearer "+ kakaotoken)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+
+        System.out.println(response);
 
         return null;
     }
