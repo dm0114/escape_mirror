@@ -149,8 +149,14 @@ public class BookServiceImpl implements BookService {
         LOGGER.info("[BookService] getThemeDetail 호출");
 
         ThemeDetailInfoDto themeDetailInfoDto = new ThemeDetailInfoDto();
+        Theme themeRepo = themeRepository.findById(themeId);
+
         try {
-//            Theme storeRepo = themeRepository.getReferenceById(themeId);
+            themeDetailInfoDto.setThemeName(themeRepo.getThemeName());
+            themeDetailInfoDto.setGenre(themeRepo.getGenre());
+            themeDetailInfoDto.setCapacity(themeRepo.getCapacity());
+            themeDetailInfoDto.setPrice(themeRepo.getPrice());
+            themeDetailInfoDto.setDifficulty(themeRepo.getDifficulty());
 
         } catch (Exception e) {
 

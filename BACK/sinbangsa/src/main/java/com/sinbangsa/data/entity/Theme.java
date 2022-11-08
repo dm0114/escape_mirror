@@ -53,7 +53,7 @@ public class Theme {
 
     @Column
     @NotNull
-    private String difficulty;
+    private int difficulty;
 
     @Column
     @NotNull
