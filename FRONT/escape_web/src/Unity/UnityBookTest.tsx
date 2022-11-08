@@ -5,10 +5,10 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 const UnityBookTest = () => {
 
     const { unityProvider } = useUnityContext({
-        loaderUrl: "/Builds/Main/Book2/Book.loader.js",
-        dataUrl: "/Builds/Main/Book2/Book.data",
-        frameworkUrl: "/Builds/Main/Book2/Book.framework.js",
-        codeUrl: "/Builds/Main/Book2/Book.wasm"
+        loaderUrl: "/Builds/Main/Book2/Book2.loader.js",
+        dataUrl: "/Builds/Main/Book2/Book2.data",
+        frameworkUrl: "/Builds/Main/Book2/Book2.framework.js",
+        codeUrl: "/Builds/Main/Book2/Book2.wasm"
     })
 
     return (
