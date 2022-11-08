@@ -12,6 +12,7 @@ import { css } from '@emotion/react';
 import NotFound from '@pages/NotFound';
 import UnityMainBook from './Unity/UnityMainBook';
 import UnityTest from './Unity/UnityTest';
+import UnityBookTest from './Unity/UnityBookTest';
 
 const style = css`
   color:pink;
@@ -32,6 +33,7 @@ function App() {
           <Route path="*" element={<NotFound />}/>
           <Route path="/unity/main/book" element={<UnityMainBook />}/>
           <Route path="/unity/test" element={<UnityTest />}/>
+          <Route path="/unity/main/test" element={<UnityBookTest />}/>
         </Routes>
         </BrowserRouter>
       </div>
