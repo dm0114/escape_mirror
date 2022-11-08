@@ -1,5 +1,7 @@
 package com.sinbangsa.utils;
 
+import com.sinbangsa.data.entity.RefreshToken;
+import com.sinbangsa.data.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,8 @@ public class JwtTokenProvider {
 
     private final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
     private final UserDetailsService userDetailsService;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
 //    private static String secret ;
 //
@@ -58,7 +63,7 @@ public class JwtTokenProvider {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
 
-        LOGGER.info("AccessToken 발급 완료")
+        LOGGER.info("AccessToken 발급 완료");
         return token;
     }
 
@@ -78,6 +83,12 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now.getTime() + refreshExpireTime))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
+
+        RefreshToken findRefreshToken = refreshTokenRepository.findByEmail(email)
+                        .orElse(RefreshToken.createToken(email, token));
+
+        findRefreshToken.changeToken(token);
+        refreshTokenRepository.save(findRefreshToken);
 
         LOGGER.info("[createRefreshToken] 토큰 생성 완료");
 
@@ -100,6 +111,22 @@ public class JwtTokenProvider {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    @Transactional
+    public String reissueRefreshToken(String refreshToken) throws RuntimeException{
+        Authentication authentication = getAuthentication(refreshToken);
+        RefreshToken findRefreshToken = refreshTokenRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("not found error!!!"));
+
+        if (findRefreshToken.getRefreshToken().equals(refreshToken)){
+            String newRefreshToken = createRefreshToken(authentication.getName());
+            findRefreshToken.changeToken(newRefreshToken);
+            return newRefreshToken;
+        }else{
+            LOGGER.info("리프레시 토큰 불일치");
+            return null;
+        }
     }
 
     public boolean validateToken(String token){
