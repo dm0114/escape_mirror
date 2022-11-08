@@ -1,24 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import {
-  View,
-  Text,
-  useWindowDimensions,
-  FlatList,
-  StyleSheet,
-  StatusBar,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-  Animated,
-  ImageBackground
-} from "react-native";
+import {  View,  Text,  useWindowDimensions,  FlatList,  StyleSheet,  StatusBar,  SafeAreaView,  Image, TouchableOpacity,  Animated,  ImageBackground,} from "react-native";
 import Plotly from "react-native-plotly";
 
-import { Neomorph } from 'react-native-neomorph-shadows';
 import { Shadow } from "react-native-shadow-2";
 import styled from "styled-components/native";
 const cardImage = require("../assets/mocks/image.png");
+import Svg,{ Circle } from 'react-native-svg';
 
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -38,6 +26,7 @@ function ThemeDetailScreen({ navigation, route }) {
   const dimensions = useWindowDimensions();
   const Width = (dimensions.width - 256) / 2;
   const [showMenu, setShowMenu] = useState(true);
+  console.log(showMenu);
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
@@ -56,7 +45,7 @@ function ThemeDetailScreen({ navigation, route }) {
 
   const ChartLayout = {
     height: 200, // 원하는 크기로 height를 지정해주었다!
-    paper_bgcolor: '#f6f6f6',
+    paper_bgcolor: "#f6f6f6",
     margin: {
       // chart에는 기본값으로 margin이 적용되어 있는데, 우리가 흔히 아는 top, bottom, left와는 좀 다르다. 0으로 모두 초기화 해주었다.
       l: 0,
@@ -178,30 +167,15 @@ function ThemeDetailScreen({ navigation, route }) {
 
   const PriceData = [0, ...ThemeDatas?.price.split("/")];
 
-  const NohintRoute = () => {
-    <FlatList
-      data={ThemeDatas.noHintRanking}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{
-        paddingTop: 40,
-      }}
-      renderItem={({ item }) => (
-        <>
-          <Text>{item.userNickname}</Text>
-          <Text>{item.cleartime}</Text>
-        </>
-      )}
-    />;
-  };
   useEffect(() => {
     Animated.timing(scaleValue, {
-      toValue: 0.5,
+      toValue: 1.1,
       useNativeDriver: true,
     }).start();
 
     Animated.timing(offsetValue, {
       // YOur Random Value...
-      toValue: 500,
+      toValue: -500,
       useNativeDriver: true,
     }).start();
   }, []);
@@ -209,45 +183,31 @@ function ThemeDetailScreen({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <MainContainer>
-        {/* <Neomorph
-          swapShadows // <- change zIndex of each shadow color
-          style={{
-            shadowRadius: 10,
-            borderRadius: 25,
-            backgroundColor: "#DDDDDD",
-            width: 150,
-            height: 150,
+        <Shadow
+          distance={100}
+          startColor={"#00000050"}
+          endColor={"#00000000"}
+          offset={[0, -50]}
+          containerStyle={{
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginVertical: 40,
           }}
+          radius={30}
         >
           <Image
             source={cardImage}
             style={{
-              width: 200,
-              height: 320,
+              width: 100,
+              height: 160,
               borderRadius: 20,
             }}
           ></Image>
-        </Neomorph> */}
-        {/* <Shadow
-              distance={50}
-              startColor={"#00000020"}
-              childColor={"#fff"}
-              endColor={"#00000000"}
-              
-              offset={[0, 10]}
-              containerStyle={{
-
-                marginLeft: 'auto',
-                marginRight: 'auto'
-              }}
-              radius={30}
-            >
-
-            </Shadow> */}
-
-        <SubTitle>{ThemeDatas.star}점</SubTitle>
+          <RatingView>
+            <RatingText>{ThemeDatas.star}</RatingText>
+          </RatingView>
+        </Shadow>
         <MainTitle>{ThemeDatas.themeName}</MainTitle>
-
         <InfoTextWrapper>
           <RowContainer>
             <SubTitle>{ThemeDatas.leadtime}분 • </SubTitle>
@@ -255,7 +215,6 @@ function ThemeDetailScreen({ navigation, route }) {
             <SubTitle>난이도 {ThemeDatas.difficulty}</SubTitle>
           </RowContainer>
         </InfoTextWrapper>
-
         <InfoTextWrapper>
           <SubTitle>{ThemeDatas.description}</SubTitle>
           <Body>
@@ -266,9 +225,8 @@ function ThemeDetailScreen({ navigation, route }) {
         </InfoTextWrapper>
 
         <InfoTextWrapper>
-          <SubTitle>가격</SubTitle>
-          <Body>{PriceData[number]}</Body>
           <RowContainer>
+            <SubTitle>가격</SubTitle>
             <TouchableOpacity onPress={number <= 4 ? onIncrease : null}>
               <Text>+</Text>
             </TouchableOpacity>
@@ -277,6 +235,7 @@ function ThemeDetailScreen({ navigation, route }) {
               <Text>-</Text>
             </TouchableOpacity>
           </RowContainer>
+          <Body>{!!PriceData[number] ? PriceData[number] : 0}원</Body>
         </InfoTextWrapper>
 
         <RankingWrapper>
@@ -306,8 +265,8 @@ function ThemeDetailScreen({ navigation, route }) {
       >
         <SubTitle>예약하기</SubTitle>
       </ButtonContainer>
-
-      <Animated.View
+ 
+      {/* <Animated.View
         style={{
           flexGrow: 1,
           flexDirection: "row",
@@ -319,15 +278,16 @@ function ThemeDetailScreen({ navigation, route }) {
           right: 0,
           // paddingHorizontal: 20,
           // paddingVertical: 20,
-          borderRadius: showMenu ? 15 : 0,
-          transform: [{ scale: scaleValue }, { translateX: offsetValue }],
+          borderRadius: showMenu ? 75 : 0,
+          transform: [{ scale: scaleValue }, { translateY: offsetValue }],
         }}
       >
         <ImageBackground
           source={cardImage}
-          resizeMode="cover"
-          blurRadius={5}
+          resizeMode="contain"
+          // blurRadius={5}
           style={styles.container}
+          imageStyle={{ borderRadius: showMenu ? 75 : 0 }}
         >
           <FloatContainer>
             <FloatLeftContainer>
@@ -380,7 +340,7 @@ function ThemeDetailScreen({ navigation, route }) {
 
                   Animated.timing(offsetValue, {
                     // YOur Random Value...
-                    toValue: showMenu ? 0 : -300,
+                    toValue: showMenu ? 0 : 500,
                     duration: 300,
                     useNativeDriver: true,
                   }).start();
@@ -400,7 +360,7 @@ function ThemeDetailScreen({ navigation, route }) {
             </FloatRightContainer>
           </FloatContainer>
         </ImageBackground>
-      </Animated.View>
+      </Animated.View> */}
     </SafeAreaView>
   );
 }
@@ -410,14 +370,13 @@ const RowContainer = styled.View`
   flex-direction: row;
 `;
 
-const MainContainer = styled.View`
+const MainContainer = styled.ScrollView`
   flex: 1;
-  padding-top: 80px;
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-bottom: 40px;
+  margin-top: 40px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 40px;
 `;
-
 
 const FloatContainer = styled.View`
   flex: 1;
@@ -435,12 +394,12 @@ const FloatRightContainer = styled.View`
 const ChartContainer = styled.View`
   height: 200px;
   border-width: 1px;
-  border-color: rgba(228,228,228,10);
-`
+  border-color: rgba(228, 228, 228, 10);
+`;
 const TitleTextContainer = styled.View`
   margin-top: 80px;
   margin-left: 40px;
-`
+`;
 
 const CafeImage = styled.View`
   position: relative;
@@ -460,6 +419,25 @@ const RankingWrapper = styled.View`
 
 const InfoTextWrapper = styled.View`
   margin-bottom: 10px;
+`;
+const RatingView = styled.View`
+  position: absolute;
+  margin-top: auto;
+  margin-left: auto;
+  top: -30px;
+  right: -30px;
+  width: 60px;
+  height: 60px;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9;
+  background-color: #fff;
 `;
 
 // 요소
@@ -501,8 +479,7 @@ const ReviewTextWrapper = styled.View`
 const ReviewTextContainer = styled.View`
   margin-top: 20px;
   margin-left: 60px;
-`
-
+`;
 
 // 텍스트
 const MainTitle = styled.Text`
@@ -556,7 +533,13 @@ const Body = styled.Text`
   font-size: ${({ theme }) => theme.fontSizes.caption1};
   line-height: ${({ theme }) => theme.fontHeight.caption1};
   letter-spacing: 0.5px;
-  color: #000;
+  color: #9b989b;
+`
+const RatingText = styled.Text`
+  font-family: "SUIT-ExtraBold";
+  font-size: ${({ theme }) => theme.fontSizes.title1};
+  line-height: ${({ theme }) => theme.fontHeight.title1};
+  letter-spacing: -1px;
 `;
 
 const styles = StyleSheet.create({
@@ -565,6 +548,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "flex-start",
     justifyContent: "flex-start",
+    borderRadius: 15,
   },
   tabBar: {
     flexDirection: "row",

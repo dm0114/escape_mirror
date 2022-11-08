@@ -14,12 +14,14 @@ export default function SearchCafeList({
   storeImg,
   storeAddress,
   likeCount,
+  mostReviewedTheme,
 }) {
   const navigation = useNavigation();
+  const {themeId, themeName, themeImg, star} = mostReviewedTheme
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("CafeDetailScreen");
+        navigation.navigate("CafeDetailScreen", {storeId : storeId});
       }}
     >
       <Container>
@@ -95,10 +97,9 @@ const MainSubTitle = styled.Text`
   color: #fff;
 `;
 const Title = styled.Text`
-  font-family: "SUIT-Bold";
+  font-family: "SUIT-SemiBold";
   font-size: ${({ theme }) => theme.fontSizes.title3};
   line-height: ${({ theme }) => theme.fontHeight.title3};
-  letter-spacing: -0.1px;
 `;
 const SubTitle = styled.Text`
   font-family: "SUIT-Regular";

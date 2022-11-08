@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import styled from "styled-components/native";
@@ -11,8 +11,8 @@ import LoadingScreen from "./LoadingScreen";
 import SearchThemeList from "../components/SearchThemeList";
 
 function CafeDetailScreen({ navigation: { navigate }, route }) {
-  const {storeId} = route.params;
-  const { isLoading, isFetching, data, refetch } = useQuery(
+  const { storeId } = route.params;
+  const { isLoading, status, data } = useQuery(
     ["CafeDetail", storeId], //토큰 추가
     searchApi.getCafeDetail
   );
@@ -20,10 +20,12 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
   const HeaderTabView = () => {
     const FirstRoute = () => (
       <FlatList
-        data={data?.themeList}
+        data={data?.themeDetailDtoList}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 40 }}
-        numColumns={2}
+        contentContainerStyle={{ 
+          paddingTop: 40,
+          marginHorizontal: 20
+        }}
         renderItem={({ item }) => (
           <SearchThemeList
             themeId={item.themeId}
@@ -72,31 +74,29 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
     );
   };
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+  return status === 'success' ? (
     <>
       <Container>
         {/* themeImg 넣기 */}
         <CafeImage />
         <TextContainer>
-          <Title>{data.store.storeName}</Title>
-          <SubTitle>{data.store.Address}</SubTitle>
-          <SubTitle>{data.store.mapX}</SubTitle>
-          <SubTitle>{data.store.mapY}</SubTitle>
+          <Title>{data.storeName}</Title>
+          <SubTitle>{data.Address}</SubTitle>
+          <SubTitle>{data.mapX}</SubTitle>
+          <SubTitle>{data.mapY}</SubTitle>
 
-          <SubTitle>{data.store.tel}분 | </SubTitle>
-          <SubTitle>난이도 {data.store.storeImg} | </SubTitle>
-          <SubTitle>{data.store.homepage} </SubTitle>
+          <SubTitle>{data.tel}분 | </SubTitle>
+          <SubTitle>난이도 {data.storeImg} | </SubTitle>
+          <SubTitle>{data.homepage} </SubTitle>
 
-          <SubTitle>{data.store.region}</SubTitle>
-          <SubTitle>
-            {data.store.isClear ? <Text>Clear</Text> : <Text>Fail</Text>}
-          </SubTitle>
+          <SubTitle>{data.region}</SubTitle>
+          <SubTitle>{data.clearCnt} / {data.totalTheme}</SubTitle>
         </TextContainer>
       </Container>
       <HeaderTabView />
     </>
+  ) : (
+    <LoadingScreen />
   );
 }
 

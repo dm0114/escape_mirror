@@ -60,6 +60,7 @@ const ThemeTitle = styled.Text`
 const CafeTitle = styled.Text`
   font-family: "SUIT-Medium";
   font-size: ${({ theme }) => theme.fontSizes.caption1};
+  color: #9b989b;
 `
 const TimeText = styled.Text`
   font-family: "SUIT-Bold";

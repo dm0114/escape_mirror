@@ -14,6 +14,7 @@ export default function SearchThemeList({
   themeImg,
   likeCount,
   star,
+  randomReview
 }) {
   const navigation = useNavigation();
 
@@ -45,7 +46,7 @@ export default function SearchThemeList({
       <ReviewWrapper>
         <ReviewContainerDesign />
         <ReviewContainer>
-          <Text>{`"asdasdasdasdasd..."`}</Text>
+          <Text>{`"${randomReview}"`}</Text>
         </ReviewContainer>
       </ReviewWrapper>
     </MainContainer>
