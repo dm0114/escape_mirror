@@ -4,6 +4,7 @@ package com.sinbangsa.service;
 import com.sinbangsa.data.dto.StoreDetailDto;
 import com.sinbangsa.data.dto.StoreDto;
 import com.sinbangsa.data.dto.ThemeDetailDto;
+import com.sinbangsa.data.dto.ThemeDetailInfoDto;
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.User;
@@ -66,7 +67,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public StoreDetailDto getStoreDetail(Long storeId) {
-        LOGGER.info("[BookService] getCafeDetail 호출");
+        LOGGER.info("[BookService] getStoreDetail 호출");
 
         StoreDetailDto storeDetailDto = new StoreDetailDto();
 
@@ -108,8 +109,24 @@ public class BookServiceImpl implements BookService {
 
         }
         storeDetailDto.setThemeDetailDtoList(themeDetailDtoList);
-        LOGGER.info("[BookService] getCafeDetail 성공");
+        LOGGER.info("[BookService] getStoreDetail 성공");
         return storeDetailDto;
+    }
+
+    public ThemeDetailInfoDto getThemeDetail(Long themeId) {
+        LOGGER.info("[BookService] getThemeDetail 호출");
+
+        ThemeDetailInfoDto themeDetailInfoDto = new ThemeDetailInfoDto();
+        try {
+            System.out.println(themeRepository.findById(themeId));
+
+        } catch (Exception e) {
+
+        }
+
+
+        return themeDetailInfoDto;
+
     }
 
 

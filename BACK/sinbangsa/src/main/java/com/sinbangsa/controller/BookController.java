@@ -4,6 +4,8 @@ package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.StoreDetailDto;
 import com.sinbangsa.data.dto.StoreDto;
+import com.sinbangsa.data.dto.ThemeDetailDto;
+import com.sinbangsa.data.dto.ThemeDetailInfoDto;
 import com.sinbangsa.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +36,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/store")
-    @ApiOperation(value = "도감 API")
+    @ApiOperation(value = "지역별 카페리스트")
     public ResponseEntity<List<StoreDto>> getStoreList(@RequestParam String region) {
         LOGGER.info("[BookController] getCafeList 호출");
         HttpHeaders headers = new HttpHeaders();
@@ -49,7 +51,6 @@ public class BookController {
     @GetMapping("/store/{storeId}")
     @ApiOperation(value = "가게 상세정보")
     public ResponseEntity<StoreDetailDto> getStoreDetail(@PathVariable Long storeId) {
-        System.out.println(storeId);
         LOGGER.info("[BookController] getStoreDetail 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
@@ -57,4 +58,13 @@ public class BookController {
         return new ResponseEntity<StoreDetailDto>(result, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/theme/{themeId}")
+    @ApiOperation(value = "테마 상세정보")
+    public ResponseEntity<ThemeDetailInfoDto> getThemeDetail(@PathVariable Long themeId) {
+        LOGGER.info("[BookController] getStoreDetail 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        ThemeDetailInfoDto result = bookService.getThemeDetail(themeId);
+        return new ResponseEntity<ThemeDetailInfoDto>(result, headers, HttpStatus.OK);
+    }
 }

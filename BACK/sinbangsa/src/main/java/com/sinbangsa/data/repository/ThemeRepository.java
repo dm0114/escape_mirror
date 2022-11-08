@@ -13,6 +13,8 @@ import java.util.List;
 public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
     Theme findById(long id);
+
+    Theme getById(long themeId);
     List<Theme> findAllByStore(Store store);
     List<Theme> findAllByThemeNameContaining(String searchWord);
     int countByStore(Store store);
