@@ -21,7 +21,6 @@ public class ThemeTime {
     private Theme theme;
 
     @Column
-    @NotNull
     private String time;
 
 
