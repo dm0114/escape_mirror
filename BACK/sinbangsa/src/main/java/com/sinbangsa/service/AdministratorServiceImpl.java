@@ -61,13 +61,19 @@ public class AdministratorServiceImpl implements AdministratorService {
             newStore.setRegion(storeRegesterDto.getRegion());
             newStore.setHomepage(storeRegesterDto.getHomepage());
             newStore.setStoreId(storeRepository.getNewStoreId());
+            newStore.setPoster(storeRegesterDto.getStoreImg());
+
+            // DB 지우고 다시 데이터 넣고 돌릴 때 지울부분(not null 옵션 때문에...)
+            newStore.setMapX("123");
+            newStore.setMapY("sdf");
+            //------------------------
 
             storeRepository.save(newStore);
+            LOGGER.info("[AdministratorService] 저장 됨");
             return true;
         } catch(Exception e){
-            return false;
+           return false;
         }
-
 
     };
 }
