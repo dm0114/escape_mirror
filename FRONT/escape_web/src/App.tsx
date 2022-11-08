@@ -11,6 +11,7 @@ import Home from '@pages/Home';
 import { css } from '@emotion/react';
 import NotFound from '@pages/NotFound';
 import UnityMainBook from './Unity/UnityMainBook';
+import UnityTest from './Unity/UnityTest';
 
 const style = css`
   color:pink;
@@ -30,6 +31,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />}/>
           <Route path="/unity/main/book" element={<UnityMainBook />}/>
+          <Route path="/unity/test" element={<UnityTest />}/>
         </Routes>
         </BrowserRouter>
       </div>
