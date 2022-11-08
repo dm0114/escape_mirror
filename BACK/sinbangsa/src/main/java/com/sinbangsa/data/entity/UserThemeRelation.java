@@ -25,5 +25,5 @@ public class UserThemeRelation {
 
     @ManyToOne
     @JoinColumn(name = "theme_id")
-    private Store userRelationTheme;
+    private Theme userRelationTheme;
 }
