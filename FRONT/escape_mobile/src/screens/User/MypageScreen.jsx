@@ -52,7 +52,7 @@ export default function MypageScreen() {
 
         {/* 찜테마 | 후기 | 내 예약 */}
         <UserView>
-          <MorePageTxt onPress={() => {navigation.navigate('MypageMoreScreen')}}>더 보기</MorePageTxt>
+          <MorePageTxt onPress={() => {navigation.navigate('MypageMoreScreen')}}>나의 스토리</MorePageTxt>
         </UserView>
 
         
@@ -185,7 +185,8 @@ const ProfileImg = styled.View`
   border-radius: 150px;
   z-index: 9999999999;
 `
-const ProfileEditImg=styled(ProfileImg)`
+const ProfileEditImg = styled(ProfileImg)`
+
 `
 const SettingsView = styled.View`
   align-items: flex-end;
