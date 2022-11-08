@@ -37,6 +37,7 @@ public class MainpageServiceImpl implements MainpageService{
             searchStore.setStoreId(store.getStoreId());
             searchStore.setStoreName(store.getStoreName());
             searchStore.setStoreImg(store.getPoster());
+            searchStore.setStoreAddress(store.getAddress());
             searchStore.setLikeCount(userStoreRelationRepository.countByUserRelationStore(store));
 
             List<Theme> themeList;
