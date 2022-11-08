@@ -30,18 +30,27 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
+        System.out.println("loadUser 진행중");
+
         Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
         String email = (String) kakao_account.get("email");
+
+        System.out.println("email 추출중 :" + email);
 
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         String nickname = (String) properties.get("nickname");
 
+        System.out.println("nickname 추출중 :" + nickname);
+
         if (!userRepository.existsByEmail(email)){
+            System.out.println("user회원가입");
             User user = User.builder()
                     .email(email)
                     .nickname(nickname)
                     .build();
             userRepository.save(user);
+
+            System.out.println(user);
         } else {
             System.out.println("이미 가입됨");
         }

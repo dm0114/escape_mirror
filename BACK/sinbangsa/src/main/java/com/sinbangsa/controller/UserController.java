@@ -29,14 +29,14 @@ public class UserController {
     private final UserService userService;
 
     @ResponseBody
-    @GetMapping("/kakao/code")
+    @GetMapping("/kakao")
     public void kakaoCode(@RequestParam String code){
         System.out.println(code);
     }
 
 
 //    @ApiOperation(value = "카카오 회원관리")
-//    @PostMapping("/kakao/token")
+//    @PostMapping("/kakao")
 //    public ResponseEntity<String> kakao(@RequestBody KakaoCodeDto kakaocodedto){
 //        String code = kakaocodedto.getCode();
 //        System.out.println(code);

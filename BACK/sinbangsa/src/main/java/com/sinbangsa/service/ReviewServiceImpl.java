@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
             themeReview.setHorror(reviewDto.getFeelHorror());
             themeReview.setLocker(reviewDto.getLocker());
             themeReview.setContent(reviewDto.getContent());
-            themeReview.setCreateAt(LocalDate.now());
+            themeReview.setCreateAt(LocalDateTime.now());
             // 임시 유저정보 token 완료 후 변경 필요
             themeReview.setReviewUser(userRepository.findById(1));
 
