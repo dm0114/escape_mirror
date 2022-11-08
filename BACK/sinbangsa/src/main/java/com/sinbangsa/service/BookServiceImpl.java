@@ -2,10 +2,7 @@ package com.sinbangsa.service;
 
 
 import com.sinbangsa.data.dto.*;
-import com.sinbangsa.data.entity.Book;
-import com.sinbangsa.data.entity.Store;
-import com.sinbangsa.data.entity.Theme;
-import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -32,6 +29,8 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
 
     private final ThemeReviewRepository themeReviewRepository;
+
+    private final UserThemeRelationRepository userThemeRelationRepository;
 
     public List<StoreDto> getStoreList(String region) {
         LOGGER.info("[BookService] getCafeList 호출");
@@ -164,9 +163,42 @@ public class BookServiceImpl implements BookService {
 
     public Boolean themeLike(long themeId) {
         LOGGER.info("[BookService] themeLike 호출");
+        Theme themeRepo = themeRepository.findById(themeId);
+        UserThemeRelation userThemeRelation = new UserThemeRelation();
+        //임시
+        User userRepo = userRepository.findById((long) 1);
+        if (userThemeRelationRepository.existsByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo)) {
+
+            return false;
+        } else {
+
+            userThemeRelation.setUserRelationTheme(themeRepo);
+            System.out.println(1);
+            userThemeRelation.setThemeRelationUser(userRepo);
+            System.out.println(2);
+            userThemeRelationRepository.save(userThemeRelation);
+            System.out.println(3);
+            return true;
+        }
 
 
-        return true;
+    }
+
+    public Boolean themeLikeCancel(long themeId) {
+        LOGGER.info("[BookService] themeLike 호출");
+        Theme themeRepo = themeRepository.findById(themeId);
+        UserThemeRelation userThemeRelation = new UserThemeRelation();
+        //임시
+        User userRepo = userRepository.findById((long) 1);
+        if (userThemeRelationRepository.existsByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo)) {
+            userThemeRelationRepository.delete(userThemeRelationRepository.findByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo));
+            return true;
+        } else {
+
+            return false;
+        }
+
+
     }
 
 

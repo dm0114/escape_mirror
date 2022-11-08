@@ -20,5 +20,7 @@ public interface BookService {
 
     Boolean themeLike(long themeId);
 
+    Boolean themeLikeCancel(long themeId);
+
 
 }
