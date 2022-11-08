@@ -45,8 +45,6 @@ public class MainpageDto {
         String randomReview;
     }
 
-
-
     List<LStoreDto> storeList;
     List<LThemeDto> themelist;
 
