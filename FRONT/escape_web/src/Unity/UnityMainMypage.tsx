@@ -6,9 +6,9 @@ const UnityMainMypage = () => {
 
     const { unityProvider } = useUnityContext({
         loaderUrl: "/Builds/Main/Mypage/MyPage.loader.js",
-        dataUrl: "/Builds/Main/Mypage/MyPage.data.unityweb",
-        frameworkUrl: "/Builds/Main/Mypage/MyPage.framework.js.unityweb",
-        codeUrl: "/Builds/Main/Mypage/MyPage.wasm.unityweb"
+        dataUrl: "/Builds/Main/Mypage/MyPage.data",
+        frameworkUrl: "/Builds/Main/Mypage/MyPage.framework.js",
+        codeUrl: "/Builds/Main/Mypage/MyPage.wasm"
     })
 
     return (
