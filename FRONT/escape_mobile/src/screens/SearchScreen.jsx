@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useWindowDimensions, Text } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import Carousel from "react-native-reanimated-carousel";
 
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
@@ -13,7 +14,17 @@ import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
 
+
+
 export default function SearchScreen() {
+  /**
+   * 레이아웃
+   */
+  const layout = useWindowDimensions();
+  const Width = layout.width;
+  const Height = layout.height;
+
+
   const [query, setQuery] = useState("");
   const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
@@ -56,6 +67,33 @@ export default function SearchScreen() {
       );
 
       const ThemeRoute = () => (
+        // <Carousel
+        //   loop={false}
+        //   width={Width}
+        //   height={Height / 2}
+        //   autoPlay={false}
+        //   data={data.themelist}
+        //   mode={'parallax'}
+        //   modeConfig={
+        //     {
+        //       parallaxScrollingScale: 1,
+        //       parallaxAdjacentItemScale: 0.9
+        //     }
+        //   }
+        //   vertical={true}
+        //   scrollAnimationDuration={1000}
+        //   renderItem={({item}) => (
+        //       <SearchThemeList
+        //         themeId={item.themeId}
+        //         themeName={item.themeName}
+        //         storeName={item.storeName}
+        //         themeImg={item.themeImg}
+        //         likeCount={item.likeCount}
+        //         star={item.star}
+        //       />
+        //   )}
+        // />
+
         <ThemeListScroll
           data={data.themelist}
           contentContainerStyle={{
@@ -74,7 +112,6 @@ export default function SearchScreen() {
         />
       );
 
-      const layout = useWindowDimensions();
 
       const [index, setIndex] = React.useState(0);
       const [routes] = React.useState([

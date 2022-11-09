@@ -1,21 +1,38 @@
-import React from 'react'
-import styled from 'styled-components/native';
-import ReservationComponent from '../components/ReservationComponent';
-
+import React from "react";
+import styled from "styled-components/native";
+import ReservationComponent from "../components/ReservationComponent";
+import { Dimensions } from "react-native";
+import "react-native-reanimated";
+import Carousel from "react-native-reanimated-carousel";
+const { width } = Dimensions.get("window");
 
 export default function MainScreen() {
-  
   // 프리로딩 API 연결
   const data = {
-    "reservations": [{
-      "reservationId": 1,
-      "themeName": "테마이름",
-      "storeName": "카페이름",
-      "date":"22-02-08",
-      "reserveTime":"16:20"
-      }
+    reservations: [
+      {
+        reservationId: 1,
+        themeName: "테마이름",
+        storeName: "카페이름",
+        date: "22-02-08",
+        reserveTime: "16:20",
+      },
+      {
+        reservationId: 2,
+        themeName: "테마이름",
+        storeName: "카페이름",
+        date: "22-02-08",
+        reserveTime: "16:20",
+      },
+      {
+        reservationId: 3,
+        themeName: "테마이름",
+        storeName: "카페이름",
+        date: "22-02-08",
+        reserveTime: "16:20",
+      },
     ],
-  }
+  };
 
   return (
     <MainContainer>
@@ -24,18 +41,45 @@ export default function MainScreen() {
         오랜만에 저택으로 돌아오셨네요.{"\n"}
         받으신 초대장 목록을 보여드릴게요.
       </MainText>
-      {data.reservations.map((item) => {
+      <Carousel
+        loop={false}
+        width={width - 40}
+        height={width / 3.5}
+        autoPlay={false}
+        data={data.reservations}
+        mode={'parallax'}
+        modeConfig={
+          {
+            parallaxScrollingScale: 1,
+            parallaxAdjacentItemScale: 0.9
+          }
+        }
+        vertical={true}
+        scrollAnimationDuration={1000}
+        renderItem={({item}) => (
+          <ReservationComponent
+            key={item.reservationId}
+            reservationId={item.reservationId}
+            themeName={item.themeName}
+            storeName={item.storeName}
+            date={item.date}
+            reserveTime={item.reserveTime}
+          />
+        )}
+      />
+
+      {/* {data.reservations.map((item) => {
         return (
-          <ReservationComponent 
-          key={item.reservationId}
-          reservationId={item.reservationId}
-          themeName={item.themeName}
-          storeName={item.storeName}
-          date={item.date}
-          reserveTime={item.reserveTime}
-        />
-        )
-      })}
+          <ReservationComponent
+            key={item.reservationId}
+            reservationId={item.reservationId}
+            themeName={item.themeName}
+            storeName={item.storeName}
+            date={item.date}
+            reserveTime={item.reserveTime}
+          />
+        );
+      })} */}
     </MainContainer>
   );
 }
@@ -45,7 +89,7 @@ const MainContainer = styled.View`
   padding-left: ${({ theme }) => theme.screenMargin.padding};
   padding-right: ${({ theme }) => theme.screenMargin.padding};
   padding-top: ${({ theme }) => theme.screenMargin.paddingTop};
-`
+`;
 const MainText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
@@ -53,4 +97,4 @@ const MainText = styled.Text`
   line-height: ${({ theme }) => theme.fontHeight.title2};
   margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
   margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
-`
+`;

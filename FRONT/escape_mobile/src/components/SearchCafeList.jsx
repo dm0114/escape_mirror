@@ -1,10 +1,9 @@
 import React from "react";
-import { TouchableOpacity, Image, StyleSheet, View } from "react-native";
+import { TouchableOpacity, Image, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import styled from "styled-components/native";
-import { BlurView } from "@react-native-community/blur";
 
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons, Fontisto } from "@expo/vector-icons";
+import { BestBadge, Container, IconContainer, MainContentWrapper, MainSubTitle, MainTextContainer, MainTitle, RepThemeContainer, StoreImgContainer, SubContentWrapper, styles } from "../styles/Search/CafeList";
 const cardImage = require("../assets/mocks/image.png");
 const storeImage = require("../assets/mocks/storeImg.png");
 
@@ -17,128 +16,59 @@ export default function SearchCafeList({
   mostReviewedTheme,
 }) {
   const navigation = useNavigation();
-  const {themeId, themeName, themeImg, star} = mostReviewedTheme
+  const { themeId, themeName, themeImg, star } = mostReviewedTheme;
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("CafeDetailScreen", {storeId : storeId});
+        navigation.navigate("CafeDetailScreen", { storeId: storeId });
       }}
     >
-      <Container>
-        {/* storeImg 넣기 */}
+      <Container mb="60px">
         <MainContentWrapper>
           <StoreImgContainer>
             <View style={styles.storeImgContainer} />
             <Image source={storeImage} style={styles.storeImg} blurRadius={3} />
           </StoreImgContainer>
+        </MainContentWrapper>
+
+        <SubContentWrapper>
           <MainTextContainer>
             <MainTitle>{storeName}</MainTitle>
             <MainSubTitle>{storeAddress}</MainSubTitle>
+            <IconContainer>
+              <Ionicons
+                name="md-call"
+                size={19}
+                color="black"
+                style={{ marginRight: 4 }}
+              />
+              <Ionicons
+                name="md-logo-instagram"
+                size={20}
+                color="black"
+                style={{ marginHorizontal: 8 }}
+              />
+              <Ionicons
+                name="md-location-sharp"
+                size={20}
+                color="black"
+                style={{ marginLeft: 4 }}
+              />
+            </IconContainer>
           </MainTextContainer>
-        </MainContentWrapper>
-        <SubContentWrapper>
-          <TextContainer>
-            <SubTitle>대표 테마</SubTitle>
-            <Title>{storeName}</Title>
-          </TextContainer>
-          <View style={{elevation: 10}}>
+          <RepThemeContainer>
             <Image source={cardImage} style={styles.img} />
-          </View>
+            {/* <Title>{storeName}</Title> */}
+            <BestBadge>
+              {/* <SubTitle>BEST</SubTitle> */}
+              <Fontisto name="fire" size={17} color="white" />
+            </BestBadge>
+            
+          </RepThemeContainer>
         </SubContentWrapper>
-        {/* store LikeButton 추가 */}
       </Container>
     </TouchableOpacity>
   );
 }
 
-// 뷰
-const Container = styled.View`
-  margin-bottom: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-`;
-const MainContentWrapper = styled.View`
-  height: 80px;
-`;
-const SubContentWrapper = styled.View`
-  flex-direction: row;
-  justify-content: flex-end;
-  height: 100px;
-`;
 
-const StoreImgContainer = styled.View`
-  overflow: hidden;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-`;
-
-const MainTextContainer = styled.View`
-  position: absolute;
-  padding: 20px;
-`;
-const TextContainer = styled.View`
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding-bottom: 20px;
-`;
-
-
-// 텍스트
-const MainTitle = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.title3};
-  line-height: ${({ theme }) => theme.fontHeight.title3};
-  color: #fff;
-`;
-const MainSubTitle = styled.Text`
-  font-family: "SUIT-Regular";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
-  color: #fff;
-`;
-const Title = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.title3};
-  line-height: ${({ theme }) => theme.fontHeight.title3};
-`;
-const SubTitle = styled.Text`
-  font-family: "SUIT-Regular";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
-`;
-
-// styles
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  absolute: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    height: "20%",
-  },
-  img: {
-    height: 100,
-    resizeMode: "contain",
-    position: "relative",
-    top: -20,
-    elevation: 5,
-  },
-  storeImg: {
-    position: 'absolute',
-    height: 80,
-    resizeMode: "cover",
-  },
-  storeImgContainer: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    height: 80,
-    backgroundColor: '#00000090',
-    zIndex: 999,
-  }
-});

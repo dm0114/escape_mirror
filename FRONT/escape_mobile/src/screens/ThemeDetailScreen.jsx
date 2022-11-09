@@ -6,11 +6,32 @@ import Plotly from "react-native-plotly";
 import { Shadow } from "react-native-shadow-2";
 import styled from "styled-components/native";
 const cardImage = require("../assets/mocks/image.png");
-import Svg,{ Circle } from 'react-native-svg';
+// import Svg,{ Circle } from 'react-native-svg';
 
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
+
+// {
+//   "themeName": "셜록홈즈: 살인누명",
+//   "genre": "추리",
+//   "capacity": "2인~6인",
+//   "price": "/44000/60000/76000/90000",
+//   "difficulty": 0,
+//   "leadTime": 60,
+//   "description": "\"왓슨군, 보는 것과 관찰하는 것은 다른 것이라네.“\\n\\n다급한 홈즈의 전화를 받고 단숨에 달려왔다.\\n그런데 사무실에는 아무도 없다.\\n무언가 수상하다.\\n\\n이건 뭐지? 홈즈의 메시지인가?\\n이럴 수가… 홈즈가 위기에 빠진 게 분명하다.?\\n당황하고 있을 시간이 없다.\"",
+//   "themeImg": "p3207.jpg",
+//   "star": 0,
+//   "feelDifficulty": 0,
+//   "feelStory": 0,
+//   "feelInterior": 0,
+//   "feelActivity": 0,
+//   "feelHorror": 0,
+//   "lock": 0,
+//   "reviews": [],
+//   "noHintRanking": [],
+//   "hintRanking": []
+// }
 
 function ThemeDetailScreen({ navigation, route }) {
   // 카운터
@@ -86,10 +107,15 @@ function ThemeDetailScreen({ navigation, route }) {
   };
 
   const { themeId } = route.params;
-  // const { isLoading, data } = useQuery(
-  //   ["ThemeDetail", themeId],
-  //   searchApi.getThemeDetail
-  // );
+  const { isLoading, data } = useQuery(
+    ["ThemeDetail", themeId],
+    searchApi.getThemeDetail
+  );
+  useEffect(()=>{
+    console.log(themeId);
+    console.log(data);
+  }, [data])
+
   const ThemeDatas = {
     themeId: 3,
     themeName: "비밀의 가족",
@@ -204,24 +230,19 @@ function ThemeDetailScreen({ navigation, route }) {
             }}
           ></Image>
           <RatingView>
-            <RatingText>{ThemeDatas.star}</RatingText>
+            <RatingText>{data.star}</RatingText>
           </RatingView>
         </Shadow>
-        <MainTitle>{ThemeDatas.themeName}</MainTitle>
+        <MainTitle>{data.themeName}</MainTitle>
         <InfoTextWrapper>
           <RowContainer>
-            <SubTitle>{ThemeDatas.leadtime}분 • </SubTitle>
-            <SubTitle>{ThemeDatas.capacity} • </SubTitle>
-            <SubTitle>난이도 {ThemeDatas.difficulty}</SubTitle>
+            <SubTitle>{data.leadTime}분 • </SubTitle>
+            <SubTitle>{data.capacity} • </SubTitle>
+            <SubTitle>난이도 {data.difficulty}</SubTitle>
           </RowContainer>
         </InfoTextWrapper>
         <InfoTextWrapper>
-          <SubTitle>{ThemeDatas.description}</SubTitle>
-          <Body>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s
-          </Body>
+          <Body>{data.description.replace(/\\n/g, ' ')}</Body>
         </InfoTextWrapper>
 
         <InfoTextWrapper>
@@ -240,7 +261,7 @@ function ThemeDetailScreen({ navigation, route }) {
 
         <RankingWrapper>
           <SubTitle>랭킹</SubTitle>
-          {ThemeDatas.noHintRanking.map((item, idx) => {
+          {data.noHintRanking.map((item, idx) => {
             return (
               <RowContainer key={idx}>
                 <Body>{idx + 1}등 |</Body>
@@ -256,10 +277,10 @@ function ThemeDetailScreen({ navigation, route }) {
         left={Width}
         onPress={() => {
           navigation.navigate("PostReservationScreen", {
-            themeName: ThemeDatas.themeName,
-            leadtime: ThemeDatas.leadtime,
-            price: ThemeDatas.price,
-            themeImg: ThemeDatas.themeImg,
+            themeName: data.themeName,
+            leadtime: data.leadtime,
+            price: data.price,
+            themeImg: data.themeImg,
           });
         }}
       >
@@ -368,6 +389,7 @@ function ThemeDetailScreen({ navigation, route }) {
 // 뷰
 const RowContainer = styled.View`
   flex-direction: row;
+  justify-content: center;
 `;
 
 const MainContainer = styled.ScrollView`
@@ -488,6 +510,7 @@ const MainTitle = styled.Text`
   line-height: ${({ theme }) => theme.fontHeight.title1};
   letter-spacing: -1px;
   margin-bottom: 10px;
+  text-align: center;
 `;
 const Title = styled.Text`
   font-family: "SUIT-Bold";

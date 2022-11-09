@@ -37,10 +37,9 @@ const getCafeDetail = async({queryKey}) => {
   return await (await fetch(`${BASE_URL}/book/store/${storeId}`)).json();
 }
 
-const getThemeDetail = () => {
-  // api/book/theme/{themeId}
-  // 헤더에 토큰 추가
-  fetch(`${BASE_URL}/mocks/db`).then((res) => res.json());
+const getThemeDetail = async({queryKey}) => {
+  let [_, themeId] = queryKey
+  return await (await fetch(`${BASE_URL}/book/theme/${themeId}`)).json();
 
 }
 
