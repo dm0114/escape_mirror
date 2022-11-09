@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import theme from '../../../theme';
 import { Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { withTheme } from 'styled-components';
 
  
 // 화면 너비, 높이 구하는 방법
@@ -20,8 +21,20 @@ export default function Book({navigation}){
             <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/main/book/'}}/>
         </Container> */}
         <Container>
-        <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/main/book'}} />
-            {/* <View style={{ position:'absolute', zIndex:10, elevation:10, backgroundColor:'red' }}>
+            <TouchableOpacity
+            style={{position:'absolute', zIndex:10, elevation:10, top:100}}
+             onPress={()=>{navigation.navigate('RegionBook',{
+                        num:Tel[1],
+                        name:Region[1]
+                    })}}>
+                <View>
+                    <Text style={{color:'white'}}>안녕,,,</Text>
+                </View>
+            </TouchableOpacity>
+            <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/main/book'}} />
+        </Container>
+        {/* <Container> */}
+            {/* <View style={{position:'absolute', flex:1, top:0, left:0, zIndex:10, elevation:10}}>
                 <TwoRegion>
                     <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
                         num:Tel[0],
@@ -59,7 +72,7 @@ export default function Book({navigation}){
                     })}}><RegionTitle>{Tel[6]}</RegionTitle></RegionBtn>
                 </TwoRegion>
             </View> */}
-        </Container>
+        {/* </Container> */}
         {/* <Container>
             
         </Container> */}
@@ -83,7 +96,7 @@ const RegionBtn = styled.TouchableOpacity`
 
 const Container = styled.View`
     flex:1;
-    padding-top:40px;
+    /* padding-top:40px; */
 `
 
 const TwoRegion = styled.View`

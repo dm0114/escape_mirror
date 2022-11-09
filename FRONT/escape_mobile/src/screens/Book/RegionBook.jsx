@@ -9,6 +9,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Modal } from "native-base";
 import {ProgressBar} from 'react-native-ui-lib';
 
+import { WebView } from 'react-native-webview';
+
 const RegionList = {
     // 서울
     '02':[
@@ -152,125 +154,130 @@ export default function RegionBook({navigation, route}){
     }, [])
 
     return(
-        <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
-            <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20}}>
-                <Modal isOpen={reviewModal} onClose={()=>setReviewModal(false)}>
-                    <Modal.Content>
-                        <Modal.CloseButton />
-                        <Modal.Header>테마이름</Modal.Header>
-                        <Modal.Body>
-                            리뷰 내용이 들어가야 함
-                        </Modal.Body>
-                    </Modal.Content>
-                </Modal>
-                <View style={{flex:1}}>
-                    <RoomNumber>ROOM {num}</RoomNumber>
-                </View>
-                <View style={{flex:8}}
-                >
-                    {cafeSet !== null ? 
-                    <>
-                        <View style={{marginTop:10}}>
-                        <CafeNavBtn style={{flexDirection:'row', marginTop:20, marginBottom:20}}
-                        onPress={()=>{
-                            // setCafeSet(null)
-                            navigation.navigate('CafeDetailScreen', {
-                            storeId:cafeSet.storeId
-                        })
-                        }}>
-                            <CafeImg source={{uri:cafeSet.storeImg}} resizeMode="cover" imageStyle={{borderRadius:10}} />
-                            <View style={{flexDirection:'column', marginLeft:20, flex:1, marginTop:'auto', marginBottom:'auto'}}>
-                                <CafeName>{cafeSet.storeName}</CafeName>
-                                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                                    <ProgressTitle>진행도</ProgressTitle>
-                                    <ProgressTitle style={{marginRight:10}}>10/15</ProgressTitle>
-                                </View>
-                                <ProgressBar progress={55} progressColor={'red'} style={{height:20}} />
-                            </View>
-                        </CafeNavBtn>
-                        <FlatList
-                            style={{marginTop:20}}
-                            // columnWrapperStyle={{ justifyContent:"space-between" }}
-                            keyExtractor={(item) => item.themeId}
-                            data={data}
-                            numColumns={3}
-                            key={3}
-                            // columnWrapperStyle={{justifyContent: 'space-between'}}
-                            renderItem={(obj) => 
-                                <>
-                                <TouchableOpacity style={[{width:117, position:'relative'}, 
-                                    obj.index % 3 == 2 ? {marginRight:0} : {marginRight:20}]}
-                                onPress={()=>{
-                                    if(obj.item.isClear < 2){navigation.navigate('ThemeDetailScreen', {
-                                    storeId:obj.item.themeId
-                                })}else{
-                                    setReviewModal(true)
-                                }
-                                }}>
-                                    <View style={{backgroundColor:'black', height:180, width:117, position:'absolute', zIndex:3, elevation:3, borderRadius:10, opacity:opacity_list[obj.item.isClear]}} />
-                                    <ThemeView
-                                        source={{uri:obj.item.themeImg}}
-                                        resizeMode="cover"
-                                        imageStyle={{borderRadius:10}}
-                                        />
-                                </TouchableOpacity>
-                                </>
-                    }
+        <>
+        <View style={{flex:1}}>
+        <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/test'}} />
+        </View>
+        </>
+        // <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
+        //     <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20}}>
+        //         <Modal isOpen={reviewModal} onClose={()=>setReviewModal(false)}>
+        //             <Modal.Content>
+        //                 <Modal.CloseButton />
+        //                 <Modal.Header>테마이름</Modal.Header>
+        //                 <Modal.Body>
+        //                     리뷰 내용이 들어가야 함
+        //                 </Modal.Body>
+        //             </Modal.Content>
+        //         </Modal>
+        //         <View style={{flex:1}}>
+        //             <RoomNumber>ROOM {num}</RoomNumber>
+        //         </View>
+        //         <View style={{flex:8}}
+        //         >
+        //             {cafeSet !== null ? 
+        //             <>
+        //                 <View style={{marginTop:10}}>
+        //                 <CafeNavBtn style={{flexDirection:'row', marginTop:20, marginBottom:20}}
+        //                 onPress={()=>{
+        //                     // setCafeSet(null)
+        //                     navigation.navigate('CafeDetailScreen', {
+        //                     storeId:cafeSet.storeId
+        //                 })
+        //                 }}>
+        //                     <CafeImg source={{uri:cafeSet.storeImg}} resizeMode="cover" imageStyle={{borderRadius:10}} />
+        //                     <View style={{flexDirection:'column', marginLeft:20, flex:1, marginTop:'auto', marginBottom:'auto'}}>
+        //                         <CafeName>{cafeSet.storeName}</CafeName>
+        //                         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+        //                             <ProgressTitle>진행도</ProgressTitle>
+        //                             <ProgressTitle style={{marginRight:10}}>10/15</ProgressTitle>
+        //                         </View>
+        //                         <ProgressBar progress={55} progressColor={'red'} style={{height:20}} />
+        //                     </View>
+        //                 </CafeNavBtn>
+        //                 <FlatList
+        //                     style={{marginTop:20}}
+        //                     // columnWrapperStyle={{ justifyContent:"space-between" }}
+        //                     keyExtractor={(item) => item.themeId}
+        //                     data={data}
+        //                     numColumns={3}
+        //                     key={3}
+        //                     // columnWrapperStyle={{justifyContent: 'space-between'}}
+        //                     renderItem={(obj) => 
+        //                         <>
+        //                         <TouchableOpacity style={[{width:117, position:'relative'}, 
+        //                             obj.index % 3 == 2 ? {marginRight:0} : {marginRight:20}]}
+        //                         onPress={()=>{
+        //                             if(obj.item.isClear < 2){navigation.navigate('ThemeDetailScreen', {
+        //                             storeId:obj.item.themeId
+        //                         })}else{
+        //                             setReviewModal(true)
+        //                         }
+        //                         }}>
+        //                             <View style={{backgroundColor:'black', height:180, width:117, position:'absolute', zIndex:3, elevation:3, borderRadius:10, opacity:opacity_list[obj.item.isClear]}} />
+        //                             <ThemeView
+        //                                 source={{uri:obj.item.themeImg}}
+        //                                 resizeMode="cover"
+        //                                 imageStyle={{borderRadius:10}}
+        //                                 />
+        //                         </TouchableOpacity>
+        //                         </>
+        //             }
                     
-                    />
-                        </View>
-                    </>
-                    :   
-                    <>
-                        {/* 세부지역이 있을 경우 select box를 보여주고, 없는 경우 보여주지 않음 */}
-                        <View style={{flex:8}}>
-                            {itemsList.length ?
-                            <RNPickerSelect
-                                style={{inputAndroid: styles.rnpicker}}
-                                onValueChange={(value) => {
-                                    setSelectRegion(`${name}/${value}`)
-                                    setSpecificRegion(value)}}
-                                items={itemsList}
-                                value={specificRegion}
-                                useNativeAndroidPickerStyle={false}
-                                placeholder={{label:'세부지역을 선택해주세요', value:null}}
-                            />
-                            :
-                            null
-                            }
-                            {/* 세부지역 선택 시 해당 세부지역에 대한 카페 데이터를 보여줌 */}
-                            {selectRegion !== `${name}/null` ? 
-                            <FlatList
-                                numColumns={2}
-                                data={test}
-                                renderItem={(obj) => 
-                                    <TouchableOpacity style={{flex:0.5, position:'relative'}} onPress={()=>{setCafeSet(obj.item)}}>
-                                        <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
-                                        style={[obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                                            : {marginRight:10}, {height:180, width:186, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
-                                        <CafeView
-                                            source={{uri:obj.item.storeImg}}
-                                            resizeMode="cover"
-                                            imageStyle={{borderRadius:10}}
-                                            style={
-                                                obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                                            : {marginRight:10}}>
-                                                <ThemeTitle>진행도</ThemeTitle>
-                                                <ProgressBar progress={55} progressColor={'red'} style={{zIndex:10, marginTop:130}}/>
-                                                {/* <ThemeTitle>{obj.item.storeName}</ThemeTitle> */}
-                                        </CafeView>
-                                    </TouchableOpacity>
-                        }/>
+        //             />
+        //                 </View>
+        //             </>
+        //             :   
+        //             <>
+        //                 {/* 세부지역이 있을 경우 select box를 보여주고, 없는 경우 보여주지 않음 */}
+        //                 <View style={{flex:8}}>
+        //                     {itemsList.length ?
+        //                     <RNPickerSelect
+        //                         style={{inputAndroid: styles.rnpicker}}
+        //                         onValueChange={(value) => {
+        //                             setSelectRegion(`${name}/${value}`)
+        //                             setSpecificRegion(value)}}
+        //                         items={itemsList}
+        //                         value={specificRegion}
+        //                         useNativeAndroidPickerStyle={false}
+        //                         placeholder={{label:'세부지역을 선택해주세요', value:null}}
+        //                     />
+        //                     :
+        //                     null
+        //                     }
+        //                     {/* 세부지역 선택 시 해당 세부지역에 대한 카페 데이터를 보여줌 */}
+        //                     {selectRegion !== `${name}/null` ? 
+        //                     <FlatList
+        //                         numColumns={2}
+        //                         data={test}
+        //                         renderItem={(obj) => 
+        //                             <TouchableOpacity style={{flex:0.5, position:'relative'}} onPress={()=>{setCafeSet(obj.item)}}>
+        //                                 <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+        //                                 style={[obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+        //                                     : {marginRight:10}, {height:180, width:186, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
+        //                                 <CafeView
+        //                                     source={{uri:obj.item.storeImg}}
+        //                                     resizeMode="cover"
+        //                                     imageStyle={{borderRadius:10}}
+        //                                     style={
+        //                                         obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+        //                                     : {marginRight:10}}>
+        //                                         <ThemeTitle>진행도</ThemeTitle>
+        //                                         <ProgressBar progress={55} progressColor={'red'} style={{zIndex:10, marginTop:130}}/>
+        //                                         {/* <ThemeTitle>{obj.item.storeName}</ThemeTitle> */}
+        //                                 </CafeView>
+        //                             </TouchableOpacity>
+        //                 }/>
                             
-                            : null}
+        //                     : null}
                                 
-                        </View>
-                    </>
-                    }
-                    {/* </BlurView> */}
-                </View>
-            </View>
-        </ImageBackground>
+        //                 </View>
+        //             </>
+        //             }
+        //             {/* </BlurView> */}
+        //         </View>
+        //     </View>
+        // </ImageBackground>
     )
 }
 
