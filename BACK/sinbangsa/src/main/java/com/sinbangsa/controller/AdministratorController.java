@@ -1,6 +1,7 @@
 package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.AdminStoreDto;
+import com.sinbangsa.data.dto.AdministratorThemeDetailDto;
 import com.sinbangsa.data.dto.StoreRegesterDto;
 import com.sinbangsa.data.dto.ThemeListDto;
 import com.sinbangsa.data.entity.Admin;
@@ -83,14 +84,31 @@ public class AdministratorController {
     }
 
     @GetMapping("/theme")
-    @ApiOperation(value = "테마 리스트")
+    @ApiOperation(value = "관리자 페이지 테마 리스트")
     public ResponseEntity<List<ThemeListDto>> getThemeList(@RequestParam Long storeId){
         LOGGER.info("[AdministratorController] getThemeList 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        List<ThemeListDto> themeList = administratorService.getThemeList(storeId);
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+
+        List<ThemeListDto> themeList = administratorService.getThemeList(storeId, adminId);
         return new ResponseEntity<>(themeList, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/theme/{themeId}")
+    @ApiOperation(value = "관리자 페이지 테마 상세")
+    public ResponseEntity<AdministratorThemeDetailDto> getThemeDetail(@PathVariable long themeId){
+        LOGGER.info("[AdministratorController] getThemeDetail 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+
+        AdministratorThemeDetailDto themeDetail = administratorService.getThemeDetail(themeId, adminId);
+        return new ResponseEntity<>(themeDetail, headers, HttpStatus.OK);
     }
 
 
