@@ -57,14 +57,8 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
   const Width = (dimensions.width - 256) / 2;
   const Height = parseInt(dimensions.height / 2);
   const offsetValue = useRef(new Animated.Value(0)).current;
-  const scaleValue = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.timing(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-
     Animated.timing(offsetValue, {
       // YOur Random Value...
       toValue: -(Height / 2),

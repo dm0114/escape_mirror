@@ -247,16 +247,18 @@ function ThemeDetailScreen({ navigation, route }) {
 
         <InfoTextWrapper>
           <RowContainer>
-            <SubTitle>가격</SubTitle>
-            <TouchableOpacity onPress={number <= 4 ? onIncrease : null}>
-              <Text>+</Text>
-            </TouchableOpacity>
-            <Body>{number}</Body>
-            <TouchableOpacity onPress={number >= 2 ? onDecrease : null}>
-              <Text>-</Text>
-            </TouchableOpacity>
+            <RowContainer>
+              <SubTitle>가격</SubTitle>
+              <TouchableOpacity onPress={number <= 4 ? onIncrease : null}>
+                <Text>+</Text>
+              </TouchableOpacity>
+              <Body>{number}</Body>
+              <TouchableOpacity onPress={number >= 2 ? onDecrease : null}>
+                <Text>-</Text>
+              </TouchableOpacity>
+            </RowContainer>
+            <Body>{!!PriceData[number] ? PriceData[number] : 0}원</Body>
           </RowContainer>
-          <Body>{!!PriceData[number] ? PriceData[number] : 0}원</Body>
         </InfoTextWrapper>
 
         <RankingWrapper>
@@ -557,6 +559,7 @@ const Body = styled.Text`
   line-height: ${({ theme }) => theme.fontHeight.caption1};
   letter-spacing: 0.5px;
   color: #9b989b;
+  text-align: center;
 `
 const RatingText = styled.Text`
   font-family: "SUIT-ExtraBold";
