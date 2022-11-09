@@ -1,12 +1,16 @@
 package com.sinbangsa.controller;
 
 
-import com.sinbangsa.data.dto.KakaoTokenDto;
+import com.sinbangsa.data.dto.KakaoLoginRequestDto;
+import com.sinbangsa.data.dto.KakaoLoginResponseDto;
 import com.sinbangsa.data.dto.KakaoUserDto;
+import com.sinbangsa.data.entity.User;
 import com.sinbangsa.service.UserService;
+import com.sinbangsa.utils.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,22 +30,35 @@ public class UserController {
     private static final String FAIL = "fail";
     private final UserService userService;
 
-    @ResponseBody
-    @GetMapping("/kakao")
-    public void kakaoCode(@RequestParam String code){
-        System.out.println(code);
-    }
+    private final JwtTokenProvider jwtTokenProvider;
+
+//    @ResponseBody
+//    @GetMapping("/kakao")
+//    public void kakaoCode(@RequestParam String code){
+//        System.out.println(code);
+//    }
 
 
     @ApiOperation(value = "카카오 회원관리")
     @PostMapping("/kakao")
-    public ResponseEntity<String> kakao(@RequestBody KakaoTokenDto kakaoTokenDto){
+    public ResponseEntity<KakaoLoginResponseDto> kakao(@RequestBody KakaoLoginRequestDto kakaoLoginRequestDto){
         System.out.println("123");
-        String kakaoToken = kakaoTokenDto.getAccess_token();
-        System.out.println("start?");
-        KakaoUserDto kakaoUserDto = userService.getProfile(kakaoToken);
-        System.out.println(kakaoUserDto);
-        return new ResponseEntity<>(null,HttpStatus.OK);
+        String kakaoToken = kakaoLoginRequestDto.getAccessToken();
+        User loginUser = userService.getUserinfoByToken(kakaoToken);
+        String userEmail = loginUser.getEmail();
+        String accessToken = jwtTokenProvider.createAccessToken(userEmail);
+        String refreshToken = jwtTokenProvider.createRefreshToken(userEmail);
+        KakaoLoginResponseDto kakaoLoginResponseDto = new KakaoLoginResponseDto();
+        kakaoLoginResponseDto.setAccessToken(accessToken);
+        kakaoLoginResponseDto.setRefreshToken(refreshToken);
+
+        return new ResponseEntity<>(kakaoLoginResponseDto,HttpStatus.OK);
+
+    }
+
+    @GetMapping("/test")
+    public void test(){
+        jwtTokenProvider.
 
     }
 

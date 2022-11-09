@@ -3,8 +3,9 @@ package com.sinbangsa.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sinbangsa.data.dto.KakaoTokenDto;
+import com.sinbangsa.data.dto.KakaoLoginResponseDto;
 import com.sinbangsa.data.dto.KakaoUserDto;
+import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -15,13 +16,20 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private final UserRepository userRepository;
+
 
     @Value("${kakaoRestApiKey}")
     private String kakaorestApiKey;
@@ -34,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    public KakaoTokenDto getAccessTokenByCode(String code){
+    public KakaoLoginResponseDto getAccessTokenByCode(String code){
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
@@ -59,10 +67,10 @@ public class UserServiceImpl implements UserService {
         System.out.println(params);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        KakaoTokenDto kakaoToken = null;
+        KakaoLoginResponseDto kakaoToken = null;
 
         try{
-            kakaoToken = objectMapper.readValue(response, KakaoTokenDto.class);
+            kakaoToken = objectMapper.readValue(response, KakaoLoginResponseDto.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -72,20 +80,37 @@ public class UserServiceImpl implements UserService {
         return kakaoToken;
     }
 
-    public KakaoUserDto getProfile(String kakaotoken){
+    public User getUserinfoByToken(String kakaotoken){
 
-
-        String response = WebClient.create().get()
+        WebClient webClient = WebClient.create();
+        KakaoUserDto kakaoUser = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
-                .header("Authorization","Bearer "+ kakaotoken)
+                .header("Authorization","Bearer "+kakaotoken)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(KakaoUserDto.class)
                 .block();
 
-        System.out.println(response);
+        User loginUser = User.builder()
+                        .email(kakaoUser.getKakaoAccount().getEmail())
+                        .profile(kakaoUser.getProperties().getThumbnailImage())
+                        .nickname(kakaoUser.getProperties().getNickname())
+                        .build();
 
-        return null;
-    }
+        String email = loginUser.getEmail();
+        User user = userRepository.getByEmail(email).orElse(null);
+
+        if (user == null) {
+            userRepository.save(loginUser);
+        }
+
+        return loginUser;
+
+
+
+
+        }
+
+
 
 //    @Transactional
 //    public boolean join(UserDto userDto) {

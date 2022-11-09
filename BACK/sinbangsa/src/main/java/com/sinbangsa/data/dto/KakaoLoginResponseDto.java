@@ -9,8 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class KakaoTokenDto {
+public class KakaoLoginResponseDto {
 
-    private String access_token;
+    private String accessToken;
+
+    private String refreshToken;
 
 }

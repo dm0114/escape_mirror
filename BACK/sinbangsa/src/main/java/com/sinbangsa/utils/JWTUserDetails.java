@@ -29,7 +29,7 @@ public class JWTUserDetails implements UserDetails {
     public String getPassword() { return null; }
 
     @Override
-    public  String getUsername() { return this.user.getUsername(); }
+    public  String getUsername() { return  null; }
 
     @Override
     public boolean isAccountNonExpired() {

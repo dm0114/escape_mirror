@@ -46,19 +46,14 @@ public class User {
     @Column
     private Integer grade = 0;
 
-
-    @Column
-    private String username;
-
     @Column
     private String nickname;
 
 
     @Builder
-    public User(String email, String profile,String username, String nickname){
+    public User(String email, String profile, String nickname){
         this.email = email;
         this.profile = profile;
-        this.username = username;
         this.nickname = nickname;
     }
 

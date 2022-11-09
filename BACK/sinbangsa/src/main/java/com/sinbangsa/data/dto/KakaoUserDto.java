@@ -1,19 +1,40 @@
 package com.sinbangsa.data.dto;
 
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 
 @Getter
-@Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class KakaoUserDto {
 
-    private String nickname;
+    private Long id;
 
-    private String profile;
+    private Properties properties;
 
-    private String email;
+    private KakaoAccount kakaoAccount;
+
+    @ToString
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+    public static class Properties {
+        private String nickname;
+        private String thumbnailImage;
+    }
+
+    @ToString
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class KakaoAccount {
+        private String email;
+    }
 
 
 }
