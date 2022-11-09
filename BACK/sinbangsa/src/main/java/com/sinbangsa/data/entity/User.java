@@ -43,7 +43,6 @@ public class User {
     private List<ThemeReview> themeReviews = new ArrayList<>();
 
     @Column(unique = true)
-    @NotNull
     private String email;
 
     @Column

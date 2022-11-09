@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,5 +26,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     int getClearCnt(@Param("userId") User user , @Param("storeId") Store store);
 
     Optional<Book> findByBookThemeAndBookUser(Theme theme, User user);
+
+    @Query(value = "select book " +
+            "from Book book " +
+            "where book.bookTheme = :theme " +
+            "and book.clear = 1 " +
+            "order by book.clearTime asc ")
+    Optional<List<Book>> getAllBook(Theme theme);
+
+
 
 }

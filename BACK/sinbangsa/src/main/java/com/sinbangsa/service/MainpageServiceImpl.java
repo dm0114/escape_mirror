@@ -65,7 +65,7 @@ public class MainpageServiceImpl implements MainpageService{
             if (maximumReview.get(maxTheme) == 0 ){
                 mostReviewedTheme.setStar(-1);
             } else {
-                mostReviewedTheme.setStar(themeReviewRepository.getAvgStar(maxTheme));
+                mostReviewedTheme.setStar(themeReviewRepository.getAvgStar(maxTheme).orElse(null));
             }
             searchStore.setMostReviewedTheme(mostReviewedTheme);
             lStoreDto.add(searchStore);
@@ -82,7 +82,7 @@ public class MainpageServiceImpl implements MainpageService{
                 searchTheme.setStar(-1);
                 searchTheme.setRandomReview("리뷰가 없습니다.");
             } else {
-                searchTheme.setStar(themeReviewRepository.getAvgStar(theme));
+                searchTheme.setStar(themeReviewRepository.getAvgStar(theme).orElse(null));
                 searchTheme.setRandomReview(themeReviewRepository.randomReview(theme).getContent());
             }
 
