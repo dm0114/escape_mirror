@@ -4,6 +4,7 @@ import theme from '../../../theme';
 import {Image,StyleSheet,FlatList,useWindowDimensions, ImageBackground, Button, Text, View, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Alert } from 'react-native';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 import { Ionicons } from '@expo/vector-icons'; 
+import { useNavigation } from '@react-navigation/native';
 // ”star”:9,
 // ”diff”:8,
 // ”story”:6,
@@ -17,7 +18,7 @@ const data = [
     'content': '타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
     'star': 9,
-    
+    'diff':8,    
   },
   {
     'reviewId': 2,
@@ -25,6 +26,7 @@ const data = [
     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
     'star': 9,
+    'diff':8,    
   },
   {
     'reviewId': 3,
@@ -32,6 +34,7 @@ const data = [
     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
     'star': 9,
+    'diff':8,    
   },
   {
     'reviewId': 4,
@@ -39,10 +42,11 @@ const data = [
     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
     'reviewImg': '',
     'star': 9,
+    'diff':8,    
   }
 ]
 export default function ReviewTab() {
-
+  const navigation = useNavigation();
   //리뷰 컴포넌트
   function RenderReview({item}) {
     return (
@@ -60,10 +64,26 @@ export default function ReviewTab() {
           <Ionicons name="star" size={20} color="yellow" />
           <StarTxt>{item.star}</StarTxt>
         </StarView>
+        {/* 난이도 */}
+        <DiffView>
+          <DiffTxt>난이도 {item.diff}</DiffTxt>
+        </DiffView>
         {/* 리뷰내용 */}
         <ContentView>
           <ContentTxt>{item.content}</ContentTxt>
         </ContentView>
+        {/* 수정 삭제 버튼 */}
+        <BtnView>
+          <UpdateBtn>
+            <UpdateTxt
+            onPress={() => {
+            navigation.navigate("ReviewCreateScreen");
+            }}>수정</UpdateTxt>
+          </UpdateBtn>
+          <DeleteBtn>
+            <DeleteTxt>삭제</DeleteTxt>
+          </DeleteBtn>
+        </BtnView>
       </RenderView>
     )
   }
@@ -134,4 +154,35 @@ const StarTxt = styled.Text`
   line-height:  ${({ theme }) => theme.fontHeight.body};
   color: white;
   margin-left: 10px;
+`
+
+const DiffView = styled(StarView)`
+`
+const DiffTxt = styled.Text`
+  font-family: "SUIT-Medium";
+  font-size:  ${({ theme }) => theme.fontSizes.body};
+  line-height:  ${({ theme }) => theme.fontHeight.body};
+  color: white;
+`
+const BtnView = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
+`
+
+const DeleteBtn = styled.TouchableOpacity`
+  background-color: #af8181;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+`
+const UpdateBtn = styled(DeleteBtn)`
+  background-color: cornsilk;
+`
+const DeleteTxt = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size:  ${({ theme }) => theme.fontSizes.caption1};
+  line-height:  ${({ theme }) => theme.fontHeight.caption1};
+`
+const UpdateTxt = styled(DeleteTxt)`
+  
 `

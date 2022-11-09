@@ -1,8 +1,11 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList, ActivityIndicator} from 'react-native';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
 import { Dimensions } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { withTheme } from 'styled-components';
+
  
 // 화면 너비, 높이 구하는 방법
 const windowWidth = Dimensions.get('window').width;
@@ -14,10 +17,6 @@ const Tel = ['02', '031', '04?', '05!', '06$', '033', '064']
 export default function Book({navigation}){
     return(
         <>
-        {/* <Test 
-        width={windowWidth}
-        height={windowHeight}
-        style={{position: 'absolute', top:0 , left: 0, elevation: 3, zIndex: 4, backgroundColor: 'red'}}></Test> */}
         <Container>
             <TwoRegion>
                 <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
@@ -56,6 +55,9 @@ export default function Book({navigation}){
                 })}}><RegionTitle>{Tel[6]}</RegionTitle></RegionBtn>
             </TwoRegion>
         </Container>
+        {/* <Container>
+            
+        </Container> */}
         </>
     )
 }
@@ -76,7 +78,7 @@ const RegionBtn = styled.TouchableOpacity`
 
 const Container = styled.View`
     flex:1;
-    padding-top:40px;
+    /* padding-top:40px; */
 `
 
 const TwoRegion = styled.View`

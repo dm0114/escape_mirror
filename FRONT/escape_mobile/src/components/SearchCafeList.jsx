@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Image, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { Ionicons, Fontisto } from "@expo/vector-icons";
+import { Ionicons, Fontisto, FontAwesome5  } from "@expo/vector-icons";
 import { BestBadge, Container, IconContainer, MainContentWrapper, MainSubTitle, MainTextContainer, MainTitle, RepThemeContainer, StoreImgContainer, SubContentWrapper, styles } from "../styles/Search/CafeList";
 const cardImage = require("../assets/mocks/image.png");
 const storeImage = require("../assets/mocks/storeImg.png");
@@ -61,7 +61,9 @@ export default function SearchCafeList({
             {/* <Title>{storeName}</Title> */}
             <BestBadge>
               {/* <SubTitle>BEST</SubTitle> */}
-              <Fontisto name="fire" size={17} color="white" />
+              <FontAwesome5 name="trophy" size={17} color="white" />
+              {/* <FontAwesome5 name="medal" size={17} color="white" /> */}
+              {/* <Fontisto name="fire" size={17} color="white" /> */}
             </BestBadge>
             
           </RepThemeContainer>

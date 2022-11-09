@@ -11,8 +11,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import ReserveTab from '../ReservationScreen'
-import ReviewTab from '../User/ReviewTab'
+import ReviewTab from '../Review/ReviewTab'
 import ThemeTab from '../User/ThemeTab'
+
 
 //찜한 테마
 const ThemeRoute = () => (

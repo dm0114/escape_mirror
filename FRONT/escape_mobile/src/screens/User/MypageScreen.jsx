@@ -7,6 +7,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useNavigation } from '@react-navigation/native';
 import Modal from "react-native-modal";
 import { Input, Stack, Center, NativeBaseProvider } from "native-base";
+//카메라, 앨범 접근 라이브러리
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 
 // 마이페이지
@@ -74,11 +76,21 @@ export default function MypageScreen() {
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
+
+    function ShowPicker() {
+        //launchImageLibrary : 사용자 앨범 접근
+    launchImageLibrary({}, (res)=>{
+      alert(res.assets[0].uri)
+      const formdata = new FormData()
+      formdata.append('file', res.assets[0].uri);
+      console.log(res);
+    })
+    }
     return (
       <MypageContainer>
         {/* edit가 TRUE일 때, 수정 뷰 */}
         {/* 프로필 사진 수정 */}
-        <ProfileEditView>
+        <ProfileEditView onPress={ShowPicker}>
           <ProfileEditImg>
             <Ionicons name="camera-outline" size={60} color="black" /> 
           </ProfileEditImg>
@@ -125,7 +137,7 @@ export default function MypageScreen() {
   return (
     <Container>
       {/* 상단 이미지 */}
-      <MypageView flex={3} style={{ backgroundColor: "tomato" }}>
+      <MypageView flex={3}>
         
       {/*Edit가 True일 때 ? EditScreen , False일 때 MypageScreen*/}
         {edit ? <EditScreen /> : <MyPageScreen />}
@@ -153,7 +165,7 @@ const Container = styled.View `
 const MypageContainer = styled.View`
   /* flex:1; */
   margin: 80px 30px 80px 30px;
-  background-color: brown;
+  /* background-color: brown; */
 `
 const MypageView = styled.View`
   /* flex: 1; */
@@ -199,7 +211,7 @@ const SettingsTouch = styled.TouchableOpacity`
   width: 30px;
 `
 const SettingsCheckTouch = styled(SettingsTouch)`
-  background-color: tomato;
+  /* background-color: tomato; */
   border-radius: 150px;
 `
 
@@ -257,7 +269,7 @@ const CatText = styled.Text`
 const CatTxtView = styled.View`
   justify-content: center;
   align-items: center;
-  background-color: blueviolet;
+  /* background-color: blueviolet; */
 `
 
 //===================================================

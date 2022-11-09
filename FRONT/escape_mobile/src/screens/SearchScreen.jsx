@@ -13,6 +13,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
+import ThemeComponent from "../components/ThemeComponent";
 
 
 
@@ -100,7 +101,7 @@ export default function SearchScreen() {
             paddingTop: 40,
           }}
           renderItem={({ item }) => (
-            <SearchThemeList
+            <ThemeComponent
               themeId={item.themeId}
               themeName={item.themeName}
               storeName={item.storeName}

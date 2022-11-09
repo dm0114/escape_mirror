@@ -77,7 +77,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
           right: 0,
           borderRadius: 8,
           zIndex: 999,
-          transform: [{ scale: scaleValue }, { translateY: offsetValue }],
+          transform: [{ translateY: offsetValue }],
         }}
       >
         <Container mb="4px">
@@ -130,13 +130,12 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
       <ThemeListView>
         <ThemeListTitle>테마 종류</ThemeListTitle>
         <FlatList
-          data={data?.themeDetailDtoList}
+          data={data?.themeList}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             borderColor: '#00000010',
             borderStyle: 'solid',
             borderTopWidth: 1,
-            paddingTop: 40,
             marginHorizontal: 20,
           }}
           renderItem={({ item }) => (
