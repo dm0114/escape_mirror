@@ -35,4 +35,7 @@ public class Reservation {
     @NotNull
     private Boolean accept=false;
 
+    @Column
+    private int status=0;
+
 }
