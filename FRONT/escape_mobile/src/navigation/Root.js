@@ -19,7 +19,8 @@ import CommunityDetailScreen from '../screens/CommunityDetailScreen';
 import TabViewExample from './Tabview';
 
 import MypageMoreScreen from '../screens/User/MypageMoreScreen'
-// import KakaoLogin from '../screens/Login/KakaoLogin'
+import KakaoLogin from '../screens/Login/Login'
+import ReviewCreateScreen from '../screens/Review/ReviewCreateScreen'
 
 
 const Nav = createStackNavigator()
@@ -51,7 +52,8 @@ const Root = () =>
       <Nav.Screen name="CommunityDetailScreen" component={CommunityDetailScreen} />
       <Nav.Screen name="Stack" component={Stack} />
       <Nav.Screen name="MypageMoreScreen" component={MypageMoreScreen} />
-      {/* <Nav.Screen name="KakaoLogin" component={KakaoLogin} /> */}
+      <Nav.Screen name="KakaoLogin" component={KakaoLogin} />
+      <Nav.Screen name="ReviewCreateScreen" component={ReviewCreateScreen} />
   </Nav.Navigator>
 
   export default Root

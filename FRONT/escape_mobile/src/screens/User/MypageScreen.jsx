@@ -137,7 +137,7 @@ export default function MypageScreen() {
   return (
     <Container>
       {/* 상단 이미지 */}
-      <MypageView flex={3} style={{ backgroundColor: "tomato" }}>
+      <MypageView flex={3}>
         
       {/*Edit가 True일 때 ? EditScreen , False일 때 MypageScreen*/}
         {edit ? <EditScreen /> : <MyPageScreen />}
@@ -165,7 +165,7 @@ const Container = styled.View `
 const MypageContainer = styled.View`
   /* flex:1; */
   margin: 80px 30px 80px 30px;
-  background-color: brown;
+  /* background-color: brown; */
 `
 const MypageView = styled.View`
   /* flex: 1; */
@@ -211,7 +211,7 @@ const SettingsTouch = styled.TouchableOpacity`
   width: 30px;
 `
 const SettingsCheckTouch = styled(SettingsTouch)`
-  background-color: tomato;
+  /* background-color: tomato; */
   border-radius: 150px;
 `
 
@@ -269,7 +269,7 @@ const CatText = styled.Text`
 const CatTxtView = styled.View`
   justify-content: center;
   align-items: center;
-  background-color: blueviolet;
+  /* background-color: blueviolet; */
 `
 
 //===================================================
