@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ThemeRepository extends JpaRepository<Theme, Long> {
 
 
-    Theme findById(long themeId);
+    Theme findById(long id);
     Optional<Theme> getById(long themeId);
     List<Theme> findAllByStore(Store store);
     List<Theme> findAllByThemeNameContaining(String searchWord);
