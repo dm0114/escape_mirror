@@ -2,23 +2,22 @@ import * as React from "react";
 import { View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import CommunityScreen from "../screens/CommunityScreen";
+import LoginScreen from "../screens/Login";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
-import Login from '../screens/Login/LoginScreen';
 import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
   // <MainScreen />
-  <MainScreen/>
-
+  <LoginScreen/>
 );
 
 const SecondRoute = () => <SearchScreen />;
 
 
 const ThirdRoute = () => (
-  <Login />
+  <MainScreen />
 );
 
 
