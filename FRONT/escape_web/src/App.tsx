@@ -13,6 +13,7 @@ import NotFound from '@pages/NotFound';
 import UnityMainBook from './Unity/UnityMainBook';
 import UnityTest from './Unity/UnityTest';
 import UnityBookTest from './Unity/UnityBookTest';
+import UnityMainMypage from './Unity/UnityMainMypage';
 
 const style = css`
   color:pink;
@@ -34,6 +35,7 @@ function App() {
           <Route path="/unity/main/book" element={<UnityMainBook />}/>
           <Route path="/unity/test" element={<UnityTest />}/>
           <Route path="/unity/main/test" element={<UnityBookTest />}/>
+          <Route path="/unity/main/mypage" element={<UnityMainMypage />}/>
         </Routes>
         </BrowserRouter>
       </div>
