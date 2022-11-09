@@ -9,11 +9,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AdminStoreDto {
-    private Long storeId;
-    private String StoreName;
+public class StoreRegesterDto {
+
+    private String storeName;
     private String storeImg;
-    private String address;
+    private String Address;
     private String region;
     private String tel;
     private String homepage;

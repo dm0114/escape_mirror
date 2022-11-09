@@ -16,37 +16,41 @@ public class MainpageDto {
     @Getter
     @Setter
     public static class MostReviewedThemeDto{
-        long themeId;
-        String themeName;
-        String themeImg;
-        double star;
+        private long themeId;
+        private String themeName;
+        private String themeImg;
+        private double star;
     }
 
     @Getter
     @Setter
     public static class LStoreDto {
-        long storeId;
-        String storeName;
-        String storeImg;
-        String storeAddress;
-        int likeCount;
-        MostReviewedThemeDto mostReviewedTheme;
+        private long storeId;
+        private String storeName;
+        private String storeImg;
+        private String storeAddress;
+        private int likeCount;
+        private MostReviewedThemeDto mostReviewedTheme;
+        private String tel;
+        private String mapX;
+        private String mapY;
+        private String homepage;
     }
 
     @Getter
     @Setter
     public static class LThemeDto{
-        long themeId;
-        String themeName;
-        String storeName;
-        String themeImg;
-        int likeCount;
-        double star;
-        String randomReview;
+        private long themeId;
+        private String themeName;
+        private String storeName;
+        private String themeImg;
+        private int likeCount;
+        private double star;
+        private String randomReview;
     }
 
-    List<LStoreDto> storeList;
-    List<LThemeDto> themelist;
+    private List<LStoreDto> storeList;
+    private List<LThemeDto> themelist;
 
 }
 
