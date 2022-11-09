@@ -1,14 +1,14 @@
 package com.sinbangsa.service;
 
-import com.sinbangsa.data.dto.AdminStoreDto;
-import com.sinbangsa.data.dto.StoreRegesterDto;
-import com.sinbangsa.data.dto.ThemeListDto;
+import com.sinbangsa.data.dto.*;
 import com.sinbangsa.data.entity.Admin;
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
+import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.data.repository.AdministratorRepository;
 import com.sinbangsa.data.repository.StoreRepository;
 import com.sinbangsa.data.repository.ThemeRepository;
+import com.sinbangsa.data.repository.ThemeTimeRepository;
 import com.sinbangsa.exception.AccessDeniedException;
 import com.sinbangsa.exception.ThemeNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final AdministratorRepository administratorRepository;
     private final StoreRepository storeRepository;
     private final ThemeRepository themeRepository;
+    private final ThemeTimeRepository themeTimeRepository;
 
     public List<AdminStoreDto> getAdminStoreDetail(long adminId){
         LOGGER.info("[AdministratorService] getAdminStoreDetail 호출");
@@ -111,9 +113,15 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     };
 
-    public List<ThemeListDto> getThemeList(long storeId){
+    public List<ThemeListDto> getThemeList(long storeId, long adminId){
         LOGGER.info("[AdministratorService] getThemeList 호출");
-        List<Theme> themeList = storeRepository.findByStoreId(storeId).getThemes();
+        Store store = storeRepository.findByStoreId(storeId);
+
+        if (adminId != store.getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        List<Theme> themeList = store.getThemes();
         List<ThemeListDto> themeListDtoList = new ArrayList<>();
         for (Theme theme : themeList) {
             ThemeListDto gTheme = new ThemeListDto();
@@ -131,5 +139,39 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
     }
+
+    public AdministratorThemeDetailDto getThemeDetail(long themeId, long adminId){
+        LOGGER.info("[AdministratorService] getThemeDetail 호출");
+        Theme theme = themeRepository.getById(themeId).orElse(null);
+        // 토큰 넣고 주석 부분 바꾸기
+//        if (adminId != theme.getStore().getStoreAdmin().getId()) {
+//            throw new AccessDeniedException();
+//        }
+        if (theme==null) {
+            throw new ThemeNotFoundException();
+        }
+
+        AdministratorThemeDetailDto themeDetail = new AdministratorThemeDetailDto();
+        themeDetail.setThemeTitle(theme.getThemeName());
+        themeDetail.setGenre(theme.getGenre());
+        themeDetail.setContent(theme.getDescription());
+        themeDetail.setLeadtime(theme.getLeadtime());
+        themeDetail.setCapacity(theme.getCapacity());
+        themeDetail.setPrice(theme.getPrice());
+        themeDetail.setThemeImg(theme.getPoster());
+        themeDetail.setDifficaulty(theme.getDifficulty());
+        List<ThemeTime> themeTimes = theme.getThemeTimes();
+        List<ThemeTimeDto> themeTimeDto = new ArrayList<>();
+        for (ThemeTime themeTime : themeTimes ){
+            ThemeTimeDto tTime = new ThemeTimeDto();
+            tTime.setThemeTimeId(themeTime.getId());
+            tTime.setTime(themeTime.getTime());
+            themeTimeDto.add(tTime);
+        }
+        themeDetail.setReservationtime(themeTimeDto);
+
+        return themeDetail;
+
+    };
 
 }
