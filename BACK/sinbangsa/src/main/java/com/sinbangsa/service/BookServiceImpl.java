@@ -96,7 +96,8 @@ public class BookServiceImpl implements BookService {
             themeDetailDto.setStoreName(themeRepo.getStore().getStoreName());
             themeDetailDto.setThemeImg(themeRepo.getPoster());
             themeDetailDto.setLikeCount(themeRepo.getLikeThemes().size());
-            if (themeReviewRepository.getAvgStar(themeRepo) == null) {
+            Double star = themeReviewRepository.getAvgStar(themeRepo).orElse(null);
+            if ( star == null) {
                 themeDetailDto.setStar(0);
             } else {
                 themeDetailDto.setStar((int) Math.round(themeReviewRepository.getAvgStar(themeRepo).orElse(null)));
