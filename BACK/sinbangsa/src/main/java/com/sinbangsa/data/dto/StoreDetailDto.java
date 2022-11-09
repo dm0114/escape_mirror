@@ -33,7 +33,7 @@ public class StoreDetailDto {
 
     private int totalTheme;
 
-    private List<ThemeDetailDto> themeDetailDtoList;
+    private List<ThemeDetailDto> themeList;
 
 
 }

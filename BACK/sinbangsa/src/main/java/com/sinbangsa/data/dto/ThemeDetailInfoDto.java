@@ -44,7 +44,7 @@ public class ThemeDetailInfoDto {
 
     private int lock;
 
-    private List<ThemeDetailInfoDto> reviews;
+    private List<ReviewThemeDetailInfoDto> reviews;
 
     private List<UserOfRankDto> noHintRanking;
 
