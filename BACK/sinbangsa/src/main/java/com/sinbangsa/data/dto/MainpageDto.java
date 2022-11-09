@@ -31,6 +31,10 @@ public class MainpageDto {
         private String storeAddress;
         private int likeCount;
         private MostReviewedThemeDto mostReviewedTheme;
+        private String tel;
+        private String mapX;
+        private String mapY;
+        private String homepage;
     }
 
     @Getter
