@@ -17,62 +17,44 @@ const Tel = ['02', '031', '04?', '05!', '06$', '033', '064']
 export default function Book({navigation}){
     return(
         <>
-        {/* <Container style={{flex:1, position:'relative'}}>
-            <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/main/book/'}}/>
-        </Container> */}
         <Container>
-            <TouchableOpacity
-            style={{position:'absolute', zIndex:10, elevation:10, top:100}}
-             onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[1],
-                        name:Region[1]
-                    })}}>
-                <View>
-                    <Text style={{color:'white'}}>안녕,,,</Text>
-                </View>
-            </TouchableOpacity>
-            <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/main/book'}} />
+            <TwoRegion>
+                <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
+                    num:Tel[0],
+                    name:Region[0]
+                })}}><RegionTitle>{Tel[0]}</RegionTitle></RegionBtn>
+                <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
+                    num:Tel[1],
+                    name:Region[1]
+                })}}><RegionTitle>{Tel[1]}</RegionTitle></RegionBtn>
+            </TwoRegion>
+            <TwoRegion>
+                <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
+                    num:Tel[2],
+                    name:Region[2]
+                })}}><RegionTitle>{Tel[2]}</RegionTitle></RegionBtn>
+                <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
+                    num:Tel[3],
+                    name:Region[3]
+                })}}><RegionTitle>{Tel[3]}</RegionTitle></RegionBtn>
+            </TwoRegion>
+            <TwoRegion>
+                <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
+                    num:Tel[4],
+                    name:Region[4]
+                })}}><RegionTitle>{Tel[4]}</RegionTitle></RegionBtn>
+                <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
+                    num:Tel[5],
+                    name:Region[5]
+                })}}><RegionTitle>{Tel[5]}</RegionTitle></RegionBtn>
+            </TwoRegion>
+            <TwoRegion>
+                <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
+                    num:Tel[6],
+                    name:Region[6]
+                })}}><RegionTitle>{Tel[6]}</RegionTitle></RegionBtn>
+            </TwoRegion>
         </Container>
-        {/* <Container> */}
-            {/* <View style={{position:'absolute', flex:1, top:0, left:0, zIndex:10, elevation:10}}>
-                <TwoRegion>
-                    <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[0],
-                        name:Region[0]
-                    })}}><RegionTitle>{Tel[0]}</RegionTitle></RegionBtn>
-                    <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[1],
-                        name:Region[1]
-                    })}}><RegionTitle>{Tel[1]}</RegionTitle></RegionBtn>
-                </TwoRegion>
-                <TwoRegion>
-                    <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[2],
-                        name:Region[2]
-                    })}}><RegionTitle>{Tel[2]}</RegionTitle></RegionBtn>
-                    <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[3],
-                        name:Region[3]
-                    })}}><RegionTitle>{Tel[3]}</RegionTitle></RegionBtn>
-                </TwoRegion>
-                <TwoRegion>
-                    <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[4],
-                        name:Region[4]
-                    })}}><RegionTitle>{Tel[4]}</RegionTitle></RegionBtn>
-                    <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[5],
-                        name:Region[5]
-                    })}}><RegionTitle>{Tel[5]}</RegionTitle></RegionBtn>
-                </TwoRegion>
-                <TwoRegion>
-                    <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
-                        num:Tel[6],
-                        name:Region[6]
-                    })}}><RegionTitle>{Tel[6]}</RegionTitle></RegionBtn>
-                </TwoRegion>
-            </View> */}
-        {/* </Container> */}
         {/* <Container>
             
         </Container> */}
