@@ -25,9 +25,9 @@ public class ReviewThemeDetailInfoDto {
 
     private String reviewImg;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime clearDate;
+    private LocalDate clearDate;
 
     private int usedHint;
 
