@@ -13,6 +13,7 @@ import ReservationTransfer from '../screens/ReservationTransfer';
 import PostReservationScreen from '../screens/PostReservationScreen';
 import RegionBook from '../screens/Book/RegionBook';
 import Book from '../screens/Book/Book';
+import CafeBook from '../screens/Book/CafeBook';
 
 import CommunityScreen from '../screens/CommunityScreen';
 import CommunityDetailScreen from '../screens/CommunityDetailScreen';
@@ -47,6 +48,7 @@ const Root = () =>
       <Nav.Screen name="ThemeDetailScreen" component={ThemeDetailScreen} />
       <Nav.Screen name="CafeDetailScreen" component={CafeDetailScreen} />
       <Nav.Screen name="RegionBook" component={RegionBook} />
+      <Nav.Screen name="CafeBook" component={CafeBook} />
       <Nav.Screen name="Book" component={Book} />
       <Nav.Screen name="CommunityScreen" component={CommunityScreen} />
       <Nav.Screen name="CommunityDetailScreen" component={CommunityDetailScreen} />
