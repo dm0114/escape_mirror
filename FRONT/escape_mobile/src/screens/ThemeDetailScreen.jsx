@@ -46,6 +46,7 @@ function ThemeDetailScreen({ navigation, route }) {
   // 애니메이션
   const dimensions = useWindowDimensions();
   const Width = (dimensions.width - 256) / 2;
+  const Height = (dimensions.height / 2);
   const [showMenu, setShowMenu] = useState(true);
   console.log(showMenu);
   const offsetValue = useRef(new Animated.Value(0)).current;
