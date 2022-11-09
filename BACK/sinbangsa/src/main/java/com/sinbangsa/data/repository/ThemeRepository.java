@@ -5,6 +5,8 @@ import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.ThemeTime;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     List<Theme> findAllByThemeNameContaining(String searchWord);
     int countByStore(Store store);
 
-
+    @Query(value = "select ifnull(max(t.id),0) from theme t where t.id > :storeId * 100",nativeQuery = true)
+    Long getNewId(@Param("storeId") long storeId);
 
 }
