@@ -20,9 +20,9 @@ export default function FindIdScreen() {
       {/* 핸드폰 인증하기 - 핸드폰 번호 + 인증 버튼 */}
       <SubTitleText>핸드폰 인증</SubTitleText>
       <TelCertifyCompo />
-      <TelCertifyView>
+      {/* <TelCertifyView>
         <TelTextInput />
-      </TelCertifyView>
+      </TelCertifyView> */}
 
       {/* 아이디 찾기 버튼 + 사용자 인증이 되면 Alert으로 아이디 알려주기! */}
       <FindIdBtn

@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styled from "styled-components/native";
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Text } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
+
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
@@ -29,10 +31,17 @@ export default function SearchScreen() {
 
   const SearchResult = () => {
     if (!isLoading && !isFetching) {
+      if ( data.error || !data || (!data.storeList?.length && !data.themeList?.length) ) {
+        return ( <ErrorText>검색된 정보가 없어요 😥</ErrorText>)
+      }
       const CafeRoute = () => (
         <CafeListScroll
           data={data.storeList}
-          contentContainerStyle={{ paddingTop: 40 }}
+          contentContainerStyle={{
+            paddingTop: 40,
+            marginLeft: 20,
+            marginRight: 20,
+          }}
           renderItem={({ item }) => (
             <SearchCafeList
               storeId={item.storeId}
@@ -40,6 +49,7 @@ export default function SearchScreen() {
               storeImg={item.storeImg}
               storeAddress={item.storeAddress}
               likeCount={item.likeCount}
+              mostReviewedTheme={item.mostReviewedTheme}
             />
           )}
         />
@@ -47,14 +57,10 @@ export default function SearchScreen() {
 
       const ThemeRoute = () => (
         <ThemeListScroll
-          data={data.themeList}
-          showsVerticalScrollIndicator={false}
+          data={data.themelist}
           contentContainerStyle={{
             paddingTop: 40,
-            marginLeft: "auto",
-            marginRight: "auto",
           }}
-          numColumns={2}
           renderItem={({ item }) => (
             <SearchThemeList
               themeId={item.themeId}
@@ -72,8 +78,8 @@ export default function SearchScreen() {
 
       const [index, setIndex] = React.useState(0);
       const [routes] = React.useState([
-        { key: "Cafe", title: "카페 검색 결과" },
         { key: "Theme", title: "테마 검색 결과" },
+        { key: "Cafe", title: "카페 검색 결과" },
       ]);
 
       return (
@@ -91,16 +97,16 @@ export default function SearchScreen() {
         />
       );
     } else if (isLoading && isFetching) return <LoadingScreen />;
-    else {
-      return (
-        <>
-          <SearchView flex={1}>
-            <SubText>지금 주변에서 인기 있는 곳</SubText>
-            {/* 이미지 및 슬라이더 추가 */}
-          </SearchView>
-        </>
-      );
-    }
+    // else {
+    //   return (
+    //     <>
+    //       <SearchView flex={1}>
+    //         <SubText>지금 주변에서 인기 있는 곳</SubText>
+    //         {/* 이미지 및 슬라이더 추가 */}
+    //       </SearchView>
+    //     </>
+    //   );
+    // }
   };
 
   return (
@@ -116,18 +122,23 @@ export default function SearchScreen() {
         placeholder="카페 또는 테마를 입력하세요."
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
+        autoComplete ='off'
+        caretHidden={true}
       />
       <SearchResult />
     </>
   );
 }
 
-const Container = styled.View`
-  background-color: red;
+const MainContainer = styled.View`
+
 `;
 
 const TextContainer = styled.View`
   justify-content: center;
+  padding-left: ${({ theme }) => theme.screenMargin.padding};
+  padding-right: ${({ theme }) => theme.screenMargin.padding};
+  padding-top: ${({ theme }) => theme.screenMargin.paddingTop};
 `;
 
 const ThemeListScroll = styled.FlatList``;
@@ -147,6 +158,7 @@ const MainText = styled.Text`
   line-height: ${({ theme }) => theme.fontHeight.title2};
   margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
   margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
+  letter-spacing: -1px;
 `;
 
 const SubText = styled.Text`
@@ -158,9 +170,21 @@ const SubText = styled.Text`
 const SearchTextInput = styled.TextInput`
   background-color: #fff;
   padding: 8px 16px;
-  margin: 16px;
+  margin: 0px 20px 20px 20px;
   border-color: #fff;
   border-radius: 20px;
 
   text-align: center;
 `;
+
+const ErrorText = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.title3};
+  line-height: ${({ theme }) => theme.fontHeight.title3};
+  letter-spacing: -0.5px;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+`
