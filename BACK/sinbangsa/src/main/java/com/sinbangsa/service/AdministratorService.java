@@ -10,6 +10,7 @@ public interface AdministratorService {
     Boolean updateStoreDetail(AdminStoreDto adminStoreDto, long adminId);
     List<ThemeListDto> getThemeList(long storeId, long adminId);
     AdministratorThemeDetailDto getThemeDetail(long themeId, long adminId);
-    Long registerTheme(ThemeRegisterDto themeRegister, long adminId);
-    Boolean registerThemeTime(ThemeRegisterDto themeRegister, long createdThemeId);
+    Boolean registerThemeThemeTime(ThemeRegisterDto themeRegisterDto, long adminId);
+    Long registerTheme(ThemeRegisterDto themeRegister);
+    Boolean registerThemeTime(List<String> themeTimes, long createdThemeId);
 }
