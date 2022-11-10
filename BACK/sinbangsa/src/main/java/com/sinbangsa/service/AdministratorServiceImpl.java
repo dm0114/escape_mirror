@@ -369,5 +369,30 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
+    @Transactional
+    public Boolean deleteTheme(long themeId, long adminId){
+        LOGGER.info("[AdministratorService] deleteTheme 호출");
+        Theme theme = themeRepository.getById(themeId).orElse(null);
+        try {
+            if (theme == null) {
+                throw new ThemeNotFoundException();
+            }
+            if (adminId != theme.getStore().getStoreAdmin().getId()) {
+                throw new AccessDeniedException();
+            }
+
+            List<ThemeTime> themeTimeList = themeTimeRepository.findAllByThemeId(themeId);
+            for (ThemeTime themeTime : themeTimeList){
+                themeTimeRepository.delete(themeTime);
+            }
+
+            themeRepository.delete(theme);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+
+
+    }
 
 }
