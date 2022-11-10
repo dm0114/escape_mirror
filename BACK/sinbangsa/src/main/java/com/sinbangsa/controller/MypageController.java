@@ -3,6 +3,7 @@ package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.*;
 import com.sinbangsa.service.MypageService;
+import com.sinbangsa.utils.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,6 +28,8 @@ public class MypageController {
     private final Logger LOGGER = LoggerFactory.getLogger(MypageController.class);
 
     private final MypageService mypageService;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping
     @ApiOperation(value = "정보 받아오기")
@@ -71,6 +72,19 @@ public class MypageController {
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         MypageMyRoomDto result = mypageService.getMypageMyRooms();
         return new ResponseEntity<MypageMyRoomDto>(result, headers, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    @ApiOperation(value = "개인 정보 수정")
+    public ResponseEntity updateUserInfo(@RequestBody UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MypageController] updateUserInfo");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+//        long userId = jwtTokenProvider.get
+        mypageService.updateUserInfo(updateUserInfoRequestDto, httpServletRequest);
+        return new ResponseEntity(headers, HttpStatus.ACCEPTED);
     }
 
 

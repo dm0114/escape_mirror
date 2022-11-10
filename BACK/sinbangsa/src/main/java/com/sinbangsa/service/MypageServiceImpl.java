@@ -1,17 +1,16 @@
 package com.sinbangsa.service;
 
 
-import com.sinbangsa.data.dto.MypageInfoDto;
-import com.sinbangsa.data.dto.MypageLikeDto;
-import com.sinbangsa.data.dto.MypageMyRoomDto;
-import com.sinbangsa.data.dto.MypageReviewDto;
+import com.sinbangsa.data.dto.*;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
+import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,8 @@ public class MypageServiceImpl implements MypageService {
     private final ReservationRepository reservationRepository;
 
     private final BookRepository bookRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     public MypageInfoDto getMyPageInfo() {
         LOGGER.info("[MyPageServiceImpl] getMyPageInfo 호출");
@@ -148,4 +149,18 @@ public class MypageServiceImpl implements MypageService {
         }
         return mypageMyRoomDto;
     }
+
+    public void updateUserInfo(UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MypageServiceImpl] updateUserInfo 호출");
+        try {
+
+            User userRepo = userRepository.findById((long) 1);
+            userRepo.setNickname(updateUserInfoRequestDto.getNickname());
+            userRepo.setProfile(updateUserInfoRequestDto.getProfileImg());
+
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
 }
