@@ -18,5 +18,5 @@ public interface AdministratorService {
     Boolean createThemeTime(long themeId, String themeTime, long adminId);
     Boolean updateThemeTime(ThemeTimeDto themeTime, long adminId);
     Boolean deleteThemeTime(long themeTimeId, long adminId);
-
+    Boolean deleteTheme(long themeId, long adminId);
 }

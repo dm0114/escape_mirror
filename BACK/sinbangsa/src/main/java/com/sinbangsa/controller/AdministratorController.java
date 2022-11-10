@@ -191,6 +191,22 @@ public class AdministratorController {
         return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
+    @DeleteMapping("/theme/{themeId}")
+    @ApiOperation(value = "관리자 페이지 테마 삭제")
+    public ResponseEntity<Boolean> deleteTheme(@PathVariable long themeId) {
+        LOGGER.info("[AdministratorController] deleteTheme 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+        boolean result = administratorService.deleteTheme(themeId, adminId);
+
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
+
 
 
 
