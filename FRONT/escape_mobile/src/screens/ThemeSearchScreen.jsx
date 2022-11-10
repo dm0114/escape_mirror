@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components/native";
 import theme from "../../theme"
-import { useWindowDimensions, Text, ImageBackground } from "react-native";
+import { useWindowDimensions, Text, ImageBackground, View } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Carousel from "react-native-reanimated-carousel";
 import Toggle from "react-native-toggle-element";
 
+import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
@@ -17,11 +18,10 @@ import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
 import ThemeComponent from "../components/ThemeComponent";
-import { useNavigation } from "@react-navigation/native";
 
 
 
-export default function SearchScreen() {
+export default function ThemeSearchScreen({ route }) {
   /**
    * 레이아웃
    */
@@ -32,11 +32,15 @@ export default function SearchScreen() {
   /**
    * API
    */
+  const navigation = useNavigation();
+  const { queryParam } = route.params;
   const [query, setQuery] = useState("");
-  const { isLoading, isFetching, data, refetch } = useQuery(
+  useEffect(()=> {
+    setQuery(queryParam)
+  }, [])
+  const { isLoading, isFetching, data, refetch, status } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch,
-    { enabled: false }
   );
 
   /**
@@ -49,22 +53,21 @@ export default function SearchScreen() {
   /**
    * 검색
    */
-  const navigation = useNavigation();
   const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
     if (query === "") {
       return;
     }
-
-    if (toggleValue) {
-      return navigation.navigate("CafeSearchScreen", { queryParam: query });
-    }
-    
-    else {
-      return navigation.navigate("ThemeSearchScreen", { queryParam: query });
-    }
+    if (toggleValue) {return navigation.navigate("CafeSearchScreen", { queryParam: query });}
+    else return refetch()
   };
 
+  useEffect(() => {
+    console.log(status);
+    console.log(isFetching);
+    console.log(isLoading);
+    console.log(data);
+  }, [data])
   /**
    * 검색 결과
    */
@@ -73,28 +76,6 @@ export default function SearchScreen() {
       if ( data.error || !data || (!data.storeList?.length && !data.themeList?.length) ) {
         return ( <ErrorText>검색된 정보가 없어요 😥</ErrorText>)
       }
-      if (toggleValue) {
-        return (
-          <CafeListScroll
-            data={data.storeList}
-            contentContainerStyle={{
-              paddingTop: 40,
-              marginLeft: 20,
-              marginRight: 20,
-            }}
-            renderItem={({ item }) => (
-              <SearchCafeList
-                storeId={item.storeId}
-                storeName={item.storeName}
-                storeImg={item.storeImg}
-                storeAddress={item.storeAddress}
-                likeCount={item.likeCount}
-                mostReviewedTheme={item.mostReviewedTheme}
-              />
-            )}
-          />
-        )
-      } else {
         return (
           <Carousel
             loop={false}
@@ -105,7 +86,7 @@ export default function SearchScreen() {
             mode={'parallax'}
             modeConfig={
               {
-                parallaxScrollingOffset: 150,
+                parallaxScrollingOffset: 120,
                 parallaxScrollingScale: 1,
                 parallaxAdjacentItemScale: 0.9,
               }
@@ -124,22 +105,11 @@ export default function SearchScreen() {
             )}
           />
         )
-      }
     } else if (isLoading && isFetching) return <LoadingScreen />;
-    // else {
-    //   return (
-    //     <>
-    //       <SearchView flex={1}>
-    //         <SubText>지금 주변에서 인기 있는 곳</SubText>
-    //         {/* 이미지 및 슬라이더 추가 */}
-    //       </SearchView>
-    //     </>
-    //   );
-    // }
   };
 
   return (
-    <ImageBackground source={{uri:testUri}} style={{flex:1}}>
+    <View style={{backgroundColor: '#212121'}}>
       <TextContainer>
         <RowContainer>
           <MainText>
@@ -175,10 +145,10 @@ export default function SearchScreen() {
         autoComplete ='off'
         caretHidden={true}
       />
-      {/* <SerachResultView>
+      <SerachResultView>
         <SearchResult />
-      </SerachResultView> */}
-    </ImageBackground>
+      </SerachResultView>
+    </View>
   );
 }
 
