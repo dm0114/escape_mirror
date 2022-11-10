@@ -14,5 +14,6 @@ public interface AdministratorService {
     Long registerTheme(ThemeRegisterDto themeRegister);
     Boolean registerThemeTime(List<String> themeTimes, long createdThemeId);
     Boolean updateThemeThemeTime(ThemeUpdateDto themeUpdateDto, long adminId);
+    Boolean createThemeTime(long themeId, String themeTime, long adminId);
 
 }
