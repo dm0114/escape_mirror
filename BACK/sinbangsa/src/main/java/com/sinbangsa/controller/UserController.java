@@ -1,22 +1,22 @@
 package com.sinbangsa.controller;
 
 
-import com.sinbangsa.data.dto.UserDto;
+import com.sinbangsa.data.dto.KakaoLoginRequestDto;
+import com.sinbangsa.data.dto.KakaoLoginResponseDto;
+import com.sinbangsa.data.dto.KakaoLogoutDto;
+import com.sinbangsa.data.dto.KakaoUserDto;
+import com.sinbangsa.data.entity.User;
 import com.sinbangsa.service.UserService;
-import com.sinbangsa.service.UserServiceImpl;
+import com.sinbangsa.utils.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -31,36 +31,22 @@ public class UserController {
     private static final String FAIL = "fail";
     private final UserService userService;
 
-
-    //회원가입
-    @ApiOperation(value = "유저 회원가입")
-    @PostMapping("/signup")
-    public ResponseEntity<Boolean> signupUser(@RequestBody UserDto userDto) {
-        LOGGER.debug("signup - 호출");
-        try {
-            userService.join(userDto);
-            return new ResponseEntity<>(true, HttpStatus.CREATED);
-
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-        }
+    private final JwtTokenProvider jwtTokenProvider;
 
 
+
+    @ApiOperation(value = "카카오 회원관리")
+    @PostMapping("/kakao")
+    public ResponseEntity<KakaoLoginResponseDto> kakaoLogin(@RequestBody KakaoLoginRequestDto kakaoLoginRequestDto) {
+        String kakaoToken = kakaoLoginRequestDto.getAccessToken();
+        KakaoLoginResponseDto kakaoLoginResponseDto = userService.kakaoLogin(kakaoToken);
+        return new ResponseEntity<>(kakaoLoginResponseDto, HttpStatus.OK);
     }
 
-    //로그인
-//    @PostMapping("/login")
-//    public ResponseEntity<UserDto> login(@RequestBody UserDto userDto, HttpServletResponse response) {
-//
-//        try {
-//            LOGGER.debug("[login] 로그인 시도 중", userDto.getEmail());
-//
-//            User loginUser = userService.login(userDto);
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return new ResponseEntity<>();
-//
-//    }
+    @ApiOperation(value = "로그아웃")
+    @DeleteMapping("/logout")
+    public void Logout(@RequestBody KakaoLogoutDto kakaoLogoutDto){
+        String refreshToken = kakaoLogoutDto.getRefreshToken();
+        System.out.println("로그아웃!");
+    }
 }

@@ -58,7 +58,7 @@ public class AdministratorController {
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(result, headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/store")
@@ -75,7 +75,7 @@ public class AdministratorController {
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>(result, headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/theme")
@@ -112,7 +112,6 @@ public class AdministratorController {
         LOGGER.info("[AdministratorController] createTheme 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        LOGGER.info("[AdministratorController] createTheme 호출{}",themeRegister.getReservationtime());
         // 어드민 아이디 토큰에서 가져오기
         long adminId = 234212;
 
@@ -123,6 +122,28 @@ public class AdministratorController {
         }
         return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
+
+    @PutMapping("/theme")
+    @ApiOperation(value = "관리자 페이지 테마 수정")
+    public ResponseEntity<Boolean> updateTheme(@RequestBody ThemeUpdateDto themeUpdateDto){
+        LOGGER.info("[AdministratorController] updateTheme 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+        Boolean result = administratorService.updateThemeThemeTime(themeUpdateDto, adminId);
+
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+
+    }
+
+
+
+
 
 
 }

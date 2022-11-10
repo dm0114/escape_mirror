@@ -1,9 +1,12 @@
 package com.sinbangsa.service;
 
-import com.sinbangsa.data.dto.UserDto;
+import com.sinbangsa.data.dto.KakaoLoginResponseDto;
+import com.sinbangsa.data.dto.KakaoUserDto;
+import com.sinbangsa.data.entity.User;
 
 public interface UserService {
 
-    boolean join(UserDto userDto);
+    KakaoLoginResponseDto kakaoLogin(String kakaotoken);
 
+    User getUserinfoByToken(String kakaotoken);
 }
