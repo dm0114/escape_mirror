@@ -34,6 +34,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "order by book.clearTime asc ")
     Optional<List<Book>> getAllBook(Theme theme);
 
+    List<Book> findAllByBookUser(User user);
+
 
 
 }
