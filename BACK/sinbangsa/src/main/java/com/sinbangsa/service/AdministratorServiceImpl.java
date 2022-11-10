@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,21 +175,28 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     };
 
-    public Long registerTheme(ThemeRegisterDto themeRegister, long adminId){
+    @Transactional
+    public Boolean registerThemeThemeTime(ThemeRegisterDto themeRegisterDto, long adminId){
         LOGGER.info("[AdministratorService] registerTheme 호출");
-        // admin token 발급 후 수정 필요
-        Admin admin = administratorRepository.getAdminById(adminId).orElse(null);
-        // orElse 붙이기(null 처리)
-        Store store = storeRepository.findByStoreId(themeRegister.getStoreId());
 
+        // orElse 붙이기(null 처리)
+        Store store = storeRepository.findByStoreId(themeRegisterDto.getStoreId());
         if (store == null) {
             throw new StoreNotFoundException();
         }
 
-        if (adminId != store.getStoreAdmin().getId()) {
+        if (adminId != storeRepository.findByStoreId(themeRegisterDto.getStoreId()).getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
+        Long createdThemeId = registerTheme(themeRegisterDto);
+        Boolean result = registerThemeTime(themeRegisterDto.getReservationtime(), createdThemeId);
 
+        return result;
+    }
+
+    public Long registerTheme(ThemeRegisterDto themeRegister){
+        LOGGER.info("[AdministratorService] registerTheme 호출");
+        Store store = storeRepository.findByStoreId(themeRegister.getStoreId());
         Theme newTheme = new Theme();
         try {
             newTheme.setStore(store);
@@ -219,9 +227,8 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
     }
 
-    public Boolean registerThemeTime(ThemeRegisterDto themeRegister, long createdThemeId){
+    public Boolean registerThemeTime(List<String> themeTimes, long createdThemeId){
         LOGGER.info("[AdministratorService] registerThemeTime 호출");
-        List<String> themeTimes = themeRegister.getReservationtime();
         List<ThemeTime> timeList = new ArrayList<>();
 
         try{

@@ -115,20 +115,13 @@ public class AdministratorController {
         LOGGER.info("[AdministratorController] createTheme 호출{}",themeRegister.getReservationtime());
         // 어드민 아이디 토큰에서 가져오기
         long adminId = 234212;
-        long createdThemeId = administratorService.registerTheme(themeRegister, adminId);
-//        if (result) {
-//            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
-//        }
 
-        if (createdThemeId == 0) {
-            return new ResponseEntity<>(false, headers, HttpStatus.NO_CONTENT);
-        }
-        boolean result = administratorService.registerThemeTime(themeRegister, createdThemeId);
+        Boolean result = administratorService.registerThemeThemeTime(themeRegister, adminId);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(result, headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
 
