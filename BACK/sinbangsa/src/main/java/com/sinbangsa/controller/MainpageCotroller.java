@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/mainpage")
+@RequestMapping("/api/mainpage")
 @Api(value = "메인페이지 API", tags = {"메인페이지 API"})
 public class MainpageCotroller {
 
