@@ -1,11 +1,9 @@
 package com.sinbangsa.service;
 
 
-import com.sinbangsa.data.dto.MypageInfoDto;
-import com.sinbangsa.data.dto.MypageLikeDto;
-import com.sinbangsa.data.dto.MypageMyRoomDto;
-import com.sinbangsa.data.dto.MypageReviewDto;
+import com.sinbangsa.data.dto.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface MypageService {
@@ -17,4 +15,7 @@ public interface MypageService {
     List<MypageReviewDto> getReviews();
 
     MypageMyRoomDto getMypageMyRooms();
+
+    void updateUserInfo(UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest);
+
 }

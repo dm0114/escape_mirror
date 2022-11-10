@@ -1,6 +1,7 @@
 package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.*;
+import com.sinbangsa.data.entity.ThemeTime;
 
 import java.util.List;
 
@@ -15,5 +16,6 @@ public interface AdministratorService {
     Boolean registerThemeTime(List<String> themeTimes, long createdThemeId);
     Boolean updateThemeThemeTime(ThemeUpdateDto themeUpdateDto, long adminId);
     Boolean createThemeTime(long themeId, String themeTime, long adminId);
+    Boolean updateThemeTime(ThemeTimeDto themeTime, long adminId);
 
 }

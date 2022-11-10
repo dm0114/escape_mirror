@@ -1,16 +1,14 @@
 package com.sinbangsa.data.entity;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-
+@Builder
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class LikeTheme {
 
     @Id
@@ -23,7 +21,9 @@ public class LikeTheme {
 
     @ManyToOne
     @JoinColumn(name = "theme_id")
-    private Store likeTheme;
+    private Theme likeTheme;
+
+
 
 
 }

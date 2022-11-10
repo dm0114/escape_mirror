@@ -1,18 +1,16 @@
 package com.sinbangsa.data.entity;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-
+@Builder
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Reservation {
 
     @Id
@@ -37,5 +35,11 @@ public class Reservation {
 
     @Column
     private int status=0;
+
+    public void update(User reservationUser,boolean accept, int status) {
+        this.reservationUser = reservationUser;
+        this.accept = accept;
+        this.status = status;
+    }
 
 }

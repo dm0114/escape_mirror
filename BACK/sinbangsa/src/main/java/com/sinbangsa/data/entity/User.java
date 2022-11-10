@@ -10,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -57,6 +56,11 @@ public class User {
         this.email = email;
         this.profile = profile;
         this.nickname = nickname;
+    }
+
+    public void update(String nickname, String profile) {
+        this.nickname = nickname;
+        this.profile = profile;
     }
 
 

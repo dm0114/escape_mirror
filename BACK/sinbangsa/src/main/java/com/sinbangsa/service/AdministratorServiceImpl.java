@@ -289,7 +289,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     public Boolean createThemeTime(long themeId, String themeTime, long adminId){
-        LOGGER.info("[AdministratorService] updateThemeThemeTime 호출");
+        LOGGER.info("[AdministratorService] createThemeTime 호출");
         ThemeTime createdThemeTime = new ThemeTime();
         Theme theme = themeRepository.getById(themeId).orElse(null);
         if (theme == null) {
@@ -317,6 +317,28 @@ public class AdministratorServiceImpl implements AdministratorService {
         }catch (Exception e){
             return false;
         }
+
+    }
+
+    public Boolean updateThemeTime(ThemeTimeDto themeTime, long adminId){
+        LOGGER.info("[AdministratorService] updateThemeTime 호출");
+        ThemeTime updateTime = themeTimeRepository.findById(themeTime.getThemeTimeId());
+
+        if (adminId != updateTime.getTheme().getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        try {
+            updateTime.setTime(themeTime.getTime());
+
+            themeTimeRepository.save(updateTime);
+            LOGGER.info("[updateTime] 수정 됨");
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+
 
     }
 
