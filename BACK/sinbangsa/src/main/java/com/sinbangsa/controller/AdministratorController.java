@@ -1,7 +1,9 @@
 package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.*;
+import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.service.AdministratorService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ import java.util.List;
 @RequestMapping("/api/admin")
 @Api(value = "관리자페이지 API", tags = {"관리자페이지 API"})
 public class AdministratorController {
-    private final Logger LOGGER = LoggerFactory.getLogger(MainpageCotroller.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(AdministratorController.class);
 
     private static final String SUCCESS = "success";
 
@@ -141,7 +143,38 @@ public class AdministratorController {
 
     }
 
+    @PostMapping("/theme/{themeId}")
+    @ApiOperation(value = "관리자 페이지 테마 시간 추가")
+    public ResponseEntity<Boolean> createThemeTime(@PathVariable long themeId, @RequestBody ThemeTimeCreateDto themeTime){
+        LOGGER.info("[AdministratorController] createThemeTime 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+        Boolean result = administratorService.createThemeTime(themeId, themeTime.getThemeTime(), adminId);
 
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/theme/themeTime")
+    @ApiOperation(value = "관리자 페이지 테마 시간 수정")
+    public ResponseEntity<Boolean> updateThemeTime(@RequestBody ThemeTimeDto themeTime) {
+        LOGGER.info("[AdministratorController] updateThemeTime 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+        Boolean result = administratorService.updateThemeTime(themeTime, adminId);
+
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+
+    }
 
 
 
