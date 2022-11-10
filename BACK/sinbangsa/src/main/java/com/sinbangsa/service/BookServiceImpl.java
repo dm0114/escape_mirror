@@ -217,7 +217,6 @@ public class BookServiceImpl implements BookService {
             for (ThemeReview themeReviewRepo : themeReviewsRepo) {
                 ReviewThemeDetailInfoDto reviewThemeDetailInfoDto = new ReviewThemeDetailInfoDto();
                 reviewThemeDetailInfoDto.setReviewId(themeReviewRepo.getId());
-                reviewThemeDetailInfoDto.setUserName(themeReviewRepo.getReviewUser().getUsername());
                 reviewThemeDetailInfoDto.setContent(themeReviewRepo.getContent());
                 reviewThemeDetailInfoDto.setStar(themeReviewRepo.getStar());
                 reviewThemeDetailInfoDto.setReviewImg(themeReviewRepo.getImageUrl());
