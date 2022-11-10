@@ -6,9 +6,9 @@ import theme from "../../theme";
 import { useQuery } from "@tanstack/react-query";
 import { reservationApi } from "../apis/api";
 
-import ReservationComponent from "../components/ReservationComponent";
 import LoadingScreen from "./LoadingScreen";
 import BookComponent from "../components/BookComponent";
+import ReservationComponent from "../components/Reservation/ReservationComponent";
 
 export default function ReservationScreen() {
   const { isLoading, data } = useQuery(

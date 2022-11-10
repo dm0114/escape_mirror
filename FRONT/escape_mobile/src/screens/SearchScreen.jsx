@@ -1,19 +1,36 @@
 import React, { useEffect, useState } from "react";
 
 import styled from "styled-components/native";
-import { useWindowDimensions, Text } from "react-native";
+import theme from "../../theme"
+import { useWindowDimensions, Text, ImageBackground } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import Carousel from "react-native-reanimated-carousel";
+import Toggle from "react-native-toggle-element";
 
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
 import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
+import ThemeComponent from "../components/ThemeComponent";
+
+
 
 export default function SearchScreen() {
+  /**
+   * 레이아웃
+   */
+  const layout = useWindowDimensions();
+  const Width = layout.width;
+  const Height = layout.height;
+
+  /**
+   * API
+   */
   const [query, setQuery] = useState("");
   const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
@@ -21,6 +38,15 @@ export default function SearchScreen() {
     { enabled: false }
   );
 
+  /**
+   * 토글
+   */
+  const [toggleValue, setToggleValue] = useState(false);
+  useEffect(() => {
+  }, [toggleValue])
+  /**
+   * 검색
+   */
   const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
     if (query === "") {
@@ -29,73 +55,66 @@ export default function SearchScreen() {
     refetch();
   };
 
+  /**
+   * 검색 결과
+   */
   const SearchResult = () => {
     if (!isLoading && !isFetching) {
       if ( data.error || !data || (!data.storeList?.length && !data.themeList?.length) ) {
         return ( <ErrorText>검색된 정보가 없어요 😥</ErrorText>)
       }
-      const CafeRoute = () => (
-        <CafeListScroll
-          data={data.storeList}
-          contentContainerStyle={{
-            paddingTop: 40,
-            marginLeft: 20,
-            marginRight: 20,
-          }}
-          renderItem={({ item }) => (
-            <SearchCafeList
-              storeId={item.storeId}
-              storeName={item.storeName}
-              storeImg={item.storeImg}
-              storeAddress={item.storeAddress}
-              likeCount={item.likeCount}
-              mostReviewedTheme={item.mostReviewedTheme}
-            />
-          )}
-        />
-      );
-
-      const ThemeRoute = () => (
-        <ThemeListScroll
-          data={data.themelist}
-          contentContainerStyle={{
-            paddingTop: 40,
-          }}
-          renderItem={({ item }) => (
-            <SearchThemeList
-              themeId={item.themeId}
-              themeName={item.themeName}
-              storeName={item.storeName}
-              themeImg={item.themeImg}
-              likeCount={item.likeCount}
-              star={item.star}
-            />
-          )}
-        />
-      );
-
-      const layout = useWindowDimensions();
-
-      const [index, setIndex] = React.useState(0);
-      const [routes] = React.useState([
-        { key: "Theme", title: "테마 검색 결과" },
-        { key: "Cafe", title: "카페 검색 결과" },
-      ]);
-
-      return (
-        <TabView
-          navigationState={{ index, routes }}
-          renderScene={SceneMap({
-            Cafe: CafeRoute,
-            Theme: ThemeRoute,
-          })}
-          onIndexChange={setIndex}
-          initialLayout={{ width: layout.width }}
-          renderTabBar={(props) => (
-            <TabBar {...props} style={{ backgroundColor: null }} />
-          )}
-        />
-      );
+      if (toggleValue) {
+        return (
+          <CafeListScroll
+            data={data.storeList}
+            contentContainerStyle={{
+              paddingTop: 40,
+              marginLeft: 20,
+              marginRight: 20,
+            }}
+            renderItem={({ item }) => (
+              <SearchCafeList
+                storeId={item.storeId}
+                storeName={item.storeName}
+                storeImg={item.storeImg}
+                storeAddress={item.storeAddress}
+                likeCount={item.likeCount}
+                mostReviewedTheme={item.mostReviewedTheme}
+              />
+            )}
+          />
+        )
+      } else {
+        return (
+          <Carousel
+            loop={false}
+            width={Width}
+            height={Height}
+            autoPlay={false}
+            data={data.themelist}
+            mode={'parallax'}
+            modeConfig={
+              {
+                parallaxScrollingOffset: 150,
+                parallaxScrollingScale: 1,
+                parallaxAdjacentItemScale: 0.9,
+              }
+            }
+            vertical={false}
+            scrollAnimationDuration={1000}
+            renderItem={({item}) => (
+                <ThemeComponent
+                  themeId={item.themeId}
+                  themeName={item.themeName}
+                  storeName={item.storeName}
+                  themeImg={item.themeImg}
+                  likeCount={item.likeCount}
+                  star={item.star}
+                />
+            )}
+          />
+        )
+      }
     } else if (isLoading && isFetching) return <LoadingScreen />;
     // else {
     //   return (
@@ -110,35 +129,65 @@ export default function SearchScreen() {
   };
 
   return (
-    <>
+    <ImageBackground source={{uri:testUri}} style={{flex:1}}>
       <TextContainer>
-        <MainText>
-          초대 받지 않은 곳을 {"\n"}
-          가는 것도 큰 재미이죠.{"\n"}
-          새로운 곳에 가보시겠어요?
-        </MainText>
+        <RowContainer>
+          <MainText>
+            초대 받지 않은 곳을 {"\n"}
+            가는 것도 큰 재미이죠.{"\n"}
+            새로운 곳에 가보시겠어요?
+          </MainText>
+          <Toggle
+            trackBarStyle={{
+              backgroundColor: theme.colors.point,
+              
+            }}
+            thumbButton={{
+              activeBackgroundColor: '#fff',
+              inActiveBackgroundColor: '#fff'
+            }}
+            trackBar={{
+              borderWidth: 4,
+              width: 80,
+              borderActiveColor: theme.colors.point,
+              borderInActiveColor: theme.colors.point,
+            }}
+            value={toggleValue}
+            onPress={(newState) => setToggleValue(newState)}
+          />
+        </RowContainer>
       </TextContainer>
       <SearchTextInput
-        placeholder="카페 또는 테마를 입력하세요."
+        placeholder={toggleValue ? "카페를 입력하세요." : "테마를 입력하세요."}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
         autoComplete ='off'
         caretHidden={true}
       />
-      <SearchResult />
-    </>
+      <SerachResultView>
+        <SearchResult />
+      </SerachResultView>
+    </ImageBackground>
   );
 }
 
-const MainContainer = styled.View`
 
-`;
+/**
+ * 뷰
+ */
+const RowContainer = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+`
 
 const TextContainer = styled.View`
-  justify-content: center;
   padding-left: ${({ theme }) => theme.screenMargin.padding};
   padding-right: ${({ theme }) => theme.screenMargin.padding};
   padding-top: ${({ theme }) => theme.screenMargin.paddingTop};
+  margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
+  margin-right: ${({ theme }) => theme.screenMargin.titleLeftMargin};
+  margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
 `;
 
 const ThemeListScroll = styled.FlatList``;
@@ -151,22 +200,17 @@ const SearchView = styled.View`
   justify-content: center;
 `;
 
-const MainText = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title2};
-  color: #fff;
-  line-height: ${({ theme }) => theme.fontHeight.title2};
-  margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
-  margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
-  letter-spacing: -1px;
-`;
+const SerachResultView = styled.View`
+  /* background-color: #212121; */
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  height: 100%;
+`
 
-const SubText = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.title3};
-  color: #fff;
-`;
 
+/**
+ * 요소
+ */
 const SearchTextInput = styled.TextInput`
   background-color: #fff;
   padding: 8px 16px;
@@ -176,6 +220,26 @@ const SearchTextInput = styled.TextInput`
 
   text-align: center;
 `;
+
+
+/**
+ * 텍스트
+ */
+const MainText = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.title2};
+  color: #fff;
+  line-height: ${({ theme }) => theme.fontHeight.title2};
+  letter-spacing: -1px;
+`;
+
+const SubText = styled.Text`
+  font-family: "SUIT-SemiBold";
+  font-size: ${({ theme }) => theme.fontSizes.title3};
+  color: #fff;
+`;
+
+
 
 const ErrorText = styled.Text`
   font-family: "SUIT-Bold";

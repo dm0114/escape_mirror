@@ -1,27 +1,28 @@
 import * as React from "react";
 import { View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import Book from "../screens/Book/Book";
 // import CommunityScreen from "../screens/CommunityScreen";
-import LoginScreen from "../screens/Login/LoginScreen";
+import LoginScreen from "../screens/login/Login";
+// import CommunityScreen from "../screens/CommunityScreen";
+// import LoginScreen from "../screens/Login/LoginScreen";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
 import Mypage from '../screens/User/MypageScreen';
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
-  <MainScreen />
+  <LoginScreen/>
 );
 
-const SecondRoute = () => <SearchScreen />;
+const SecondRoute = () => <MainScreen />
 
 
-const ThirdRoute = () => (
-  <MainScreen />
-);
+const ThirdRoute = () => <SearchScreen />
 
 
 const FourthRoute = () => (
-  <LoginScreen/>
+  <Book />
 );
 
 const FifthRoute = () => <Mypage />;
