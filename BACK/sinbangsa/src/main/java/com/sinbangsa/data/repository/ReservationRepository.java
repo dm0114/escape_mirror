@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    boolean existsByThemeTimeIdAndDate(long themeTimeId, Date date);
+    boolean existsByThemeTimeIdAndDate(long themeTimeId, String date);
 
     List<Reservation> findAllByThemeTimeIdAndDate(long themeId, String date);
 

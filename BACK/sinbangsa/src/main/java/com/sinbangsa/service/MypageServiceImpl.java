@@ -155,8 +155,7 @@ public class MypageServiceImpl implements MypageService {
         try {
 
             User userRepo = userRepository.findById((long) 1);
-            userRepo.setNickname(updateUserInfoRequestDto.getNickname());
-            userRepo.setProfile(updateUserInfoRequestDto.getProfileImg());
+            userRepo.update(updateUserInfoRequestDto.getNickname(),updateUserInfoRequestDto.getProfileImg());
 
         } catch (Exception e) {
             throw new RuntimeException();

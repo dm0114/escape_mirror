@@ -1,6 +1,7 @@
 package com.sinbangsa.data.entity;
 
 
+import com.sinbangsa.data.repository.BookRepository;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,12 +9,15 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+
 @Builder
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ThemeReview {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -57,7 +61,7 @@ public class ThemeReview {
 
     @Column
     @NotNull
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
 
     @Column
     private int usedHint;

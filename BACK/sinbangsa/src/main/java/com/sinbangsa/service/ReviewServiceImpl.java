@@ -2,7 +2,9 @@ package com.sinbangsa.service;
 
 
 import com.sinbangsa.data.dto.ReviewDto;
+import com.sinbangsa.data.entity.Book;
 import com.sinbangsa.data.entity.ThemeReview;
+import com.sinbangsa.data.repository.BookRepository;
 import com.sinbangsa.data.repository.ReviewRepository;
 import com.sinbangsa.data.repository.ThemeRepository;
 import com.sinbangsa.data.repository.UserRepository;
@@ -27,25 +29,32 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final UserRepository userRepository;
 
+    private final BookRepository bookRepository;
+
     @Transactional
     public boolean createReview(ReviewDto reviewDto) {
 
         ThemeReview themeReview = new ThemeReview();
 
         try {
-            themeReview.setReviewTheme(themeRepository.findById(reviewDto.getThemeId()));
-            themeReview.setImageUrl(reviewDto.getReviewImg());
-            themeReview.setStar(reviewDto.getStar());
-            themeReview.setDiff(reviewDto.getFeelDifficulty());
-            themeReview.setStory(reviewDto.getFeelStory());
-            themeReview.setInterior(reviewDto.getFeelInterrior());
-            themeReview.setActivity(reviewDto.getFeelActivity());
-            themeReview.setHorror(reviewDto.getFeelHorror());
-            themeReview.setLocker(reviewDto.getLocker());
-            themeReview.setContent(reviewDto.getContent());
-            themeReview.setCreateAt(LocalDateTime.now());
-            // 임시 유저정보 token 완료 후 변경 필요
-            themeReview.setReviewUser(userRepository.findById(1));
+            Book bookRepo = bookRepository.findById(reviewDto.getBookId());
+            ThemeReview.builder()
+                    .reviewTheme(themeRepository.findById(reviewDto.getThemeId()))
+                    .reviewUser(userRepository.findById(1)) // 유저 정보 변경 필요
+                    .content(reviewDto.getContent())
+                    .star(reviewDto.getStar())
+                    .diff(reviewDto.getFeelDifficulty())
+                    .story(reviewDto.getFeelStory())
+                    .interior(reviewDto.getFeelInterrior())
+                    .activity(reviewDto.getFeelActivity())
+                    .horror(reviewDto.getFeelHorror())
+                    .locker(reviewDto.getLocker())
+                    .imageUrl(reviewDto.getReviewImg())
+                    .usedHint(bookRepo.getUsedHint())
+                    .clearTime(bookRepo.getClearTime())
+                    .clearDate(bookRepo.getDoneDate())
+                    .build();
+
 
             // 관리자 테마 클리어 승인 후 usedHint, clearTime, clear Date,
             // jwt 토큰 완료 후 reviewUser 넣어야함
