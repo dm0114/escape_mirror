@@ -47,12 +47,15 @@ public class UserServiceImpl implements UserService {
     public KakaoLoginResponseDto kakaoLogin(String kakaotoken){
 
         try{
+            LOGGER.info("로그인 시작");
             User loginUser = getUserinfoByToken(kakaotoken);
+            LOGGER.info("유저 로그인");
 
             String userEmail = loginUser.getEmail();
+            Long userId = loginUser.getId();
 
-            String accessToken = jwtTokenProvider.createAccessToken(userEmail);
-            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail);
+            String accessToken = jwtTokenProvider.createAccessToken(userEmail,userId);
+            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail,userId);
 
             KakaoLoginResponseDto kakaoLoginResponseDto = new KakaoLoginResponseDto();
             kakaoLoginResponseDto.setRefreshToken(refreshToken);
@@ -76,21 +79,24 @@ public class UserServiceImpl implements UserService {
                 .retrieve()
                 .bodyToMono(KakaoUserDto.class)
                 .block();
+        
+        LOGGER.info("유저정보 받아옴");
 
-        User loginUser = User.builder()
-                .email(kakaoUser.getKakaoAccount().getEmail())
-                .profile(kakaoUser.getProperties().getThumbnailImage())
-                .nickname(kakaoUser.getProperties().getNickname())
-                .build();
 
-        String email = loginUser.getEmail();
+        String email = kakaoUser.getKakaoAccount().getEmail();
         User user = userRepository.getByEmail(email).orElse(null);
 
         if (user == null) {
-            userRepository.save(loginUser);
+            User loginUser = User.builder()
+                    .email(kakaoUser.getKakaoAccount().getEmail())
+                    .profile(kakaoUser.getProperties().getThumbnailImage())
+                    .nickname(kakaoUser.getProperties().getNickname())
+                    .build();
+
+            user = userRepository.save(loginUser);
         }
 
-        return loginUser;
+        return user;
     }
 }
 
