@@ -1,9 +1,10 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components/native";
-
 const cardImage = require("../assets/mocks/image.png");
-
 
 function ThemeComponent({
   themeId,
@@ -12,26 +13,46 @@ function ThemeComponent({
   themeImg,
   likeCount,
   star,
-  randomReview
+  randomReview,
 }) {
+  const navigation = useNavigation();
   return (
-    <ThemePosterContainer>
-      <Image source={cardImage} style={styles.img}/>
+    <ThemePosterContainer 
+      onPress={() => {
+        navigation.navigate("ThemeDetailScreen", { themeId: themeId });
+      }}
+    >
+      <LinearGradient
+        colors={["#21212120", "#212121"]}
+        style={{
+            height: 323,
+            width: 200,
+            position: "absolute",
+            zIndex: 3,
+            // elevation: 3,
+            borderRadius: 8,
+          }}
+      />
+      <Image source={cardImage} style={styles.img} />
       <MainTitle>{themeName}</MainTitle>
-      <Text>{themeImg}</Text>
-      <Text>{likeCount}</Text>
-      <Text>{star}</Text>
-      <Description>{randomReview ? `"${randomReview}"` : '"등록된 리뷰가 없어요"'}</Description>
+      {/* <Text>{themeImg}</Text> */}
+      <Description>{likeCount}좋아요 칩으로 등록</Description>
+      <Description>{star}별점 아이콘으로 등록</Description>
+      <Description>
+        {randomReview ? `"${randomReview}"` : '"등록된 리뷰가 없어요"'}
+      </Description>
     </ThemePosterContainer>
   );
 }
 
 export default ThemeComponent;
 
-const ThemePosterContainer = styled.View`
+const ThemePosterContainer = styled.TouchableOpacity`
+  margin-top: 40px;
   align-items: center;
-`
+`;
 const MainTitle = styled.Text`
+  margin-top: 20px;
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
   line-height: ${({ theme }) => theme.fontHeight.title2};
@@ -52,7 +73,6 @@ export const styles = StyleSheet.create({
     width: 200,
     height: 320,
     resizeMode: "cover",
-    elevation: 5,
+    borderRadius: 8,
   },
-})
-
+});

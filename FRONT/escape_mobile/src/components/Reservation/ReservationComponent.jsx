@@ -1,8 +1,6 @@
 import React from 'react';
 
 import styled from 'styled-components/native';
-import theme from '../../theme';
-
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -17,7 +15,7 @@ export default function ReservationComponent({
 
   return (
     <ReservationContainer 
-      style={{elevation: 30}}
+      style={{elevation: 10}}
       onPress={() => {navigation.navigate('ReservationDetailScreen', {
         reservationId: reservationId,
         themeName: themeName,

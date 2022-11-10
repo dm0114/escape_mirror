@@ -5,6 +5,7 @@ import theme from '../../../theme';
 import { Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { withTheme } from 'styled-components';
+import { useNavigation } from '@react-navigation/native';
 
  
 // 화면 너비, 높이 구하는 방법
@@ -14,7 +15,8 @@ const windowHeight = Dimensions.get('window').height;
 const Region = ['서울', '경기', '충청', '경상', '전라', '강원', '제주']
 const Tel = ['02', '031', '04?', '05!', '06$', '033', '064']
 
-export default function Book({navigation}){
+export default function Book(){
+    const navigation = useNavigation();
     return(
         <>
         <Container>

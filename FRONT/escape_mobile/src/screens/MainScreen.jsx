@@ -1,10 +1,14 @@
 import React from "react";
+import { Dimensions, ImageBackground } from "react-native";
+const { width } = Dimensions.get("window");
+
 import styled from "styled-components/native";
-import ReservationComponent from "../components/ReservationComponent";
-import { Dimensions } from "react-native";
 import "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
-const { width } = Dimensions.get("window");
+import ReservationComponent from "../components/Reservation/ReservationComponent";
+
+const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
+
 
 export default function MainScreen() {
   // 프리로딩 API 연결
@@ -35,52 +39,54 @@ export default function MainScreen() {
   };
 
   return (
-    <MainContainer>
-      <MainText>
-        안녕하세요, {}님.{"\n"}
-        오랜만에 저택으로 돌아오셨네요.{"\n"}
-        받으신 초대장 목록을 보여드릴게요.
-      </MainText>
-      <Carousel
-        loop={false}
-        width={width - 40}
-        height={width / 3.5}
-        autoPlay={false}
-        data={data.reservations}
-        mode={'parallax'}
-        modeConfig={
-          {
-            parallaxScrollingScale: 1,
-            parallaxAdjacentItemScale: 0.9
+    <ImageBackground  source={{uri:testUri}} style={{flex:1}}>
+      <MainContainer>
+        <MainText>
+          안녕하세요, {}님.{"\n"}
+          오랜만에 저택으로 돌아오셨네요.{"\n"}
+          받으신 초대장 목록을 보여드릴게요.
+        </MainText>
+        <Carousel
+          loop={false}
+          width={width - 40}
+          height={width / 3.5}
+          autoPlay={false}
+          data={data.reservations}
+          mode={'parallax'}
+          modeConfig={
+            {
+              parallaxScrollingScale: 1,
+              parallaxAdjacentItemScale: 0.9
+            }
           }
-        }
-        vertical={true}
-        scrollAnimationDuration={1000}
-        renderItem={({item}) => (
-          <ReservationComponent
-            key={item.reservationId}
-            reservationId={item.reservationId}
-            themeName={item.themeName}
-            storeName={item.storeName}
-            date={item.date}
-            reserveTime={item.reserveTime}
-          />
-        )}
-      />
+          vertical={true}
+          scrollAnimationDuration={2000}
+          renderItem={({item}) => (
+            <ReservationComponent
+              key={item.reservationId}
+              reservationId={item.reservationId}
+              themeName={item.themeName}
+              storeName={item.storeName}
+              date={item.date}
+              reserveTime={item.reserveTime}
+            />
+          )}
+        />
 
-      {/* {data.reservations.map((item) => {
-        return (
-          <ReservationComponent
-            key={item.reservationId}
-            reservationId={item.reservationId}
-            themeName={item.themeName}
-            storeName={item.storeName}
-            date={item.date}
-            reserveTime={item.reserveTime}
-          />
-        );
-      })} */}
-    </MainContainer>
+        {/* {data.reservations.map((item) => {
+          return (
+            <ReservationComponent
+              key={item.reservationId}
+              reservationId={item.reservationId}
+              themeName={item.themeName}
+              storeName={item.storeName}
+              date={item.date}
+              reserveTime={item.reserveTime}
+            />
+          );
+        })} */}
+      </MainContainer>
+    </ImageBackground>
   );
 }
 

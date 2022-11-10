@@ -42,7 +42,7 @@ export const BestBadge = styled.View`
   position: absolute;
   top: -10px;
   right: -10px;
-  background-color: #ff5f3f;
+  background-color: ${({ theme }) => theme.colors.point};
   width: 30px;
   height: 30px;
   align-items: center;

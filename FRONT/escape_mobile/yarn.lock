@@ -7177,6 +7177,13 @@ react-native-text-size@4.0.0-rc.1:
   resolved "https://registry.yarnpkg.com/react-native-text-size/-/react-native-text-size-4.0.0-rc.1.tgz#1e048d345dd6a5a8e1269e0585c1a5948c478da5"
   integrity sha512-CysqjU2jK6Yc+a+kEI222pUyTY2ywcU2HqbFqf1KHymW6OPTdvBBHqbEJKL0QiLhQaFYDbqicM+h990s9TP00g==
 
+react-native-toggle-element@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-toggle-element/-/react-native-toggle-element-2.0.1.tgz#7318bfc719004bd348c7abfb113117208dbbc724"
+  integrity sha512-+btOh+1HAc/nrhc/ktAPYiNLIHYij+5+V+I6twxbDOx3ezfeiWQJkODAJQBgO2+7xxWn8zmlxQ3X/DIJCuJ4mg==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-ui-lib@^6.23.1:
   version "6.23.1"
   resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.23.1.tgz#8b9c752be8fde603d2b7dc2010f09e8ca6009e3a"

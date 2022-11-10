@@ -1,6 +1,6 @@
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const BASE_URL2 = "https://my-json-server.typicode.com/dm0113";
-
+const Token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkbTEwODAyQGdtYWlsLmNvbSIsInJvbGVzIjoiVXNlciIsImlzcyI6ImVzY2FwZWRpY3Rpb25hcnkuY29tIiwiaWF0IjoxNjY4MDU5MjYzLCJleHAiOjE2NjgxNDU2NjN9.12H9MZGW96Aps04r9L4tRHZZM1GGWadiz9EVMyT0crE'
 
 // 참고
 // return await fetch(`${BASE_URL}/mainpage/search?${query}`,{
@@ -28,19 +28,30 @@ const getSearch = async ({ queryKey }) => {
   query = new URLSearchParams({
     searchWord: query
   })
-  const response = await (await fetch(`${BASE_URL}/mainpage/search?${query}`)).json()
+  const response = await (await fetch(`${BASE_URL}/mainpage/search?${query}`,{
+    headers : {
+      Authorization : Token
+    }
+  })).json()
   return response
 }
 
 const getCafeDetail = async({queryKey}) => {
   let [_, storeId] = queryKey
-  return await (await fetch(`${BASE_URL}/book/store/${storeId}`)).json();
+  return await (await fetch(`${BASE_URL}/book/store/${storeId}`,{
+    headers : {
+      Authorization : Token
+    }
+  })).json();
 }
 
 const getThemeDetail = async({queryKey}) => {
   let [_, themeId] = queryKey
-  return await (await fetch(`${BASE_URL}/book/theme/${themeId}`)).json();
-
+  return await (await fetch(`${BASE_URL}/book/theme/${themeId}`,{
+    headers : {
+      Authorization : Token
+    }
+  })).json();
 }
 
 export const searchApi = { getSearch, getCafeDetail, getThemeDetail };
@@ -60,15 +71,30 @@ const getReservationDetail = (reservationId) => {
 }
 
 //테마 예약 가능 시간
-const getReservationTime = (themeId) => {
-  // api/reservation
-  fetch(`${BASE_URL}/mocks/db`)
+const getReservationTime = async({queryKey}) => {
+  let [_, themeId] = queryKey
+  themeId = new URLSearchParams({
+    themeId: themeId
+  })
+  return await (await fetch(`${BASE_URL}/reservation?${themeId}`,{
+    headers : {
+      Authorization : Token
+    }
+  })).json();
 }
 
 //날짜별 예약 현황
-const getReservationDate = (themeId, date) => {
-  // api/reservation/date
-  fetch(`${BASE_URL}/mocks/db`)
+const getReservationDate = async({queryKey}) => {
+  let [_, themeId, date] = queryKey
+  themeId = new URLSearchParams({
+    themeId: themeId,
+    date: date
+  })
+  return await (await fetch(`${BASE_URL}/reservation/date?${themeId}`,{
+    headers : {
+      Authorization : Token
+    }
+  })).json();
 }
 
 //예약하기

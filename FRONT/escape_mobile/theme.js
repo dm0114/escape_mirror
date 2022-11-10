@@ -34,7 +34,9 @@ const screenMargin = {
 
 // 자주 사용하는 색을 객체로 만들자.
 const colors = {
-  // black: "#000000",
+  backgroundDark: '#212121',
+  point: "#ff5f3f",
+  border: "#00000010",
   // grey: "#999999",
   // green: "#3cb46e",
   // blue: "#000080",

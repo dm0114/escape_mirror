@@ -25,6 +25,7 @@ const RootContainer = styled.View`
 
 const queryClient = new QueryClient();
 
+
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const onLayoutRootView = useCallback(async () => {

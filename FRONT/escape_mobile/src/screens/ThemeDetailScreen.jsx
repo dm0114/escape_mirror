@@ -1,6 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import {  View,  Text,  useWindowDimensions,  FlatList,  StyleSheet,  StatusBar,  SafeAreaView,  Image, TouchableOpacity,  Animated,  ImageBackground,} from "react-native";
+import {
+  View,
+  Text,
+  useWindowDimensions,
+  FlatList,
+  StyleSheet,
+  StatusBar,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  Animated,
+  ImageBackground,
+  Button,
+} from "react-native";
 import Plotly from "react-native-plotly";
 
 import { Shadow } from "react-native-shadow-2";
@@ -9,8 +22,11 @@ const cardImage = require("../assets/mocks/image.png");
 // import Svg,{ Circle } from 'react-native-svg';
 
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from '@tanstack/react-query'
 import { searchApi } from "../apis/api";
+import LoadingScreen from "./LoadingScreen";
+import ReservationBotttomModal from "../components/Reservation/ReservationBotttomModal";
 
 // {
 //   "themeName": "셜록홈즈: 살인누명",
@@ -34,7 +50,18 @@ import { searchApi } from "../apis/api";
 // }
 
 function ThemeDetailScreen({ navigation, route }) {
-  // 카운터
+  /**
+   * API
+   */
+  const { themeId } = route.params;
+  const { isLoading, data, status } = useQuery(
+    ["ThemeDetail", themeId],
+    searchApi.getThemeDetail
+  );
+
+  /**
+   * 카운터
+   */
   const [number, setNumber] = useState(1);
   const onIncrease = () => {
     setNumber((prevNumber) => prevNumber + 1);
@@ -43,17 +70,33 @@ function ThemeDetailScreen({ navigation, route }) {
     setNumber((prevNumber) => prevNumber - 1);
   };
 
-  // 애니메이션
+  /**
+   * 애니메이션
+   */
   const dimensions = useWindowDimensions();
   const Width = (dimensions.width - 256) / 2;
-  const Height = (dimensions.height / 2);
+  const Height = dimensions.height / 2;
   const [showMenu, setShowMenu] = useState(true);
-  console.log(showMenu);
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(scaleValue, {
+      toValue: 1.2,
+      useNativeDriver: true,
+    }).start();
 
-  // 차트
+    Animated.timing(offsetValue, {
+      // YOur Random Value...
+      toValue: 150,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  /**
+   * 차트
+   */
   const ChartData = [
     // 차트에 들어갈 data를 먼저 지정해주고!
     {
@@ -106,16 +149,6 @@ function ThemeDetailScreen({ navigation, route }) {
     },
     showlegend: false, // @4
   };
-
-  const { themeId } = route.params;
-  const { isLoading, data } = useQuery(
-    ["ThemeDetail", themeId],
-    searchApi.getThemeDetail
-  );
-  useEffect(()=>{
-    console.log(themeId);
-    console.log(data);
-  }, [data])
 
   const ThemeDatas = {
     themeId: 3,
@@ -194,20 +227,10 @@ function ThemeDetailScreen({ navigation, route }) {
 
   const PriceData = [0, ...ThemeDatas?.price.split("/")];
 
-  useEffect(() => {
-    Animated.timing(scaleValue, {
-      toValue: 1.1,
-      useNativeDriver: true,
-    }).start();
 
-    Animated.timing(offsetValue, {
-      // YOur Random Value...
-      toValue: -500,
-      useNativeDriver: true,
-    }).start();
-  }, []);
 
-  return (
+
+  return status === "success" ? (
     <SafeAreaView style={styles.container}>
       <MainContainer>
         <Shadow
@@ -234,6 +257,8 @@ function ThemeDetailScreen({ navigation, route }) {
             <RatingText>{data.star}</RatingText>
           </RatingView>
         </Shadow>
+
+        
         <MainTitle>{data.themeName}</MainTitle>
         <InfoTextWrapper>
           <RowContainer>
@@ -243,7 +268,7 @@ function ThemeDetailScreen({ navigation, route }) {
           </RowContainer>
         </InfoTextWrapper>
         <InfoTextWrapper>
-          <Body>{data.description.replace(/\\n/g, ' ')}</Body>
+          <Body>{data.description.replace(/\\n/g, " ")}</Body>
         </InfoTextWrapper>
 
         <InfoTextWrapper>
@@ -276,6 +301,9 @@ function ThemeDetailScreen({ navigation, route }) {
         </RankingWrapper>
       </MainContainer>
 
+      {/* 바텀 시트 모달 */}
+      <ReservationBotttomModal themeId={themeId} />
+
       <ButtonContainer
         left={Width}
         onPress={() => {
@@ -289,7 +317,7 @@ function ThemeDetailScreen({ navigation, route }) {
       >
         <SubTitle>예약하기</SubTitle>
       </ButtonContainer>
- 
+
       {/* <Animated.View
         style={{
           flexGrow: 1,
@@ -385,7 +413,35 @@ function ThemeDetailScreen({ navigation, route }) {
           </FloatContainer>
         </ImageBackground>
       </Animated.View> */}
+
+      {/* 포스터 애니메이션 */}
+      <Animated.View
+        style={{
+          position: "relative",
+          top: -dimensions.height,
+          left: 0,
+          right: 0,
+          borderRadius: 8,
+          zIndex: 999,
+          transform: [{ scale: scaleValue }, { translateY: offsetValue }],
+        }}
+      >
+        <Image
+          source={cardImage}
+          style={{
+            width: dimensions.width - 40,
+            height: Height / 2,
+            resizeMode: "cover",
+            borderBottomLeftRadius: 40,
+            borderBottomRightRadius: 40,
+            marginLeft: 20,
+          }}
+          blurRadius={3}
+        />
+      </Animated.View>
     </SafeAreaView>
+  ) : (
+    <LoadingScreen />
   );
 }
 
@@ -561,7 +617,7 @@ const Body = styled.Text`
   letter-spacing: 0.5px;
   color: #9b989b;
   text-align: center;
-`
+`;
 const RatingText = styled.Text`
   font-family: "SUIT-ExtraBold";
   font-size: ${({ theme }) => theme.fontSizes.title1};
