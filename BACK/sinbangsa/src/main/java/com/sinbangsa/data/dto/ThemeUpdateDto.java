@@ -20,5 +20,6 @@ public class ThemeUpdateDto {
     private String capacity;
     private String price;
     private String themeImg;
+    private int difficulty;
 
 }

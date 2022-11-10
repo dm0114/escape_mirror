@@ -61,22 +61,20 @@ public class AdministratorServiceImpl implements AdministratorService {
         LOGGER.info("[AdministratorService] registerStoreDetail 호출");
         // admin token 발급 후 수정 필요
         Admin admin = administratorRepository.getAdminById(adminId).orElse(null);
-        Store newStore = new Store();
 
         try {
-            newStore.setStoreAdmin(admin);
-            newStore.setStoreName(storeRegisterDto.getStoreName());
-            newStore.setAddress(storeRegisterDto.getAddress());
-            newStore.setTel(storeRegisterDto.getTel());
-            newStore.setRegion(storeRegisterDto.getRegion());
-            newStore.setHomepage(storeRegisterDto.getHomepage());
-            newStore.setStoreId(storeRepository.getNewStoreId());
-            newStore.setPoster(storeRegisterDto.getStoreImg());
-
-            // DB 지우고 다시 데이터 넣고 돌릴 때 지울부분(not null 옵션 때문에...)
-            newStore.setMapX("123");
-            newStore.setMapY("sdf");
-            //------------------------
+            Store newStore = Store.builder()
+                    .storeId(storeRepository.getNewStoreId())
+                    .storeAdmin(admin)
+                    .storeName(storeRegisterDto.getStoreName())
+                    .tel(storeRegisterDto.getTel())
+                    .address(storeRegisterDto.getAddress())
+                    .region(storeRegisterDto.getRegion())
+                    .homepage(storeRegisterDto.getHomepage())
+                    .poster(storeRegisterDto.getStoreImg())
+                    .mapX("123")  // DB 지우고 다시 데이터 넣고 돌릴 때 지울부분(not null 옵션 때문에...)
+                    .mapY("1sdf") // DB 지우고 다시 데이터 넣고 돌릴 때 지울부분(not null 옵션 때문에...)
+                    .build();
 
             storeRepository.save(newStore);
             LOGGER.info("[AdministratorService] 저장 됨");
@@ -97,12 +95,13 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
         try {
-            updateStore.setStoreName(adminStoreDto.getStoreName());
-            updateStore.setPoster(adminStoreDto.getStoreImg());
-            updateStore.setAddress(adminStoreDto.getAddress());
-            updateStore.setRegion(adminStoreDto.getRegion());
-            updateStore.setTel(adminStoreDto.getTel());
-            updateStore.setHomepage(adminStoreDto.getHomepage());
+            updateStore.update(adminStoreDto.getStoreName(),
+                    adminStoreDto.getAddress(),
+                    adminStoreDto.getTel(),
+                    adminStoreDto.getStoreImg(),
+                    adminStoreDto.getHomepage(),
+                    adminStoreDto.getRegion()
+                    );
 
             storeRepository.save(updateStore);
             LOGGER.info("[updateStoreDetail] 수정 됨");
@@ -144,10 +143,10 @@ public class AdministratorServiceImpl implements AdministratorService {
     public AdministratorThemeDetailDto getThemeDetail(long themeId, long adminId){
         LOGGER.info("[AdministratorService] getThemeDetail 호출");
         Theme theme = themeRepository.getById(themeId).orElse(null);
-        // 토큰 넣고 주석 부분 바꾸기
-//        if (adminId != theme.getStore().getStoreAdmin().getId()) {
-//            throw new AccessDeniedException();
-//        }
+//         토큰 넣고 주석 부분 바꾸기
+        if (adminId != theme.getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
         if (theme==null) {
             throw new ThemeNotFoundException();
         }
@@ -197,26 +196,27 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Long registerTheme(ThemeRegisterDto themeRegister){
         LOGGER.info("[AdministratorService] registerTheme 호출");
         Store store = storeRepository.findByStoreId(themeRegister.getStoreId());
-        Theme newTheme = new Theme();
+
         try {
-            newTheme.setStore(store);
-            newTheme.setThemeName(themeRegister.getThemeTitle());
-            newTheme.setGenre(themeRegister.getGenre());
-            newTheme.setDescription(themeRegister.getContent());
-            newTheme.setLeadtime(themeRegister.getLeadtime());
-            newTheme.setDifficulty(themeRegister.getDifficulty());
-            newTheme.setCapacity(themeRegister.getCapacity());
-            newTheme.setPrice(themeRegister.getPrice());
-            newTheme.setPoster(themeRegister.getThemeImg());
-
-
             long newId = themeRepository.getNewId(store.getStoreId());
             if (newId == 0) {
                 newId = store.getStoreId()*100+1;
             } else {
                 newId = themeRepository.getNewId(store.getStoreId()) + 1;
             }
-            newTheme.setId(newId);
+
+            Theme newTheme = Theme.builder()
+                    .id(newId)
+                    .themeName(themeRegister.getThemeTitle())
+                    .capacity(themeRegister.getCapacity())
+                    .genre(themeRegister.getGenre())
+                    .price(themeRegister.getPrice())
+                    .difficulty(themeRegister.getDifficulty())
+                    .poster(themeRegister.getThemeImg())
+                    .leadtime(themeRegister.getLeadtime())
+                    .description(themeRegister.getContent())
+                    .store(store)
+                    .build();
 
             Theme savedTheme = themeRepository.save(newTheme);
             LOGGER.info("[registerTheme] 저장 됨 {}",savedTheme.getId());
@@ -234,13 +234,12 @@ public class AdministratorServiceImpl implements AdministratorService {
         try{
             int cnt = 1;
             for (String themeTime : themeTimes) {
-                ThemeTime createThemeTime = new ThemeTime();
-                createThemeTime.setTheme(themeRepository.findById(createdThemeId));
-                createThemeTime.setTime(themeTime);
-
                 long newId = createdThemeId*100+cnt;
-
-                createThemeTime.setId(newId);
+                ThemeTime createThemeTime = ThemeTime.builder()
+                        .time(themeTime)
+                        .theme(themeRepository.findById(createdThemeId))
+                        .id(newId)
+                        .build();
 
                 timeList.add(createThemeTime);
                 cnt += 1;
@@ -269,13 +268,15 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
         try {
-            theme.setThemeName(themeUpdateDto.getThemeTitle());
-            theme.setGenre(themeUpdateDto.getGenre());
-            theme.setDescription(themeUpdateDto.getContent());
-            theme.setLeadtime(themeUpdateDto.getLeadtime());
-            theme.setCapacity(themeUpdateDto.getCapacity());
-            theme.setPrice(themeUpdateDto.getPrice());
-            theme.setPoster(themeUpdateDto.getThemeImg());
+            theme.update(themeUpdateDto.getThemeTitle(),
+                    themeUpdateDto.getGenre(),
+                    themeUpdateDto.getCapacity(),
+                    themeUpdateDto.getPrice(),
+                    themeUpdateDto.getDifficulty(),
+                    themeUpdateDto.getLeadtime(),
+                    themeUpdateDto.getContent(),
+                    themeUpdateDto.getThemeImg()
+            );
 
             themeRepository.save(theme);
             LOGGER.info("[updateThemeDetail] 수정 됨");
@@ -290,7 +291,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     public Boolean createThemeTime(long themeId, String themeTime, long adminId){
         LOGGER.info("[AdministratorService] createThemeTime 호출");
-        ThemeTime createdThemeTime = new ThemeTime();
+
         Theme theme = themeRepository.getById(themeId).orElse(null);
         if (theme == null) {
             throw new ThemeNotFoundException();
@@ -300,15 +301,18 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
         try {
-            createdThemeTime.setTheme(themeRepository.getById(themeId).orElse(null));
             long createdThemeTimeId = themeTimeRepository.getNewId(themeId);
             if (createdThemeTimeId == 0) {
                 createdThemeTimeId = themeId*100+1;
             }else {
                 createdThemeTimeId += 1;
             }
-            createdThemeTime.setId(createdThemeTimeId);
-            createdThemeTime.setTime(themeTime);
+
+            ThemeTime createdThemeTime = ThemeTime.builder()
+                    .id(createdThemeTimeId)
+                    .theme(theme)
+                    .time(themeTime)
+                    .build();
 
             themeTimeRepository.save(createdThemeTime);
             LOGGER.info("[createThemeTime] 추가 됨");
@@ -329,7 +333,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
         try {
-            updateTime.setTime(themeTime.getTime());
+            updateTime.update(themeTime.getTime());
 
             themeTimeRepository.save(updateTime);
             LOGGER.info("[updateTime] 수정 됨");
