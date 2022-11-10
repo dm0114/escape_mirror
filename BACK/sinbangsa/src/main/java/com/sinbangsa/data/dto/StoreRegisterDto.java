@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class StoreRegesterDto {
+public class StoreRegisterDto {
 
     private String storeName;
     private String storeImg;

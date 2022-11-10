@@ -1,10 +1,6 @@
 package com.sinbangsa.controller;
 
-import com.sinbangsa.data.dto.AdminStoreDto;
-import com.sinbangsa.data.dto.AdministratorThemeDetailDto;
-import com.sinbangsa.data.dto.StoreRegesterDto;
-import com.sinbangsa.data.dto.ThemeListDto;
-import com.sinbangsa.data.entity.Admin;
+import com.sinbangsa.data.dto.*;
 import com.sinbangsa.service.AdministratorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,7 +46,7 @@ public class AdministratorController {
 
     @PostMapping("/store")
     @ApiOperation(value = "카페 상세정보 등록")
-    public ResponseEntity<Boolean> registerStoreDetail(@RequestBody StoreRegesterDto storeResgesterDto){
+    public ResponseEntity<Boolean> registerStoreDetail(@RequestBody StoreRegisterDto storeResgesterDto){
         LOGGER.info("[AdministratorController] registerStoreDetail 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
@@ -109,6 +104,24 @@ public class AdministratorController {
 
         AdministratorThemeDetailDto themeDetail = administratorService.getThemeDetail(themeId, adminId);
         return new ResponseEntity<>(themeDetail, headers, HttpStatus.OK);
+    }
+
+    @PostMapping("/theme")
+    @ApiOperation(value = "관리자 페이지 테마 등록")
+    public ResponseEntity<Boolean> createTheme(@RequestBody ThemeRegisterDto themeRegister){
+        LOGGER.info("[AdministratorController] createTheme 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        LOGGER.info("[AdministratorController] createTheme 호출{}",themeRegister.getReservationtime());
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+
+        Boolean result = administratorService.registerThemeThemeTime(themeRegister, adminId);
+
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
 
