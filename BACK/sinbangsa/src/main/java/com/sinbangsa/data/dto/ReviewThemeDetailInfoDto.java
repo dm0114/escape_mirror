@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +33,7 @@ public class ReviewThemeDetailInfoDto {
     private int usedHint;
 
     private String clearTime;
+
 
 
 }
