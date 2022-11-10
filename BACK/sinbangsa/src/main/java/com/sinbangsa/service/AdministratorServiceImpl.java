@@ -288,5 +288,37 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
+    public Boolean createThemeTime(long themeId, String themeTime, long adminId){
+        LOGGER.info("[AdministratorService] updateThemeThemeTime 호출");
+        ThemeTime createdThemeTime = new ThemeTime();
+        Theme theme = themeRepository.getById(themeId).orElse(null);
+        if (theme == null) {
+            throw new ThemeNotFoundException();
+        }
+        if (adminId != theme.getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        try {
+            createdThemeTime.setTheme(themeRepository.getById(themeId).orElse(null));
+            long createdThemeTimeId = themeTimeRepository.getNewId(themeId);
+            if (createdThemeTimeId == 0) {
+                createdThemeTimeId = themeId*100+1;
+            }else {
+                createdThemeTimeId += 1;
+            }
+            createdThemeTime.setId(createdThemeTimeId);
+            createdThemeTime.setTime(themeTime);
+
+            themeTimeRepository.save(createdThemeTime);
+            LOGGER.info("[createThemeTime] 추가 됨");
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+
+    }
+
 
 }
