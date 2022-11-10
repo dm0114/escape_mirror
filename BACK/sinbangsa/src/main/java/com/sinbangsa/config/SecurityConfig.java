@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() //요청에 관해 인증체크
                 .antMatchers("/api/user/**").permitAll()
-                .antMatchers("/v3/api-docs","/swagger*/**").permitAll()
+                .antMatchers("/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**","/swagger*/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

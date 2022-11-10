@@ -42,9 +42,10 @@ public class JwtTokenProvider {
 
     public static final String ISSUER = "escapedictionary.com";
 
-    public String createAccessToken(String email){
+    public String createAccessToken(String email,Long id){
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles","User");
+        claims.put("userId",id);
         Date now = new Date();
 
         String token = Jwts.builder()
@@ -60,12 +61,13 @@ public class JwtTokenProvider {
     }
 
     @Transactional
-    public String createRefreshToken(String email){
+    public String createRefreshToken(String email,Long userId){
 
         LOGGER.info("[createRefreshToken] 토큰 생성 시작");
 
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles","User");
+        claims.put("userId",userId);
         Date now = new Date();
 
         String token = Jwts.builder()
@@ -99,6 +101,12 @@ public class JwtTokenProvider {
         return info;
     }
 
+    public Long getUserId(String Token){
+        Long info = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(Token).getBody().get("userId",Long.class);
+        System.out.println(info);
+        return null;
+    }
+
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
@@ -107,21 +115,21 @@ public class JwtTokenProvider {
         return null;
     }
 
-    @Transactional
-    public String reissueRefreshToken(String refreshToken) throws RuntimeException{
-        Authentication authentication = getAuthentication(refreshToken);
-        RefreshToken findRefreshToken = refreshTokenRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("not found error!!!"));
-
-        if (findRefreshToken.getRefreshToken().equals(refreshToken)){
-            String newRefreshToken = createRefreshToken(authentication.getName());
-            findRefreshToken.changeToken(newRefreshToken);
-            return newRefreshToken;
-        }else{
-            LOGGER.info("리프레시 토큰 불일치");
-            return null;
-        }
-    }
+//    @Transactional
+//    public String reissueRefreshToken(String refreshToken) throws RuntimeException{
+//        Authentication authentication = getAuthentication(refreshToken);
+//        RefreshToken findRefreshToken = refreshTokenRepository.findByEmail(authentication.getName())
+//                .orElseThrow(() -> new UsernameNotFoundException("not found error!!!"));
+//
+//        if (findRefreshToken.getRefreshToken().equals(refreshToken)){
+//            String newRefreshToken = createRefreshToken(authentication.getName());
+//            findRefreshToken.changeToken(newRefreshToken);
+//            return newRefreshToken;
+//        }else{
+//            LOGGER.info("리프레시 토큰 불일치");
+//            return null;
+//        }
+//    }
 
     public boolean validateToken(String token){
         try{
