@@ -35,31 +35,24 @@ public class Store {
     private String storeName;
 
     @Column
-    @NotNull
     private String address;
 
     @Column
-    @NotNull
     private String mapX;
 
     @Column
-    @NotNull
     private String mapY;
 
     @Column
-    @NotNull
     private String tel;
 
     @Column
-    @NotNull
     private String poster;
 
     @Column
-    @NotNull
     private String homepage;
 
     @Column
-    @NotNull
     private String region;
 
 

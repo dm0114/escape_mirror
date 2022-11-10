@@ -18,5 +18,9 @@ public interface BookService {
 
     List<ThemeForThemeListDto> getThemeList(long storeId);
 
+    Boolean themeLike(long themeId);
+
+    Boolean themeLikeCancel(long themeId);
+
 
 }

@@ -4,6 +4,7 @@ import com.sinbangsa.data.dto.MainpageDto;
 import com.sinbangsa.data.dto.PreLoadingDto;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
+import com.sinbangsa.exception.ThemeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +34,24 @@ public class MainpageServiceImpl implements MainpageService{
 
         List<Store> rplStorelist = storeRepository.findAllByStoreNameContaining(searchWord);
         for (Store store : rplStorelist){
+            System.out.println("---------");
             MainpageDto.LStoreDto searchStore = new MainpageDto.LStoreDto();
             searchStore.setStoreId(store.getStoreId());
             searchStore.setStoreName(store.getStoreName());
+            System.out.println(store.getStoreName());
             searchStore.setStoreImg(store.getPoster());
             searchStore.setStoreAddress(store.getAddress());
             searchStore.setLikeCount(userStoreRelationRepository.countByUserRelationStore(store));
+            searchStore.setHomepage(store.getHomepage());
+            searchStore.setMapX(store.getMapX());
+            searchStore.setMapY(store.getMapY());
+            searchStore.setTel(store.getTel());
 
             List<Theme> themeList;
             themeList = themeRepository.findAllByStore(store);
+            if (themeList == null) {
+                throw new ThemeNotFoundException();
+            }
 
             Map<Theme,Integer> maximumReview = new HashMap<>();
             for (Theme theme : themeList){
@@ -65,7 +75,7 @@ public class MainpageServiceImpl implements MainpageService{
             if (maximumReview.get(maxTheme) == 0 ){
                 mostReviewedTheme.setStar(-1);
             } else {
-                mostReviewedTheme.setStar(themeReviewRepository.getAvgStar(maxTheme));
+                mostReviewedTheme.setStar(themeReviewRepository.getAvgStar(maxTheme).orElse(null));
             }
             searchStore.setMostReviewedTheme(mostReviewedTheme);
             lStoreDto.add(searchStore);
@@ -82,7 +92,7 @@ public class MainpageServiceImpl implements MainpageService{
                 searchTheme.setStar(-1);
                 searchTheme.setRandomReview("리뷰가 없습니다.");
             } else {
-                searchTheme.setStar(themeReviewRepository.getAvgStar(theme));
+                searchTheme.setStar(themeReviewRepository.getAvgStar(theme).orElse(null));
                 searchTheme.setRandomReview(themeReviewRepository.randomReview(theme).getContent());
             }
 

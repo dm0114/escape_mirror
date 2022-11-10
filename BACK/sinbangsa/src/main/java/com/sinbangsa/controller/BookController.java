@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -76,5 +78,24 @@ public class BookController {
         return new ResponseEntity<ThemeDetailInfoDto>(result, headers, HttpStatus.OK);
     }
 
+    @PostMapping("/theme/{themeId}/like")
+    @ApiOperation(value = "테마 찜하기")
+    public ResponseEntity<Boolean> themeLike(@PathVariable long themeId) {
+        LOGGER.info("[BookController] themeLike 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        boolean result = bookService.themeLike(themeId);
+        return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/theme/{themeId}/like")
+    @ApiOperation(value = "테마 찜하기 취소")
+    public ResponseEntity<Boolean> themeLikeCancel(@PathVariable long themeId) {
+        LOGGER.info("[BookController] themeLikeCancel 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        boolean result = bookService.themeLikeCancel(themeId);
+        return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+    }
 
 }

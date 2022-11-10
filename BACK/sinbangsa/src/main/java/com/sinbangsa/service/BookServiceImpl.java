@@ -2,10 +2,7 @@ package com.sinbangsa.service;
 
 
 import com.sinbangsa.data.dto.*;
-import com.sinbangsa.data.entity.Book;
-import com.sinbangsa.data.entity.Store;
-import com.sinbangsa.data.entity.Theme;
-import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -32,6 +29,8 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
 
     private final ThemeReviewRepository themeReviewRepository;
+
+    private final UserThemeRelationRepository userThemeRelationRepository;
 
     public List<StoreDto> getStoreList(String region) {
         LOGGER.info("[BookService] getCafeList 호출");
@@ -97,17 +96,18 @@ public class BookServiceImpl implements BookService {
             themeDetailDto.setStoreName(themeRepo.getStore().getStoreName());
             themeDetailDto.setThemeImg(themeRepo.getPoster());
             themeDetailDto.setLikeCount(themeRepo.getLikeThemes().size());
-            if (themeReviewRepository.getAvgStar(themeRepo) == null) {
+            Double star = themeReviewRepository.getAvgStar(themeRepo).orElse(null);
+            if ( star == null) {
                 themeDetailDto.setStar(0);
             } else {
-                themeDetailDto.setStar((int) Math.round(themeReviewRepository.getAvgStar(themeRepo)));
+                themeDetailDto.setStar((int) Math.round(themeReviewRepository.getAvgStar(themeRepo).orElse(null)));
             }
 
 
             themeDetailDtoList.add(themeDetailDto);
 
         }
-        storeDetailDto.setThemeDetailDtoList(themeDetailDtoList);
+        storeDetailDto.setThemeList(themeDetailDtoList);
         LOGGER.info("[BookService] getStoreDetail 성공");
         return storeDetailDto;
     }
@@ -150,17 +150,154 @@ public class BookServiceImpl implements BookService {
         LOGGER.info("[BookService] getThemeDetail 호출");
 
         ThemeDetailInfoDto themeDetailInfoDto = new ThemeDetailInfoDto();
+        Theme themeRepo = themeRepository.findById(themeId);
+        LOGGER.info("[BookService] getThemeDetail themeRepository 성공");
         try {
-//            Theme storeRepo = themeRepository.getReferenceById(themeId);
+            themeDetailInfoDto.setThemeName(themeRepo.getThemeName());
+            themeDetailInfoDto.setGenre(themeRepo.getGenre());
+            themeDetailInfoDto.setCapacity(themeRepo.getCapacity());
+            themeDetailInfoDto.setPrice(themeRepo.getPrice());
+            themeDetailInfoDto.setDifficulty(themeRepo.getDifficulty());
+            themeDetailInfoDto.setLeadTime(themeRepo.getLeadtime());
+            themeDetailInfoDto.setDescription(themeRepo.getDescription());
+            themeDetailInfoDto.setThemeImg(themeRepo.getPoster());
+
+            Double star = themeReviewRepository.getAvgStar(themeRepo).orElse(null);
+            if (star == null) {
+                themeDetailInfoDto.setStar(0);
+            } else {
+                themeDetailInfoDto.setStar((int) Math.round(star));
+            }
+
+            Double difficulty = themeReviewRepository.getAvgDifficulty(themeRepo).orElse(null);
+            if (difficulty == null) {
+                themeDetailInfoDto.setDifficulty(0);
+            } else {
+                themeDetailInfoDto.setDifficulty((int) Math.round(difficulty));
+            }
+
+            Double story = themeReviewRepository.getAvgStory(themeRepo).orElse(null);
+            if (story == null) {
+                themeDetailInfoDto.setFeelStory(0);
+            } else {
+                themeDetailInfoDto.setFeelStory((int) Math.round(story));
+            }
+
+            Double interior = themeReviewRepository.getAvgInterior(themeRepo).orElse(null);
+            if (interior == null) {
+                themeDetailInfoDto.setFeelInterior(0);
+            } else {
+                themeDetailInfoDto.setFeelInterior((int) Math.round(interior));
+            }
+
+            Double activity = themeReviewRepository.getAvgActivity(themeRepo).orElse(null);
+            if (activity == null) {
+                themeDetailInfoDto.setFeelActivity(0);
+            } else {
+                themeDetailInfoDto.setFeelActivity((int) Math.round(activity));
+            }
+
+            Double horror = themeReviewRepository.getAvgHorror(themeRepo).orElse(null);
+            if (horror == null) {
+                themeDetailInfoDto.setFeelHorror(0);
+            } else {
+                themeDetailInfoDto.setFeelHorror((int) Math.round(horror));
+            }
+
+            Double lock = themeReviewRepository.getAvgLock(themeRepo).orElse(null);
+            if (lock == null) {
+                themeDetailInfoDto.setLock(0);
+            } else {
+                themeDetailInfoDto.setLock((int) Math.round(lock));
+            }
+
+
+            List<ReviewThemeDetailInfoDto> reviews = new ArrayList<>();
+            List<ThemeReview> themeReviewsRepo = themeReviewRepository.findAllByReviewTheme(themeRepo).orElse(null );
+            for (ThemeReview themeReviewRepo : themeReviewsRepo) {
+                ReviewThemeDetailInfoDto reviewThemeDetailInfoDto = new ReviewThemeDetailInfoDto();
+                reviewThemeDetailInfoDto.setReviewId(themeReviewRepo.getId());
+                reviewThemeDetailInfoDto.setUserName(themeReviewRepo.getReviewUser().getUsername());
+                reviewThemeDetailInfoDto.setContent(themeReviewRepo.getContent());
+                reviewThemeDetailInfoDto.setStar(themeReviewRepo.getStar());
+                reviewThemeDetailInfoDto.setReviewImg(themeReviewRepo.getImageUrl());
+                reviewThemeDetailInfoDto.setCreatedAt(themeReviewRepo.getCreateAt());
+                reviewThemeDetailInfoDto.setClearDate(themeReviewRepo.getClearDate());
+                reviewThemeDetailInfoDto.setUsedHint(themeReviewRepo.getUsedHint());
+                reviewThemeDetailInfoDto.setClearTime(themeReviewRepo.getClearTime());
+                reviews.add(reviewThemeDetailInfoDto);
+            }
+            themeDetailInfoDto.setReviews(reviews);
+            LOGGER.info("[BookService] getThemeDetail themeDetailInfoDto 성공");
+
+            List<UserOfRankDto> noHints = new ArrayList<>();
+            List<UserOfRankDto> hints = new ArrayList<>();
+            List<Book> noHintUsersRepo = bookRepository.getAllBook(themeRepo).orElse(null);;
+            for (Book noHintUserRepo : noHintUsersRepo) {
+                UserOfRankDto userOfRankDto = new UserOfRankDto();
+                userOfRankDto.setUserNickname(noHintUserRepo.getBookUser().getNickname());
+                userOfRankDto.setClearTime(noHintUserRepo.getClearTime());
+                int usedHint = noHintUserRepo.getUsedHint();
+                userOfRankDto.setUsedHint(usedHint);
+                if (usedHint == 0) {
+                    noHints.add(userOfRankDto);
+                } else {
+                    hints.add(userOfRankDto);
+                }
+            }
+            themeDetailInfoDto.setNoHintRanking(noHints);
+            themeDetailInfoDto.setHintRanking(hints);
+            return themeDetailInfoDto;
 
         } catch (Exception e) {
-
+            throw new NullPointerException();
         }
 
 
-        return themeDetailInfoDto;
+
 
     }
+
+    public Boolean themeLike(long themeId) {
+        LOGGER.info("[BookService] themeLike 호출");
+        Theme themeRepo = themeRepository.findById(themeId);
+        UserThemeRelation userThemeRelation = new UserThemeRelation();
+        //임시
+        User userRepo = userRepository.findById((long) 1);
+        if (userThemeRelationRepository.existsByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo)) {
+
+            return false;
+        } else {
+
+            userThemeRelation.setUserRelationTheme(themeRepo);
+            System.out.println(1);
+            userThemeRelation.setThemeRelationUser(userRepo);
+            System.out.println(2);
+            userThemeRelationRepository.save(userThemeRelation);
+            System.out.println(3);
+            return true;
+        }
+
+
+    }
+
+    public Boolean themeLikeCancel(long themeId) {
+        LOGGER.info("[BookService] themeLike 호출");
+        Theme themeRepo = themeRepository.findById(themeId);
+        UserThemeRelation userThemeRelation = new UserThemeRelation();
+        //임시
+        User userRepo = userRepository.findById((long) 1);
+        if (userThemeRelationRepository.existsByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo)) {
+            userThemeRelationRepository.delete(userThemeRelationRepository.findByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo));
+            return true;
+        } else {
+
+            return false;
+        }
+
+
+    }
+
 
 
 }
