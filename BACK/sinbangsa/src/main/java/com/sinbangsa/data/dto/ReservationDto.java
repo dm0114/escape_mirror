@@ -13,7 +13,7 @@ public class ReservationDto {
 
     private long themeId;
 
-    private Date reservationDate;
+    private String reservationDate;
 
     private long themeTimeId;
 

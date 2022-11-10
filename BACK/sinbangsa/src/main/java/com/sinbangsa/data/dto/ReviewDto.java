@@ -12,6 +12,8 @@ import lombok.Setter;
 @Setter
 public class ReviewDto {
 
+    long bookId;
+
     long themeId;
 
     String reviewImg;

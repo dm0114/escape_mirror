@@ -267,13 +267,10 @@ public class BookServiceImpl implements BookService {
 
             return false;
         } else {
-
-            userThemeRelation.setUserRelationTheme(themeRepo);
-            System.out.println(1);
-            userThemeRelation.setThemeRelationUser(userRepo);
-            System.out.println(2);
-            userThemeRelationRepository.save(userThemeRelation);
-            System.out.println(3);
+            UserThemeRelation.builder()
+                    .themeRelationUser(userRepo)
+                    .userRelationTheme(themeRepo)
+                    .build();
             return true;
         }
 
@@ -283,7 +280,6 @@ public class BookServiceImpl implements BookService {
     public Boolean themeLikeCancel(long themeId) {
         LOGGER.info("[BookService] themeLike 호출");
         Theme themeRepo = themeRepository.findById(themeId);
-        UserThemeRelation userThemeRelation = new UserThemeRelation();
         //임시
         User userRepo = userRepository.findById((long) 1);
         if (userThemeRelationRepository.existsByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo)) {

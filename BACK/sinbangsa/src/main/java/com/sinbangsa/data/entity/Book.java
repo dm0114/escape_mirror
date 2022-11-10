@@ -33,7 +33,7 @@ public class Book {
     private Boolean review;
 
     @Column
-    private LocalDate doneDate;
+    private LocalDate doneDate= LocalDate.now();
 
     @Column
     private int usedHint;

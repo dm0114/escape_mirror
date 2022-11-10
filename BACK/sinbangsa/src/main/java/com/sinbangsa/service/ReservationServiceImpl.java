@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,20 +34,19 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     public boolean createReservation(ReservationDto reservationDto) {
+        LOGGER.info("[ReservationServiceImpl] createReservation 호출");
 
-        Reservation reservation = new Reservation();
 
         try {
-//            reservation.setDate(reservationDto.getReservationDate());
-            reservation.setThemeTime(themeTimeRepository
-                    .findById(reservationDto.getThemeTimeId()));
-            // 임시 token 생성 후 수정 필요
-            reservation.setReservationUser(userRepository.findById(1));
 
             // 기존 예약 내역에 이미 데이터가 있는지 확인
             if (!reservationRepository.existsByThemeTimeIdAndDate(
                     reservationDto.getThemeTimeId(), reservationDto.getReservationDate())) {
-                reservationRepository.save(reservation);
+                Reservation.builder()
+                        .reservationUser(userRepository.findById(1))
+                        .date(reservationDto.getReservationDate())
+                        .themeTime(themeTimeRepository.findById(reservationDto.getThemeTimeId()))
+                        .build();
 
             } else {
                 return false;
