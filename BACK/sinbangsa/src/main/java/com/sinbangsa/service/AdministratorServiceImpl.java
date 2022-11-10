@@ -256,4 +256,37 @@ public class AdministratorServiceImpl implements AdministratorService {
         return true;
     }
 
+    @Transactional
+    public Boolean updateThemeThemeTime(ThemeUpdateDto themeUpdateDto, long adminId){
+        LOGGER.info("[AdministratorService] updateThemeThemeTime 호출");
+
+        Theme theme = themeRepository.getById(themeUpdateDto.getThemeId()).orElse(null);
+        if (theme == null) {
+            throw new ThemeNotFoundException();
+        }
+        if (adminId != theme.getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        try {
+            theme.setThemeName(themeUpdateDto.getThemeTitle());
+            theme.setGenre(themeUpdateDto.getGenre());
+            theme.setDescription(themeUpdateDto.getContent());
+            theme.setLeadtime(themeUpdateDto.getLeadtime());
+            theme.setCapacity(themeUpdateDto.getCapacity());
+            theme.setPrice(themeUpdateDto.getPrice());
+            theme.setPoster(themeUpdateDto.getThemeImg());
+
+            themeRepository.save(theme);
+            LOGGER.info("[updateThemeDetail] 수정 됨");
+            return true;
+
+        }catch (Exception e) {
+            return false;
+        }
+
+
+    }
+
+
 }
