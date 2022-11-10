@@ -8,11 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ThemeTimeRepository extends JpaRepository<ThemeTime, Long> {
 
-    ThemeTime findById(long id);
+    Optional<ThemeTime> findById(long id);
 
     List<ThemeTime> findAllByThemeId(long themeId);
 

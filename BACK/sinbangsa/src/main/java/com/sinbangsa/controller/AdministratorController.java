@@ -143,7 +143,7 @@ public class AdministratorController {
 
     }
 
-    @PostMapping("/theme/{themeId}")
+    @PostMapping("/theme/{themeId}/themeTime")
     @ApiOperation(value = "관리자 페이지 테마 시간 추가")
     public ResponseEntity<Boolean> createThemeTime(@PathVariable long themeId, @RequestBody ThemeTimeCreateDto themeTime){
         LOGGER.info("[AdministratorController] createThemeTime 호출");
@@ -175,6 +175,22 @@ public class AdministratorController {
         return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
 
     }
+
+    @DeleteMapping("/theme/themeTime/{themeTimeId}")
+    @ApiOperation(value = "관리자 페이지 테마 시간 삭제")
+    public ResponseEntity<Boolean> deleteThemeTime(@PathVariable long themeTimeId) {
+        LOGGER.info("[AdministratorController] deleteThemeTime 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+        boolean result = administratorService.deleteThemeTime(themeTimeId, adminId);
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
+
 
 
 
