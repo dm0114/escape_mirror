@@ -1,10 +1,7 @@
 package com.sinbangsa.controller;
 
 
-import com.sinbangsa.data.dto.MypageInfoDto;
-import com.sinbangsa.data.dto.MypageLikeDto;
-import com.sinbangsa.data.dto.MypageReviewDto;
-import com.sinbangsa.data.dto.ThemeForThemeListDto;
+import com.sinbangsa.data.dto.*;
 import com.sinbangsa.service.MypageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -58,11 +56,22 @@ public class MypageController {
     @GetMapping("/reviews")
     @ApiOperation(value = "리뷰 목록")
     public ResponseEntity<List<MypageReviewDto>> getReviews() {
-        LOGGER.info("[MypageController] getReviews");
+        LOGGER.info("[MypageController] getReviews 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         List<MypageReviewDto> result = mypageService.getReviews();
         return new ResponseEntity<List<MypageReviewDto>>(result, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/acts")
+    @ApiOperation(value = "활동 내역 목록")
+    public ResponseEntity<MypageMyRoomDto> getMyRooms() {
+        LOGGER.info("[MypageController] getMyRooms 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        MypageMyRoomDto result = mypageService.getMypageMyRooms();
+        return new ResponseEntity<MypageMyRoomDto>(result, headers, HttpStatus.OK);
+    }
+
 
 }

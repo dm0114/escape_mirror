@@ -3,14 +3,10 @@ package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.MypageInfoDto;
 import com.sinbangsa.data.dto.MypageLikeDto;
+import com.sinbangsa.data.dto.MypageMyRoomDto;
 import com.sinbangsa.data.dto.MypageReviewDto;
-import com.sinbangsa.data.entity.Theme;
-import com.sinbangsa.data.entity.ThemeReview;
-import com.sinbangsa.data.entity.User;
-import com.sinbangsa.data.entity.UserThemeRelation;
-import com.sinbangsa.data.repository.ThemeReviewRepository;
-import com.sinbangsa.data.repository.UserRepository;
-import com.sinbangsa.data.repository.UserThemeRelationRepository;
+import com.sinbangsa.data.entity.*;
+import com.sinbangsa.data.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +26,10 @@ public class MypageServiceImpl implements MypageService {
     private final UserThemeRelationRepository userThemeRelationRepository;
 
     private final ThemeReviewRepository themeReviewRepository;
+
+    private final ReservationRepository reservationRepository;
+
+    private final BookRepository bookRepository;
 
     public MypageInfoDto getMyPageInfo() {
         LOGGER.info("[MyPageServiceImpl] getMyPageInfo 호출");
@@ -102,5 +102,50 @@ public class MypageServiceImpl implements MypageService {
         }
 
         return reviews;
+    }
+
+
+    public MypageMyRoomDto getMypageMyRooms() {
+        LOGGER.info("[MypageServiceImpl] getMypageMyRooms 호출");
+        MypageMyRoomDto mypageMyRoomDto = new MypageMyRoomDto();
+
+        try {
+            // 임시
+            User user = userRepository.findById((long) 1);
+            List<MypageMyRoomDto.ReservationDto> reservationsDto = new ArrayList<>();
+            List<Reservation> reservationsRepo = reservationRepository.findAllByReservationUser(user);
+            for (Reservation reservationRepo : reservationsRepo) {
+                MypageMyRoomDto.ReservationDto reservationDto = new MypageMyRoomDto.ReservationDto();
+                reservationDto.setReservationId(reservationRepo.getReservationId());
+
+                Theme themeRepo = reservationRepo.getThemeTime().getTheme();
+                reservationDto.setThemeName(themeRepo.getThemeName());
+                reservationDto.setStoreName(themeRepo.getStore().getStoreName());
+                reservationDto.setDate(reservationRepo.getDate());
+                reservationDto.setReservatedTime(reservationRepo.getThemeTime().getTime());
+                reservationsDto.add(reservationDto);
+            }
+            mypageMyRoomDto.setReservations(reservationsDto);
+
+            List<MypageMyRoomDto.PlayedRoomDto> playedRoomsDto = new ArrayList<>();
+            List<Book> booksRepo = bookRepository.findAllByBookUser(user);
+            for (Book bookRepo : booksRepo) {
+                MypageMyRoomDto.PlayedRoomDto playedRoomDto = new MypageMyRoomDto.PlayedRoomDto();
+                playedRoomDto.setBookId(bookRepo.getId());
+                playedRoomDto.setThemeName(bookRepo.getBookTheme().getThemeName());
+                playedRoomDto.setStoreName(bookRepo.getBookTheme().getStore().getStoreName());
+                playedRoomDto.setIsClear(bookRepo.getClear());
+                playedRoomDto.setReview(bookRepo.getReview());
+                playedRoomDto.setDoneDate(bookRepo.getDoneDate());
+                playedRoomDto.setUsedHint(bookRepo.getUsedHint());
+                playedRoomDto.setClearTime(bookRepo.getClearTime());
+                playedRoomsDto.add(playedRoomDto);
+            }
+            mypageMyRoomDto.setBooks(playedRoomsDto);
+
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+        return mypageMyRoomDto;
     }
 }

@@ -32,4 +32,7 @@ public class MypageReviewDto {
 
     private String reviewImg;
 
+
 }
+
+
