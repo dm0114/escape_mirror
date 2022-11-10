@@ -7,6 +7,7 @@ import com.sinbangsa.data.dto.KakaoLoginResponseDto;
 import com.sinbangsa.data.dto.KakaoUserDto;
 import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.UserRepository;
+import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
 
     @Value("${kakaoRestApiKey}")
     private String kakaorestApiKey;
@@ -41,60 +44,44 @@ public class UserServiceImpl implements UserService {
     private String kakaoClientSecret;
 
 
-
-    public KakaoLoginResponseDto getAccessTokenByCode(String code){
-
-        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", kakaorestApiKey);
-        params.add("redirect_uri", kakaoRedirectUri);
-        params.add("code", code);
-        params.add("client_secret", kakaoClientSecret);
-
-        System.out.println(params);
-
-        String url = "https://kauth.kakao.com/oauth/token";
-
-        WebClient wc = WebClient.create(url);
-        String response = wc.post()
-                .uri(url)
-                .body(BodyInserters.fromFormData(params))
-                .header("Content-type","application/x-www-form-urlencoded")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
-        System.out.println(params);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        KakaoLoginResponseDto kakaoToken = null;
+    public KakaoLoginResponseDto kakaoLogin(String kakaotoken){
 
         try{
-            kakaoToken = objectMapper.readValue(response, KakaoLoginResponseDto.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            User loginUser = getUserinfoByToken(kakaotoken);
+
+            String userEmail = loginUser.getEmail();
+
+            String accessToken = jwtTokenProvider.createAccessToken(userEmail);
+            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail);
+
+            KakaoLoginResponseDto kakaoLoginResponseDto = new KakaoLoginResponseDto();
+            kakaoLoginResponseDto.setRefreshToken(refreshToken);
+            kakaoLoginResponseDto.setAccessToken(accessToken);
+
+            return kakaoLoginResponseDto;
+        } catch (Exception e) {
+            LOGGER.info("로그인 실패");
+            return null;
         }
 
-        System.out.println(kakaoToken);
 
-        return kakaoToken;
     }
 
-    public User getUserinfoByToken(String kakaotoken){
+    public User getUserinfoByToken(String kakaotoken) {
 
         WebClient webClient = WebClient.create();
         KakaoUserDto kakaoUser = webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me")
-                .header("Authorization","Bearer "+kakaotoken)
+                .header("Authorization", "Bearer " + kakaotoken)
                 .retrieve()
                 .bodyToMono(KakaoUserDto.class)
                 .block();
 
         User loginUser = User.builder()
-                        .email(kakaoUser.getKakaoAccount().getEmail())
-                        .profile(kakaoUser.getProperties().getThumbnailImage())
-                        .nickname(kakaoUser.getProperties().getNickname())
-                        .build();
+                .email(kakaoUser.getKakaoAccount().getEmail())
+                .profile(kakaoUser.getProperties().getThumbnailImage())
+                .nickname(kakaoUser.getProperties().getNickname())
+                .build();
 
         String email = loginUser.getEmail();
         User user = userRepository.getByEmail(email).orElse(null);
@@ -104,30 +91,7 @@ public class UserServiceImpl implements UserService {
         }
 
         return loginUser;
-
-
-
-
-        }
-
-
-
-//    @Transactional
-//    public boolean join(UserDto userDto) {
-//        SHA256 sha256 = new SHA256();
-//        User user = new User();
-//
-//        try {
-//            user.setUsername(userDto.getUsername());
-//            user.setNickname(userDto.getNickname());
-//            user.setEmail(userDto.getEmail());
-//
-//
-//            userRepository.save(user);
-//            return true;
-//        } catch (Exception e) {
-//            throw new RuntimeException();
-//        }
-//    }
-
+    }
 }
+
+

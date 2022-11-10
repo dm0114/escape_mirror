@@ -7,11 +7,10 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jdk.internal.jline.internal.Log;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,16 +33,10 @@ public class JwtTokenProvider {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-//    private static String secret ;
-//
-//    @Value("${springboot.jwt.secret}")
-//    public void setKey(String value) {
-//        secret = value;
-//    }
     static Key secretKey = Keys.hmacShaKeyFor("SinBangSaSecretKeyJWTTokenCreateKey".getBytes(StandardCharsets.UTF_8));
 
-    // 엑세스 토큰 만료시간 10분
-    private static final long expireTime = 10 * 60 * 1000L;
+    // 엑세스 토큰 만료시간 10분 (현재 임시로 1일)
+    private static final long expireTime = 24 * 60 * 60 * 1000L;
 
     //리프레시 토큰 만료시간 7일 => 나중에 줄인 뒤 갱신하는 방식으로 갈 것.
     private final long refreshExpireTime = 7 * 24 * 60 * 60 * 1000L;
@@ -96,7 +89,9 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token){
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getEmail(token));
+        LOGGER.info("권한 테스트");
         return new UsernamePasswordAuthenticationToken(userDetails, "",userDetails.getAuthorities());
     }
 

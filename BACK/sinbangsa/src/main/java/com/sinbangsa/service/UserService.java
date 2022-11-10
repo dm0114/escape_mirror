@@ -6,8 +6,7 @@ import com.sinbangsa.data.entity.User;
 
 public interface UserService {
 
-//    boolean join(UserDto userDto);
-    KakaoLoginResponseDto getAccessTokenByCode(String code);
-    User getUserinfoByToken(String kakaotoken);
+    KakaoLoginResponseDto kakaoLogin(String kakaotoken);
 
+    User getUserinfoByToken(String kakaotoken);
 }

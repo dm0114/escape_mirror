@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+    
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -23,13 +23,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && token.startsWith("Bearer ")){
             String tokenStr = jwtTokenProvider.resolveToken(request);
-            if (jwtTokenProvider.validateToken(token)) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            System.out.println();
+            if (jwtTokenProvider.validateToken(tokenStr)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(tokenStr);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
-            filterChain.doFilter(request, response);
         }
-
+        filterChain.doFilter(request, response);
     }
 }

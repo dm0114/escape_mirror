@@ -3,6 +3,7 @@ package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.KakaoLoginRequestDto;
 import com.sinbangsa.data.dto.KakaoLoginResponseDto;
+import com.sinbangsa.data.dto.KakaoLogoutDto;
 import com.sinbangsa.data.dto.KakaoUserDto;
 import com.sinbangsa.data.entity.User;
 import com.sinbangsa.service.UserService;
@@ -32,65 +33,20 @@ public class UserController {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-//    @ResponseBody
-//    @GetMapping("/kakao")
-//    public void kakaoCode(@RequestParam String code){
-//        System.out.println(code);
-//    }
 
 
     @ApiOperation(value = "카카오 회원관리")
     @PostMapping("/kakao")
-    public ResponseEntity<KakaoLoginResponseDto> kakao(@RequestBody KakaoLoginRequestDto kakaoLoginRequestDto){
-        System.out.println("123");
+    public ResponseEntity<KakaoLoginResponseDto> kakaoLogin(@RequestBody KakaoLoginRequestDto kakaoLoginRequestDto) {
         String kakaoToken = kakaoLoginRequestDto.getAccessToken();
-        User loginUser = userService.getUserinfoByToken(kakaoToken);
-        String userEmail = loginUser.getEmail();
-        String accessToken = jwtTokenProvider.createAccessToken(userEmail);
-        String refreshToken = jwtTokenProvider.createRefreshToken(userEmail);
-        KakaoLoginResponseDto kakaoLoginResponseDto = new KakaoLoginResponseDto();
-        kakaoLoginResponseDto.setAccessToken(accessToken);
-        kakaoLoginResponseDto.setRefreshToken(refreshToken);
-
-        return new ResponseEntity<>(kakaoLoginResponseDto,HttpStatus.OK);
-
+        KakaoLoginResponseDto kakaoLoginResponseDto = userService.kakaoLogin(kakaoToken);
+        return new ResponseEntity<>(kakaoLoginResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public void test(){
-        jwtTokenProvider.
-
+    @ApiOperation(value = "로그아웃")
+    @DeleteMapping("/logout")
+    public void Logout(@RequestBody KakaoLogoutDto kakaoLogoutDto){
+        String refreshToken = kakaoLogoutDto.getRefreshToken();
+        System.out.println("로그아웃!");
     }
-
-    //회원가입
-//    @ApiOperation(value = "유저 회원가입")
-//    @PostMapping("/signup")
-//    public ResponseEntity<Boolean> signupUser(@RequestBody UserDto userDto) {
-//        LOGGER.debug("signup - 호출");
-//        try {
-//            userService.join(userDto);
-//            return new ResponseEntity<>(true, HttpStatus.CREATED);
-//
-//        } catch (RuntimeException e) {
-//            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-//        }
-//
-//
-//    }
-
-    //로그인
-//    @PostMapping("/login")
-//    public ResponseEntity<UserDto> login(@RequestBody UserDto userDto, HttpServletResponse response) {
-//
-//        try {
-//            LOGGER.debug("[login] 로그인 시도 중", userDto.getEmail());
-//
-//            User loginUser = userService.login(userDto);
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return new ResponseEntity<>();
-//
-//    }
 }
