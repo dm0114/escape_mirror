@@ -12,6 +12,7 @@ import com.sinbangsa.data.repository.ThemeTimeRepository;
 import com.sinbangsa.exception.AccessDeniedException;
 import com.sinbangsa.exception.StoreNotFoundException;
 import com.sinbangsa.exception.ThemeNotFoundException;
+import com.sinbangsa.exception.ThemeTimeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -326,8 +327,10 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     public Boolean updateThemeTime(ThemeTimeDto themeTime, long adminId){
         LOGGER.info("[AdministratorService] updateThemeTime 호출");
-        ThemeTime updateTime = themeTimeRepository.findById(themeTime.getThemeTimeId());
-
+        ThemeTime updateTime = themeTimeRepository.findById(themeTime.getThemeTimeId()).orElse(null);
+        if (updateTime == null) {
+            throw new ThemeTimeNotFoundException();
+        }
         if (adminId != updateTime.getTheme().getStore().getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
@@ -343,6 +346,26 @@ public class AdministratorServiceImpl implements AdministratorService {
             return false;
         }
 
+
+    }
+
+    public Boolean deleteThemeTime(long themeTimeId, long adminId){
+        LOGGER.info("[AdministratorService] deleteThemeTime 호출");
+        ThemeTime themetime = themeTimeRepository.findById(themeTimeId).orElse(null);
+
+        try {
+            if (themetime == null) {
+                throw new ThemeTimeNotFoundException();
+            }
+
+            if (adminId != themetime.getTheme().getStore().getStoreAdmin().getId()) {
+                throw new AccessDeniedException();
+            }
+            themeTimeRepository.delete(themetime);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
 
     }
 
