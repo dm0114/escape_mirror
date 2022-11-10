@@ -1,19 +1,17 @@
 package com.sinbangsa.data.entity;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
-
+@Builder
 @Entity
 @Getter
-@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ThemeReview {
 
@@ -72,5 +70,16 @@ public class ThemeReview {
     @NotNull
     private LocalDate clearDate;
 
+    public void update(String content, int star, int diff, int story, int interior, int activity, int horror, int locker, String imageUrl) {
+        this.content = content;
+        this.star = star;
+        this.diff = diff;
+        this.story = story;
+        this.interior = interior;
+        this.activity = activity;
+        this.horror = horror;
+        this.locker = locker;
+        this.imageUrl = imageUrl;
+    }
 
 }

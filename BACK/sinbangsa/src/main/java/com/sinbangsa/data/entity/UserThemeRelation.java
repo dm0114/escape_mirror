@@ -10,7 +10,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserThemeRelation {
@@ -26,4 +25,5 @@ public class UserThemeRelation {
     @ManyToOne
     @JoinColumn(name = "theme_id")
     private Theme userRelationTheme;
+
 }

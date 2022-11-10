@@ -1,18 +1,16 @@
 package com.sinbangsa.data.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-
+@Builder
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Store {
 
     @Id
@@ -55,5 +53,13 @@ public class Store {
     @Column
     private String region;
 
+    public void update(String storeName, String address, String tel, String poster, String homepage, String region) {
+        this.storeName = storeName;
+        this.address = address;
+        this.tel = tel;
+        this.poster = poster;
+        this.homepage = homepage;
+        this.region = region;
+    }
 
 }
