@@ -24,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/admin")
+@RequestMapping("/api/admin")
 @Api(value = "관리자페이지 API", tags = {"관리자페이지 API"})
 public class AdministratorController {
     private final Logger LOGGER = LoggerFactory.getLogger(MainpageCotroller.class);
