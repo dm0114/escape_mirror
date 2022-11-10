@@ -1,8 +1,6 @@
 import React from 'react';
 
 import styled from 'styled-components/native';
-import theme from '../../theme';
-
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -17,6 +15,7 @@ export default function ReservationComponent({
 
   return (
     <ReservationContainer 
+      style={{elevation: 10}}
       onPress={() => {navigation.navigate('ReservationDetailScreen', {
         reservationId: reservationId,
         themeName: themeName,
@@ -42,6 +41,10 @@ const ReservationContainer = styled.TouchableOpacity`
   border-radius: 10px;
   margin-bottom: 20px;
   padding: 20px;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: #00000010;
 `
 
 

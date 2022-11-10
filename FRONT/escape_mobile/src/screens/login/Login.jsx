@@ -4,7 +4,7 @@ import WebView from 'react-native-webview';
 import axios from 'axios'
 
 
-const REST_API_KEY = '0c63b5d77d9ab6952f145147cd352307'
+const REST_API_KEY = '6cb2dd1e35672b64fb0dac71ee59315f'
 const REDIRECT_URI = 'http://localhost:8082'
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
@@ -18,7 +18,7 @@ const requestToken = async (code ) => {
     client_id: REST_API_KEY,
     redirect_uri: REDIRECT_URI,
     code: code,
-    client_secret: 'W9u87VSNGdCApszypnbb0lQiD28eXEAF'
+    client_secret: 'nPbxKBveS9LdVJv8rHjV7dXXztkbK1tj'
   });
 
   try {
