@@ -20,7 +20,7 @@ import CommunityDetailScreen from '../screens/CommunityDetailScreen';
 import TabViewExample from './Tabview';
 
 import MypageMoreScreen from '../screens/User/MypageMoreScreen'
-import KakaoLogin from '../screens/Login/Login'
+import KakaoLogin from '../screens/login/Login'
 import ReviewCreateScreen from '../screens/Review/ReviewCreateScreen'
 
 
@@ -30,7 +30,7 @@ const Nav = createStackNavigator()
 const Root = () => 
   // <Nav.Navigator screenOptions={{ presentation: "modal", headerShown: false }}>
   <Nav.Navigator
-    initialRouteName="TabViewExample"
+    initialRouteName="Book"
     screenOptions={{
       cardStyle: { backgroundColor: '#212121' },
       headerShown: false

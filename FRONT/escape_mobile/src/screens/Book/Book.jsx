@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, FlatList, ActivityIndicator} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList, ActivityIndicator, ImageBackground} from 'react-native';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
 import { Dimensions } from 'react-native';
@@ -8,8 +8,10 @@ import { withTheme } from 'styled-components';
 
  
 // 화면 너비, 높이 구하는 방법
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+// const windowWidth = Dimensions.get('window').width;
+// const windowHeight = Dimensions.get('window').height;
+
+// const testbg = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif';
 
 const Region = ['서울', '경기', '충청', '경상', '전라', '강원', '제주']
 const Tel = ['02', '031', '04?', '05!', '06$', '033', '064']
@@ -18,6 +20,7 @@ export default function Book({navigation}){
     return(
         <>
         <Container>
+            {/* <WebView source={{uri:'https://k7c104.p.ssafy.io/unity/test'}} /> */}
             <TwoRegion>
                 <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
                     num:Tel[0],

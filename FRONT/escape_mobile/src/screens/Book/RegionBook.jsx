@@ -5,9 +5,10 @@ import { LinearGradient } from 'expo-linear-gradient'
 import theme from '../../../theme';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import RNPickerSelect from 'react-native-picker-select';
-
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query'
 import { Modal } from "native-base";
 import {ProgressBar} from 'react-native-ui-lib';
+import { getRegionCafeList } from '../../apis/BookApi';
 
 const RegionList = {
     // 서울
@@ -55,54 +56,10 @@ const RegionList = {
     '064':[]
 }
 
-const test = [
-    {
-        'storeId': 1,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
-        'storeName': '카페 이름',
-        'isClear':false,
-    },
-    {
-        'storeId': 2,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
-        'storeName': '카페 이름',
-        'isClear':false,
-    },
-    {
-        'storeId': 3,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199650505-b0a49a60-800f-4e0e-95b5-301fb88a726e.png',
-        'storeName': '카페 이름',
-        'isClear':false,
-    },
-    {
-        'storeId': 4,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199650505-b0a49a60-800f-4e0e-95b5-301fb88a726e.png',
-        'storeName': '카페 이름',
-        'isClear':false,
-    },
-    {
-        'storeId': 5,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
-        'storeName': '카페 이름',
-        'isClear':false,
-    },
-    {
-        'storeId': 6,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
-        'storeName': '카페 이름',
-        'isClear':false,
-    },
-    {
-        'storeId': 7,
-        'storeImg': 'https://user-images.githubusercontent.com/97578425/199631491-2520584b-510d-4baf-8535-748c8cda2196.png',
-        'storeName': '카페 이름',
-        'isClear':false,
-    },
-]
+const LIMIT  = 20
 
 const testImg = 'https://media.4-paws.org/1/e/d/6/1ed6da75afe37d82757142dc7c6633a532f53a7d/VIER%20PFOTEN_2019-03-15_001-2886x1999-1920x1330.jpg';
-const testUnity = 'https://user-images.githubusercontent.com/97578425/199651092-ce04c889-71c8-431f-bfae-1732e4c72f8c.png'
-
+const testUnity = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation.gif'
 
 
 export default function RegionBook({navigation, route}){
@@ -112,10 +69,50 @@ export default function RegionBook({navigation, route}){
     const itemsList = RegionList[num].map((item) => {
         return {label:item, value:item}
     })
+    const {data} = useQuery(
+        ['RegionCafe', specificRegion, name],
+        getRegionCafeList,
+        {enabled:!!specificRegion}
+    )
 
     useEffect(()=>{
         itemsList.length ? setSelectRegion(`${name}/null`) : setSelectRegion(`${name}`)
     }, [])
+
+    const renderItem = (obj) => {
+        return(
+            <>
+            <TouchableOpacity style={{flex:0.5, height:180, marginBottom:20, position:'relative'}} onPress={()=>{navigation.navigate('CafeBook', {
+                storeId:obj.item.storeId,
+                storeImg:obj.item.storeImg,
+                storeName:obj.item.storeName,
+                clearCnt:obj.item.clearCnt,
+                totalTheme:obj.item.totalTheme
+            })}}>
+                <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+                style={[obj.index !== data.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+                    : {marginRight:10}, {height:180, width:186, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
+                <CafeView
+                    source={ obj.item.storeImg ? {uri:
+                        `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${obj.item.storeImg}`} : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}}
+                    resizeMode="cover"
+                    imageStyle={{borderRadius:10}}
+                    style={
+                        obj.index !== data.length-1 && obj.index %2 == 1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+                    : {marginRight:10}}
+                    >
+                        <ThemeTitleView style={{flex:1}}>
+                            <ThemeTitle>진행도</ThemeTitle>
+                            <ThemeTitle>{obj.item.clearCnt}/{obj.item.totalTheme}</ThemeTitle>
+                        </ThemeTitleView>
+                        <ProgressBar progress={(obj.item.clearCnt/obj.item.totalTheme)*100} progressColor={'red'} style={{zIndex:10, marginTop:130}}/>
+                        {/* <ThemeTitle>{obj.item.storeName}</ThemeTitle> */}
+                </CafeView>
+            </TouchableOpacity>
+            </>
+        )
+        
+    }
 
     return(
         <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
@@ -144,30 +141,14 @@ export default function RegionBook({navigation, route}){
                         {/* 세부지역 선택 시 해당 세부지역에 대한 카페 데이터를 보여줌 */}
                         {selectRegion !== `${name}/null` ? 
                         <FlatList
+                            // onEndReached={}
+                            // onEndReachedThreshold={1}
+                            disableVirtualization={false}
                             numColumns={2}
-                            data={test}
-                            renderItem={(obj) => 
-                                <TouchableOpacity style={{flex:0.5, position:'relative'}} onPress={()=>{navigation.navigate('CafeBook', {
-                                    storeId:obj.item.storeId,
-                                    storeImg:obj.item.storeImg,
-                                    storeName:obj.item.storeName
-                                })}}>
-                                    <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
-                                    style={[obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                                        : {marginRight:10}, {height:180, width:186, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
-                                    <CafeView
-                                        source={{uri:obj.item.storeImg}}
-                                        resizeMode="cover"
-                                        imageStyle={{borderRadius:10}}
-                                        style={
-                                            obj.index !== test.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                                        : {marginRight:10}}>
-                                            <ThemeTitle>진행도</ThemeTitle>
-                                            <ProgressBar progress={55} progressColor={'red'} style={{zIndex:10, marginTop:130}}/>
-                                            {/* <ThemeTitle>{obj.item.storeName}</ThemeTitle> */}
-                                    </CafeView>
-                                </TouchableOpacity>
-                    }/>
+                            // data={data.pages.map(page => page.results).flat}
+                            data={data}
+                            initialNumToRender={6}
+                            renderItem={renderItem}/>
                         
                         : null}
                             
@@ -204,12 +185,19 @@ const CafeView = styled.ImageBackground`
 const ThemeTitle = styled.Text`
     font-size: ${({theme}) => theme.fontSizes.title3};
     font-family: 'SUIT-SemiBold';
-    flex:1;
+    color:white;
+`
+const ThemeTitleView = styled.View`
+    font-size: ${({theme}) => theme.fontSizes.title3};
+    font-family: 'SUIT-SemiBold';
     z-index: 10;
     color:white;
+    width:100%;
     position: absolute;
     top:110px;
     left:20px;
+    flex-direction: row;
+    justify-content: space-between;
 `
 
 

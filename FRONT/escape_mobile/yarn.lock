@@ -7095,9 +7095,6 @@
     "prop-types" "^15.6.2"
     "react-native-iphone-x-helper" "^1.0.3"
 
-<<<<<<< HEAD
-"react-native-pager-view@5.4.24":
-=======
 "react-native-modal@^13.0.1":
   "integrity" "sha512-UB+mjmUtf+miaG/sDhOikRfBOv0gJdBU2ZE1HtFWp6UixW9jCk/bhGdHUgmZljbPpp0RaO/6YiMmQSSK3kkMaw=="
   "resolved" "https://registry.npmjs.org/react-native-modal/-/react-native-modal-13.0.1.tgz"
@@ -7106,8 +7103,7 @@
     "prop-types" "^15.6.2"
     "react-native-animatable" "1.3.3"
 
-"react-native-pager-view@*", "react-native-pager-view@>= 4.0.0", "react-native-pager-view@5.4.24":
->>>>>>> 8819ecaf092ed48b12e5042d77d1a9216a9f795d
+"react-native-pager-view@5.4.24":
   "integrity" "sha512-dRMB7i3B+mu4NCeIN6gqbR/kC/rr2wzqO0gisXDdJwJr78G24sWoTNpLEDFo3G8TFHY9nTMutVl5CUvkN2dp6g=="
   "resolved" "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-5.4.24.tgz"
   "version" "5.4.24"
@@ -7120,16 +7116,12 @@
     "@react-native-picker/picker" "^1.8.3"
     "lodash.isequal" "^4.5.0"
 
-<<<<<<< HEAD
-"react-native-reanimated@~2.9.1":
-=======
 "react-native-plotly@^6.0.0":
   "integrity" "sha512-coFr3EXCNrH8a1xftL+0+KgI1Hn4qDrwJDZD3YbnRmq/zESA+XAYPfMionXZxGb9+uydUTx/yCY69C7g4qWAfQ=="
   "resolved" "https://registry.npmjs.org/react-native-plotly/-/react-native-plotly-6.0.0.tgz"
   "version" "6.0.0"
 
-"react-native-reanimated@*", "react-native-reanimated@>= 1.0.0", "react-native-reanimated@>=2.0.0", "react-native-reanimated@>=2.2.0", "react-native-reanimated@~2.9.1":
->>>>>>> 8819ecaf092ed48b12e5042d77d1a9216a9f795d
+"react-native-reanimated@~2.9.1":
   "integrity" "sha512-309SIhDBwY4F1n6e5Mr5D1uPZm2ESIcmZsGXHUu8hpKX4oIOlZj2MilTk+kHhi05LjChoJkcpfkstotCJmPRPg=="
   "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz"
   "version" "2.9.1"
@@ -7166,17 +7158,10 @@
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"
 
-<<<<<<< HEAD
-"react-native-svg@12.1.1":
-  "integrity" "sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q=="
-  "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz"
-  "version" "12.1.1"
-=======
 "react-native-shadow-2@^7.0.6":
   "integrity" "sha512-kH0fKttPE67gIzTsnvmdJS0HAyb2utYAnUZguznmn6iNDRxRDD8RY1COsfW8YN1YuzYZgVtu60G394Az9bmuTg=="
   "resolved" "https://registry.npmjs.org/react-native-shadow-2/-/react-native-shadow-2-7.0.6.tgz"
   "version" "7.0.6"
->>>>>>> 8819ecaf092ed48b12e5042d77d1a9216a9f795d
   dependencies:
     "colord" "2.9.2"
 
@@ -7185,7 +7170,7 @@
   "resolved" "https://registry.npmjs.org/react-native-star-rating-widget/-/react-native-star-rating-widget-1.3.0.tgz"
   "version" "1.3.0"
 
-"react-native-svg@*", "react-native-svg@^13.5.0", "react-native-svg@>=12.1.0":
+"react-native-svg@^13.5.0":
   "integrity" "sha512-JWou/k4zfXRY6TsVgM4i30D0z54McqQ64D5cAfOzX17ThZwFjOheN24owmbAs7Y+naD0Bk5j409kT/6FZEop4g=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-13.5.0.tgz"
   "version" "13.5.0"
@@ -7244,11 +7229,7 @@
     "normalize-css-color" "^1.0.2"
     "prop-types" "^15.6.0"
 
-<<<<<<< HEAD
 "react-native-webview@^11.23.1":
-=======
-"react-native-webview@*", "react-native-webview@^11.23.1":
->>>>>>> 8819ecaf092ed48b12e5042d77d1a9216a9f795d
   "integrity" "sha512-bmqsdg4RYOUYD37R9XTrQALm7eD62KbLNPRfgvpLGd1SjaurvAjjsLrLN4mt6yOtKOMKeZvlcAl3x6De6cCQsA=="
   "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.23.1.tgz"
   "version" "11.23.1"
@@ -7256,11 +7237,7 @@
     "escape-string-regexp" "2.0.0"
     "invariant" "2.2.4"
 
-<<<<<<< HEAD
 "react-native@0.69.6":
-=======
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.70 || 1000.0.0", "react-native@>= 0.30.0", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.57", "react-native@>=0.59.0", "react-native@>=0.64.1", "react-native@>=0.65.0", "react-native@0.69.6":
->>>>>>> 8819ecaf092ed48b12e5042d77d1a9216a9f795d
   "integrity" "sha512-wwXpqM+12kdEYdBZCJUb5SBu95CzgejrwFeYJ78RzHZV/Sj6DBRekbsHGrDDsY4R25QXALQxy4DQYQCObVvWjA=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.69.6.tgz"
   "version" "0.69.6"

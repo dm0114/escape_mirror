@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 // import CommunityScreen from "../screens/CommunityScreen";
-import LoginScreen from "../screens/Login/LoginScreen";
+import LoginScreen from "../screens/login/LoginScreen";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
 import Mypage from '../screens/User/MypageScreen';
