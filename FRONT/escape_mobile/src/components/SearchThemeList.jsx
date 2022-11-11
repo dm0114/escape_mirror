@@ -57,8 +57,11 @@ const MainContainer = styled.TouchableOpacity`
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
-  margin-bottom: 60px;
   border-radius: 8px;
+  margin-top: 80px;
+  margin-bottom: 60px;
+  margin-left: 20px;
+  margin-right: 20px;
 `;
 const Container = styled.View`
   flex-direction: row;

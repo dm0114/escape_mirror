@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components/native";
 import theme from "../../theme"
-import { useWindowDimensions, Text, ImageBackground } from "react-native";
+import { useWindowDimensions, Text, ImageBackground, View } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Carousel from "react-native-reanimated-carousel";
 import Toggle from "react-native-toggle-element";
 
+import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
@@ -17,11 +18,10 @@ import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
 import ThemeComponent from "../components/ThemeComponent";
-import { useNavigation } from "@react-navigation/native";
 
 
 
-export default function SearchScreen() {
+export default function ThemeSearchScreen({ route }) {
   /**
    * 레이아웃
    */
@@ -32,41 +32,75 @@ export default function SearchScreen() {
   /**
    * API
    */
+  const navigation = useNavigation();
+  const { queryParam } = route.params;
   const [query, setQuery] = useState("");
-  const { isLoading, isFetching, data, refetch } = useQuery(
+  useEffect(()=> {
+    setQuery(queryParam)
+  }, [])
+  const { isLoading, isFetching, data, refetch, status } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch,
-    { enabled: false }
   );
 
   /**
    * 토글
    */
-  const [toggleValue, setToggleValue] = useState(false);
-  useEffect(() => {
-  }, [toggleValue])
 
   /**
    * 검색
    */
-  const navigation = useNavigation();
   const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
     if (query === "") {
       return;
     }
+    refetch()
+  };
 
-    if (toggleValue) {
-      return navigation.navigate("CafeSearchScreen", { queryParam: query });
-    }
-    
-    else {
-      return navigation.navigate("ThemeSearchScreen", { queryParam: query });
-    }
+
+  /**
+   * 검색 결과
+   */
+  const SearchResult = () => {
+    if (!isLoading && !isFetching) {
+      if ( data.error || !data || (!data.storeList?.length && !data.themeList?.length) ) {
+        return ( <ErrorText>검색된 정보가 없어요 😥</ErrorText>)
+      }
+        return (
+          <Carousel
+            loop={false}
+            width={Width}
+            height={Height}
+            autoPlay={false}
+            data={data.themelist}
+            mode={'parallax'}
+            modeConfig={
+              {
+                parallaxScrollingOffset: 120,
+                parallaxScrollingScale: 1,
+                parallaxAdjacentItemScale: 0.9,
+              }
+            }
+            vertical={false}
+            scrollAnimationDuration={1000}
+            renderItem={({item}) => (
+                <ThemeComponent
+                  themeId={item.themeId}
+                  themeName={item.themeName}
+                  storeName={item.storeName}
+                  themeImg={item.themeImg}
+                  likeCount={item.likeCount}
+                  star={item.star}
+                />
+            )}
+          />
+        )
+    } else if (isLoading && isFetching) return <LoadingScreen />;
   };
 
   return (
-    <ImageBackground source={{uri:testUri}} style={{flex:1}}>
+    <View style={{backgroundColor: '#212121'}}>
       <TextContainer>
         <RowContainer>
           <MainText>
@@ -90,22 +124,22 @@ export default function SearchScreen() {
               borderActiveColor: theme.colors.point,
               borderInActiveColor: theme.colors.point,
             }}
-            value={toggleValue}
-            onPress={(newState) => setToggleValue(newState)}
+            // value={toggleValue}
+            onPress={() => {navigation.navigate("CafeSearchScreen", { queryParam: query })}}
           />
         </RowContainer>
       </TextContainer>
       <SearchTextInput
-        placeholder={toggleValue ? "카페를 입력하세요." : "테마를 입력하세요."}
+        placeholder={"테마를 입력하세요."}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
         autoComplete ='off'
         caretHidden={true}
       />
-      {/* <SerachResultView>
+      <SerachResultView>
         <SearchResult />
-      </SerachResultView> */}
-    </ImageBackground>
+      </SerachResultView>
+    </View>
   );
 }
 

@@ -1,135 +1,208 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, Text, View, useWindowDimensions } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  FlatList,
+  Text,
+  View,
+  useWindowDimensions,
+  Image,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
+import { Linking, TabView, SceneMap, TabBar } from "react-native-tab-view";
+import Carousel from "react-native-reanimated-carousel";
+
 import styled from "styled-components/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import {
+  BestBadge,
+  Container,
+  IconContainer,
+  MainContentWrapper,
+  MainSubTitle,
+  MainTextContainer,
+  MainTitle,
+  RepThemeContainer,
+  StoreImgContainer,
+  SubContentWrapper,
+  styles,
+} from "../styles/Search/CafeList";
+import { Fontisto } from "@expo/vector-icons";
+const cardImage = require("../assets/mocks/image.png");
+const storeImage = require("../assets/mocks/storeImg.png");
 
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
 import LoadingScreen from "./LoadingScreen";
 import SearchThemeList from "../components/SearchThemeList";
+import { SerachResultView, ThemeListTitle, ThemeListView } from "../styles/Search/CafeDetail";
+import ThemeComponent from "../components/ThemeComponent";
 
 function CafeDetailScreen({ navigation: { navigate }, route }) {
+  /**
+   * API
+   */
   const { storeId } = route.params;
   const { isLoading, status, data } = useQuery(
-    ["CafeDetail", storeId], //토큰 추가
+    ["CafeDetail", storeId],
     searchApi.getCafeDetail
   );
 
-  const HeaderTabView = () => {
-    const FirstRoute = () => (
-      <FlatList
-        data={data?.themeDetailDtoList}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ 
-          paddingTop: 40,
-          marginHorizontal: 20
-        }}
-        renderItem={({ item }) => (
-          <SearchThemeList
-            themeId={item.themeId}
-            themeName={item.themeName}
-            storeName={item.storeName}
-            themeImg={item.themeImg}
-            likeCount={item.likeCount}
-            star={item.star}
-          />
-        )}
-      />
-    );
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
-    const SecondRoute = () => (
-      <View style={{ flex: 1, backgroundColor: "#673ab7" }}>
-        <Ionicons name="call" size={24} color="black" />
-        <Text>전화 하기</Text>
-        <Ionicons name="logo-instagram" size={24} color="black" />
-        <Text>방문 하기</Text>
-        <Text>지도 띄우기</Text>
-      </View>
-    );
+  /**
+   * 애니메이션 추가
+   */
+  const dimensions = useWindowDimensions();
+  const Width = (dimensions.width - 256) / 2;
+  const Height = parseInt(dimensions.height / 2);
+  const CarouselWidth = dimensions.width;
+  const CarouselHeight = dimensions.height;
+  const offsetValue = useRef(new Animated.Value(0)).current;
 
-    const renderScene = SceneMap({
-      first: FirstRoute,
-      second: SecondRoute,
-    });
-    const layout = useWindowDimensions();
+  useEffect(() => {
+    Animated.timing(offsetValue, {
+      // YOur Random Value...
+      toValue: -(Height / 2),
+      duration: 700,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
-    const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-      { key: "first", title: "테마 종류" },
-      { key: "second", title: "상세 정보" },
-    ]);
-
-    return (
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{ width: layout.width }}
-        renderTabBar={(props) => (
-          <TabBar {...props} style={{ backgroundColor: null }} />
-        )}
-      />
-    );
-  };
-
-  return status === 'success' ? (
+  return status === "success" ? (
     <>
-      <Container>
-        {/* themeImg 넣기 */}
-        <CafeImage />
-        <TextContainer>
-          <Title>{data.storeName}</Title>
-          <SubTitle>{data.Address}</SubTitle>
-          <SubTitle>{data.mapX}</SubTitle>
-          <SubTitle>{data.mapY}</SubTitle>
+      <Animated.View
+        style={{
+          position: 'relative',
+          top: Height / 2,
+          left: 0,
+          right: 0,
+          borderRadius: 8,
+          zIndex: 999,
+          transform: [{ translateY: offsetValue }],
+        }}
+      >
+        <Container mb="4px">
+          <MainContentWrapper>
+            <StoreImgContainer>
+              <View style={styles.storeImgContainer} />
+              <Image
+                source={storeImage}
+                style={styles.storeImg}
+                blurRadius={3}
+              />
+            </StoreImgContainer>
+          </MainContentWrapper>
 
-          <SubTitle>{data.tel}분 | </SubTitle>
-          <SubTitle>난이도 {data.storeImg} | </SubTitle>
-          <SubTitle>{data.homepage} </SubTitle>
+          <SubContentWrapper>
+            <MainTextContainer>
+              <MainTitle>{data.storeName}</MainTitle>
+              <MainSubTitle>{data.storeAddress}</MainSubTitle>
+              <IconContainer>
+                <TouchableOpacity onPress={() => {}}>
+                  <Ionicons
+                    name="md-call"
+                    size={19}
+                    color="black"
+                    style={{ marginRight: 4 }}
+                  />
+                </TouchableOpacity>
+                <Ionicons
+                  name="md-logo-instagram"
+                  size={20}
+                  color="black"
+                  style={{ marginHorizontal: 8 }}
+                />
+                <Ionicons
+                  name="md-location-sharp"
+                  size={20}
+                  color="black"
+                  style={{ marginLeft: 4 }}
+                />
+              </IconContainer>
+            </MainTextContainer>
+            {/* <RepThemeContainer>
+              <SubTitle>진행율</SubTitle>
+              <SubTitle>{data.clearCnt} / {data.totalTheme}</SubTitle>
+            </RepThemeContainer> */}
+          </SubContentWrapper>
+        </Container>
+      </Animated.View>
 
-          <SubTitle>{data.region}</SubTitle>
-          <SubTitle>{data.clearCnt} / {data.totalTheme}</SubTitle>
-        </TextContainer>
-      </Container>
-      <HeaderTabView />
+      <ThemeListTitle>테마 종류</ThemeListTitle>     
+
+      <SerachResultView>
+        <Carousel
+            loop={false}
+            width={CarouselWidth}
+            height={CarouselHeight}
+            autoPlay={false}
+            data={data.themeList}
+            mode={'parallax'}
+            modeConfig={
+              {
+                parallaxScrollingOffset: 120,
+                parallaxScrollingScale: 1,
+                parallaxAdjacentItemScale: 0.9,
+              }
+            }
+            vertical={false}
+            scrollAnimationDuration={1000}
+            renderItem={({item}) => (
+                <ThemeComponent
+                  themeId={item.themeId}
+                  themeName={item.themeName}
+                  storeName={item.storeName}
+                  themeImg={item.themeImg}
+                  likeCount={item.likeCount}
+                  star={item.star}
+                />
+            )}
+          />
+      </SerachResultView>
+
+        {/* <FlatList
+          data={data?.themeList}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            borderColor: '#00000010',
+            borderStyle: 'solid',
+            borderTopWidth: 1,
+            marginHorizontal: 20,
+          }}
+          renderItem={({ item }) => (
+            <SearchThemeList
+              themeId={item.themeId}
+              themeName={item.themeName}
+              storeName={item.storeName}
+              themeImg={item.themeImg}
+              likeCount={item.likeCount}
+              star={item.star}
+            />
+          )}
+        /> */}
     </>
   ) : (
     <LoadingScreen />
   );
 }
 
-const Container = styled.View`
-  flex-direction: row;
-  margin-bottom: 16px;
-  align-items: center;
-`;
+/**
+ * 재사용 할 수도 있는 코드
+ */
+// useEffect(()=> {
+//   console.log(`tel:${data.tel.replace(/-/gi, '')}`);
+//   Linking.openURL(`tel:+${data.tel.replace(/-/gi, '')}`)
+// }, [data])
 
-const TextContainer = styled.View`
-  margin-left: 16px;
-`;
+// <SubTitle>{data.mapX}</SubTitle>
+//         <SubTitle>{data.mapY}</SubTitle>
+//         <SubTitle>{data.tel} </SubTitle>
+//         <SubTitle>{data.homepage} </SubTitle>
+//         <SubTitle> {data.storeImg} </SubTitle>
 
-// 추후 이미지 태그로 대체
-const CafeImage = styled.View`
-  width: 100px;
-  height: 160px;
-  background-color: gray;
-`;
-const Title = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.body};
-  color: #fff;
-  margin-bottom: 8px;
-`;
-const SubTitle = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
-  color: #fff;
-`;
-
-const TmpContainer = styled.View`
-  background-color: #fff;
-`;
-
+//         <SubTitle>{data.region}</SubTitle>
+//         <SubTitle>{data.clearCnt} / {data.totalTheme}</SubTitle>
 export default CafeDetailScreen;
