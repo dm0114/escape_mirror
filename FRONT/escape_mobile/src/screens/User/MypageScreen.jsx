@@ -92,7 +92,7 @@ export default function MypageScreen() {
         {/* 프로필 사진 수정 */}
         <ProfileEditView onPress={ShowPicker}>
           <ProfileEditImg>
-            <Ionicons name="camera-outline" size={60} color="black" /> 
+            <Ionicons name="camera-outline" size={60} color="white" /> 
           </ProfileEditImg>
         </ProfileEditView>
 
@@ -100,18 +100,18 @@ export default function MypageScreen() {
         {/* 확인 버튼 */}
         <SettingsCheckView>
           <SettingsCheckTouch onPress={() => setEdit(false)}>
-            <Ionicons name="checkmark" size={30} color="black" />
+            <Ionicons name="checkmark" size={30} color="color" />
           </SettingsCheckTouch>
         </SettingsCheckView>
 
         {/* input창 클릭 시 focusing되면서 키보드 가려지지 않게  KeyboardAwareScrollView 적용 */}
-        <KeyboardAwareScrollView>
+        <View>
           {/* 업적명 & 닉네임명 */}
           <EditTxtView>
             <GradeTxt >집주인</GradeTxt>
             <NickNameEdit placeholder={nick} textAlign='center' />
           </EditTxtView>
-        </KeyboardAwareScrollView>  
+        </View>  
 
         <UserView>
           {/* 회원 탈퇴하기 */}
@@ -136,21 +136,24 @@ export default function MypageScreen() {
 
   return (
     <Container>
+    <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_mypage.gif'}} style={{flex:1}}>
       {/* 상단 이미지 */}
-      <MypageView flex={3}>
+      <MypageView>
         
       {/*Edit가 True일 때 ? EditScreen , False일 때 MypageScreen*/}
         {edit ? <EditScreen /> : <MyPageScreen />}
       </MypageView>
 
-      <CatView flex={2}>
+      <CatView>
         <View flex={1}></View>
         <CatTxtView flex={1}>
-          <CatText>hihi</CatText>
+          <CatText>내 조각들을 보고 싶다면</CatText>
+          <CatText>나의 스토리를 눌러봐!</CatText>
         </CatTxtView>
       </CatView>
 
-    </Container>
+      </ImageBackground>
+      </Container>
   )
 }
 
@@ -249,6 +252,8 @@ const NickNameEdit = styled.TextInput`
 const UserView = styled.View`
   flex-direction: row;
   justify-content: center;
+  /* border: 1px solid white;
+  padding: 5px; */
 `
 const LogOutTxt = styled.Text`
   font-family: "SUIT-Bold";
@@ -256,7 +261,9 @@ const LogOutTxt = styled.Text`
   color: white;
   margin: 20px;
 `
-const MorePageTxt=styled(LogOutTxt)`
+const MorePageTxt = styled(LogOutTxt)`
+  font-size:${({ theme }) => theme.fontSizes.body};
+  color: tomato;
   
 `
 const EscapeTxt = styled(LogOutTxt)`
@@ -264,11 +271,13 @@ const EscapeTxt = styled(LogOutTxt)`
 const CatText = styled.Text`
   color: white;
   font-family: "SUIT-Bold";
-  font-size:${({ theme }) => theme.fontSizes.title1};
-`
+  font-size:${({ theme }) => theme.fontSizes.body};
+ line-height:  ${({ theme }) => theme.fontHeight.body};
+ `
 const CatTxtView = styled.View`
   justify-content: center;
   align-items: center;
+  padding: 100px 50px;
   /* background-color: blueviolet; */
 `
 
