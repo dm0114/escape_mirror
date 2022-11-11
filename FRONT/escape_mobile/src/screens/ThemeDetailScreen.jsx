@@ -59,16 +59,6 @@ function ThemeDetailScreen({ navigation, route }) {
     searchApi.getThemeDetail
   );
 
-  /**
-   * 카운터
-   */
-  const [number, setNumber] = useState(1);
-  const onIncrease = () => {
-    setNumber((prevNumber) => prevNumber + 1);
-  };
-  const onDecrease = () => {
-    setNumber((prevNumber) => prevNumber - 1);
-  };
 
   /**
    * 애니메이션
@@ -230,10 +220,10 @@ function ThemeDetailScreen({ navigation, route }) {
 
 
 
-  return status === "success" ? (
+  return status === "success" || !isLoading ? (
     <SafeAreaView style={styles.container}>
       <MainContainer>
-        <Shadow
+        {/* <Shadow
           distance={100}
           startColor={"#00000050"}
           endColor={"#00000000"}
@@ -256,67 +246,42 @@ function ThemeDetailScreen({ navigation, route }) {
           <RatingView>
             <RatingText>{data.star}</RatingText>
           </RatingView>
-        </Shadow>
-
+        </Shadow> */}
         
-        <MainTitle>{data.themeName}</MainTitle>
-        <InfoTextWrapper>
-          <RowContainer>
-            <SubTitle>{data.leadTime}분 • </SubTitle>
-            <SubTitle>{data.capacity} • </SubTitle>
-            <SubTitle>난이도 {data.difficulty}</SubTitle>
-          </RowContainer>
-        </InfoTextWrapper>
-        <InfoTextWrapper>
-          <Body>{data.description.replace(/\\n/g, " ")}</Body>
-        </InfoTextWrapper>
-
-        <InfoTextWrapper>
-          <RowContainer>
+        <View style={{marginTop: Height*2/4}}>
+          <MainTitle>{data.themeName}</MainTitle>
+          <InfoTextWrapper>
             <RowContainer>
-              <SubTitle>가격</SubTitle>
-              <TouchableOpacity onPress={number <= 4 ? onIncrease : null}>
-                <Text>+</Text>
-              </TouchableOpacity>
-              <Body>{number}</Body>
-              <TouchableOpacity onPress={number >= 2 ? onDecrease : null}>
-                <Text>-</Text>
-              </TouchableOpacity>
+              <SubTitle>{data.leadTime}분 • </SubTitle>
+              <SubTitle>{data.capacity} • </SubTitle>
+              <SubTitle>난이도 {data.difficulty}</SubTitle>
             </RowContainer>
-            <Body>{!!PriceData[number] ? PriceData[number] : 0}원</Body>
-          </RowContainer>
-        </InfoTextWrapper>
+          </InfoTextWrapper>
+          <InfoTextWrapper>
+            <Body>{data.description.replace(/\\n/g, " ")}</Body>
+          </InfoTextWrapper>
 
-        <RankingWrapper>
-          <SubTitle>랭킹</SubTitle>
-          {data.noHintRanking.map((item, idx) => {
-            return (
-              <RowContainer key={idx}>
-                <Body>{idx + 1}등 |</Body>
-                <Body>{item.userNickname} |</Body>
-                <Body>{item.cleartime}</Body>
-              </RowContainer>
-            );
-          })}
-        </RankingWrapper>
+          <RankingWrapper>
+            <SubTitle>랭킹</SubTitle>
+            {!!data.noHintRanking ? data.noHintRanking.map((item, idx) => {
+              return (
+                <RowContainer key={idx}>
+                  <Body>{idx + 1}등 |</Body>
+                  <Body>{item.userNickname} |</Body>
+                  <Body>{item.cleartime}</Body>
+                </RowContainer>
+              );
+            }) : <SubTitle>데이터가 없습니다</SubTitle>}
+          </RankingWrapper>
+        </View>
+        
       </MainContainer>
 
-      {/* 바텀 시트 모달 */}
-      <ReservationBotttomModal themeId={themeId} />
+      {/* 
+      바텀 시트 모달 
+      */}
+      <ReservationBotttomModal themeId={themeId} PriceData={PriceData} />
 
-      <ButtonContainer
-        left={Width}
-        onPress={() => {
-          navigation.navigate("PostReservationScreen", {
-            themeName: data.themeName,
-            leadtime: data.leadtime,
-            price: data.price,
-            themeImg: data.themeImg,
-          });
-        }}
-      >
-        <SubTitle>예약하기</SubTitle>
-      </ButtonContainer>
 
       {/* <Animated.View
         style={{
@@ -421,7 +386,11 @@ function ThemeDetailScreen({ navigation, route }) {
           top: -dimensions.height,
           left: 0,
           right: 0,
-          borderRadius: 8,
+          borderRadius: 50,
+          borderWidth: 1,
+          borderStyle: 'solid',
+          borderColor: '#00000020',
+          elevation: 50,
           zIndex: 999,
           transform: [{ scale: scaleValue }, { translateY: offsetValue }],
         }}
@@ -435,8 +404,9 @@ function ThemeDetailScreen({ navigation, route }) {
             borderBottomLeftRadius: 40,
             borderBottomRightRadius: 40,
             marginLeft: 20,
+            
           }}
-          blurRadius={3}
+          blurRadius={0}
         />
       </Animated.View>
     </SafeAreaView>
@@ -522,27 +492,6 @@ const RatingView = styled.View`
 `;
 
 // 요소
-const ButtonContainer = styled.TouchableOpacity`
-  position: absolute;
-
-  bottom: 20px;
-  left: ${(props) => props.left}px;
-  right: 0;
-
-  margin: auto;
-  /* margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px; */
-
-  width: 256px;
-  padding: 10px;
-  border-radius: 40px;
-  background-color: #f6f5e9;
-
-  z-index: 999;
-  justify-content: center;
-  align-items: center;
-`;
 const ReviewWrapper = styled.View`
   margin-top: 20px;
   margin-bottom: 20px;
@@ -584,6 +533,7 @@ const SubTitle = styled.Text`
   font-size: ${({ theme }) => theme.fontSizes.body2};
   line-height: 36px;
   letter-spacing: -0.5px;
+  text-align: center;
 `;
 
 const ReviewTitle = styled.Text`
