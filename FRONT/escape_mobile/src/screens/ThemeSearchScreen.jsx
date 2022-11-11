@@ -46,9 +46,6 @@ export default function ThemeSearchScreen({ route }) {
   /**
    * 토글
    */
-  const [toggleValue, setToggleValue] = useState(false);
-  useEffect(() => {
-  }, [toggleValue])
 
   /**
    * 검색
@@ -58,16 +55,10 @@ export default function ThemeSearchScreen({ route }) {
     if (query === "") {
       return;
     }
-    if (toggleValue) {return navigation.navigate("CafeSearchScreen", { queryParam: query });}
-    else return refetch()
+    refetch()
   };
 
-  useEffect(() => {
-    console.log(status);
-    console.log(isFetching);
-    console.log(isLoading);
-    console.log(data);
-  }, [data])
+
   /**
    * 검색 결과
    */
@@ -133,13 +124,13 @@ export default function ThemeSearchScreen({ route }) {
               borderActiveColor: theme.colors.point,
               borderInActiveColor: theme.colors.point,
             }}
-            value={toggleValue}
-            onPress={(newState) => setToggleValue(newState)}
+            // value={toggleValue}
+            onPress={() => {navigation.navigate("CafeSearchScreen", { queryParam: query })}}
           />
         </RowContainer>
       </TextContainer>
       <SearchTextInput
-        placeholder={toggleValue ? "카페를 입력하세요." : "테마를 입력하세요."}
+        placeholder={"테마를 입력하세요."}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
         autoComplete ='off'

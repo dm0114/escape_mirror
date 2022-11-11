@@ -9,6 +9,7 @@ import {
   Animated,
 } from "react-native";
 import { Linking, TabView, SceneMap, TabBar } from "react-native-tab-view";
+import Carousel from "react-native-reanimated-carousel";
 
 import styled from "styled-components/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -34,7 +35,8 @@ import { searchApi } from "../apis/api";
 
 import LoadingScreen from "./LoadingScreen";
 import SearchThemeList from "../components/SearchThemeList";
-import { ThemeListTitle, ThemeListView } from "../styles/Search/CafeDetail";
+import { SerachResultView, ThemeListTitle, ThemeListView } from "../styles/Search/CafeDetail";
+import ThemeComponent from "../components/ThemeComponent";
 
 function CafeDetailScreen({ navigation: { navigate }, route }) {
   /**
@@ -56,6 +58,8 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
   const dimensions = useWindowDimensions();
   const Width = (dimensions.width - 256) / 2;
   const Height = parseInt(dimensions.height / 2);
+  const CarouselWidth = dimensions.width;
+  const CarouselHeight = dimensions.height;
   const offsetValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -127,9 +131,39 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
         </Container>
       </Animated.View>
 
-      <ThemeListView>
-        <ThemeListTitle>테마 종류</ThemeListTitle>
-        <FlatList
+      <ThemeListTitle>테마 종류</ThemeListTitle>     
+
+      <SerachResultView>
+        <Carousel
+            loop={false}
+            width={CarouselWidth}
+            height={CarouselHeight}
+            autoPlay={false}
+            data={data.themeList}
+            mode={'parallax'}
+            modeConfig={
+              {
+                parallaxScrollingOffset: 120,
+                parallaxScrollingScale: 1,
+                parallaxAdjacentItemScale: 0.9,
+              }
+            }
+            vertical={false}
+            scrollAnimationDuration={1000}
+            renderItem={({item}) => (
+                <ThemeComponent
+                  themeId={item.themeId}
+                  themeName={item.themeName}
+                  storeName={item.storeName}
+                  themeImg={item.themeImg}
+                  likeCount={item.likeCount}
+                  star={item.star}
+                />
+            )}
+          />
+      </SerachResultView>
+
+        {/* <FlatList
           data={data?.themeList}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -148,8 +182,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
               star={item.star}
             />
           )}
-        />
-      </ThemeListView>
+        /> */}
     </>
   ) : (
     <LoadingScreen />
