@@ -45,12 +45,7 @@ export default function CafeSearchScreen({ route }) {
     searchApi.getSearch,
   );
 
-  /**
-   * 토글
-   */
-  const [toggleValue, setToggleValue] = useState(false);
-  useEffect(() => {
-  }, [toggleValue])
+
   /**
    * 검색
    */
@@ -59,9 +54,9 @@ export default function CafeSearchScreen({ route }) {
     if (query === "") {
       return;
     }
-    if (toggleValue) refetch();
-    else navigation.navigate("CafeSearchScreen", { queryParam: query });
+    refetch();
   };
+
 
   /**
    * 검색 결과
@@ -105,26 +100,26 @@ export default function CafeSearchScreen({ route }) {
           </MainText>
           <Toggle
             trackBarStyle={{
-              backgroundColor: theme.colors.point,
-              
+              backgroundColor: theme.colors.point,              
             }}
             thumbButton={{
               activeBackgroundColor: '#fff',
-              inActiveBackgroundColor: '#fff'
+              inActiveBackgroundColor: '#fff',
+              width: 30,
+              height: 30,
             }}
             trackBar={{
-              borderWidth: 4,
-              width: 80,
+              width: 60,
+              height: 20,
               borderActiveColor: theme.colors.point,
               borderInActiveColor: theme.colors.point,
-            }}
-            value={toggleValue}
-            onPress={(newState) => setToggleValue(newState)}
+            }}         
+            onPress={()=>{navigation.navigate("ThemeSearchScreen", { queryParam: query });}}
           />
         </RowContainer>
       </TextContainer>
       <SearchTextInput
-        placeholder={toggleValue ? "카페를 입력하세요." : "테마를 입력하세요."}
+        placeholder={"카페를 입력하세요."}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
         autoComplete ='off'
