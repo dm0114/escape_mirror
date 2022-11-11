@@ -51,7 +51,7 @@ public class SecurityConfig {
                 // 인증처리에서는 세션을 사용하지 않는다는 뜻
                 .and()
                 .authorizeRequests() //요청에 관해 인증체크
-                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/user/**","/api/admin/auth/**").permitAll()
                 .antMatchers("/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**","/swagger*/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
