@@ -43,9 +43,7 @@ public class MainpageCotroller {
     @GetMapping("/test")
     @ApiOperation(value = "테스트")
     public void test(HttpServletRequest httpServletRequest){
-        System.out.println("test 시작");
         String apptoken = jwtTokenProvider.resolveToken(httpServletRequest);
-        System.out.println(apptoken);
         Long userId = jwtTokenProvider.getUserId(apptoken);
 
         System.out.println(userId);
