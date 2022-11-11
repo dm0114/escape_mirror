@@ -20,7 +20,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findAllByRegionContaining(String region);
 
-    Store findByStoreId(long storeId);
+    Optional<Store> findByStoreId(long storeId);
 
     Optional<Store> getByStoreId(long storeId);
 
