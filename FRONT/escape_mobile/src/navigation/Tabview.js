@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import Book from "../screens/Book/Book";
+import BookMain from "../screens/Book/BookMain";
 // import CommunityScreen from "../screens/CommunityScreen";
 import LoginScreen from "../screens/login/Login";
 // import CommunityScreen from "../screens/CommunityScreen";
@@ -22,7 +22,7 @@ const ThirdRoute = () => <SearchScreen />
 
 
 const FourthRoute = () => (
-  <Book />
+  <BookMain />
 );
 
 const FifthRoute = () => <Mypage />;

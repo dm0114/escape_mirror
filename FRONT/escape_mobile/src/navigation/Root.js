@@ -2,7 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
 // import Drawers from './Drawer'
 
-import Stack from './Stack'
+import Stack from './Stack';
 import SearchScreen from '../screens/SearchScreen';
 import ThemeDetailScreen from '../screens/ThemeDetailScreen';
 import CafeDetailScreen from '../screens/CafeDetailScreen';
@@ -14,15 +14,15 @@ import PostReservationScreen from '../screens/PostReservationScreen';
 import RegionBook from '../screens/Book/RegionBook';
 import Book from '../screens/Book/Book';
 import CafeBook from '../screens/Book/CafeBook';
+import BookMain from '../screens/Book/BookMain';
 
 import CommunityScreen from '../screens/CommunityScreen';
 import CommunityDetailScreen from '../screens/CommunityDetailScreen';
 import TabViewExample from './Tabview';
 
-import MypageMoreScreen from '../screens/User/MypageMoreScreen'
-import KakaoLogin from '../screens/login/Login'
-import ReviewCreateScreen from '../screens/Review/ReviewCreateScreen'
-
+import MypageMoreScreen from '../screens/User/MypageMoreScreen';
+import KakaoLogin from '../screens/login/Login';
+import ReviewCreateScreen from '../screens/Review/ReviewCreateScreen';
 
 const Nav = createStackNavigator()
 
@@ -30,7 +30,7 @@ const Nav = createStackNavigator()
 const Root = () => 
   // <Nav.Navigator screenOptions={{ presentation: "modal", headerShown: false }}>
   <Nav.Navigator
-    initialRouteName="Book"
+    initialRouteName="TabViewExample"
     screenOptions={{
       cardStyle: { backgroundColor: '#212121' },
       headerShown: false
@@ -50,6 +50,7 @@ const Root = () =>
       <Nav.Screen name="RegionBook" component={RegionBook} />
       <Nav.Screen name="CafeBook" component={CafeBook} />
       <Nav.Screen name="Book" component={Book} />
+      <Nav.Screen name="BookMain" component={BookMain} />
       <Nav.Screen name="CommunityScreen" component={CommunityScreen} />
       <Nav.Screen name="CommunityDetailScreen" component={CommunityDetailScreen} />
       <Nav.Screen name="Stack" component={Stack} />

@@ -115,7 +115,7 @@ export default function RegionBook({navigation, route}){
     }
 
     return(
-        <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
+        <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/book_room01.gif'}} style={{flex:1}}>
             <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20}}>
                 <View style={{flex:1}}>
                     <RoomNumber>ROOM {num}</RoomNumber>

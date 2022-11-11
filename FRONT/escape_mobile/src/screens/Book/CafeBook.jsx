@@ -6,38 +6,38 @@ import {ProgressBar} from 'react-native-ui-lib';
 import { getCafeThemeList } from '../../apis/BookApi';
 import {useQuery} from '@tanstack/react-query';
 
-const data = [
-    {
-    'themeId':1,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':0
-    },
-    {
-    'themeId':2,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':2
-    },
-    {
-    'themeId':3,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':1
-    },
-    {
-    'themeId':4,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':2
-    },
-    {
-    'themeId':5,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':1
-    }
-]
+// const data = [
+//     {
+//     'themeId':1,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':0
+//     },
+//     {
+//     'themeId':2,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':2
+//     },
+//     {
+//     'themeId':3,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':1
+//     },
+//     {
+//     'themeId':4,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':2
+//     },
+//     {
+//     'themeId':5,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':1
+//     }
+// ]
 
 const testUnity = 'https://user-images.githubusercontent.com/97578425/199651092-ce04c889-71c8-431f-bfae-1732e4c72f8c.png'
 
@@ -46,14 +46,13 @@ export default function CafeBook({navigation, route}){
     const progressRate = (clearCnt/totalTheme)*100
     const [isModal, setIsModal] = useState(false);
     const opacity_list = [0.8, 0.5, 0];
-    // const {data} = useQuery(
-    //     ['CafeTheme', storeId],
-    //     getCafeThemeList
-    //     )
-    // console.log(data)
+    const {data} = useQuery(
+        ['CafeTheme', storeId],
+        getCafeThemeList
+        )
     return(
-        <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
-        <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20}}>
+        <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/book_room01.gif'}} style={{flex:1}}>
+        <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20, marginTop:10}}>
         <Modal isOpen={isModal} onClose={()=>setIsModal(false)}>
             <Modal.Content>
                 <Modal.CloseButton />

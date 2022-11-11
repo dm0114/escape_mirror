@@ -23,11 +23,13 @@ export const getCafeThemeList = async ({ queryKey }) => {
     const cafeTheme = new URLSearchParams({
         storeId:storeId
     })
-    const response = await (await fetch(`${BASE_URL}/book/theme?${cafeTheme}`, {
+    const response = await (await fetch(`http://k7c104.p.ssafy.io:8080/api/book/theme?storeId=1`, {
         headers:{
             Authorization : Token
         }
     })).json()
+
+    console.log(response)
 
     return response
 }

@@ -7072,32 +7072,18 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-<<<<<<< HEAD
-"react-native-modal@^13.0.1":
-  "integrity" "sha512-UB+mjmUtf+miaG/sDhOikRfBOv0gJdBU2ZE1HtFWp6UixW9jCk/bhGdHUgmZljbPpp0RaO/6YiMmQSSK3kkMaw=="
-  "resolved" "https://registry.npmjs.org/react-native-modal/-/react-native-modal-13.0.1.tgz"
-  "version" "13.0.1"
-=======
 react-native-modal@^13.0.1:
   version "13.0.1"
   resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-13.0.1.tgz#691f1e646abb96fa82c1788bf18a16d585da37cd"
   integrity sha512-UB+mjmUtf+miaG/sDhOikRfBOv0gJdBU2ZE1HtFWp6UixW9jCk/bhGdHUgmZljbPpp0RaO/6YiMmQSSK3kkMaw==
->>>>>>> 943d4a4876fca4227918c04520dd867cb8115c65
   dependencies:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
-<<<<<<< HEAD
-"react-native-pager-view@5.4.24":
-  "integrity" "sha512-dRMB7i3B+mu4NCeIN6gqbR/kC/rr2wzqO0gisXDdJwJr78G24sWoTNpLEDFo3G8TFHY9nTMutVl5CUvkN2dp6g=="
-  "resolved" "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-5.4.24.tgz"
-  "version" "5.4.24"
-=======
 react-native-pager-view@5.4.24:
   version "5.4.24"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.24.tgz#8626e757ddc55e41eca66d2f8a8a75aec54591ee"
   integrity sha512-dRMB7i3B+mu4NCeIN6gqbR/kC/rr2wzqO0gisXDdJwJr78G24sWoTNpLEDFo3G8TFHY9nTMutVl5CUvkN2dp6g==
->>>>>>> 943d4a4876fca4227918c04520dd867cb8115c65
 
 react-native-picker-select@^8.0.4:
   version "8.0.4"
@@ -7107,17 +7093,6 @@ react-native-picker-select@^8.0.4:
     "@react-native-picker/picker" "^1.8.3"
     lodash.isequal "^4.5.0"
 
-<<<<<<< HEAD
-"react-native-plotly@^6.0.0":
-  "integrity" "sha512-coFr3EXCNrH8a1xftL+0+KgI1Hn4qDrwJDZD3YbnRmq/zESA+XAYPfMionXZxGb9+uydUTx/yCY69C7g4qWAfQ=="
-  "resolved" "https://registry.npmjs.org/react-native-plotly/-/react-native-plotly-6.0.0.tgz"
-  "version" "6.0.0"
-
-"react-native-reanimated@~2.9.1":
-  "integrity" "sha512-309SIhDBwY4F1n6e5Mr5D1uPZm2ESIcmZsGXHUu8hpKX4oIOlZj2MilTk+kHhi05LjChoJkcpfkstotCJmPRPg=="
-  "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz"
-  "version" "2.9.1"
-=======
 react-native-plotly@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/react-native-plotly/-/react-native-plotly-6.0.0.tgz#a21d4c12b70f6ea15b2d08f6b1c09391c4d17083"
@@ -7132,7 +7107,6 @@ react-native-reanimated@~2.9.1:
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz#d9a932e312c13c05b4f919e43ebbf76d996e0bc1"
   integrity sha512-309SIhDBwY4F1n6e5Mr5D1uPZm2ESIcmZsGXHUu8hpKX4oIOlZj2MilTk+kHhi05LjChoJkcpfkstotCJmPRPg==
->>>>>>> 943d4a4876fca4227918c04520dd867cb8115c65
   dependencies:
     "@babel/plugin-proposal-export-namespace-from" "^7.17.12"
     "@babel/plugin-transform-object-assign" "^7.16.7"
@@ -7166,17 +7140,10 @@ react-native-screens@^3.18.2:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-<<<<<<< HEAD
-"react-native-shadow-2@^7.0.6":
-  "integrity" "sha512-kH0fKttPE67gIzTsnvmdJS0HAyb2utYAnUZguznmn6iNDRxRDD8RY1COsfW8YN1YuzYZgVtu60G394Az9bmuTg=="
-  "resolved" "https://registry.npmjs.org/react-native-shadow-2/-/react-native-shadow-2-7.0.6.tgz"
-  "version" "7.0.6"
-=======
 react-native-shadow-2@^7.0.6:
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/react-native-shadow-2/-/react-native-shadow-2-7.0.6.tgz#8fbdb975674b77f236c5fce6af3e0781af6a0ae1"
   integrity sha512-kH0fKttPE67gIzTsnvmdJS0HAyb2utYAnUZguznmn6iNDRxRDD8RY1COsfW8YN1YuzYZgVtu60G394Az9bmuTg==
->>>>>>> 943d4a4876fca4227918c04520dd867cb8115c65
   dependencies:
     colord "2.9.2"
 
@@ -7185,17 +7152,10 @@ react-native-star-rating-widget@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-star-rating-widget/-/react-native-star-rating-widget-1.3.0.tgz#8ed65d397159ef77449f205ba7f5d2d31a5dc65f"
   integrity sha512-99cg/9t2ZPk+8EjqvnItaU4xgvGQVcpCdvU0V3lr7qoeuMYJLWJfxeGZNBdoHfkBFIm03h9xy7w6ppwzzIbb9g==
 
-<<<<<<< HEAD
-"react-native-svg@^13.5.0":
-  "integrity" "sha512-JWou/k4zfXRY6TsVgM4i30D0z54McqQ64D5cAfOzX17ThZwFjOheN24owmbAs7Y+naD0Bk5j409kT/6FZEop4g=="
-  "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-13.5.0.tgz"
-  "version" "13.5.0"
-=======
 react-native-svg@^13.5.0:
   version "13.5.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.5.0.tgz#2b34f0ab84436b3c1e57109d62012a6c031e0596"
   integrity sha512-JWou/k4zfXRY6TsVgM4i30D0z54McqQ64D5cAfOzX17ThZwFjOheN24owmbAs7Y+naD0Bk5j409kT/6FZEop4g==
->>>>>>> 943d4a4876fca4227918c04520dd867cb8115c65
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"
@@ -7245,17 +7205,10 @@ react-native-ui-lib@^6.23.1:
     tinycolor2 "^1.4.2"
     url-parse "^1.2.0"
 
-<<<<<<< HEAD
-"react-native-webview@^11.23.1":
-  "integrity" "sha512-bmqsdg4RYOUYD37R9XTrQALm7eD62KbLNPRfgvpLGd1SjaurvAjjsLrLN4mt6yOtKOMKeZvlcAl3x6De6cCQsA=="
-  "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.23.1.tgz"
-  "version" "11.23.1"
-=======
 react-native-web@0.17.1:
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.17.1.tgz#90d473c89dd99b88bc9830b2a9fcdd2fc5f04902"
   integrity sha512-lUnn+2O8ynQ6/gJKylSxm7DLi2vHw6AujdDV1+LSa8Epe1bYFJNUcJTEhJf0jNYUFGOujzMtuG8Mkz3HdWTkag==
->>>>>>> 943d4a4876fca4227918c04520dd867cb8115c65
   dependencies:
     array-find-index "^1.0.2"
     create-react-class "^15.7.0"
@@ -7265,12 +7218,6 @@ react-native-web@0.17.1:
     normalize-css-color "^1.0.2"
     prop-types "^15.6.0"
 
-<<<<<<< HEAD
-"react-native@0.69.6":
-  "integrity" "sha512-wwXpqM+12kdEYdBZCJUb5SBu95CzgejrwFeYJ78RzHZV/Sj6DBRekbsHGrDDsY4R25QXALQxy4DQYQCObVvWjA=="
-  "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.69.6.tgz"
-  "version" "0.69.6"
-=======
 react-native-webview@^11.23.1:
   version "11.23.1"
   resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.23.1.tgz#6a4bf2620e491dd4fecf4e6dc079005117fae12c"
@@ -7283,7 +7230,6 @@ react-native@0.69.6:
   version "0.69.6"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.69.6.tgz#cdd1a5757d902b91b165c28fdda4e518ed6f683a"
   integrity sha512-wwXpqM+12kdEYdBZCJUb5SBu95CzgejrwFeYJ78RzHZV/Sj6DBRekbsHGrDDsY4R25QXALQxy4DQYQCObVvWjA==
->>>>>>> 943d4a4876fca4227918c04520dd867cb8115c65
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^8.0.4"
