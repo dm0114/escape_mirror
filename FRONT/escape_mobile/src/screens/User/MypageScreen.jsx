@@ -272,7 +272,7 @@ const CatText = styled.Text`
   color: white;
   font-family: "SUIT-Bold";
   font-size:${({ theme }) => theme.fontSizes.body};
- line-height:  ${({ theme }) => theme.fontHeight.body};
+  line-height:  ${({ theme }) => theme.fontHeight.title2};
  `
 const CatTxtView = styled.View`
   justify-content: center;

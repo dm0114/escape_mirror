@@ -208,6 +208,13 @@ export default function ReviewCreateScreen() {
           margin={5}
         />
       </Box>
+      
+      <EnrollView>
+        <EnrollBtn>
+          <EnrollTxt>등록</EnrollTxt>
+        </EnrollBtn>
+      </EnrollView>
+
 
     </Container>
   )
@@ -270,7 +277,7 @@ const EvalView = styled.View`
 const EvalTxtView = styled.View`
   flex-direction: row;
   margin: 10px 5px 5px 0px;
-  justify-content: space-evenly;
+  justify-content: space-around;
 `
 
 const EvalTxt = styled.Text`
@@ -291,6 +298,21 @@ const SelectBox = styled.View`
 `
 
 const EvalDiff = styled.Text`
+`
+const EnrollView = styled.View`
+  align-items: flex-end;
+`
+const EnrollBtn = styled.TouchableOpacity`
+  background-color: tomato;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+`
+const EnrollTxt = styled.Text`
+  color: white;
+  font-family: "SUIT-Medium";
+  font-size:  ${({ theme }) => theme.fontSizes.body};
+  padding: 10px;
 `
 const styles = StyleSheet.create({
   tinyImage: {
