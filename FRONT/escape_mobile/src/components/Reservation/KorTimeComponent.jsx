@@ -43,46 +43,48 @@ export const KorTime = ({themeId}) => {
   };
   // useEffect(() => {}, [dayData]);
   return (
-    <>
-      <Title>{`${dayData[0]} ${dayData[1]}`}</Title>
-      <RowContainer>
-        {Days.map((item, i) => {
-          return (
-            <DayButton
-              key={i}
-              activeOpacity={1}
-              onPress={() => {
-                setTmp(i, item);
-              }}
-            >
-              {toggleData[i] ? (
-                <FocusedDayButton>
-                  <FocusSubTitle>{item[1]}</FocusSubTitle>
-                </FocusedDayButton>
-              ) : (
-                <SubTitle>{item[1]}</SubTitle>
-              )}
-              {toggleData[i] ? (
-                <FocusBody>{item[2]}</FocusBody>
-              ) : (
-                <Body>{item[2]}</Body>
-              )}
-            </DayButton>
-          );
-        })}
-      </RowContainer>
+    <View style={{flex: 3}}>
+      <View style={{flex: 2, alignItems:"center"}}>
+        <Title>{`${dayData[0]} ${dayData[1]}`}</Title>
+        <RowContainer>
+          {Days.map((item, i) => {
+            return (
+              <DayButton
+                key={i}
+                activeOpacity={1}
+                onPress={() => {
+                  setTmp(i, item);
+                }}
+              >
+                {toggleData[i] ? (
+                  <FocusedDayButton>
+                    <FocusSubTitle>{item[1]}</FocusSubTitle>
+                  </FocusedDayButton>
+                ) : (
+                  <SubTitle>{item[1]}</SubTitle>
+                )}
+                {toggleData[i] ? (
+                  <FocusBody>{item[2]}</FocusBody>
+                ) : (
+                  <Body>{item[2]}</Body>
+                )}
+              </DayButton>
+            );
+          })}
+        </RowContainer>
+      </View>
       {/* 
         시간 Chip
       */}
       {dayData[0] != "날짜를" ? <ReservationChips date={dayData[0]} themeId={themeId}/> : null}
-    </>
+    </View>
   );
 };
 
 const DayButton = styled.TouchableOpacity`
   margin: 10px 5px 20px 5px;
   width: 40px;
-  height: 80px;
+  height: 60px;
   align-items: center;
 `;
 

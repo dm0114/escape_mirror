@@ -7,6 +7,7 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Carousel from "react-native-reanimated-carousel";
 import Toggle from "react-native-toggle-element";
 
+import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
@@ -17,11 +18,11 @@ import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
 import ThemeComponent from "../components/ThemeComponent";
-import { useNavigation } from "@react-navigation/native";
+import { View } from "native-base";
 
 
 
-export default function SearchScreen() {
+export default function CafeSearchScreen({ route }) {
   /**
    * 레이아웃
    */
@@ -32,11 +33,16 @@ export default function SearchScreen() {
   /**
    * API
    */
+  const navigation = useNavigation();
+  const { queryParam } = route.params;
   const [query, setQuery] = useState("");
+  useEffect(()=> {
+    setQuery(queryParam)
+  }, [])
+  
   const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch,
-    { enabled: false }
   );
 
   /**
@@ -45,24 +51,16 @@ export default function SearchScreen() {
   const [toggleValue, setToggleValue] = useState(false);
   useEffect(() => {
   }, [toggleValue])
-
   /**
    * 검색
    */
-  const navigation = useNavigation();
   const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
     if (query === "") {
       return;
     }
-
-    if (toggleValue) {
-      return navigation.navigate("CafeSearchScreen", { queryParam: query });
-    }
-    
-    else {
-      return navigation.navigate("ThemeSearchScreen", { queryParam: query });
-    }
+    if (toggleValue) refetch();
+    else navigation.navigate("CafeSearchScreen", { queryParam: query });
   };
 
   /**
@@ -73,7 +71,6 @@ export default function SearchScreen() {
       if ( data.error || !data || (!data.storeList?.length && !data.themeList?.length) ) {
         return ( <ErrorText>검색된 정보가 없어요 😥</ErrorText>)
       }
-      if (toggleValue) {
         return (
           <CafeListScroll
             data={data.storeList}
@@ -94,52 +91,11 @@ export default function SearchScreen() {
             )}
           />
         )
-      } else {
-        return (
-          <Carousel
-            loop={false}
-            width={Width}
-            height={Height}
-            autoPlay={false}
-            data={data.themelist}
-            mode={'parallax'}
-            modeConfig={
-              {
-                parallaxScrollingOffset: 150,
-                parallaxScrollingScale: 1,
-                parallaxAdjacentItemScale: 0.9,
-              }
-            }
-            vertical={false}
-            scrollAnimationDuration={1000}
-            renderItem={({item}) => (
-                <ThemeComponent
-                  themeId={item.themeId}
-                  themeName={item.themeName}
-                  storeName={item.storeName}
-                  themeImg={item.themeImg}
-                  likeCount={item.likeCount}
-                  star={item.star}
-                />
-            )}
-          />
-        )
-      }
     } else if (isLoading && isFetching) return <LoadingScreen />;
-    // else {
-    //   return (
-    //     <>
-    //       <SearchView flex={1}>
-    //         <SubText>지금 주변에서 인기 있는 곳</SubText>
-    //         {/* 이미지 및 슬라이더 추가 */}
-    //       </SearchView>
-    //     </>
-    //   );
-    // }
   };
 
   return (
-    <ImageBackground source={{uri:testUri}} style={{flex:1}}>
+    <View style={{backgroundColor: '#212121'}}>
       <TextContainer>
         <RowContainer>
           <MainText>
@@ -149,17 +105,16 @@ export default function SearchScreen() {
           </MainText>
           <Toggle
             trackBarStyle={{
-              backgroundColor: theme.colors.point,              
+              backgroundColor: theme.colors.point,
+              
             }}
             thumbButton={{
               activeBackgroundColor: '#fff',
-              inActiveBackgroundColor: '#fff',
-              width: 30,
-              height: 30,
+              inActiveBackgroundColor: '#fff'
             }}
             trackBar={{
-              width: 60,
-              height: 20,
+              borderWidth: 4,
+              width: 80,
               borderActiveColor: theme.colors.point,
               borderInActiveColor: theme.colors.point,
             }}
@@ -175,10 +130,10 @@ export default function SearchScreen() {
         autoComplete ='off'
         caretHidden={true}
       />
-      {/* <SerachResultView>
+      <SerachResultView>
         <SearchResult />
-      </SerachResultView> */}
-    </ImageBackground>
+      </SerachResultView>
+    </View>
   );
 }
 

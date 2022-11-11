@@ -6,6 +6,8 @@ import Stack from './Stack';
 import SearchScreen from '../screens/SearchScreen';
 import ThemeDetailScreen from '../screens/ThemeDetailScreen';
 import CafeDetailScreen from '../screens/CafeDetailScreen';
+import ThemeSearchScreen from '../screens/ThemeSearchScreen';
+import CafeSearchScreen from '../screens/CafeSearchScreen';
 
 import ReservationScreen from '../screens/ReservationScreen';
 import ReservationDetailScreen from '../screens/ReservationDetailScreen';
@@ -45,6 +47,9 @@ const Root = () =>
       <Nav.Screen name="PostReservationScreen" component={PostReservationScreen} />
       <Nav.Screen name="ReservationDetailScreen" component={ReservationDetailScreen} />
       <Nav.Screen name="ReservationTransfer" component={ReservationTransfer} />
+      
+      <Nav.Screen name="ThemeSearchScreen" component={ThemeSearchScreen} />
+      <Nav.Screen name="CafeSearchScreen" component={CafeSearchScreen} />
       <Nav.Screen name="ThemeDetailScreen" component={ThemeDetailScreen} />
       <Nav.Screen name="CafeDetailScreen" component={CafeDetailScreen} />
       <Nav.Screen name="RegionBook" component={RegionBook} />
