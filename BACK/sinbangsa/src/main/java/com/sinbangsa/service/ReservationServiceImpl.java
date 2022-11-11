@@ -10,6 +10,7 @@ import com.sinbangsa.data.repository.ReservationRepository;
 import com.sinbangsa.data.repository.ThemeRepository;
 import com.sinbangsa.data.repository.ThemeTimeRepository;
 import com.sinbangsa.data.repository.UserRepository;
+import com.sinbangsa.exception.ThemeTimeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,13 +40,17 @@ public class ReservationServiceImpl implements ReservationService {
 
         try {
 
+            ThemeTime reservationTime = themeTimeRepository.findById(reservationDto.getThemeTimeId()).orElse(null);
+            if (reservationTime == null) {
+                throw new ThemeTimeNotFoundException();
+            }
             // 기존 예약 내역에 이미 데이터가 있는지 확인
             if (!reservationRepository.existsByThemeTimeIdAndDate(
                     reservationDto.getThemeTimeId(), reservationDto.getReservationDate())) {
                 Reservation.builder()
                         .reservationUser(userRepository.findById(1))
                         .date(reservationDto.getReservationDate())
-                        .themeTime(themeTimeRepository.findById(reservationDto.getThemeTimeId()))
+                        .themeTime(reservationTime)
                         .build();
 
             } else {
