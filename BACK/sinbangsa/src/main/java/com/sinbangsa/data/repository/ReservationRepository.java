@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -18,4 +19,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByThemeTimeIdAndDate(long themeId, String date);
 
     List<Reservation> findAllByReservationUser(User user);
+
+    Optional<Reservation> findByDateAndThemeTime(Date date, ThemeTime themeTime);
 }
