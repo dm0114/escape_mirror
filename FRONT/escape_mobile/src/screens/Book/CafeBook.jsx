@@ -3,50 +3,56 @@ import {View, Text, FlatList, ImageBackground, Pressable,  StyleSheet, Dimension
 import { Modal } from 'native-base';
 import styled from 'styled-components/native';
 import {ProgressBar} from 'react-native-ui-lib';
+import { getCafeThemeList } from '../../apis/BookApi';
+import {useQuery} from '@tanstack/react-query';
 
-const data = [
-    {
-    'themeId':1,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':0
-    },
-    {
-    'themeId':2,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':2
-    },
-    {
-    'themeId':3,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':1
-    },
-    {
-    'themeId':4,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':2
-    },
-    {
-    'themeId':5,
-    'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'themeName':'새벽 베이커리',
-    'isClear':1
-    }
-]
+// const data = [
+//     {
+//     'themeId':1,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':0
+//     },
+//     {
+//     'themeId':2,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':2
+//     },
+//     {
+//     'themeId':3,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':1
+//     },
+//     {
+//     'themeId':4,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':2
+//     },
+//     {
+//     'themeId':5,
+//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'themeName':'새벽 베이커리',
+//     'isClear':1
+//     }
+// ]
 
 const testUnity = 'https://user-images.githubusercontent.com/97578425/199651092-ce04c889-71c8-431f-bfae-1732e4c72f8c.png'
 
 export default function CafeBook({navigation, route}){
-    const {storeId, storeImg, storeName} = route.params;
+    const {storeId, storeImg, storeName, clearCnt, totalTheme} = route.params;
+    const progressRate = (clearCnt/totalTheme)*100
     const [isModal, setIsModal] = useState(false);
     const opacity_list = [0.8, 0.5, 0];
-    console.log(isModal);
+    const {data} = useQuery(
+        ['CafeTheme', storeId],
+        getCafeThemeList
+        )
     return(
-        <ImageBackground source={{uri:testUnity}} style={{flex:1}}>
-        <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20}}>
+        <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/book_room01.gif'}} style={{flex:1}}>
+        <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20, marginTop:10}}>
         <Modal isOpen={isModal} onClose={()=>setIsModal(false)}>
             <Modal.Content>
                 <Modal.CloseButton />
@@ -62,14 +68,15 @@ export default function CafeBook({navigation, route}){
                 storeId:storeId
             })
             }}>
-            <CafeImg source={{uri:storeImg}} resizeMode="cover" imageStyle={{borderRadius:10}} />
+            <CafeImg source={ storeImg ? {uri:
+                        `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${storeImg}`} : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} resizeMode="cover" imageStyle={{borderRadius:10}} />
             <View style={{flexDirection:'column', marginLeft:20, flex:1, marginTop:'auto', marginBottom:'auto'}}>
                 <CafeName>{storeName}</CafeName>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                     <ProgressTitle>진행도</ProgressTitle>
-                    <ProgressTitle style={{marginRight:10}}>10/15</ProgressTitle>
+                    <ProgressTitle style={{marginRight:10}}>{clearCnt}/{totalTheme}</ProgressTitle>
                 </View>
-                <ProgressBar progress={55} progressColor={'red'} style={{height:20}} />
+                <ProgressBar progress={progressRate} progressColor={'red'} style={{height:20}} />
             </View>
         </CafeNavBtn>
         <View style={{marginTop:10}}>
@@ -83,12 +90,9 @@ export default function CafeBook({navigation, route}){
                 <TouchableOpacity style={[{width:117, position:'relative'}, 
                     obj.index % 3 == 2 ? {marginRight:0} : {marginRight:20}]}
                 onPress={()=>{
-                    if(obj.item.isClear < 2){navigation.navigate('ThemeDetailScreen', {
+                    navigation.navigate('ThemeDetailScreen', {
                     storeId:obj.item.themeId
-                    })}else{
-                        setIsModal(true)
-                    }
-                    }}
+                    })}}
                 >
                     <View style={{backgroundColor:'black', height:180, width:117, position:'absolute', zIndex:3, elevation:3, borderRadius:10, opacity:opacity_list[obj.item.isClear]}} />
                     <ThemeView
@@ -131,7 +135,7 @@ const CafeName = styled.Text`
 `
 
 const ProgressTitle = styled.Text`
-    font-size: ${({theme}) => theme.fontSizes.body};
+    font-size: ${({theme}) => theme.fontSizes.title3};
     font-family: 'SUIT-SemiBold';
     color:white;
     margin-bottom: 10px;
