@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import StarRating from 'react-native-star-rating-widget';
 
 import {
   View,
@@ -50,6 +51,7 @@ import ReservationBotttomModal from "../components/Reservation/ReservationBottto
 // }
 
 function ThemeDetailScreen({ navigation, route }) {
+  const [rating, setRating] = useState(0);
   /**
    * API
    */
@@ -250,6 +252,10 @@ function ThemeDetailScreen({ navigation, route }) {
         
         <View style={{marginTop: Height*2/4}}>
           <MainTitle>{data.themeName}</MainTitle>
+          <StarRating
+            rating={rating}
+            onChange={data.star}
+          />
           <InfoTextWrapper>
             <RowContainer>
               <SubTitle>{data.leadTime}분 • </SubTitle>

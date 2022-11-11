@@ -18,25 +18,26 @@ export default function MainScreen() {
         reservationId: 1,
         themeName: "테마이름",
         storeName: "카페이름",
-        date: "22-02-08",
-        reserveTime: "16:20",
+        date: "2022-11-11",
+        reserveTime: "17:20",
       },
       {
         reservationId: 2,
         themeName: "테마이름",
         storeName: "카페이름",
-        date: "22-02-08",
-        reserveTime: "16:20",
+        date: "2022-11-14",
+        reserveTime: "12:20",
       },
       {
         reservationId: 3,
         themeName: "테마이름",
         storeName: "카페이름",
-        date: "22-02-08",
+        date: "2022-12-08",
         reserveTime: "16:20",
       },
     ],
   };
+
 
   return (
     <ImageBackground  source={{uri:testUri}} style={{flex:1}}>

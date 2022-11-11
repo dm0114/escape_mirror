@@ -48,10 +48,6 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
     searchApi.getCafeDetail
   );
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   /**
    * 애니메이션 추가
    */
