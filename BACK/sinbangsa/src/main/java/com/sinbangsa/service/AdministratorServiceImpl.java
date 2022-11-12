@@ -12,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -118,7 +120,6 @@ public class AdministratorServiceImpl implements AdministratorService {
         LOGGER.info("[AdministratorService] getThemeList 호출");
         Store store = storeRepository.findByStoreId(storeId).orElse(null);
 
-
         if (adminId != store.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
@@ -189,9 +190,6 @@ public class AdministratorServiceImpl implements AdministratorService {
             throw new StoreNotFoundException();
         }
 
-//        if (adminId != storeRepository.findByStoreId(themeRegisterDto.getStoreId()).getStoreAdmin().getId()) {
-//            throw new AccessDeniedException();
-//        }
         if (adminId != store.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
