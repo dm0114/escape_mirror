@@ -1,6 +1,7 @@
 package com.sinbangsa.data.repository;
 
 import com.sinbangsa.data.dto.MainpageDto;
+import com.sinbangsa.data.entity.Admin;
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,7 +22,10 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findByStoreId(long storeId);
 
+    Optional<Store> getByStoreId(long storeId);
+
     @Query("select max(storeId)+1 from Store ")
     Long getNewStoreId();
+
 
 }

@@ -43,9 +43,7 @@ public class MainpageCotroller {
     @GetMapping("/test")
     @ApiOperation(value = "테스트")
     public void test(HttpServletRequest httpServletRequest){
-        System.out.println("test 시작");
         String apptoken = jwtTokenProvider.resolveToken(httpServletRequest);
-        System.out.println(apptoken);
         Long userId = jwtTokenProvider.getUserId(apptoken);
 
         System.out.println(userId);
@@ -71,10 +69,13 @@ public class MainpageCotroller {
         LOGGER.info("[MainpageController] getSearchResult 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        MainpageDto searchResult = mainpageService.getSearchResult(searchWord);
-        LOGGER.info("[MainpageController] getSearchResult 반환 성공");
-
-        return new ResponseEntity<>(searchResult, headers, HttpStatus.OK);
+        try {
+            MainpageDto searchResult = mainpageService.getSearchResult(searchWord);
+            return new ResponseEntity<>(searchResult, headers, HttpStatus.OK);
+        }catch (Exception e) {
+            MainpageDto mainpageDto = new MainpageDto();
+            return new ResponseEntity<>(mainpageDto, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

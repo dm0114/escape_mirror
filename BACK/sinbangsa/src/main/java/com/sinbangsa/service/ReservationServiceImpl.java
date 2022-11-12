@@ -7,10 +7,10 @@ import com.sinbangsa.data.entity.Reservation;
 import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.ReservationRepository;
-import com.sinbangsa.data.repository.ThemeRepository;
 import com.sinbangsa.data.repository.ThemeTimeRepository;
 import com.sinbangsa.data.repository.UserRepository;
 import com.sinbangsa.utils.JwtTokenProvider;
+import com.sinbangsa.exception.ThemeTimeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,11 +45,17 @@ public class ReservationServiceImpl implements ReservationService {
         LOGGER.info("[ReservationServiceImpl] createReservation 호출");
 
         try {
+
             String token = jwtTokenProvider.resolveToken(httpServletRequest);
             Long userId = jwtTokenProvider.getUserId(token);
             User userRepo = userRepository.findById(userId).orElse(null);
             if (userRepo == null) {
                 throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+
+            ThemeTime reservationTime = themeTimeRepository.findById(reservationDto.getThemeTimeId()).orElse(null);
+            if (reservationTime == null) {
+                throw new ThemeTimeNotFoundException();
             }
             // 기존 예약 내역에 이미 데이터가 있는지 확인
             if (!reservationRepository.existsByThemeTimeIdAndDate(
@@ -60,7 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
                 Reservation.builder()
                         .reservationUser(userRepo)
                         .date(reservationDto.getReservationDate())
-                        .themeTime(themeTimeRepository.findById(reservationDto.getThemeTimeId()))
+                        .themeTime(reservationTime)
                         .build();
                 return true;
             } else {

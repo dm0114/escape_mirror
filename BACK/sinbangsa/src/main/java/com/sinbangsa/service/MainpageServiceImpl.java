@@ -112,7 +112,7 @@ public class MainpageServiceImpl implements MainpageService{
         List<PreLoadingDto.ReservationDto> reservationList = new ArrayList<>();
 
         // 토큰 전까지 임시 user
-        User user = userRepository.findById(1);
+        User user = userRepository.findById(1).orElse(null);
 
         // 해당 유저의 앞으로 예약
         List<Reservation> upcommingReservation = reservationRepository.findAllByReservationUser(user);
