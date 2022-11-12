@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 
 @RestController
@@ -36,21 +37,17 @@ public class ReviewController {
 
     @PostMapping
     @ApiOperation(value = "리뷰 작성")
-    public ResponseEntity<String> createReview(@RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<String> createReview(@RequestBody ReviewDto reviewDto, HttpServletRequest httpServletRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
-        boolean result = reviewService.createReview(reviewDto);
-        if (!result) {
-
-
+        try {
+            boolean result = reviewService.createReview(reviewDto, httpServletRequest);
+            return new ResponseEntity<>("리뷰 작성 성공", headers, HttpStatus.CREATED);
+        } catch (Exception e) {
             return new ResponseEntity<>("리뷰 작성 실패", headers, HttpStatus.BAD_REQUEST);
         }
 
-
-        return new ResponseEntity<>("리뷰 작성 성공", headers, HttpStatus.CREATED);
     }
-
 
 }
 

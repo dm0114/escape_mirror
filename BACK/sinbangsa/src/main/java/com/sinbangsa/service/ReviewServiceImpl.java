@@ -3,17 +3,18 @@ package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.ReviewDto;
 import com.sinbangsa.data.entity.Book;
+import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.ThemeReview;
-import com.sinbangsa.data.repository.BookRepository;
-import com.sinbangsa.data.repository.ReviewRepository;
-import com.sinbangsa.data.repository.ThemeRepository;
-import com.sinbangsa.data.repository.UserRepository;
+import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.repository.*;
+import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -31,16 +32,29 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final BookRepository bookRepository;
 
-    @Transactional
-    public boolean createReview(ReviewDto reviewDto) {
+    private final ThemeReviewRepository themeReviewRepository;
 
-        ThemeReview themeReview = new ThemeReview();
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @Transactional
+    public boolean createReview(ReviewDto reviewDto, HttpServletRequest httpServletRequest) {
 
         try {
-            Book bookRepo = bookRepository.findById(reviewDto.getBookId());
-            ThemeReview.builder()
-                    .reviewTheme(themeRepository.findById(reviewDto.getThemeId()))
-                    .reviewUser(userRepository.findById(1)) // 유저 정보 변경 필요
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(token);
+            User user = userRepository.findById(userId).orElse(null);
+
+            Book bookRepo = bookRepository.findById(reviewDto.getBookId()).orElse(null);
+            if (bookRepo == null) {
+                throw new NullPointerException("도감 정보가 잘못되었습니다.");
+            }
+            Theme themeRepo = themeRepository.findById(reviewDto.getThemeId()).orElse(null);
+            if (themeRepo == null) {
+                throw new NullPointerException("테마 정보가 잘못되었습니다.");
+            }
+            ThemeReview themeReview = ThemeReview.builder()
+                    .reviewTheme(themeRepo)
+                    .reviewUser(user)
                     .content(reviewDto.getContent())
                     .star(reviewDto.getStar())
                     .diff(reviewDto.getFeelDifficulty())
@@ -54,16 +68,13 @@ public class ReviewServiceImpl implements ReviewService {
                     .clearTime(bookRepo.getClearTime())
                     .clearDate(bookRepo.getDoneDate())
                     .build();
-
-
-            // 관리자 테마 클리어 승인 후 usedHint, clearTime, clear Date,
-            // jwt 토큰 완료 후 reviewUser 넣어야함
+            themeReviewRepository.save(themeReview);
+            return true;
 
         } catch (Exception e) {
-            return false;
+            throw e;
         }
 
-        return true;
     }
 
 }

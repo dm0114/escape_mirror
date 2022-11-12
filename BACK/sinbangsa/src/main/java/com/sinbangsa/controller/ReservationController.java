@@ -16,8 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,19 +40,18 @@ public class ReservationController {
 
     @PostMapping
     @ApiOperation(value = "예약하기")
-    public ResponseEntity<Map<String,Object>> createReservation(@RequestBody ReservationDto reservationDto) {
-        HashMap<String, Object> resultMap = new HashMap<>();
-
-
-        boolean result = reservationService.createReservation(reservationDto);
-        if (!result) {
-            resultMap.put("message", FAIL);
-
-            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> createReservation(@RequestBody ReservationDto reservationDto, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[]");
+        try {
+            boolean result = reservationService.createReservation(reservationDto, httpServletRequest);
+            if (!result) {
+                return new ResponseEntity<String>("같은 시간에 예약이 이미 존재합니다.", HttpStatus.ALREADY_REPORTED);
+            }
+            return new ResponseEntity<String>("예약되었습니다.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
-        resultMap.put("message", SUCCESS);
 
-        return new ResponseEntity<>(resultMap, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -59,8 +60,14 @@ public class ReservationController {
         LOGGER.info("[ReservationController] getThemeTime 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        List<ThemeTimeDto> result = reservationService.getThemeTime(themeId);
-        return new ResponseEntity<List<ThemeTimeDto>>(result, headers, HttpStatus.OK);
+        try {
+            List<ThemeTimeDto> result = reservationService.getThemeTime(themeId);
+            return new ResponseEntity<List<ThemeTimeDto>>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            List<ThemeTimeDto> result = new ArrayList<>();
+            return new ResponseEntity<List<ThemeTimeDto>>(result, headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/date")
@@ -69,9 +76,16 @@ public class ReservationController {
         LOGGER.info("[ReservationController] canReserve 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        List<Long> result = reservationService.canReserve(themeId,date);
-        LOGGER.info("[ReservationController] canReserveList 반환 성공");
-        return new ResponseEntity<List<Long>>(result, headers, HttpStatus.OK);
+        try {
+            List<Long> result = reservationService.canReserve(themeId, date);
+            LOGGER.info("[ReservationController] canReserveList 반환 성공");
+            return new ResponseEntity<List<Long>>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            List<Long> result = reservationService.canReserve(themeId,date);
+            LOGGER.info("[ReservationController] canReserveList 반환 실패");
+            return new ResponseEntity<List<Long>>(result, headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/searchuser")
@@ -80,8 +94,14 @@ public class ReservationController {
         LOGGER.info("[ReservationController] validateNickname 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        Long result = reservationService.validateNickname(nickname);
-        LOGGER.info("[ReservationController] validateNickname 반환 성공");
-        return new ResponseEntity<Long>(result, headers, HttpStatus.OK);
+        try {
+            Long result = reservationService.validateNickname(nickname);
+            LOGGER.info("[ReservationController] validateNickname 반환 성공");
+            return new ResponseEntity<Long>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info("[ReservationController] validateNickname 반환 실패");
+            return new ResponseEntity(headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

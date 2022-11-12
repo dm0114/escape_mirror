@@ -32,11 +32,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "where book.bookTheme = :theme " +
             "and book.clear = 1 " +
             "order by book.clearTime asc ")
-    Optional<List<Book>> getAllBook(Theme theme);
+    List<Book> getAllBook(Theme theme);
 
     List<Book> findAllByBookUser(User user);
 
-    Book findById(long bookId);
+    Optional<Book> findById(long bookId);
 
 
 

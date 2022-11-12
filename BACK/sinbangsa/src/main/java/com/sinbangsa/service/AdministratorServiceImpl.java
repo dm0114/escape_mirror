@@ -88,6 +88,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         LOGGER.info("[AdministratorService] updateStoreDetail 호출");
 
         Store updateStore = storeRepository.findByStoreId(adminStoreDto.getStoreId()).orElse(null);
+
         if(updateStore == null) {
             throw new StoreNotFoundException();
         }
@@ -201,6 +202,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Long registerTheme(ThemeRegisterDto themeRegister){
         LOGGER.info("[AdministratorService] registerTheme 호출");
         Store store = storeRepository.findByStoreId(themeRegister.getStoreId()).orElse(null);
+
         if(store == null) {
             throw new StoreNotFoundException();
         }
@@ -242,9 +244,13 @@ public class AdministratorServiceImpl implements AdministratorService {
             int cnt = 1;
             for (String themeTime : themeTimes) {
                 long newId = createdThemeId*100+cnt;
+                Theme themeRepo = themeRepository.findById(createdThemeId).orElse(null);
+                if (themeRepo == null) {
+                    throw new ThemeNotFoundException();
+                }
                 ThemeTime createThemeTime = ThemeTime.builder()
                         .time(themeTime)
-                        .theme(themeRepository.findById(createdThemeId))
+                        .theme(themeRepo)
                         .id(newId)
                         .build();
 
