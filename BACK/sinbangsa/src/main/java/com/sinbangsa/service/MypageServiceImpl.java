@@ -32,32 +32,41 @@ public class MypageServiceImpl implements MypageService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public MypageInfoDto getMyPageInfo() {
+    public MypageInfoDto getMyPageInfo(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MyPageServiceImpl] getMyPageInfo 호출");
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(token);
 
         MypageInfoDto mypageInfoDto = new MypageInfoDto();
+        try {
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+            mypageInfoDto.setNickname(userRepo.getNickname());
+            mypageInfoDto.setGrade(userRepo.getGrade());
+            mypageInfoDto.setProfileImg(userRepo.getProfile());
+            return mypageInfoDto;
+        } catch (Exception e) {
+            throw e;
+        }
 
-        //임시
-        long userId = (long) 1;
-        User userRepo = userRepository.findById(userId);
-
-        mypageInfoDto.setNickname(userRepo.getNickname());
-        mypageInfoDto.setGrade(userRepo.getGrade());
-        mypageInfoDto.setProfileImg(userRepo.getProfile());
-
-        return mypageInfoDto;
     }
 
 
-    public List<MypageLikeDto> getLikes() {
+    public List<MypageLikeDto> getLikes(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageService] getLikes 호출");
         List<MypageLikeDto> likes = new ArrayList<>();
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(token);
 
         try {
-            // 임시
-            User user = userRepository.findById((long) 1);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
 
-            List<UserThemeRelation> userThemeRelations = userThemeRelationRepository.findAllByThemeRelationUser(user).orElse(null);
+            List<UserThemeRelation> userThemeRelations = userThemeRelationRepository.findAllByThemeRelationUser(userRepo);
             for (UserThemeRelation userThemeRelation : userThemeRelations) {
                 MypageLikeDto mypageLikeDto = new MypageLikeDto();
                 Theme theme = userThemeRelation.getUserRelationTheme();
@@ -67,23 +76,26 @@ public class MypageServiceImpl implements MypageService {
                 mypageLikeDto.setThemeImg(theme.getPoster());
                 likes.add(mypageLikeDto);
             }
-
-
+            return likes;
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw e;
         }
 
-        return likes;
     }
 
-    public List<MypageReviewDto> getReviews() {
+    public List<MypageReviewDto> getReviews(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageServiceImpl] getReviews 호출");
         List<MypageReviewDto> reviews = new ArrayList<>();
 
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(token);
+
         try {
-            //임시
-            User user = userRepository.findById((long) 1);
-            List<ThemeReview> themeReviewsRepo = themeReviewRepository.findAllByReviewUser(user).orElse(new ArrayList<>());
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+            List<ThemeReview> themeReviewsRepo = themeReviewRepository.findAllByReviewUser(userRepo);
             for (ThemeReview themeReviewRepo : themeReviewsRepo) {
                 MypageReviewDto mypageReviewDto = new MypageReviewDto();
                 mypageReviewDto.setReviewId(themeReviewRepo.getId());
@@ -98,23 +110,28 @@ public class MypageServiceImpl implements MypageService {
                 mypageReviewDto.setReviewImg(themeReviewRepo.getImageUrl());
                 reviews.add(mypageReviewDto);
             }
+            return reviews;
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw e;
         }
 
-        return reviews;
+
     }
 
 
-    public MypageMyRoomDto getMypageMyRooms() {
+    public MypageMyRoomDto getMypageMyRooms(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageServiceImpl] getMypageMyRooms 호출");
         MypageMyRoomDto mypageMyRoomDto = new MypageMyRoomDto();
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(token);
 
         try {
-            // 임시
-            User user = userRepository.findById((long) 1);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
             List<MypageMyRoomDto.ReservationDto> reservationsDto = new ArrayList<>();
-            List<Reservation> reservationsRepo = reservationRepository.findAllByReservationUser(user);
+            List<Reservation> reservationsRepo = reservationRepository.findAllByReservationUser(userRepo);
             for (Reservation reservationRepo : reservationsRepo) {
                 MypageMyRoomDto.ReservationDto reservationDto = new MypageMyRoomDto.ReservationDto();
                 reservationDto.setReservationId(reservationRepo.getReservationId());
@@ -129,7 +146,7 @@ public class MypageServiceImpl implements MypageService {
             mypageMyRoomDto.setReservations(reservationsDto);
 
             List<MypageMyRoomDto.PlayedRoomDto> playedRoomsDto = new ArrayList<>();
-            List<Book> booksRepo = bookRepository.findAllByBookUser(user);
+            List<Book> booksRepo = bookRepository.findAllByBookUser(userRepo);
             for (Book bookRepo : booksRepo) {
                 MypageMyRoomDto.PlayedRoomDto playedRoomDto = new MypageMyRoomDto.PlayedRoomDto();
                 playedRoomDto.setBookId(bookRepo.getId());
@@ -143,22 +160,29 @@ public class MypageServiceImpl implements MypageService {
                 playedRoomsDto.add(playedRoomDto);
             }
             mypageMyRoomDto.setBooks(playedRoomsDto);
-
+            return mypageMyRoomDto;
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw e;
         }
-        return mypageMyRoomDto;
+
     }
 
     public void updateUserInfo(UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageServiceImpl] updateUserInfo 호출");
         try {
-
-            User userRepo = userRepository.findById((long) 1);
-            userRepo.update(updateUserInfoRequestDto.getNickname(),updateUserInfoRequestDto.getProfileImg());
+            String apptoken = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(apptoken);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+            if (updateUserInfoRequestDto.getUserId() == userId) {
+                userRepo.update(updateUserInfoRequestDto.getNickname(), updateUserInfoRequestDto.getProfileImg());
+            } else {
+                throw new Exception("유저 정보 불일치");
+            }
 
         } catch (Exception e) {
-            throw new RuntimeException();
         }
     }
 

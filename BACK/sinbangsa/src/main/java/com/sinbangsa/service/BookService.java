@@ -6,21 +6,22 @@ import com.sinbangsa.data.dto.StoreDto;
 import com.sinbangsa.data.dto.ThemeDetailInfoDto;
 import com.sinbangsa.data.dto.ThemeForThemeListDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface BookService {
 
-    List<StoreDto> getStoreList(String region);
+    List<StoreDto> getStoreList(String region, HttpServletRequest httpServletRequest);
 
-    StoreDetailDto getStoreDetail(long storeId);
+    StoreDetailDto getStoreDetail(long storeId, HttpServletRequest httpServletRequest);
 
     ThemeDetailInfoDto getThemeDetail(long themeId);
 
-    List<ThemeForThemeListDto> getThemeList(long storeId);
+    List<ThemeForThemeListDto> getThemeList(long storeId, HttpServletRequest httpServletRequest);
 
-    Boolean themeLike(long themeId);
+    Boolean themeLike(long themeId, HttpServletRequest httpServletRequest);
 
-    Boolean themeLikeCancel(long themeId);
+    Boolean themeLikeCancel(long themeId, HttpServletRequest httpServletRequest);
 
 
 }

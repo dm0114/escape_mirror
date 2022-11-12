@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
@@ -18,7 +19,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findAllByRegionContaining(String region);
 
-    Store findByStoreId(long storeId);
+    Optional<Store> findByStoreId(long storeId);
 
     @Query("select max(storeId)+1 from Store ")
     Long getNewStoreId();
