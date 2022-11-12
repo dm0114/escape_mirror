@@ -104,7 +104,7 @@ public class JwtTokenProvider {
     public Long getUserId(String Token){
         Long info = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(Token).getBody().get("userId",Long.class);
         System.out.println(info);
-        return null;
+        return info;
     }
 
     public String resolveToken(HttpServletRequest request) {

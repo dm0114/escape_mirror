@@ -40,9 +40,6 @@ public class BookServiceImpl implements BookService {
         LOGGER.info("[BookService] getCafeList 호출");
         List<StoreDto> cafeList = new ArrayList<>();
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long userId = jwtTokenProvider.getUserId(token);
-
         String state;
         String city;
         String[] strList = region.split("/");
@@ -52,12 +49,16 @@ public class BookServiceImpl implements BookService {
             region = state;
         }
         List<StoreDto> stores = new ArrayList<>();
-
         try {
+            LOGGER.info("유저 정보 호출");
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(token);
             User userRepo = userRepository.findById(userId).orElse(null);
+
             if (userRepo == null) {
                 throw new NullPointerException("유저 정보가 존재하지 않습니다.");
             }
+            LOGGER.info("유저정보 호출 성공");
 
             List<Store> storesRepo = storeRepository.findAllByRegionContaining(region);
             for (Store storeRepo : storesRepo) {
