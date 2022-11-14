@@ -3,6 +3,7 @@ package com.sinbangsa.controller;
 import com.sinbangsa.data.dto.MainpageDto;
 import com.sinbangsa.data.dto.PreLoadingDto;
 import com.sinbangsa.data.dto.TransferDto;
+import com.sinbangsa.data.dto.TransferSearchDto;
 import com.sinbangsa.service.MainpageService;
 import com.sinbangsa.utils.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -43,7 +45,7 @@ public class MainpageCotroller {
 
     @GetMapping("/test")
     @ApiOperation(value = "테스트")
-    public void test(HttpServletRequest httpServletRequest){
+    public void test(HttpServletRequest httpServletRequest) {
         String apptoken = jwtTokenProvider.resolveToken(httpServletRequest);
         Long userId = jwtTokenProvider.getUserId(apptoken);
 
@@ -53,7 +55,7 @@ public class MainpageCotroller {
 
     @GetMapping
     @ApiOperation(value = "프리로딩")
-    public ResponseEntity<PreLoadingDto> preLoading(){
+    public ResponseEntity<PreLoadingDto> preLoading() {
         LOGGER.info("[MainpageController] preLoading 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -66,14 +68,14 @@ public class MainpageCotroller {
 
     @GetMapping("/search")
     @ApiOperation(value = "검색")
-    public ResponseEntity<MainpageDto> getSearchResult(@RequestParam String searchWord){
+    public ResponseEntity<MainpageDto> getSearchResult(@RequestParam String searchWord) {
         LOGGER.info("[MainpageController] getSearchResult 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try {
             MainpageDto searchResult = mainpageService.getSearchResult(searchWord);
             return new ResponseEntity<>(searchResult, headers, HttpStatus.OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             MainpageDto mainpageDto = new MainpageDto();
             return new ResponseEntity<>(mainpageDto, headers, HttpStatus.BAD_REQUEST);
         }
@@ -82,16 +84,30 @@ public class MainpageCotroller {
     @GetMapping("/transfer")
     @ApiOperation(value = "양도리스트")
     public ResponseEntity<List<TransferDto>> getTransfers(@RequestParam String region) {
-        LOGGER.info("[MainpageController] getSearchResult 호출");
+        LOGGER.info("[MainpageController] getTransfers 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try {
             List<TransferDto> result = mainpageService.getTransfers(region);
             return new ResponseEntity<>(result, headers, HttpStatus.OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
 
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
         }
     }
 
+    @GetMapping("/transfer/search")
+    @ApiOperation(value = "양도 검색")
+    public ResponseEntity<TransferSearchDto> getTransferSearch(@RequestParam String searchWord) {
+        LOGGER.info("[MainpageController] getTransferSearch 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        try {
+            TransferSearchDto result = mainpageService.getTransferSearch(searchWord);
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
