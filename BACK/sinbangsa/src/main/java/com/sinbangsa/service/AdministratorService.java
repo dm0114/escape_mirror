@@ -27,4 +27,5 @@ public interface AdministratorService {
     ReservationAdminDayDto getReservationAdminDay(long storeId, Date reservationDay, long adminId);
     Boolean approveReservation(long adminId, long reservationId);
     Boolean deleteReservation(long reservationId, long adminId);
+    Boolean verificationExit(BookRegisterDto bookRegister,long adminId);
 }

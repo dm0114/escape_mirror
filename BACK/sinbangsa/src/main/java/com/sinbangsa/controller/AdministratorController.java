@@ -254,7 +254,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         // 어드민 아이디 토큰에서 가져오기
-        long adminId = 234212;
+        long adminId = 3;
         boolean result = administratorService.deleteReservation(reservationId, adminId);
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.OK);
@@ -262,8 +262,20 @@ public class AdministratorController {
         return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
-//    @PostMapping("/validation")
-//    @ApiOperation(value = "")
+    @PostMapping("/validation")
+    @ApiOperation(value = "탈출 인증")
+    public ResponseEntity<Boolean> verificationExit(@RequestBody BookRegisterDto bookRegister){
+        LOGGER.info("[AdministratorController] valificationExit 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 3;
+        boolean result = administratorService.verificationExit(bookRegister, adminId);
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
 
 
 }
