@@ -23,7 +23,7 @@ import CommunityDetailScreen from '../screens/CommunityDetailScreen';
 import TabViewExample from './Tabview';
 
 import MypageMoreScreen from '../screens/User/MypageMoreScreen';
-import KakaoLogin from '../screens/Login/Login';
+import KakaoLogin from '../screens/login/Login';
 import ReviewCreateScreen from '../screens/Review/ReviewCreateScreen';
 
 const Nav = createStackNavigator()

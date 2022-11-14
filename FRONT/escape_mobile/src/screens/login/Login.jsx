@@ -2,10 +2,13 @@ import React from 'react';
 import { View } from 'react-native';
 import WebView from 'react-native-webview';
 import axios from 'axios'
+import { SecureState } from '../../store/SecureStore';
+import { AsyncState } from '../../store/AsyncStore';
 
 
 const REST_API_KEY = '6cb2dd1e35672b64fb0dac71ee59315f'
 const REDIRECT_URI = 'http://localhost:8082'
+const APIURI = 'http://k7c104.p.ssafy.io:8080/api/user/kakao'
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 const qs = require('qs');
@@ -24,17 +27,24 @@ const requestToken = async (code ) => {
   try {
     const tokenResponse = await axios.post(requestTokenUrl, options);
     const ACCESS_TOKEN = tokenResponse.data.access_token;
-    console.log(ACCESS_TOKEN); 
-    // 1. api만들어지면 api주소로 post로 던지기 -> 찬기님이랑 얘기
-    // 2. 응답으로 받은 토큰을 보안 저장소에 저장 (https://docs.expo.dev/versions/latest/sdk/securestore/)
     // 3. 토큰 받으면 화면 로그인 상태로 변경
-    // 4. 화이팅하기ㅎㅎ
     
     const body = {
-      ACCESS_TOKEN,
+      accessToken: ACCESS_TOKEN,
     };
-    const response = await axios.post(REDIRECT_URI, body);
-    const value = response.data;
+
+
+    const response = await axios.post(APIURI, body);
+    const value = response.data;    
+    await SecureState.setData('accessToken', value.accessToken);
+    
+    /**
+     * Get AccessToken
+     */
+    await SecureState.getData('accessToken');
+    // await AsyncState.setData(ACCESS_TOKEN);
+    // await AsyncState.getData();
+
     const result = await storeUser(value);
     if (result === 'stored') {
       const user = await getData('user');
@@ -54,6 +64,7 @@ const getCode = (target) => {
     requestToken(requestCode);
   }
 };
+
 
 export default function LoginScreen() {
   return (

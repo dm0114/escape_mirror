@@ -17,10 +17,15 @@ function ReservationChips({ themeId, date }) {
   /**
    * API (예약 가능한 값)
    */
+  console.log(themeId, date);
   const { isLoading, data, status } = useQuery(
     ["ReservedTime", themeId, date],
     reservationApi.getReservationDate
   );
+
+  useEffect(() => {
+    console.log(data);
+  }, [data])
 
   /**
    * 캐싱된 값 접근

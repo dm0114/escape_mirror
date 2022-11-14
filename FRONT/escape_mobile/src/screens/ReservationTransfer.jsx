@@ -18,17 +18,7 @@ function ReservationTransfer({
   return (
     isLoading ? <LoadingScreen/> :
     <Container>
-      {/* <Text>{reservationId}</Text> */}
-      <Text>{themeName}</Text>
-      <Text>{storeName}</Text>
-      <Text>{date}</Text>
-      <Text>{reserveTime}</Text>
-      <Text>{storeAddress}</Text>
-      <Text>양도하실 분의 닉네임을 검색해주세요</Text>
-      <TextInput 
-        style={{ width: 180, borderWidth: 1}}
-      />
-      <Text>님에게 예약을 양도하시겠습니까?</Text>
+      <Title>정말 양도하시겠습니까?</Title>
     </Container>
   )
 }
@@ -38,3 +28,11 @@ export default ReservationTransfer
 const Container = styled.View`
   align-items: center;
 `
+
+const Title = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.body};
+  line-height: ${({ theme }) => theme.fontHeight.body};
+  margin-bottom: 20px;
+  color: #000;
+`;
