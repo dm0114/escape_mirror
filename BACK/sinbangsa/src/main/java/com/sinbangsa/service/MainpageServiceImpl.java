@@ -3,6 +3,7 @@ package com.sinbangsa.service;
 import com.sinbangsa.data.dto.MainpageDto;
 import com.sinbangsa.data.dto.PreLoadingDto;
 import com.sinbangsa.data.dto.TransferDto;
+import com.sinbangsa.data.dto.TransferSearchDto;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import com.sinbangsa.exception.ThemeNotFoundException;
@@ -167,4 +168,53 @@ public class MainpageServiceImpl implements MainpageService{
         }
     }
 
+
+    @Transactional(readOnly = true)
+    public TransferSearchDto getTransferSearch(String searchWord) {
+        LOGGER.info("[MainpageService] getTransferSearch 호출");
+        try {
+            List<Reservation> reservationsRepo = reservationRepository.getTransfer();
+
+            TransferSearchDto transferSearchDto = new TransferSearchDto();
+            List<TransferDto> stores = new ArrayList<>();
+            List<TransferDto> themes = new ArrayList<>();
+            for (Reservation reservationRepo : reservationsRepo) {
+                Store storeRepo = reservationRepo.getThemeTime().getTheme().getStore();
+                Theme themeRepo = reservationRepo.getThemeTime().getTheme();
+                if (storeRepo.getStoreName().contains(searchWord)) {
+                    TransferDto transferDto = new TransferDto();
+                    transferDto.setStoreId(storeRepo.getStoreId());
+                    transferDto.setStoreName(storeRepo.getStoreName());
+                    transferDto.setThemeId(themeRepo.getId());
+                    transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservedDate(reservationRepo.getDate());
+                    transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
+                    transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
+                    stores.add(transferDto);
+                }
+
+                if (themeRepo.getThemeName().contains(searchWord)) {
+                    TransferDto transferDto = new TransferDto();
+                    transferDto.setStoreId(storeRepo.getStoreId());
+                    transferDto.setStoreName(storeRepo.getStoreName());
+                    transferDto.setThemeId(themeRepo.getId());
+                    transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservedDate(reservationRepo.getDate());
+                    transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
+                    transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
+                    themes.add(transferDto);
+                }
+
+            }
+            transferSearchDto.setStoreList(stores);
+            transferSearchDto.setThemeList(themes);
+            return transferSearchDto;
+        } catch (Exception e) {
+            throw e;
+        }
+
+
+
+
+    }
 }
