@@ -56,6 +56,10 @@ public class ReviewServiceImpl implements ReviewService {
             if (themeRepo == null) {
                 throw new NullPointerException("테마 정보가 잘못되었습니다.");
             }
+            if (bookRepo.getReview() == true) {
+                throw new ReviewNotFoundException("이미 리뷰가 작성된 테마입니다");
+            }
+            System.out.println(bookRepo.getDoneDate());
             ThemeReview themeReview = ThemeReview.builder()
                     .reviewTheme(themeRepo)
                     .reviewUser(user)
@@ -71,8 +75,12 @@ public class ReviewServiceImpl implements ReviewService {
                     .usedHint(bookRepo.getUsedHint())
                     .clearTime(bookRepo.getClearTime())
                     .clearDate(bookRepo.getDoneDate())
+                    .createAt(LocalDateTime.now())
                     .build();
             themeReviewRepository.save(themeReview);
+            LOGGER.info("[themeReview] 저장됨");
+            bookRepo.update(true);
+            LOGGER.info("[bookRepo] 수정됨");
             return true;
 
         } catch (Exception e) {

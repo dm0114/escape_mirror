@@ -35,15 +35,16 @@ public class ReviewController {
 
     @PostMapping
     @ApiOperation(value = "리뷰 작성")
-    public ResponseEntity<String> createReview(@RequestBody ReviewDto reviewDto, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Boolean> createReview(@RequestBody ReviewDto reviewDto, HttpServletRequest httpServletRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        try {
-            boolean result = reviewService.createReview(reviewDto, httpServletRequest);
-            return new ResponseEntity<>("리뷰 작성 성공", headers, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("리뷰 작성 실패", headers, HttpStatus.BAD_REQUEST);
+
+        boolean result = reviewService.createReview(reviewDto, httpServletRequest);
+
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
         }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
 
     }
 
