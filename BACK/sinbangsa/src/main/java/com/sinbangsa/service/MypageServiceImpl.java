@@ -186,4 +186,27 @@ public class MypageServiceImpl implements MypageService {
         }
     }
 
+    public ReservationDetailDto getReservationDetail(Long reservationId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MypageServiceImpl] updateUserInfo 호출");
+        try {
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(token);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+            Reservation reservationRepo = reservationRepository.findByReservationId(reservationId).orElse(null);
+            if (reservationRepo == null) {
+                throw new NullPointerException("예약 정보가 잘못되었습니다.");
+            }
+            Theme themeRepo = reservationRepo.getThemeTime().getTheme();
+            ReservationDetailDto reservationDetailDto = new ReservationDetailDto();
+            reservationDetailDto.setStoreAddress(themeRepo.getStore().getAddress());
+            reservationDetailDto.setThemeImg(themeRepo.getPoster());
+            return reservationDetailDto;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
 }

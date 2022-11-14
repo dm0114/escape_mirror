@@ -101,14 +101,22 @@ public class MypageController {
     @PutMapping("/update")
     @ApiOperation(value = "개인 정보 수정")
     public ResponseEntity updateUserInfo(@RequestBody UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest) {
-        LOGGER.info("[MypageController] updateUserInfo");
+        LOGGER.info("[MypageController] updateUserInfo 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-//        long userId = jwtTokenProvider.get
         mypageService.updateUserInfo(updateUserInfoRequestDto, httpServletRequest);
         return new ResponseEntity(headers, HttpStatus.ACCEPTED);
+    }
+
+
+    @GetMapping("/{reservationId}")
+    @ApiOperation(value = "예약 상세")
+    public ResponseEntity<ReservationDetailDto> getReservationDetail(@PathVariable Long reservationId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MypageController] getReservationDetail 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        ReservationDetailDto result = mypageService.getReservationDetail(reservationId, httpServletRequest);
+        return new ResponseEntity<ReservationDetailDto>(result, headers, HttpStatus.ACCEPTED);
     }
 
 
