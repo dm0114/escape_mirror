@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -531,6 +532,8 @@ public class AdministratorServiceImpl implements AdministratorService {
                         .clear(bookRegister.getClear())
                         .usedHint(bookRegister.getUsedHint())
                         .clearTime(bookRegister.getClearTime())
+                        .doneDate(LocalDate.now())
+                        .review(false)
                         .build();
                 bookRepository.save(rbook);
             } catch (Exception e) {

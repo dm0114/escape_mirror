@@ -2,6 +2,7 @@ package com.sinbangsa.controller;
 
 
 import com.sinbangsa.data.dto.ReviewDto;
+import com.sinbangsa.data.dto.ReviewUpdateDto;
 import com.sinbangsa.service.ReviewService;
 import com.sinbangsa.service.UserService;
 import io.swagger.annotations.Api;
@@ -13,10 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
@@ -46,6 +44,21 @@ public class ReviewController {
         } catch (Exception e) {
             return new ResponseEntity<>("리뷰 작성 실패", headers, HttpStatus.BAD_REQUEST);
         }
+
+    }
+
+    @PutMapping("/{reviewId}")
+    @ApiOperation(value = "리뷰 수정")
+    public ResponseEntity<Boolean> updateReview(@RequestParam long reviewId, @RequestBody ReviewUpdateDto reviewUpdate, HttpServletRequest httpServletRequest){
+        LOGGER.info("[ReviewController] updateReview 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        boolean result = reviewService.updateReview(reviewId, reviewUpdate, httpServletRequest);
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
 
     }
 
