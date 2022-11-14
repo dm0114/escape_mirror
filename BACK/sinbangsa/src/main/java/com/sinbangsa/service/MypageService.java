@@ -18,4 +18,8 @@ public interface MypageService {
 
     void updateUserInfo(UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest);
 
+    ReservationDetailDto getReservationDetail(Long reservationId, HttpServletRequest httpServletRequest);
+
+    boolean doTransfer(Long reservationId, HttpServletRequest httpServletRequest);
+
 }

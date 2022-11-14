@@ -36,9 +36,7 @@ public class Reservation {
     @Column
     private int status=0;
 
-    public void update(User reservationUser,boolean accept, int status) {
-        this.reservationUser = reservationUser;
-        this.accept = accept;
+    public void update(int status) {
         this.status = status;
     }
 

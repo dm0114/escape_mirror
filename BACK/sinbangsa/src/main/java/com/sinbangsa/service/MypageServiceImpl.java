@@ -4,11 +4,13 @@ package com.sinbangsa.service;
 import com.sinbangsa.data.dto.*;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
+import com.sinbangsa.exception.AccessDeniedException;
 import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -183,6 +185,55 @@ public class MypageServiceImpl implements MypageService {
             }
 
         } catch (Exception e) {
+        }
+    }
+
+    public ReservationDetailDto getReservationDetail(Long reservationId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MypageServiceImpl] updateUserInfo 호출");
+        try {
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(token);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+            Reservation reservationRepo = reservationRepository.findByReservationId(reservationId).orElse(null);
+            if (reservationRepo == null) {
+                throw new NullPointerException("예약 정보가 잘못되었습니다.");
+            }
+            Theme themeRepo = reservationRepo.getThemeTime().getTheme();
+            ReservationDetailDto reservationDetailDto = new ReservationDetailDto();
+            reservationDetailDto.setStoreAddress(themeRepo.getStore().getAddress());
+            reservationDetailDto.setThemeImg(themeRepo.getPoster());
+            return reservationDetailDto;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    @Transactional
+    public boolean doTransfer(Long reservationId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MypageServiceImpl] doTransfer 호출");
+        final int TRANSFER_STATE =1;
+        try {
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(token);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+
+            Reservation reservationRepo = reservationRepository.findByReservationId(reservationId).orElse(null);
+
+            if (reservationRepo == null) {
+                throw new NullPointerException("예약 정보가 잘못되었습니다.");
+            }
+            if (reservationRepo.getReservationUser() != userRepo) {
+                throw new AccessDeniedException("유저정보와 요청유저가 일치하지않습니다.");
+            }
+            reservationRepo.update(TRANSFER_STATE);
+            return true;
+        } catch (Exception e) {
+            throw e;
         }
     }
 
