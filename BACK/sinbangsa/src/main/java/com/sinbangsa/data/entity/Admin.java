@@ -1,10 +1,8 @@
 package com.sinbangsa.data.entity;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -29,5 +27,12 @@ public class Admin {
 
     @Column
     private String password;
+
+    @Builder
+    public Admin(String adminName,String userId,String password){
+        this.adminName = adminName;
+        this.password = password;
+        this.userId = userId;
+    }
 
 }

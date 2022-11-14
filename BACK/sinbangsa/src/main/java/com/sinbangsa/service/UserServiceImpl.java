@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinbangsa.data.dto.KakaoLoginResponseDto;
 import com.sinbangsa.data.dto.KakaoUserDto;
+import com.sinbangsa.data.entity.RefreshToken;
 import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.repository.RefreshTokenRepository;
 import com.sinbangsa.data.repository.UserRepository;
 import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     @Value("${kakaoRestApiKey}")
@@ -97,6 +101,17 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    public Boolean kakaoLogout(String refreshToken){
+
+        RefreshToken ref = refreshTokenRepository.findRefreshTokenByRefreshToken(refreshToken).orElse(null);
+        if (ref == null) {
+            return false;
+        }
+        refreshTokenRepository.delete(ref);
+        return true;
+
     }
 }
 
