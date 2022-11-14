@@ -222,6 +222,7 @@ public class MypageServiceImpl implements MypageService {
             }
 
             Reservation reservationRepo = reservationRepository.findByReservationId(reservationId).orElse(null);
+
             if (reservationRepo == null) {
                 throw new NullPointerException("예약 정보가 잘못되었습니다.");
             }
@@ -231,6 +232,7 @@ public class MypageServiceImpl implements MypageService {
             System.out.println(reservationRepo.getStatus());
             reservationRepo.update(TRANSFER_STATE);
             System.out.println(reservationRepo.getStatus());
+            reservationRepository.save(reservationRepo);
             return true;
         } catch (Exception e) {
             throw e;
