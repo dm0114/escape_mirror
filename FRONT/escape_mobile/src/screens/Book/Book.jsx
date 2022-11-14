@@ -33,8 +33,7 @@ export default function Book(){
                 <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
                     num:Tel[0],
                     name:Region[0]
-                })
-                setShowRegion(false)}}><RegionTitle>{Tel[0]}</RegionTitle></RegionBtn>
+                })}}><RegionTitle>{Tel[0]}</RegionTitle></RegionBtn>
                 <RegionBtn onPress={()=>{navigation.navigate('RegionBook',{
                     num:Tel[1],
                     name:Region[1]
@@ -66,9 +65,7 @@ export default function Book(){
                     name:Region[6]
                 })}}><RegionTitle>{Tel[6]}</RegionTitle></RegionBtn>
             </TwoRegion>
-            <SelectText style={{marginTop: 50}}>방문을 원하시는 방을 선택해주세요.</SelectText>
-            <SelectText style={{marginTop: 10}}>저택의 주인이 되기 위해서는</SelectText>
-            <SelectText style={{marginTop: 10}}>모든 방을 클리어하셔야 합니다.</SelectText>
+            <SelectText style={{marginTop: 110}}>방문을 원하시는 방을 선택해주세요.</SelectText>
         </Container>}
         </ImageBackground>
     )

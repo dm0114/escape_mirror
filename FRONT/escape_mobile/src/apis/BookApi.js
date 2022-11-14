@@ -1,5 +1,5 @@
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
-const Token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkbTEwODAyQGdtYWlsLmNvbSIsInJvbGVzIjoiVXNlciIsImlzcyI6ImVzY2FwZWRpY3Rpb25hcnkuY29tIiwiaWF0IjoxNjY4MDU5MjYzLCJleHAiOjE2NjgxNDU2NjN9.12H9MZGW96Aps04r9L4tRHZZM1GGWadiz9EVMyT0crE'
+const Token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkbTEwODAyQGdtYWlsLmNvbSIsInJvbGVzIjoiVXNlciIsInVzZXJJZCI6MSwiaXNzIjoiZXNjYXBlZGljdGlvbmFyeS5jb20iLCJpYXQiOjE2NjgyMjgzMTcsImV4cCI6MTY2ODMxNDcxN30.YZ7W2p59mKkiaxyPGLzBAb3_oAaS6J8gFMO4ZvEt91M'
 
 export const getRegionCafeList = async ({ queryKey }) => {
     let [_, specificRegion, name] = queryKey;
@@ -8,7 +8,7 @@ export const getRegionCafeList = async ({ queryKey }) => {
         region: `${name}/${specificRegion}`
     });
 
-
+    console.log(specificRegion, name)
     const response = await (await fetch(`${BASE_URL}/book/store?${RegionCafe}`, {
         headers:{
             Authorization : Token
@@ -23,13 +23,11 @@ export const getCafeThemeList = async ({ queryKey }) => {
     const cafeTheme = new URLSearchParams({
         storeId:storeId
     })
-    const response = await (await fetch(`http://k7c104.p.ssafy.io:8080/api/book/theme?storeId=1`, {
+    const response = await (await fetch(`http://k7c104.p.ssafy.io:8080/api/book/theme?${cafeTheme}`, {
         headers:{
             Authorization : Token
         }
     })).json()
-
-    console.log(response)
 
     return response
 }
