@@ -7,12 +7,14 @@ import com.sinbangsa.data.dto.TransferSearchDto;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import com.sinbangsa.exception.ThemeNotFoundException;
+import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -27,6 +29,8 @@ public class MainpageServiceImpl implements MainpageService{
     private final ThemeReviewRepository themeReviewRepository;
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public MainpageDto getSearchResult(String searchWord) {
@@ -212,8 +216,31 @@ public class MainpageServiceImpl implements MainpageService{
         } catch (Exception e) {
             throw e;
         }
+    }
 
+    @Transactional
+    public Boolean putTransfer(Long reservationId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MainpageService] putTransfer 호출");
+        final int NOT_TRANSFER_STATUS = 0;
 
+        try {
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(token);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+
+            Reservation reservationRepo = reservationRepository.findByReservationId(reservationId).orElse(null);
+            if (reservationRepo == null) {
+                throw new NullPointerException("예약 정보가 잘못되었습니다.");
+            }
+
+            reservationRepo.update(userRepo, NOT_TRANSFER_STATUS);
+            return true;
+        } catch (Exception e) {
+            throw e;
+        }
 
 
     }
