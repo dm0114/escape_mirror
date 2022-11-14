@@ -1,9 +1,6 @@
 package com.sinbangsa.controller;
 
-import com.sinbangsa.data.dto.MainpageDto;
-import com.sinbangsa.data.dto.PreLoadingDto;
-import com.sinbangsa.data.dto.TransferDto;
-import com.sinbangsa.data.dto.TransferSearchDto;
+import com.sinbangsa.data.dto.*;
 import com.sinbangsa.service.MainpageService;
 import com.sinbangsa.utils.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
@@ -17,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
@@ -105,6 +99,21 @@ public class MainpageCotroller {
         try {
             TransferSearchDto result = mainpageService.getTransferSearch(searchWord);
             return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/transfer")
+    @ApiOperation(value = "양도 받기")
+    public ResponseEntity putTransfer(@RequestBody RequestTransfer requestTransfer, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MainpageController] putTransfer 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        try {
+            boolean result = mainpageService.putTransfer(requestTransfer.getReservationId(), httpServletRequest);
+            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
         } catch (Exception e) {
 
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
