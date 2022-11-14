@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import StarRating from "react-native-star-rating-widget";
 
 import {
   View,
   Text,
   useWindowDimensions,
   FlatList,
-  StyleSheet,
   StatusBar,
   SafeAreaView,
   Image,
@@ -16,40 +16,48 @@ import {
 } from "react-native";
 import Plotly from "react-native-plotly";
 
+import {
+  Body,
+  InfoTextWrapper,
+  MainContainer,
+  MainTitle,
+  RankingWrapper,
+  RatingContainer,
+  ReviewTitle,
+  RowContainer,
+  SubTitle,
+  styles,
+  GenreTitle,
+  ChartContainer,
+  ReviewWrapper,
+  ReviewInfo,
+  ReviewContent,
+  ReviewUser,
+  ReviewRowContainer,
+  ReivewRowInfo,
+  RankingMain,
+  RankingSub,
+  RankingContainer,
+  RankingBody,
+  RankingInfoContainer,
+  RankingName,
+} from "../styles/Theme/Info";
 import { Shadow } from "react-native-shadow-2";
-import styled from "styled-components/native";
 const cardImage = require("../assets/mocks/image.png");
 // import Svg,{ Circle } from 'react-native-svg';
 
 import { useNavigation } from "@react-navigation/native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 import LoadingScreen from "./LoadingScreen";
 import ReservationBotttomModal from "../components/Reservation/ReservationBotttomModal";
-
-// {
-//   "themeName": "셜록홈즈: 살인누명",
-//   "genre": "추리",
-//   "capacity": "2인~6인",
-//   "price": "/44000/60000/76000/90000",
-//   "difficulty": 0,
-//   "leadTime": 60,
-//   "description": "\"왓슨군, 보는 것과 관찰하는 것은 다른 것이라네.“\\n\\n다급한 홈즈의 전화를 받고 단숨에 달려왔다.\\n그런데 사무실에는 아무도 없다.\\n무언가 수상하다.\\n\\n이건 뭐지? 홈즈의 메시지인가?\\n이럴 수가… 홈즈가 위기에 빠진 게 분명하다.?\\n당황하고 있을 시간이 없다.\"",
-//   "themeImg": "p3207.jpg",
-//   "star": 0,
-//   "feelDifficulty": 0,
-//   "feelStory": 0,
-//   "feelInterior": 0,
-//   "feelActivity": 0,
-//   "feelHorror": 0,
-//   "lock": 0,
-//   "reviews": [],
-//   "noHintRanking": [],
-//   "hintRanking": []
-// }
+import HeaderPosterImage from "../components/HeaderPosterImage";
+import { LayoutContext } from "../../App";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 function ThemeDetailScreen({ navigation, route }) {
+  const [rating, setRating] = useState(0);
   /**
    * API
    */
@@ -59,30 +67,17 @@ function ThemeDetailScreen({ navigation, route }) {
     searchApi.getThemeDetail
   );
 
-
   /**
    * 애니메이션
    */
-  const dimensions = useWindowDimensions();
-  const Width = (dimensions.width - 256) / 2;
-  const Height = dimensions.height / 2;
-  const [showMenu, setShowMenu] = useState(true);
-  const offsetValue = useRef(new Animated.Value(0)).current;
-  const scaleValue = useRef(new Animated.Value(1)).current;
-  const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    Animated.timing(scaleValue, {
-      toValue: 1.2,
-      useNativeDriver: true,
-    }).start();
+  const { Width, Height } = useContext(LayoutContext);
+  // const Width = (dimensions.width - 256) / 2;
+  // const Height = dimensions.height / 2;
+  const [showMenu, setShowMenu] = useState(false);
 
-    Animated.timing(offsetValue, {
-      // YOur Random Value...
-      toValue: 150,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
+  const offsetValue2 = useRef(new Animated.Value(2)).current;
+  const scaleValue2 = useRef(new Animated.Value(3)).current;
+  const closeButtonOffset = useRef(new Animated.Value(2)).current;
 
   /**
    * 차트
@@ -217,13 +212,161 @@ function ThemeDetailScreen({ navigation, route }) {
 
   const PriceData = [0, ...ThemeDatas?.price.split("/")];
 
-
-
-
   return status === "success" || !isLoading ? (
     <SafeAreaView style={styles.container}>
+      <HeaderPosterImage />
+
       <MainContainer>
-        {/* <Shadow
+        <View
+          style={{
+            marginTop: 40,
+            paddingTop: Height / 4,
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            width: Width - 40,
+            marginHorizontal: 20,
+            paddingHorizontal: 20,
+            paddingBottom: 20,
+          }}
+        >
+          <GenreTitle>{data.genre}</GenreTitle>
+          <MainTitle>{data.themeName}</MainTitle>
+
+          <InfoTextWrapper>
+            <RowContainer>
+              <SubTitle>{data.leadTime}분 • </SubTitle>
+              <SubTitle>{data.capacity} • </SubTitle>
+              <SubTitle>난이도 {data.difficulty}</SubTitle>
+            </RowContainer>
+          </InfoTextWrapper>
+
+          <RatingContainer>
+            <StarRating
+              starSize={24}
+              rating={data.star}
+              onChange={() => {}}
+              style={{ marginLeft: "auto", marginRight: "auto" }}
+            />
+          </RatingContainer>
+
+          <InfoTextWrapper>
+            <Body>{data.description.replace(/\\n/g, " ")}</Body>
+          </InfoTextWrapper>
+        </View>
+
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            height: Height / 6,
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            marginTop: 4,
+            marginHorizontal: 20,
+          }}
+        >
+          {ThemeDatas.noHintRanking ? (
+            <RankingContainer>
+              <RankingInfoContainer>
+                <RankingSub>
+                  <RankingBody>{ThemeDatas.noHintRanking[1].cleartime}</RankingBody>
+                </RankingSub>
+                <RankingName>{ThemeDatas.noHintRanking[1].userNickname}</RankingName>
+              </RankingInfoContainer>
+              <RankingInfoContainer>
+                <RankingMain>
+                  <RankingBody>{ThemeDatas.noHintRanking[0].cleartime}</RankingBody>
+                </RankingMain>
+                <RankingName>{ThemeDatas.noHintRanking[0].userNickname}</RankingName>
+              </RankingInfoContainer>
+              <RankingInfoContainer>
+                <RankingSub>
+                  <RankingBody>{ThemeDatas.noHintRanking[2].cleartime}</RankingBody>
+                </RankingSub>
+                <RankingName>{ThemeDatas.noHintRanking[2].userNickname}</RankingName>
+              </RankingInfoContainer>
+            </RankingContainer>
+          ) : (
+            <SubTitle>데이터가 없습니다</SubTitle>
+          )}
+        </View>
+
+        <RankingWrapper>
+          <ReviewTitle>후기 ({ThemeDatas.reviews.length})</ReviewTitle>
+          <ChartContainer>
+            <Plotly data={ChartData} layout={ChartLayout} enableFullPlotly />
+          </ChartContainer>
+
+          {ThemeDatas.reviews.map((item, idx) => {
+            return (
+              <ReviewWrapper key={idx}>
+                <StarRating
+                  starSize={14}
+                  starStyle={{
+                    marginLeft: 0,
+                    marginRight: 4,
+                    marginBottom: 10,
+                  }}
+                  rating={item.star}
+                  onChange={() => {}}
+                />
+                <ReviewUser>{`${item.User}  `}</ReviewUser>
+                <ReviewContent>{item.content}</ReviewContent>
+                <ReviewRowContainer>
+                  <ReivewRowInfo>
+                    <FontAwesome5
+                      name="question-circle"
+                      size={12}
+                      color="black"
+                      style={{ marginRight: 6 }}
+                    />
+                    <ReviewInfo>{item.usedHint}</ReviewInfo>
+                  </ReivewRowInfo>
+                  <ReivewRowInfo>
+                    <FontAwesome5
+                      name="clock"
+                      size={12}
+                      color="black"
+                      style={{ marginRight: 6 }}
+                    />
+                    <ReviewInfo>{item.clearTime}</ReviewInfo>
+                  </ReivewRowInfo>
+                </ReviewRowContainer>
+              </ReviewWrapper>
+            );
+          })}
+        </RankingWrapper>
+
+        {/* 
+        리뷰 페이지
+      */}
+
+        {/* <FloatContainer>
+            <FloatLeftContainer>
+              
+              
+            </FloatLeftContainer>
+          </FloatContainer> */}
+      </MainContainer>
+
+      {/* 
+        바텀 시트 모달 
+      */}
+      <ReservationBotttomModal themeId={themeId} PriceData={PriceData} />
+    </SafeAreaView>
+  ) : (
+    <LoadingScreen />
+  );
+}
+
+export default ThemeDetailScreen;
+
+/**
+ * 재사용
+ */
+
+{
+  /* <Shadow
           distance={100}
           startColor={"#00000050"}
           endColor={"#00000000"}
@@ -246,352 +389,25 @@ function ThemeDetailScreen({ navigation, route }) {
           <RatingView>
             <RatingText>{data.star}</RatingText>
           </RatingView>
-        </Shadow> */}
-        
-        <View style={{marginTop: Height*2/4}}>
-          <MainTitle>{data.themeName}</MainTitle>
-          <InfoTextWrapper>
-            <RowContainer>
-              <SubTitle>{data.leadTime}분 • </SubTitle>
-              <SubTitle>{data.capacity} • </SubTitle>
-              <SubTitle>난이도 {data.difficulty}</SubTitle>
-            </RowContainer>
-          </InfoTextWrapper>
-          <InfoTextWrapper>
-            <Body>{data.description.replace(/\\n/g, " ")}</Body>
-          </InfoTextWrapper>
-
-          <RankingWrapper>
-            <SubTitle>랭킹</SubTitle>
-            {!!data.noHintRanking ? data.noHintRanking.map((item, idx) => {
-              return (
-                <RowContainer key={idx}>
-                  <Body>{idx + 1}등 |</Body>
-                  <Body>{item.userNickname} |</Body>
-                  <Body>{item.cleartime}</Body>
-                </RowContainer>
-              );
-            }) : <SubTitle>데이터가 없습니다</SubTitle>}
-          </RankingWrapper>
-        </View>
-        
-      </MainContainer>
-
-      {/* 
-      바텀 시트 모달 
-      */}
-      <ReservationBotttomModal themeId={themeId} PriceData={PriceData} />
-
-
-      {/* <Animated.View
-        style={{
-          flexGrow: 1,
-          flexDirection: "row",
-          backgroundColor: "white",
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          // paddingHorizontal: 20,
-          // paddingVertical: 20,
-          borderRadius: showMenu ? 75 : 0,
-          transform: [{ scale: scaleValue }, { translateY: offsetValue }],
-        }}
-      >
-        <ImageBackground
-          source={cardImage}
-          resizeMode="contain"
-          // blurRadius={5}
-          style={styles.container}
-          imageStyle={{ borderRadius: showMenu ? 75 : 0 }}
-        >
-          <FloatContainer>
-            <FloatLeftContainer>
-              <TitleTextContainer>
-                <Title>{ThemeDatas.themeName}</Title>
-              </TitleTextContainer>
-              <ChartContainer>
-                <Plotly
-                  data={ChartData}
-                  layout={ChartLayout}
-                  enableFullPlotly
-                />
-              </ChartContainer>
-              <ReviewTitle>리뷰 ({ThemeDatas.reviews.length})</ReviewTitle>
-              <FlatList
-                data={ThemeDatas.reviews}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  marginLeft: 40,
-                }}
-                renderItem={({ item }) => (
-                  <ReviewWrapper>
-                    <RowContainer>
-                      <ReviewProfileImg />
-                      <ReviewTextWrapper>
-                        <ReviewSubTitle>⭐ {item.star}</ReviewSubTitle>
-                        <RowContainer>
-                          <ReviewSubTitle>{`${item.User}  `}</ReviewSubTitle>
-                          <ReviewInfo>{` 💡 ${item.usedHint}    ⏰ ${item.clearTime}''`}</ReviewInfo>
-                        </RowContainer>
-                      </ReviewTextWrapper>
-                    </RowContainer>
-                    <ReviewTextContainer>
-                      <ReviewContent>{item.content}</ReviewContent>
-                    </ReviewTextContainer>
-                  </ReviewWrapper>
-                )}
-              />
-            </FloatLeftContainer>
-            <FloatRightContainer>
-              <TouchableOpacity
-                onPress={() => {
-                  // Do Actions Here....
-                  // Scaling the view...
-                  Animated.timing(scaleValue, {
-                    toValue: showMenu ? 1 : 0.88,
-                    duration: 300,
-                    useNativeDriver: true,
-                  }).start();
-
-                  Animated.timing(offsetValue, {
-                    // YOur Random Value...
-                    toValue: showMenu ? 0 : 500,
-                    duration: 300,
-                    useNativeDriver: true,
-                  }).start();
-
-                  Animated.timing(closeButtonOffset, {
-                    // YOur Random Value...
-                    toValue: !showMenu ? -30 : 0,
-                    duration: 300,
-                    useNativeDriver: true,
-                  }).start();
-
-                  setShowMenu(!showMenu);
-                }}
-              >
-                <SubTitle style={{ marginLeft: "auto" }}>리뷰 더보기</SubTitle>
-              </TouchableOpacity>
-            </FloatRightContainer>
-          </FloatContainer>
-        </ImageBackground>
-      </Animated.View> */}
-
-      {/* 포스터 애니메이션 */}
-      <Animated.View
-        style={{
-          position: "relative",
-          top: -dimensions.height,
-          left: 0,
-          right: 0,
-          borderRadius: 50,
-          borderWidth: 1,
-          borderStyle: 'solid',
-          borderColor: '#00000020',
-          elevation: 50,
-          zIndex: 999,
-          transform: [{ scale: scaleValue }, { translateY: offsetValue }],
-        }}
-      >
-        <Image
-          source={cardImage}
-          style={{
-            width: dimensions.width - 40,
-            height: Height / 2,
-            resizeMode: "cover",
-            borderBottomLeftRadius: 40,
-            borderBottomRightRadius: 40,
-            marginLeft: 20,
-            
-          }}
-          blurRadius={0}
-        />
-      </Animated.View>
-    </SafeAreaView>
-  ) : (
-    <LoadingScreen />
-  );
+        </Shadow> */
 }
-
-// 뷰
-const RowContainer = styled.View`
-  flex-direction: row;
-  justify-content: center;
-`;
-
-const MainContainer = styled.ScrollView`
-  flex: 1;
-  margin-top: 40px;
-  margin-left: 40px;
-  margin-right: 40px;
-  margin-bottom: 40px;
-`;
-
-const FloatContainer = styled.View`
-  flex: 1;
-  flex-direction: row;
-`;
-const FloatLeftContainer = styled.View`
-  flex: 5;
-`;
-const FloatRightContainer = styled.View`
-  flex: 1;
-  padding-top: 80px;
-  /* padding-right: 20px; */
-  padding-bottom: 20px;
-`;
-const ChartContainer = styled.View`
-  height: 200px;
-  border-width: 1px;
-  border-color: rgba(228, 228, 228, 10);
-`;
-const TitleTextContainer = styled.View`
-  margin-top: 80px;
-  margin-left: 40px;
-`;
-
-const CafeImage = styled.View`
-  position: relative;
-  top: -80px;
-  width: 100px;
-  height: 160px;
-  margin-bottom: -60px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: gray;
-  border-radius: 10px;
-`;
-const RankingWrapper = styled.View`
-  margin-top: 15px;
-  margin-bottom: 15px;
-`;
-
-const InfoTextWrapper = styled.View`
-  margin-bottom: 10px;
-`;
-const RatingView = styled.View`
-  position: absolute;
-  margin-top: auto;
-  margin-left: auto;
-  top: -30px;
-  right: -30px;
-  width: 60px;
-  height: 60px;
-
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 9;
-  background-color: #fff;
-`;
-
-// 요소
-const ReviewWrapper = styled.View`
-  margin-top: 20px;
-  margin-bottom: 20px;
-`;
-const ReviewProfileImg = styled.View`
-  width: 50px;
-  height: 50px;
-  background-color: tomato;
-  border-radius: 50px;
-`;
-const ReviewTextWrapper = styled.View`
-  margin-left: 10px;
-  justify-content: space-between;
-`;
-const ReviewTextContainer = styled.View`
-  margin-top: 20px;
-  margin-left: 60px;
-`;
-
-// 텍스트
-const MainTitle = styled.Text`
-  font-family: "SUIT-ExtraBold";
-  font-size: ${({ theme }) => theme.fontSizes.title1};
-  line-height: ${({ theme }) => theme.fontHeight.title1};
-  letter-spacing: -1px;
-  margin-bottom: 10px;
-  text-align: center;
-`;
-const Title = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title1};
-  line-height: ${({ theme }) => theme.fontHeight.title1};
-  margin-bottom: 10px;
-  color: #000;
-`;
-
-const SubTitle = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.body2};
-  line-height: 36px;
-  letter-spacing: -0.5px;
-  text-align: center;
-`;
-
-const ReviewTitle = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title2};
-  line-height: ${({ theme }) => theme.fontHeight.title2};
-  margin-left: 40px;
-  margin-top: 40px;
-  margin-bottom: 10px;
-`;
-
-const ReviewSubTitle = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.body2};
-`;
-
-const ReviewInfo = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.caption0};
-`;
-const ReviewContent = styled.Text`
-  font-family: "SUIT-Medium";
-  font-size: ${({ theme }) => theme.fontSizes.body2};
-  line-height: ${({ theme }) => theme.fontHeight.body2};
-`;
-
-const Body = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
-  letter-spacing: 0.5px;
-  color: #9b989b;
-  text-align: center;
-`;
-const RatingText = styled.Text`
-  font-family: "SUIT-ExtraBold";
-  font-size: ${({ theme }) => theme.fontSizes.title1};
-  line-height: ${({ theme }) => theme.fontHeight.title1};
-  letter-spacing: -1px;
-`;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    borderRadius: 15,
-  },
-  tabBar: {
-    flexDirection: "row",
-    paddingTop: StatusBar.currentHeight,
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: "center",
-    padding: 16,
-  },
-});
-
-export default ThemeDetailScreen;
+// {
+//   "themeName": "셜록홈즈: 살인누명",
+//   "genre": "추리",
+//   "capacity": "2인~6인",
+//   "price": "/44000/60000/76000/90000",
+//   "difficulty": 0,
+//   "leadTime": 60,
+//   "description": "\"왓슨군, 보는 것과 관찰하는 것은 다른 것이라네.“\\n\\n다급한 홈즈의 전화를 받고 단숨에 달려왔다.\\n그런데 사무실에는 아무도 없다.\\n무언가 수상하다.\\n\\n이건 뭐지? 홈즈의 메시지인가?\\n이럴 수가… 홈즈가 위기에 빠진 게 분명하다.?\\n당황하고 있을 시간이 없다.\"",
+//   "themeImg": "p3207.jpg",
+//   "star": 0,
+//   "feelDifficulty": 0,
+//   "feelStory": 0,
+//   "feelInterior": 0,
+//   "feelActivity": 0,
+//   "feelHorror": 0,
+//   "lock": 0,
+//   "reviews": [],
+//   "noHintRanking": [],
+//   "hintRanking": []
+// }

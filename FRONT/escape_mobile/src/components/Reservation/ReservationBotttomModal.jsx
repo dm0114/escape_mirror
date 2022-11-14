@@ -86,7 +86,7 @@ function ReservationBotttomModal({ themeId, PriceData }) {
    */
   return status === "success" ? (
     <BottomSheetModalProvider>
-      <View style={{ position: "absolute", bottom: 0 }}>
+      <View style={{ position: "absolute", bottom: 0, backgroundColor: 'red'}}>
         {
           toggler ? null :
           <ButtonContainer left={Width} onPress={handlePresentModalPress}>
@@ -104,7 +104,15 @@ function ReservationBotttomModal({ themeId, PriceData }) {
             달력, 타임 테이블
            */}
           <View style={styles.contentContainer}>
+            
+            {/* 
+            KorTime 
+            */}
             <KorTime themeId={themeId} />
+
+            {/* 
+              Stepper 
+            */}
             <InfoTextWrapper>
               <RowContainer>
                 <RowContainer>
@@ -138,10 +146,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#00000020",
 
     zIndex: 100,
   },

@@ -1,6 +1,9 @@
+import { SecureState } from "../store/SecureStore";
+
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const BASE_URL2 = "https://my-json-server.typicode.com/dm0113";
-const Token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkbTEwODAyQGdtYWlsLmNvbSIsInJvbGVzIjoiVXNlciIsInVzZXJJZCI6MiwiaXNzIjoiZXNjYXBlZGljdGlvbmFyeS5jb20iLCJpYXQiOjE2NjgxMjU1NjAsImV4cCI6MTY2ODIxMTk2MH0.ZshkE1N42DR7nSkjBihiJ5RDJhYSuj96gEt97IvvVhU'
+const ACCESS_TOKEN = SecureState.getData('accessToken');
+const Token = `Bearer ${ACCESS_TOKEN}`
 
 // 참고
 // return await fetch(`${BASE_URL}/mainpage/search?${query}`,{

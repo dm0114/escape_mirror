@@ -2,7 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
-
+import MyTimer from '../TimerComponent';
+import { Timer } from './KorTimeComponent';
 
 export default function ReservationComponent({
   reservationId,
@@ -29,7 +30,7 @@ export default function ReservationComponent({
         <CafeTitle>{storeName}</CafeTitle>
       </TextContainer>
       <TimeContainer>
-        <TimeText>{date}</TimeText>
+        <MyTimer expiryTimestamp={Timer(date, reserveTime)} />
       </TimeContainer>
     </ReservationContainer>
   )
@@ -38,7 +39,7 @@ export default function ReservationComponent({
 const ReservationContainer = styled.TouchableOpacity`
   ${({ theme }) => theme.common.flexCenterRow}
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 20px;
   margin-bottom: 20px;
   padding: 20px;
 
@@ -56,16 +57,18 @@ const TimeContainer = styled.View`
 `
 
 const ThemeTitle = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.body};
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.title3};
+  line-height: ${({ theme }) => theme.fontHeight.title3};
   margin-bottom: 4px;
+  letter-spacing: -0.5px;
 `
 const CafeTitle = styled.Text`
   font-family: "SUIT-Medium";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
+  font-size: ${({ theme }) => theme.fontSizes.body2};
   color: #9b989b;
 `
 const TimeText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
-`
+`;

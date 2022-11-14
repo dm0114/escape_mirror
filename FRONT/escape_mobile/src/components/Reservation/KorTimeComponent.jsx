@@ -2,32 +2,69 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import styled from "styled-components/native";
 import ReservationChips from "./ReservationChips";
+import moment from "moment-timezone";
+const nowTime = moment().tz('Asia/Seoul').format("YYYY-MM-DDTHH:mm:ss")
+
 
 // 이번 주를 반환하는 함수..하하..
 const KoTIme = () => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
-  const now = new Date(); // 현재 시간
-  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000; // 현재 시간을 utc로 변환한 밀리세컨드값
-  const koreaTimeDiff = 15 * 60 * 60 * 1000 + 510000; // 한국 시간은 UTC보다 9시간 빠름(9시간의 밀리세컨드 표현)
-  const koreaNow = new Date(utcNow - koreaTimeDiff);
+  const now = new Date(nowTime) // 현재 시간
+  const nowDay = now.getDay()
+  
+  console.log(now);
+  // console.log(nowTime.getDate());
+  
 
   const Days = [
     [
-      `${koreaNow.getFullYear()}-${
-        koreaNow.getMonth() + 1
-      }-${koreaNow.getDate()}`,
-      koreaNow.getDate(),
-      week[koreaNow.getDay()],
+      `${now.getFullYear()}-${
+        now.getMonth() + 1
+      }-${now.getDate()}`,
+      now.getDate(),
+      week[now.getDay()],
     ],
   ];
   for (let i = 0; i < 6; i++) {
-    var tmp = new Date(koreaNow.setDate(koreaNow.getDate() + 1));
+    var tmp = new Date(now.setDate(now.getDate() + 1));
     var day = tmp.getDate();
-    var date = week[koreaNow.getDay()];
+    var date = week[now.getDay()];
     Days.push([`${tmp.getFullYear()}-${tmp.getMonth() + 1}-${day}`, day, date]);
   }
   return Days;
 };
+
+export const Timer = (date, reserveTime) => {
+  // 시간 나면 캐싱
+  // 한국 시간
+  var now = new Date(nowTime);
+  console.log(now);
+
+  // 현재시간 
+  var year = now.getFullYear();     // 연도
+  var month = now.getMonth();     // 월                             
+  var day = now.getDate();          // 일
+  var hours = now.getHours();       // 현재 시간
+  var minutes = now.getMinutes();   // 현재 분
+  var seconds = now.getSeconds();   // 현재 초
+  
+  // 비교시간    
+  var sttDt = date.split("-");
+  var sttTime = reserveTime.split(":");
+  var sttYear = sttDt[0];
+  var sttMonth = sttDt[1] - 1;
+  var sttDay = sttDt[2];
+  var sttHours = sttTime[0] - 9;
+  var sttMinutes = sttTime[1];
+
+  var date1 = new Date(year, month, day, hours, minutes, seconds);                    // 현재 
+  var date2 = new Date(sttYear, sttMonth, sttDay, sttHours, sttMinutes);              // 파라미터
+  var elapsedSec = (date2.getTime() - date1.getTime()) / 1000; 
+  
+  const time = new Date(nowTime);
+  time.setSeconds(time.getSeconds() + elapsedSec)
+  return time
+}
 
 export const KorTime = ({themeId}) => {
   const [dayData, setDayData] = useState(["날짜를", "선택해주세요"]);
