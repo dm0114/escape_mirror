@@ -3,10 +3,7 @@ package com.sinbangsa.service;
 import com.sinbangsa.data.dto.*;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
-import com.sinbangsa.exception.AccessDeniedException;
-import com.sinbangsa.exception.StoreNotFoundException;
-import com.sinbangsa.exception.ThemeNotFoundException;
-import com.sinbangsa.exception.ThemeTimeNotFoundException;
+import com.sinbangsa.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -466,6 +463,26 @@ public class AdministratorServiceImpl implements AdministratorService {
         return reservationAdminDayDto;
     }
 
+    public Boolean approveReservation(long adminId, long reservationId){
+        LOGGER.info("[AdministratorService] approveReservation 호출");
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+        if (reservation == null) {
+            throw new ReservationNotFound();
+        }
+
+//        // admin 안붙어있으면 에러남
+//        if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
+//            throw new AccessDeniedException();
+//        }
+
+        try {
+            reservation.update(true);
+            LOGGER.info("[approveReservation] 승인 됨");
+            return true;
+        } catch(Exception e){
+            return false;
+        }
+    }
 
 
 }

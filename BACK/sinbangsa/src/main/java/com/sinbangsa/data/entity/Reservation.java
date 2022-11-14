@@ -41,4 +41,9 @@ public class Reservation {
         this.status = status;
     }
 
+    public void update(boolean accept) {
+        this.accept = accept;
+    }
+
+
 }
