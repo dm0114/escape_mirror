@@ -60,11 +60,12 @@ public class ReservationServiceImpl implements ReservationService {
             // 기존 예약 내역에 이미 데이터가 있는지 확인
             if (!reservationRepository.existsByThemeTimeIdAndDate(
                     reservationDto.getThemeTimeId(), reservationDto.getReservationDate())) {
-                Reservation.builder()
+                Reservation reservation = Reservation.builder()
                         .reservationUser(userRepo)
                         .date(reservationDto.getReservationDate())
                         .themeTime(reservationTime)
                         .build();
+                reservationRepository.save(reservation);
                 return true;
             } else {
                 return false;

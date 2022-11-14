@@ -20,4 +20,6 @@ public interface MypageService {
 
     ReservationDetailDto getReservationDetail(Long reservationId, HttpServletRequest httpServletRequest);
 
+    boolean doTransfer(Long reservationId, HttpServletRequest httpServletRequest);
+
 }

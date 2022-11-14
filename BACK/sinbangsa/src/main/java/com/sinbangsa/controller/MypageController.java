@@ -49,7 +49,6 @@ public class MypageController {
     }
 
 
-
     @GetMapping("/likes")
     @ApiOperation(value = "찜 목록")
     public ResponseEntity<List<MypageLikeDto>> getLikes(HttpServletRequest httpServletRequest) {
@@ -104,8 +103,13 @@ public class MypageController {
         LOGGER.info("[MypageController] updateUserInfo 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        mypageService.updateUserInfo(updateUserInfoRequestDto, httpServletRequest);
-        return new ResponseEntity(headers, HttpStatus.ACCEPTED);
+        try {
+            mypageService.updateUserInfo(updateUserInfoRequestDto, httpServletRequest);
+            return new ResponseEntity(headers, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity(headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 
@@ -115,9 +119,29 @@ public class MypageController {
         LOGGER.info("[MypageController] getReservationDetail 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        ReservationDetailDto result = mypageService.getReservationDetail(reservationId, httpServletRequest);
-        return new ResponseEntity<ReservationDetailDto>(result, headers, HttpStatus.ACCEPTED);
+        try {
+            ReservationDetailDto result = mypageService.getReservationDetail(reservationId, httpServletRequest);
+            return new ResponseEntity<ReservationDetailDto>(result, headers, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+
+            return new ResponseEntity(headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
+    @PutMapping("/{reservationId}")
+    @ApiOperation(value = "양도 올리기")
+    public ResponseEntity<Boolean>doTransfer(@PathVariable Long reservationId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MypageController] getReservationDetail 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        try {
+            boolean result = mypageService.doTransfer(reservationId, httpServletRequest);
+            return new ResponseEntity(result, headers, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            boolean result = false;
+            return new ResponseEntity(result, headers, HttpStatus.BAD_REQUEST);
+        }
 
+    }
 }

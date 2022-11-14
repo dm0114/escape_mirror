@@ -247,7 +247,7 @@ public class BookServiceImpl implements BookService {
 
     public Boolean themeLike(long themeId, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookService] themeLike 호출");
-        UserThemeRelation userThemeRelation = new UserThemeRelation();
+
         try {
             Theme themeRepo = themeRepository.findById(themeId).orElse(null);
             if (themeRepo == null) {
@@ -262,10 +262,11 @@ public class BookServiceImpl implements BookService {
             if (userThemeRelationRepository.existsByUserRelationThemeAndThemeRelationUser(themeRepo, userRepo)) {
                 return false;
             } else {
-                UserThemeRelation.builder()
+                UserThemeRelation userThemeRelation = UserThemeRelation.builder()
                         .themeRelationUser(userRepo)
                         .userRelationTheme(themeRepo)
                         .build();
+                userThemeRelationRepository.save(userThemeRelation);
                 return true;
             }
         } catch (Exception e) {
