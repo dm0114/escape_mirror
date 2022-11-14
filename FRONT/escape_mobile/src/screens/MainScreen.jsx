@@ -1,16 +1,17 @@
-import React from "react";
-import { Dimensions, ImageBackground } from "react-native";
-const { width } = Dimensions.get("window");
+import React, { useContext } from "react";
+import { ImageBackground, View } from "react-native";
 
 import styled from "styled-components/native";
 import "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
 import ReservationComponent from "../components/Reservation/ReservationComponent";
+import { LayoutContext } from "../../App";
 
 const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
 
 
 export default function MainScreen() {
+  const {Width, Height} = useContext(LayoutContext);
   // 프리로딩 API 연결
   const data = {
     reservations: [
@@ -18,14 +19,14 @@ export default function MainScreen() {
         reservationId: 1,
         themeName: "테마이름",
         storeName: "카페이름",
-        date: "2022-11-11",
+        date: "2022-11-14",
         reserveTime: "17:20",
       },
       {
         reservationId: 2,
         themeName: "테마이름",
         storeName: "카페이름",
-        date: "2022-11-14",
+        date: "2022-11-15",
         reserveTime: "12:20",
       },
       {
@@ -49,8 +50,8 @@ export default function MainScreen() {
         </MainText>
         <Carousel
           loop={false}
-          width={width - 40}
-          height={width / 3.5}
+          width={Width - 40}
+          height={Width / 3.5}
           autoPlay={false}
           data={data.reservations}
           mode={'parallax'}
@@ -73,19 +74,7 @@ export default function MainScreen() {
             />
           )}
         />
-
-        {/* {data.reservations.map((item) => {
-          return (
-            <ReservationComponent
-              key={item.reservationId}
-              reservationId={item.reservationId}
-              themeName={item.themeName}
-              storeName={item.storeName}
-              date={item.date}
-              reserveTime={item.reserveTime}
-            />
-          );
-        })} */}
+        
       </MainContainer>
     </ImageBackground>
   );

@@ -48,6 +48,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
     searchApi.getCafeDetail
   );
 
+
   /**
    * 애니메이션 추가
    */
@@ -139,7 +140,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
             mode={'parallax'}
             modeConfig={
               {
-                parallaxScrollingOffset: 120,
+                parallaxScrollingOffset: 140,
                 parallaxScrollingScale: 1,
                 parallaxAdjacentItemScale: 0.9,
               }

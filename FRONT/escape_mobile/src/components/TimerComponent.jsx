@@ -16,15 +16,6 @@ export default function MyTimer({ expiryTimestamp }) {
   );
 }
 
-// export default function App() {
-//   const time = new Date();
-//   time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
-//   return (
-//     <div>
-
-//     </div>
-//   );
-// }
 const TimeText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};

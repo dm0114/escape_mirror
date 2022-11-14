@@ -77,7 +77,7 @@ export default function ThemeSearchScreen({ route }) {
             mode={'parallax'}
             modeConfig={
               {
-                parallaxScrollingOffset: 120,
+                parallaxScrollingOffset: 140,
                 parallaxScrollingScale: 1,
                 parallaxAdjacentItemScale: 0.9,
               }

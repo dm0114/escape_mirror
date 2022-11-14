@@ -5,6 +5,7 @@ import {Image,StyleSheet,FlatList,useWindowDimensions, ImageBackground, Button, 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 import { Ionicons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
+import StarRating from 'react-native-star-rating-widget';
 // ”star”:9,
 // ”diff”:8,
 // ”story”:6,
@@ -48,7 +49,8 @@ const data = [
 export default function ReviewTab() {
   const navigation = useNavigation();
   //리뷰 컴포넌트
-  function RenderReview({item}) {
+  function RenderReview({ item }) {
+    const rating = item.star/2
     return (
       <RenderView>
         {/* 리뷰 이미지 | 이미지 링크가 없을땐 출력 x, 있으면 이미지 o */}
@@ -61,12 +63,17 @@ export default function ReviewTab() {
         </TitleView>
         {/* 별점 */}
         <StarView>
-          <Ionicons name="star" size={20} color="yellow" />
-          <StarTxt>{item.star}</StarTxt>
+          <StarRating
+            rating={rating}
+            starSize={20}
+          />
+          {/* <Ionicons name="star" size={20} color="yellow" />
+          <StarTxt>{item.star}</StarTxt> */}
         </StarView>
         {/* 난이도 */}
         <DiffView>
-          <DiffTxt>난이도 {item.diff}</DiffTxt>
+          <DiffTxt>난이도</DiffTxt>
+          <DiffNum>{item.diff}</DiffNum>
         </DiffView>
         {/* 리뷰내용 */}
         <ContentView>
@@ -80,9 +87,9 @@ export default function ReviewTab() {
             navigation.navigate("ReviewCreateScreen");
             }}>수정</UpdateTxt>
           </UpdateBtn>
-          <DeleteBtn>
+          {/* <DeleteBtn>
             <DeleteTxt>삭제</DeleteTxt>
-          </DeleteBtn>
+          </DeleteBtn> */}
         </BtnView>
       </RenderView>
     )
@@ -157,12 +164,18 @@ const StarTxt = styled.Text`
 `
 
 const DiffView = styled(StarView)`
+  flex-direction: row;
 `
 const DiffTxt = styled.Text`
   font-family: "SUIT-Medium";
   font-size:  ${({ theme }) => theme.fontSizes.body};
   line-height:  ${({ theme }) => theme.fontHeight.body};
   color: white;
+  margin-right:5px;
+`
+const DiffNum = styled(DiffTxt)`
+  font-family: "SUIT-Bold";
+
 `
 const BtnView = styled.View`
   flex-direction: row;
