@@ -2,11 +2,15 @@ package com.sinbangsa.service;
 
 
 import com.sinbangsa.data.dto.ReviewDto;
+import com.sinbangsa.data.dto.ReviewUpdateDto;
 import com.sinbangsa.data.entity.Book;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.ThemeReview;
 import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.*;
+import com.sinbangsa.exception.AccessDeniedException;
+import com.sinbangsa.exception.ReviewNotFoundException;
+import com.sinbangsa.exception.UserNotFoundException;
 import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -52,6 +56,10 @@ public class ReviewServiceImpl implements ReviewService {
             if (themeRepo == null) {
                 throw new NullPointerException("테마 정보가 잘못되었습니다.");
             }
+            if (bookRepo.getReview() == true) {
+                throw new ReviewNotFoundException("이미 리뷰가 작성된 테마입니다");
+            }
+            System.out.println(bookRepo.getDoneDate());
             ThemeReview themeReview = ThemeReview.builder()
                     .reviewTheme(themeRepo)
                     .reviewUser(user)
@@ -67,14 +75,54 @@ public class ReviewServiceImpl implements ReviewService {
                     .usedHint(bookRepo.getUsedHint())
                     .clearTime(bookRepo.getClearTime())
                     .clearDate(bookRepo.getDoneDate())
+                    .createAt(LocalDateTime.now())
                     .build();
             themeReviewRepository.save(themeReview);
+            LOGGER.info("[themeReview] 저장됨");
+            bookRepo.update(true);
+            LOGGER.info("[bookRepo] 수정됨");
             return true;
 
         } catch (Exception e) {
             throw e;
         }
 
+    }
+
+    @Transactional
+    public boolean updateReview(long reviewId, ReviewUpdateDto reviewUpdate, HttpServletRequest httpServletRequest){
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(token);
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+
+        ThemeReview themeReview = themeReviewRepository.findById(reviewId).orElse(null);
+        if (themeReview == null) {
+            throw new ReviewNotFoundException();
+        }
+        if (user.getId() != themeReview.getReviewUser().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        try {
+            themeReview.update(reviewUpdate.getContent(),
+                    reviewUpdate.getStar(),
+                    reviewUpdate.getFeelDifficulty(),
+                    reviewUpdate.getFeelStory(),
+                    reviewUpdate.getFeelInterrior(),
+                    reviewUpdate.getFeelActivity(),
+                    reviewUpdate.getFeelHorror(),
+                    reviewUpdate.getLocker(),
+                    reviewUpdate.getReviewImg());
+            LOGGER.info("[updateReview] 수정 됨");
+            return true;
+
+        }catch (Exception e) {
+            throw e;
+        }
     }
 
 }

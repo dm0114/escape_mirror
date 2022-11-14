@@ -57,6 +57,7 @@ public interface ThemeReviewRepository extends JpaRepository<ThemeReview,Long> {
     List<ThemeReview> findAllByReviewTheme(Theme theme);
 
     List<ThemeReview> findAllByReviewUser(User user);
+    Optional<ThemeReview> findById(long reviewId);
 
 
 }
