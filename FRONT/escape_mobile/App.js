@@ -1,32 +1,42 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
+import React, { useCallback, useEffect, useState, createContext } from "react";
+import { StatusBar } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
+import * as Font from "expo-font";
 
-import { ThemeProvider } from 'styled-components';
-import styled from 'styled-components/native';
-import theme from './theme';
+import { ThemeProvider } from "styled-components";
+import styled from "styled-components/native";
+import theme from "./theme";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-
-import { NavigationContainer } from '@react-navigation/native';
-import Root from './src/navigation/Root';
-import SearchScreen from './src/screens/SearchScreen';
+import { NavigationContainer } from "@react-navigation/native";
+import Root from "./src/navigation/Root";
+import SearchScreen from "./src/screens/SearchScreen";
 
 import { NativeBaseProvider } from "native-base";
+import { useWindowDimensions } from "react-native";
 
 
-
+/**
+ * 전역 관리
+ */
+export const LayoutContext = createContext(null);
+const queryClient = new QueryClient();
 const RootContainer = styled.View`
   flex: 1;
   background-color: #212121;
-`
-
-const queryClient = new QueryClient();
+`;
 
 
 export default function App() {
+  /**
+   * 레이아웃 컨텍스트
+   */
+   
+  const dimensions = useWindowDimensions();
+  const LayoutValue = {Width : dimensions.width, Height : dimensions.height}
+  
+
   const [appIsReady, setAppIsReady] = useState(false);
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -51,12 +61,10 @@ export default function App() {
           "SUIT-Medium": require("./src/assets/fonts/SUIT-Medium.otf"),
           "SUIT-Regular": require("./src/assets/fonts/SUIT-Regular.otf"),
           "SUIT-SemiBold": require("./src/assets/fonts/SUIT-SemiBold.otf"),
-          "Classic" : require("./src/assets/fonts/Cafe24Classictype.ttf")
+          Classic: require("./src/assets/fonts/Cafe24Classictype.ttf"),
         });
-        
       } catch (e) {
         console.warn(e);
-
       } finally {
         // Tell the application to render
         setAppIsReady(true);
@@ -71,17 +79,18 @@ export default function App() {
   }
 
   return (
-
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <RootContainer>
-          <NavigationContainer>
-            <NativeBaseProvider>
-              <Root />
-            </NativeBaseProvider>
-            {/* <MainScreen /> */}
-          </NavigationContainer>
-        </RootContainer>
+        <LayoutContext.Provider value={LayoutValue}>
+          <RootContainer>
+            <NavigationContainer>
+              <NativeBaseProvider>
+                <Root />
+              </NativeBaseProvider>
+              {/* <MainScreen /> */}
+            </NavigationContainer>
+          </RootContainer>
+        </LayoutContext.Provider>
         <StatusBar style="auto" />
       </ThemeProvider>
     </QueryClientProvider>

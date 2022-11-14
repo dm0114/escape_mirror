@@ -3,6 +3,9 @@ import styled from "styled-components/native";
 
 // font size를 객체로 반환해주자.
 const fontSizes = {
+  TitleXL: '44px',
+  TitleL: '38px',
+  title: '34px',
   title1: '28px',
   title2: '22px',
   title3: '20px',
@@ -14,6 +17,7 @@ const fontSizes = {
 };
 
 const fontHeight = {
+  title: '51px',
   title1 : '42px',
   title2 : '33px',
   title3 : '30px',

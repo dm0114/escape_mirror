@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components/native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 const cardImage = require("../assets/mocks/image.png");
 
 function ThemeComponent({
@@ -25,7 +25,7 @@ function ThemeComponent({
       }}
     >
       <LinearGradient
-        colors={["#21212110",'#21212120', '#21212130', '#21212140', '#21212140',"#21212140","#21212140","#21212160", '#21212190', '#21212190', '#21212190', '#21212190', '#21212190', '#21212190',"#212121", "#212121"]}
+        colors={["#21212110",'#21212120', '#21212130', '#21212140', '#21212140',"#21212140","#21212140","#21212160", '#21212190', '#21212190', '#21212190', '#21212190', '#21212190', '#212121',"#212121", "#212121"]}
         style={{
             height: 363,
             width: 225,
@@ -54,9 +54,13 @@ function ThemeComponent({
           </Chip>
         </RowContainer>
         <MainTitle>{themeName}</MainTitle>
-        <Description>
-          {randomReview ? `"${randomReview}"` : '"등록된 리뷰가 없어요"'}
-        </Description>
+        <DescriptionView>
+          <FontAwesome name="quote-left" size={24} color="white" />
+            <Description>
+              {randomReview ? `${randomReview}` : '등록된 리뷰가 없어요'}
+            </Description>
+          <FontAwesome name="quote-right" size={24} color="white" />
+        </DescriptionView>
       </InfoContainer>
     </ThemePosterContainer>
   );
@@ -65,8 +69,8 @@ function ThemeComponent({
 export default ThemeComponent;
 
 const InfoContainer = styled.View`
-  position: absolute;
-  bottom: -30px;
+  position: relative;
+  top: -84px;
   align-items: center;
   z-index: 999;
   
@@ -98,6 +102,13 @@ const Chip = styled.View`
   background-color: #212121;
   
 `;
+const DescriptionView = styled.View`
+  flex-direction: row;
+  width: 256px;
+  height: 64px;
+  overflow-y: hidden;
+  justify-content: space-between;
+`
 
 const ChipText = styled.Text`
   font-family: "SUIT-SemiBold";
@@ -111,7 +122,7 @@ const ChipText = styled.Text`
 
 const MainTitle = styled.Text`
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
   line-height: ${({ theme }) => theme.fontHeight.title2};
@@ -121,11 +132,12 @@ const MainTitle = styled.Text`
 `;
 
 const Description = styled.Text`
-  font-family: "SUIT-Medium";
-  font-size: ${({ theme }) => theme.fontSizes.body2};
-  line-height: ${({ theme }) => theme.fontHeight.body2};
-  letter-spacing: 0.3px;
-  color: #fff;
+  font-family: "SUIT-SemiBold";
+  margin-top: 10px;
+  font-size: ${({ theme }) => theme.fontSizes.body};
+  line-height: ${({ theme }) => theme.fontHeight.body};
+  letter-spacing: -0.3px;
+  color: #ddd;
 `;
 
 export const styles = StyleSheet.create({
