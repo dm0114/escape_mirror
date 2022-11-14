@@ -13,6 +13,22 @@ public class ReservationDetailDto {
 
     private String storeAddress;
 
+    private String themeName;
+
+    private String storeName;
+
+    private String date;
+
+    private String time;
+
+    private String tel;
+
+    private String homepage;
+
+    private String mapY;
+
+    private String mapX;
+
     private String themeImg;
 
 }

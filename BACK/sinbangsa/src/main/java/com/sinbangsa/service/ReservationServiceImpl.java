@@ -108,24 +108,29 @@ public class ReservationServiceImpl implements ReservationService {
 
         try {
             LocalDate today = LocalDate.now();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date inputToday = simpleDateFormat.parse(date);
 
             Date todayDate = java.sql.Date.valueOf(today);
             long timeDifference = todayDate.getTime() - inputToday.getTime();
-            long dayDifference = (timeDifference / (1000 * 60 * 60 * 24)) % 365;
+
+            long dayDifference = (timeDifference / (1000L * 60 * 60 * 24)) % 365;
             if (dayDifference >= 7) {
                 throw new Exception("예약 날짜 데이터가 잘못되었습니다.(오늘보다 7일이 넘는 날짜 예약 불가)");
             }
-
             // 테마 예약시간
             List<ThemeTime> themeTimes = themeTimeRepository.findAllByThemeId(themeId);
+            if (themeTimes.isEmpty()) {
+                throw new NullPointerException("요청테마가 잘못되었습니다.");
+            }
             if (themeTimes.isEmpty()) {
                 throw new NullPointerException("잘못된 themeId 요청");
             }
 
             for (ThemeTime themeTime : themeTimes) {
+                System.out.println(themeTime);
                 if (!reservationRepository.existsByThemeTimeAndDate(themeTime, date)) {
+                    System.out.println(1);
                     themeTimeIdList.add(themeTime.getId());
                 }
             }
@@ -145,7 +150,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         try {
             if (userRepository.existsByNickname(nickname)) {
-                Long userId = userRepository.findByNickname(nickname).getId();
+                User userRepo = userRepository.findByNickname(nickname).orElse(null);
+                if (userRepo == null) {
+                    throw new NullPointerException("유저 정보가 잘못되었습니다.");
+                }
+                Long userId = userRepo.getId();
                 return userId;
             }
         } catch (Exception e) {
