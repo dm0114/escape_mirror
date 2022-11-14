@@ -1,10 +1,12 @@
 package com.sinbangsa.data.repository;
 
+import com.sinbangsa.data.dto.TransferDto;
 import com.sinbangsa.data.entity.Reservation;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.data.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -24,4 +26,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findByDateAndThemeTime(Date date, ThemeTime themeTime);
     Optional<Reservation> findById(long reservationId);
+
+    @Query(value = "select reservation " +
+            "from Reservation reservation " +
+            "where reservation.status = 1")
+    List<Reservation> getTransfer();
 }

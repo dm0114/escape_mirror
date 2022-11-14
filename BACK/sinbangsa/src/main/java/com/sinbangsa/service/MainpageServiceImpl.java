@@ -2,6 +2,7 @@ package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.MainpageDto;
 import com.sinbangsa.data.dto.PreLoadingDto;
+import com.sinbangsa.data.dto.TransferDto;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import com.sinbangsa.exception.ThemeNotFoundException;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -132,4 +134,37 @@ public class MainpageServiceImpl implements MainpageService{
         return preLoading;
 
     }
+
+    @Transactional(readOnly = true)
+    public List<TransferDto> getTransfers(String region) {
+        LOGGER.info("[MainpageService] getTransfers 호출");
+        try {
+            List<TransferDto> transfers = new ArrayList<>();
+            List<Reservation> reservationsRepo = reservationRepository.getTransfer();
+
+            if (reservationsRepo.isEmpty()) {
+                return transfers;
+            }
+
+            for (Reservation reservationRepo : reservationsRepo) {
+                if (region.equals(reservationRepo.getThemeTime().getTheme().getStore().getRegion()) ) {
+                    TransferDto transferDto = new TransferDto();
+                    Theme themeRepo = reservationRepo.getThemeTime().getTheme();
+                    Store storeRepo = themeRepo.getStore();
+                    transferDto.setStoreId(storeRepo.getStoreId());
+                    transferDto.setStoreName(storeRepo.getStoreName());
+                    transferDto.setThemeId(themeRepo.getId());
+                    transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservedDate(reservationRepo.getDate());
+                    transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
+                    transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
+                    transfers.add(transferDto);
+                }
+            }
+            return transfers;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
 }

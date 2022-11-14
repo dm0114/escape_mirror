@@ -2,6 +2,7 @@ package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.MainpageDto;
 import com.sinbangsa.data.dto.PreLoadingDto;
+import com.sinbangsa.data.dto.TransferDto;
 import com.sinbangsa.service.MainpageService;
 import com.sinbangsa.utils.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
@@ -75,6 +76,21 @@ public class MainpageCotroller {
         }catch (Exception e) {
             MainpageDto mainpageDto = new MainpageDto();
             return new ResponseEntity<>(mainpageDto, headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/transfer")
+    @ApiOperation(value = "양도리스트")
+    public ResponseEntity<List<TransferDto>> getTransfers(@RequestParam String region) {
+        LOGGER.info("[MainpageController] getSearchResult 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        try {
+            List<TransferDto> result = mainpageService.getTransfers(region);
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        }catch (Exception e) {
+
+            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
         }
     }
 
