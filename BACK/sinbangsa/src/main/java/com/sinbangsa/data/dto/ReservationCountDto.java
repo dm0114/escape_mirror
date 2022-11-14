@@ -1,8 +1,18 @@
 package com.sinbangsa.data.dto;
 
-public class ReservationCountDto {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    public String Date;
+import java.time.LocalDate;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class ReservationCountDto {
+    public LocalDate day;
     public int acceptedCount;
     public int waintCount;
 

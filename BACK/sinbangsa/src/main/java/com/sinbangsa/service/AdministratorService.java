@@ -23,8 +23,8 @@ public interface AdministratorService {
     Boolean updateThemeTime(ThemeTimeDto themeTime, long adminId);
     Boolean deleteThemeTime(long themeTimeId, long adminId);
     Boolean deleteTheme(long themeId, long adminId);
-//    List<ReservationCountDto> getReservationCount(int rmonth, long adminId, long storeId);
-    ReservationAdminDayDto getReservationAdminDay(long storeId, Date reservationDay, long adminId);
+    List<ReservationCountDto> getReservationCount(long adminId, long storeId);
+    ReservationAdminDayDto getReservationAdminDay(long storeId, String reservationDay, long adminId);
     Boolean approveReservation(long adminId, long reservationId);
     Boolean deleteReservation(long reservationId, long adminId);
     Boolean verificationExit(BookRegisterDto bookRegister,long adminId);

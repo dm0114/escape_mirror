@@ -4,6 +4,7 @@ import com.sinbangsa.data.dto.*;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import com.sinbangsa.exception.*;
+import jdk.vm.ci.meta.Local;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -406,22 +407,34 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
-//    public List<ReservationCountDto> getReservationCount(int rmonth, long adminId, long storeId){
-//        LOGGER.info("[AdministratorService] getReservationCount 호출");
-//        Store store = storeRepository.getByStoreId(storeId).orElse(null);
-//        if (store == null) {
-//            throw new StoreNotFoundException();
-//        }
-//
-//        if (adminId != store.getStoreAdmin().getId()) {
-//            throw new AccessDeniedException();
-//        }
-//
-//        List<ReservationCountDto> reservationCountList = new ArrayList<>();
-//
-//    }
+    public List<ReservationCountDto> getReservationCount(long adminId, long storeId){
+        LOGGER.info("[AdministratorService] getReservationCount 호출");
+        Store store = storeRepository.getByStoreId(storeId).orElse(null);
+        if (store == null) {
+            throw new StoreNotFoundException();
+        }
 
-    public ReservationAdminDayDto getReservationAdminDay(long storeId, Date reservationDay, long adminId){
+        if (adminId != store.getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+        List<ReservationCountDto> reservationCountList = new ArrayList<>();
+        LocalDate day = LocalDate.now();
+
+        for (int i = 0; i < 7 ; i++ ){
+            LocalDate lDay = day.plusDays(i);
+            ReservationCountDto reservationCount = new ReservationCountDto();
+            reservationCount.setDay(lDay);
+            reservationCount.setAcceptedCount(reservationRepository.getCountAccepted(lDay.toString(),store.getStoreId()));
+            reservationCount.setWaintCount(reservationRepository.getCountWaiting(lDay.toString(),store.getStoreId()));
+
+            reservationCountList.add(reservationCount);
+        }
+
+        return reservationCountList;
+
+    }
+
+    public ReservationAdminDayDto getReservationAdminDay(long storeId, String reservationDay, long adminId){
         LOGGER.info("[AdministratorService] getReservationCount 호출");
         Store store = storeRepository.getByStoreId(storeId).orElse(null);
         if (store == null) {
