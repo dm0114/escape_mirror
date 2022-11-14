@@ -25,6 +25,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final ThemeRepository themeRepository;
     private final ThemeTimeRepository themeTimeRepository;
     private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
     public List<AdminStoreDto> getAdminStoreDetail(long adminId){
         LOGGER.info("[AdministratorService] getAdminStoreDetail 호출");
@@ -471,10 +473,10 @@ public class AdministratorServiceImpl implements AdministratorService {
             throw new ReservationNotFound();
         }
 
-//        // admin 안붙어있으면 에러남
-//        if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
-//            throw new AccessDeniedException();
-//        }
+        // admin 안붙어있으면 에러남
+        if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
 
         try {
             reservation.update(true);
@@ -502,5 +504,48 @@ public class AdministratorServiceImpl implements AdministratorService {
             return false;
         }
     }
+
+    @Transactional
+    public Boolean verificationExit(BookRegisterDto bookRegister,long adminId){
+        LOGGER.info("[AdministratorService] deleteReservation 호출");
+        Theme theme = themeRepository.getById(bookRegister.getThemeId()).orElse(null);
+        if (theme == null) {
+            throw new ThemeNotFoundException();
+        }
+        if (adminId != theme.getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        List<String> userList = bookRegister.getUserNicknames();
+        System.out.println(userList.size());
+        for (String nickname : userList) {
+            User user = userRepository.findByNickname(nickname).orElse(null);
+            if (user == null) {
+                throw new UserNotFoundException();
+            }
+
+            try {
+                Book rbook = Book.builder()
+                        .bookUser(user)
+                        .bookTheme(theme)
+                        .clear(bookRegister.getClear())
+                        .usedHint(bookRegister.getUsedHint())
+                        .clearTime(bookRegister.getClearTime())
+                        .build();
+                bookRepository.save(rbook);
+            } catch (Exception e) {
+                return false;
+            }
+
+        }
+        Boolean del = deleteReservation(bookRegister.getReservationId(), adminId);
+        if (del) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
 
 }

@@ -1,7 +1,7 @@
 package com.sinbangsa.exception;
 
 public class StoreNotFoundException extends RuntimeException{
-    public StoreNotFoundException() {super("테마를 찾을 수 없습니다.");}
+    public StoreNotFoundException() {super("가게를 찾을 수 없습니다.");}
 
     public StoreNotFoundException(String msg) {super(msg);}
 
