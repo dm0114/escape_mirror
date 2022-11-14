@@ -189,7 +189,7 @@ public class MypageServiceImpl implements MypageService {
     }
 
     public ReservationDetailDto getReservationDetail(Long reservationId, HttpServletRequest httpServletRequest) {
-        LOGGER.info("[MypageServiceImpl] updateUserInfo 호출");
+        LOGGER.info("[MypageServiceImpl] getReservationDetail 호출");
         try {
             String token = jwtTokenProvider.resolveToken(httpServletRequest);
             Long userId = jwtTokenProvider.getUserId(token);
@@ -201,9 +201,19 @@ public class MypageServiceImpl implements MypageService {
             if (reservationRepo == null) {
                 throw new NullPointerException("예약 정보가 잘못되었습니다.");
             }
+
             Theme themeRepo = reservationRepo.getThemeTime().getTheme();
+            Store storeRepo = themeRepo.getStore();
             ReservationDetailDto reservationDetailDto = new ReservationDetailDto();
-            reservationDetailDto.setStoreAddress(themeRepo.getStore().getAddress());
+            reservationDetailDto.setStoreAddress(storeRepo.getAddress());
+            reservationDetailDto.setThemeName(themeRepo.getThemeName());
+            reservationDetailDto.setStoreName(storeRepo.getStoreName());
+            reservationDetailDto.setDate(reservationRepo.getDate());
+            reservationDetailDto.setTime(reservationRepo.getThemeTime().getTime());
+            reservationDetailDto.setTel(storeRepo.getTel());
+            reservationDetailDto.setHomepage(storeRepo.getHomepage());
+            reservationDetailDto.setMapY(storeRepo.getMapY());
+            reservationDetailDto.setMapX(storeRepo.getMapX());
             reservationDetailDto.setThemeImg(themeRepo.getPoster());
             return reservationDetailDto;
         } catch (Exception e) {
