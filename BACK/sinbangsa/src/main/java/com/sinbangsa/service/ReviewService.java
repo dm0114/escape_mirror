@@ -10,4 +10,5 @@ public interface ReviewService {
 
     boolean createReview(ReviewDto reviewDto, HttpServletRequest httpServletRequest);
     boolean updateReview(long reviewId, ReviewUpdateDto reviewUpdate, HttpServletRequest httpServletRequest);
+    boolean deleteReview(long reviewId, HttpServletRequest httpServletRequest);
 }

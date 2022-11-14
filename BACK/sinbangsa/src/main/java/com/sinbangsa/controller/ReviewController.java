@@ -63,5 +63,19 @@ public class ReviewController {
 
     }
 
+    @DeleteMapping("/{reviewId}")
+    @ApiOperation(value = "리뷰 삭제")
+    public ResponseEntity<Boolean> deleteReview(@PathVariable long reviewId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[ReviewController] deleteReview 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        boolean result = reviewService.deleteReview(reviewId, httpServletRequest);
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
+
 }
 

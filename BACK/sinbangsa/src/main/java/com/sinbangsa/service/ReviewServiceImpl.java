@@ -125,4 +125,27 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
+    public boolean deleteReview(long reviewId, HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(token);
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        ThemeReview themeReview = themeReviewRepository.findById(reviewId).orElse(null);
+        if (themeReview == null) {
+            throw new ReviewNotFoundException();
+        }
+        if (user.getId() != themeReview.getReviewUser().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        try {
+            reviewRepository.delete(themeReview);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+    }
+
 }
