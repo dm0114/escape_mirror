@@ -50,7 +50,7 @@ public class ReviewController {
 
     @PutMapping("/{reviewId}")
     @ApiOperation(value = "리뷰 수정")
-    public ResponseEntity<Boolean> updateReview(@RequestParam long reviewId, @RequestBody ReviewUpdateDto reviewUpdate, HttpServletRequest httpServletRequest){
+    public ResponseEntity<Boolean> updateReview(@PathVariable long reviewId, @RequestBody ReviewUpdateDto reviewUpdate, HttpServletRequest httpServletRequest){
         LOGGER.info("[ReviewController] updateReview 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

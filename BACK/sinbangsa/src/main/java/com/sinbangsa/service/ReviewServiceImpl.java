@@ -103,8 +103,7 @@ public class ReviewServiceImpl implements ReviewService {
         if (themeReview == null) {
             throw new ReviewNotFoundException();
         }
-
-        if (user.getId() != themeReview.getReviewTheme().getId()) {
+        if (user.getId() != themeReview.getReviewUser().getId()) {
             throw new AccessDeniedException();
         }
 
