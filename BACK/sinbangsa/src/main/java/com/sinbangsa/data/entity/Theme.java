@@ -1,19 +1,17 @@
 package com.sinbangsa.data.entity;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-
+@Builder
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Theme {
 
     @Id
@@ -32,36 +30,42 @@ public class Theme {
     @OneToMany(mappedBy = "reviewTheme")
     private List<ThemeReview> themeReviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "userRelationTheme")
+    private List<UserThemeRelation> userRelations = new ArrayList<>();
+
     @Column
-    @NotNull
     private String themeName;
 
     @Column
-    @NotNull
     private String genre;
 
     @Column
-    @NotNull
     private String capacity;
 
     @Column
-    @NotNull
     private String price;
 
     @Column
-    @NotNull
-    private String difficulty;
+    private int difficulty;
 
     @Column
-    @NotNull
     private int leadtime;
 
     @Column(length = 1500)
-    @NotNull
     private String description;
 
     @Column
-    @NotNull
     private String poster;
+
+    public void update(String themeName, String genre, String capacity, String price, int difficulty, int leadtime, String description, String poster) {
+        this.themeName = themeName;
+        this.genre = genre;
+        this.capacity = capacity;
+        this.price = price;
+        this.difficulty = difficulty;
+        this.leadtime = leadtime;
+        this.description = description;
+        this.poster = poster;
+    }
 
 }

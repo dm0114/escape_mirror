@@ -1,9 +1,6 @@
 package com.sinbangsa.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -22,14 +18,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
 
-    @OneToMany(mappedBy = "storeUser")
-    private List<Store> stores = new ArrayList<>();
-
-    @OneToMany(mappedBy = "articleUser")
-    private List<Article> articles = new ArrayList<>();
-
-    @OneToMany(mappedBy = "commentUser")
-    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "reservationUser")
     private List<Reservation> reservations = new ArrayList<>();
@@ -40,6 +28,9 @@ public class User {
     @OneToMany(mappedBy = "storeRelationUser")
     private List<UserStoreRelation> storeRelations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "themeRelationUser")
+    private List<UserThemeRelation> themeRelations = new ArrayList<>();
+
     @OneToMany(mappedBy = "bookUser")
     private List<Book> books = new ArrayList<>();
 
@@ -48,28 +39,7 @@ public class User {
     private List<ThemeReview> themeReviews = new ArrayList<>();
 
     @Column(unique = true)
-    @NotNull
     private String email;
-
-
-    @Column
-    @NotNull
-    private boolean admin;
-
-    @Column
-    @NotNull
-    private String tel;
-
-    @Column
-    @NotNull
-    private LocalDate birth;
-
-    @Column
-    @NotNull
-    private String password;
-
-    @Column
-    private String auth;
 
     @Column
     private String profile;
@@ -78,12 +48,20 @@ public class User {
     private Integer grade = 0;
 
     @Column
-    private String Title;
-
-    @Column
-    private String username;
-
-    @Column
     private String nickname;
+
+
+    @Builder
+    public User(String email, String profile, String nickname){
+        this.email = email;
+        this.profile = profile;
+        this.nickname = nickname;
+    }
+
+    public void update(String nickname, String profile) {
+        this.nickname = nickname;
+        this.profile = profile;
+    }
+
 
 }

@@ -1,31 +1,33 @@
 package com.sinbangsa.data.entity;
 
 import lombok.AccessLevel;
-import lombok.Builder;
+
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
+    @Column(name = "refresh_token_id")
     private Long id;
 
-    @Column
     private String email;
 
-    @Column
-    private String token;
+    private String refreshToken;
 
-    @Builder
-    public RefreshToken(String email,String token){
+    private RefreshToken(String email,String token){
         this.email = email;
-        this.token = token;
+        this.refreshToken = token;
     }
 
+    public static RefreshToken createToken(String email,String token){ return new RefreshToken(email, token);}
+
+    public void changeToken(String token) { this.refreshToken = token; }
 }

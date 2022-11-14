@@ -4,6 +4,8 @@ package com.sinbangsa.controller;
 import com.sinbangsa.data.dto.ReviewDto;
 import com.sinbangsa.service.ReviewService;
 import com.sinbangsa.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +18,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/review")
+@RequestMapping("/api/review")
+@Api(value = "리뷰 API", tags = {"리뷰 API"})
 public class ReviewController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     private static final String SUCCESS = "success";
 
@@ -31,22 +35,19 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("")
-    public ResponseEntity<String> createReview(@RequestBody ReviewDto reviewDto) {
+    @PostMapping
+    @ApiOperation(value = "리뷰 작성")
+    public ResponseEntity<String> createReview(@RequestBody ReviewDto reviewDto, HttpServletRequest httpServletRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
-        boolean result = reviewService.createReview(reviewDto);
-        if (!result) {
-
-
+        try {
+            boolean result = reviewService.createReview(reviewDto, httpServletRequest);
+            return new ResponseEntity<>("리뷰 작성 성공", headers, HttpStatus.CREATED);
+        } catch (Exception e) {
             return new ResponseEntity<>("리뷰 작성 실패", headers, HttpStatus.BAD_REQUEST);
         }
 
-
-        return new ResponseEntity<>("리뷰 작성 성공", headers, HttpStatus.CREATED);
     }
-
 
 }
 

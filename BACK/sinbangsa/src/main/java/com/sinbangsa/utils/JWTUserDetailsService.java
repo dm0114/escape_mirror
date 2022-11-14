@@ -15,7 +15,7 @@ public class JWTUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email){
-        User user= userRepository.getByEmail(email);
+        User user= userRepository.getByEmail(email).orElse(null);
 
         if (user != null){
             JWTUserDetails jwtUserDetails = new JWTUserDetails(user);

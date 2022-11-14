@@ -1,26 +1,25 @@
 package com.sinbangsa.data.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-
+@Builder
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Store {
 
     @Id
     private long storeId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User storeUser;
+    @JoinColumn(name = "admin")
+    private Admin storeAdmin;
+
 
     @OneToMany(mappedBy = "store")
     private List<Theme> themes = new ArrayList<>();
@@ -34,32 +33,33 @@ public class Store {
     private String storeName;
 
     @Column
-    @NotNull
     private String address;
 
     @Column
-    @NotNull
     private String mapX;
 
     @Column
-    @NotNull
     private String mapY;
 
     @Column
-    @NotNull
     private String tel;
 
     @Column
-    @NotNull
     private String poster;
 
     @Column
-    @NotNull
     private String homepage;
 
     @Column
-    @NotNull
     private String region;
 
+    public void update(String storeName, String address, String tel, String poster, String homepage, String region) {
+        this.storeName = storeName;
+        this.address = address;
+        this.tel = tel;
+        this.poster = poster;
+        this.homepage = homepage;
+        this.region = region;
+    }
 
 }

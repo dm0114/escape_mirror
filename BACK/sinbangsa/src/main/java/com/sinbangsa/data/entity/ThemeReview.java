@@ -1,20 +1,23 @@
 package com.sinbangsa.data.entity;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.sinbangsa.data.repository.BookRepository;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
+@Builder
 @Entity
 @Getter
-@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ThemeReview {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,12 +32,10 @@ public class ThemeReview {
     private User reviewUser;
 
     @Column
-    @NotNull
     private String content;
 
 
     @Column
-    @NotNull
     private int star;
 
     @Column
@@ -60,10 +61,9 @@ public class ThemeReview {
 
     @Column
     @NotNull
-    private LocalDate createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
 
     @Column
-    @NotNull
     private int usedHint;
 
     @Column
@@ -72,7 +72,18 @@ public class ThemeReview {
 
     @Column
     @NotNull
-    private Date clearDate;
+    private LocalDate clearDate;
 
+    public void update(String content, int star, int diff, int story, int interior, int activity, int horror, int locker, String imageUrl) {
+        this.content = content;
+        this.star = star;
+        this.diff = diff;
+        this.story = story;
+        this.interior = interior;
+        this.activity = activity;
+        this.horror = horror;
+        this.locker = locker;
+        this.imageUrl = imageUrl;
+    }
 
 }
