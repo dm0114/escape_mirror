@@ -3,15 +3,18 @@ package com.sinbangsa.service;
 import com.sinbangsa.data.dto.MainpageDto;
 import com.sinbangsa.data.dto.PreLoadingDto;
 import com.sinbangsa.data.dto.TransferDto;
+import com.sinbangsa.data.dto.TransferSearchDto;
 import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import com.sinbangsa.exception.ThemeNotFoundException;
+import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -26,6 +29,8 @@ public class MainpageServiceImpl implements MainpageService{
     private final ThemeReviewRepository themeReviewRepository;
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public MainpageDto getSearchResult(String searchWord) {
@@ -167,4 +172,76 @@ public class MainpageServiceImpl implements MainpageService{
         }
     }
 
+
+    @Transactional(readOnly = true)
+    public TransferSearchDto getTransferSearch(String searchWord) {
+        LOGGER.info("[MainpageService] getTransferSearch 호출");
+        try {
+            List<Reservation> reservationsRepo = reservationRepository.getTransfer();
+
+            TransferSearchDto transferSearchDto = new TransferSearchDto();
+            List<TransferDto> stores = new ArrayList<>();
+            List<TransferDto> themes = new ArrayList<>();
+            for (Reservation reservationRepo : reservationsRepo) {
+                Store storeRepo = reservationRepo.getThemeTime().getTheme().getStore();
+                Theme themeRepo = reservationRepo.getThemeTime().getTheme();
+                if (storeRepo.getStoreName().contains(searchWord)) {
+                    TransferDto transferDto = new TransferDto();
+                    transferDto.setStoreId(storeRepo.getStoreId());
+                    transferDto.setStoreName(storeRepo.getStoreName());
+                    transferDto.setThemeId(themeRepo.getId());
+                    transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservedDate(reservationRepo.getDate());
+                    transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
+                    transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
+                    stores.add(transferDto);
+                }
+
+                if (themeRepo.getThemeName().contains(searchWord)) {
+                    TransferDto transferDto = new TransferDto();
+                    transferDto.setStoreId(storeRepo.getStoreId());
+                    transferDto.setStoreName(storeRepo.getStoreName());
+                    transferDto.setThemeId(themeRepo.getId());
+                    transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservedDate(reservationRepo.getDate());
+                    transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
+                    transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
+                    themes.add(transferDto);
+                }
+
+            }
+            transferSearchDto.setStoreList(stores);
+            transferSearchDto.setThemeList(themes);
+            return transferSearchDto;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Transactional
+    public Boolean putTransfer(Long reservationId, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[MainpageService] putTransfer 호출");
+        final int NOT_TRANSFER_STATUS = 0;
+
+        try {
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long userId = jwtTokenProvider.getUserId(token);
+            User userRepo = userRepository.findById(userId).orElse(null);
+            if (userRepo == null) {
+                throw new NullPointerException("유저 정보가 잘못되었습니다.");
+            }
+
+            Reservation reservationRepo = reservationRepository.findByReservationId(reservationId).orElse(null);
+            if (reservationRepo == null) {
+                throw new NullPointerException("예약 정보가 잘못되었습니다.");
+            }
+
+            reservationRepo.update(userRepo, NOT_TRANSFER_STATUS);
+            return true;
+        } catch (Exception e) {
+            throw e;
+        }
+
+
+    }
 }

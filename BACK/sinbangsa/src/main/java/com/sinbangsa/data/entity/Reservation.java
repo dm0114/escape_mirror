@@ -40,6 +40,11 @@ public class Reservation {
         this.status = status;
     }
 
+    public void update(User user, int status) {
+        this.reservationUser=user;
+        this.status = status;
+    }
+
     public void update(boolean accept) {
         this.accept = accept;
     }
