@@ -206,25 +206,27 @@ public class AdministratorController {
         return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
-//    @GetMapping("/reservation/month")
-//    @ApiOperation(value = "관리자페이지 월별 예약관리")
-//    public ResponseEntity<List<ReservationCountDto>> getReservationCount (@RequestParam int rmonth, long storeId){
-//        LOGGER.info("[AdministratorController] getReservationCount 호출");
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-//        // 어드민 아이디 토큰에서 가져오기
-//        long adminId = 234212;
-//        List<ReservationCountDto> reservationCountDtoList = administratorService.getReservationCount(rmonth, adminId, storeId);
-//    }
+    @GetMapping("/reservation/month/{storeId}")
+    @ApiOperation(value = "관리자페이지 월별 예약관리")
+    public ResponseEntity<List<ReservationCountDto>> getReservationCount (@PathVariable long storeId){
+        LOGGER.info("[AdministratorController] getReservationCount 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 3;
+        List<ReservationCountDto> reservationCountDtoList = administratorService.getReservationCount(adminId, storeId);
 
-    @GetMapping("/reservation/day")
+        return new ResponseEntity<>(reservationCountDtoList, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/reservation/day/{storeId}")
     @ApiOperation(value = "관리자 페이지 일별 예약 관리")
-    public ResponseEntity<ReservationAdminDayDto> getReservationAdminDay(@RequestParam Date reservationDay, long storeId) {
+    public ResponseEntity<ReservationAdminDayDto> getReservationAdminDay(@RequestParam String reservationDay, @PathVariable long storeId) {
         LOGGER.info("[AdministratorController] getReservationCount 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        long adminId = 234212;
+        long adminId = 3;
         ReservationAdminDayDto reservationAdminDay = administratorService.getReservationAdminDay(storeId ,reservationDay, adminId);
 
         return new ResponseEntity<>(reservationAdminDay, headers, HttpStatus.OK);
