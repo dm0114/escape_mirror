@@ -463,6 +463,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         return reservationAdminDayDto;
     }
 
+    @Transactional
     public Boolean approveReservation(long adminId, long reservationId){
         LOGGER.info("[AdministratorService] approveReservation 호출");
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
@@ -470,10 +471,10 @@ public class AdministratorServiceImpl implements AdministratorService {
             throw new ReservationNotFound();
         }
 
-        // admin 안붙어있으면 에러남
-        if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
-            throw new AccessDeniedException();
-        }
+//        // admin 안붙어있으면 에러남
+//        if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
+//            throw new AccessDeniedException();
+//        }
 
         try {
             reservation.update(true);
