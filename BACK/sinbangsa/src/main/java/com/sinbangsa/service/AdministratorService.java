@@ -24,4 +24,5 @@ public interface AdministratorService {
     Boolean deleteTheme(long themeId, long adminId);
 //    List<ReservationCountDto> getReservationCount(int rmonth, long adminId, long storeId);
     ReservationAdminDayDto getReservationAdminDay(long storeId, Date reservationDay, long adminId);
+    Boolean approveReservation(long adminId, long reservationId);
 }

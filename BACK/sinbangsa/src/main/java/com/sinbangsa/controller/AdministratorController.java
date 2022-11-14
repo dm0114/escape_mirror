@@ -231,5 +231,21 @@ public class AdministratorController {
 
     }
 
+    @PutMapping("/reservation/{reservationId}")
+    @ApiOperation(value = "예약 승인")
+    public ResponseEntity<Boolean> approveReservation(@PathVariable long reservationId) {
+        LOGGER.info("[AdministratorController] approveReservation 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        long adminId = 234212;
+        boolean result = administratorService.approveReservation(adminId, reservationId);
+
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
