@@ -54,8 +54,8 @@ public class AdminServiceImpl implements AdminService{
             return null;
         }
 
-        String accessToken = jwtTokenProvider.createAccessToken(adminLoginDto.getUserId(),admin.getId());
-        String refreshToken = jwtTokenProvider.createRefreshToken(adminLoginDto.getUserId(),admin.getId());
+        String accessToken = jwtTokenProvider.createAccessToken(adminLoginDto.getUserId(),admin.getId(),"ROLE_ADMIN");
+        String refreshToken = jwtTokenProvider.createRefreshToken(adminLoginDto.getUserId(),admin.getId(),"ROLE_ADMIN");
 
         AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto();
         adminLoginResponseDto.setAccessToken(accessToken);

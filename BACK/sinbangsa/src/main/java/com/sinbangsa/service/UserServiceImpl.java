@@ -10,6 +10,7 @@ import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.RefreshTokenRepository;
 import com.sinbangsa.data.repository.UserRepository;
 import com.sinbangsa.utils.JwtTokenProvider;
+import com.sinbangsa.utils.Role;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +59,8 @@ public class UserServiceImpl implements UserService {
             String userEmail = loginUser.getEmail();
             Long userId = loginUser.getId();
 
-            String accessToken = jwtTokenProvider.createAccessToken(userEmail,userId,"User");
-            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail,userId,"User");
+            String accessToken = jwtTokenProvider.createAccessToken(userEmail,userId,"ROLE_USER");
+            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail,userId,"ROLE_USER");
 
             KakaoLoginResponseDto kakaoLoginResponseDto = new KakaoLoginResponseDto();
             kakaoLoginResponseDto.setRefreshToken(refreshToken);
@@ -88,13 +89,16 @@ public class UserServiceImpl implements UserService {
 
 
         String email = kakaoUser.getKakaoAccount().getEmail();
+        LOGGER.info("{}",email);
         User user = userRepository.getByEmail(email).orElse(null);
+        LOGGER.info("${}",user);
 
         if (user == null) {
             User loginUser = User.builder()
                     .email(kakaoUser.getKakaoAccount().getEmail())
                     .profile(kakaoUser.getProperties().getThumbnailImage())
                     .nickname(kakaoUser.getProperties().getNickname())
+                    .role(Role.ROLE_USER)
                     .build();
 
             user = userRepository.save(loginUser);

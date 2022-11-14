@@ -15,10 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-<<<<<<< HEAD:BACK/sinbangsa/src/main/java/config/SecurityConfig.java
-import org.springframework.stereotype.Component;
-=======
->>>>>>> 65acd060c6b6f13fa910ed561b932b0b1b4c9d78:BACK/sinbangsa/src/main/java/com/sinbangsa/config/SecurityConfig.java
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -58,8 +54,9 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() //요청에 관해 인증체크
                 .antMatchers("/api/user/**","/api/admin/auth/**").permitAll()
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**","/swagger*/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().hasRole("USER")
                 .and()
                 .formLogin().disable()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
@@ -80,13 +77,6 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-<<<<<<< HEAD:BACK/sinbangsa/src/main/java/config/SecurityConfig.java
 
     }
-
-=======
-    }
-
-
->>>>>>> 65acd060c6b6f13fa910ed561b932b0b1b4c9d78:BACK/sinbangsa/src/main/java/com/sinbangsa/config/SecurityConfig.java
 }

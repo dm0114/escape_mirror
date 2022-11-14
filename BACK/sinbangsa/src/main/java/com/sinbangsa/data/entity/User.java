@@ -1,10 +1,9 @@
 package com.sinbangsa.data.entity;
 
+import com.sinbangsa.utils.Role;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +49,17 @@ public class User {
     @Column
     private String nickname;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+
 
     @Builder
-    public User(String email, String profile, String nickname){
+    public User(String email, String profile, String nickname, Role role){
         this.email = email;
         this.profile = profile;
         this.nickname = nickname;
+        this.role = role;
     }
 
     public void update(String nickname, String profile) {

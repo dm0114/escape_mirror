@@ -3,6 +3,7 @@ package com.sinbangsa.utils;
 import com.sinbangsa.data.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -18,11 +19,12 @@ public class JWTUserDetails implements UserDetails {
     boolean credentialNonExpired;
     boolean enabled = false;
 
-    private List<GrantedAuthority> roles = new ArrayList<>();
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+this.user.getRole().name());
+        authorities.add(authority);
+        return authorities;
     }
 
     @Override
