@@ -470,10 +470,10 @@ public class AdministratorServiceImpl implements AdministratorService {
             throw new ReservationNotFound();
         }
 
-//        // admin 안붙어있으면 에러남
-//        if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
-//            throw new AccessDeniedException();
-//        }
+        // admin 안붙어있으면 에러남
+        if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
 
         try {
             reservation.update(true);
@@ -483,6 +483,23 @@ public class AdministratorServiceImpl implements AdministratorService {
             return false;
         }
     }
+    public Boolean deleteReservation(long reservationId, long adminId){
+        LOGGER.info("[AdministratorService] deleteReservation 호출");
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
 
+        try {
+            if (reservation == null) {
+                throw new ReservationNotFound();
+            }
+
+            if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
+                throw new AccessDeniedException();
+            }
+            reservationRepository.delete(reservation);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+    }
 
 }
