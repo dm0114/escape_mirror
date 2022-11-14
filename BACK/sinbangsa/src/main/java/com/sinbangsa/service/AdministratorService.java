@@ -2,6 +2,7 @@ package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.*;
 import com.sinbangsa.data.entity.ThemeTime;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
@@ -25,4 +26,5 @@ public interface AdministratorService {
 //    List<ReservationCountDto> getReservationCount(int rmonth, long adminId, long storeId);
     ReservationAdminDayDto getReservationAdminDay(long storeId, Date reservationDay, long adminId);
     Boolean approveReservation(long adminId, long reservationId);
+    Boolean deleteReservation(long reservationId, long adminId);
 }

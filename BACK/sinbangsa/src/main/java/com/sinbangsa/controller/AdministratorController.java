@@ -232,7 +232,7 @@ public class AdministratorController {
     }
 
     @PutMapping("/reservation/{reservationId}")
-    @ApiOperation(value = "예약 승인")
+    @ApiOperation(value = "관리자 예약 승인")
     public ResponseEntity<Boolean> approveReservation(@PathVariable long reservationId) {
         LOGGER.info("[AdministratorController] approveReservation 호출");
         HttpHeaders headers = new HttpHeaders();
@@ -243,6 +243,21 @@ public class AdministratorController {
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/reservation/{reservationId}")
+    @ApiOperation(value = "관리자 예약 취소")
+    public ResponseEntity<Boolean> deleteReservation(@PathVariable long reservationId) {
+        LOGGER.info("[AdministratorController] deleteReservation 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        // 어드민 아이디 토큰에서 가져오기
+        long adminId = 234212;
+        boolean result = administratorService.deleteReservation(reservationId, adminId);
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
         }
         return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
