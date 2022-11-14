@@ -45,8 +45,14 @@ public class UserController {
 
     @ApiOperation(value = "로그아웃")
     @DeleteMapping("/logout")
-    public void Logout(@RequestBody KakaoLogoutDto kakaoLogoutDto){
+    public ResponseEntity<String> Logout(@RequestBody KakaoLogoutDto kakaoLogoutDto){
         String refreshToken = kakaoLogoutDto.getRefreshToken();
-        System.out.println("로그아웃!");
+        Boolean result = userService.kakaoLogout(refreshToken);
+
+        if (result == true) {
+            return new ResponseEntity<>("로그아웃 성공",HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("로그아웃 실패",HttpStatus.BAD_REQUEST);
+        }
     }
 }

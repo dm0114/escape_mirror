@@ -1,8 +1,11 @@
 package com.sinbangsa.service;
 
+import com.sinbangsa.data.dto.AdminLoginRequestDto;
+import com.sinbangsa.data.dto.AdminLoginResponseDto;
 import com.sinbangsa.data.dto.AdminSignupDto;
 import com.sinbangsa.data.entity.Admin;
 import com.sinbangsa.data.repository.AdministratorRepository;
+import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService{
 
     private final AdministratorRepository administratorRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -35,5 +40,28 @@ public class AdminServiceImpl implements AdminService{
         administratorRepository.save(admin);
 
         return "어드민 어드밋";
+    }
+
+    public AdminLoginResponseDto AdminLogin(AdminLoginRequestDto adminLoginDto){
+        Admin admin = administratorRepository.getAdminByUserId(adminLoginDto.getUserId()).orElse(null);
+        System.out.println(adminLoginDto.getUserId());
+        System.out.println(admin);
+        if (admin == null){
+            return null;
+        }
+        if (!passwordEncoder.matches(adminLoginDto.getPassword(), admin.getPassword())){
+            System.out.println(admin.getPassword());
+            return null;
+        }
+
+        String accessToken = jwtTokenProvider.createAccessToken(adminLoginDto.getUserId(),admin.getId());
+        String refreshToken = jwtTokenProvider.createRefreshToken(adminLoginDto.getUserId(),admin.getId());
+
+        AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto();
+        adminLoginResponseDto.setAccessToken(accessToken);
+        adminLoginResponseDto.setRefreshToken(refreshToken);
+        return adminLoginResponseDto;
+
+
     }
 }

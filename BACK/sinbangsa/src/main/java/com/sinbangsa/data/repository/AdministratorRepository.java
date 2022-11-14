@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface AdministratorRepository extends JpaRepository<Admin, Long> {
     Optional<Admin> getAdminById(long adminId);
 
-    Optional<Admin> getAdminByAdminName(String adminName);
+    Optional<Admin> getAdminByUserId(String adminName);
 }
