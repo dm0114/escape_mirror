@@ -30,7 +30,7 @@ public class Book {
     private int clear;
 
     @Column
-    private Boolean review;
+    private Boolean review = false;
 
     @Column
     private LocalDate doneDate= LocalDate.now();

@@ -3,7 +3,7 @@ package com.sinbangsa.exception;
 public class ReservationNotFound extends RuntimeException {
 
     public ReservationNotFound() {
-        super("테마를 찾을 수 없습니다.");
+        super("예약을 찾을 수 없습니다.");
     }
 
     public ReservationNotFound(String msg) {
