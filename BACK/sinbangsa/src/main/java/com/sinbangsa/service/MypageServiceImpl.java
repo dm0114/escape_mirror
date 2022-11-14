@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -209,7 +210,7 @@ public class MypageServiceImpl implements MypageService {
             throw e;
         }
     }
-
+    @Transactional
     public boolean doTransfer(Long reservationId, HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageServiceImpl] doTransfer 호출");
         final int TRANSFER_STATE =1;
@@ -229,10 +230,7 @@ public class MypageServiceImpl implements MypageService {
             if (reservationRepo.getReservationUser() != userRepo) {
                 throw new AccessDeniedException("유저정보와 요청유저가 일치하지않습니다.");
             }
-            System.out.println(reservationRepo.getStatus());
             reservationRepo.update(TRANSFER_STATE);
-            System.out.println(reservationRepo.getStatus());
-            reservationRepository.save(reservationRepo);
             return true;
         } catch (Exception e) {
             throw e;
