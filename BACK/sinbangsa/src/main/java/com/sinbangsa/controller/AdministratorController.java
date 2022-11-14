@@ -1,9 +1,7 @@
 package com.sinbangsa.controller;
 
 import com.sinbangsa.data.dto.*;
-import com.sinbangsa.data.entity.ThemeTime;
 import com.sinbangsa.service.AdministratorService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -207,8 +206,30 @@ public class AdministratorController {
         return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
     }
 
+//    @GetMapping("/reservation/month")
+//    @ApiOperation(value = "관리자페이지 월별 예약관리")
+//    public ResponseEntity<List<ReservationCountDto>> getReservationCount (@RequestParam int rmonth, long storeId){
+//        LOGGER.info("[AdministratorController] getReservationCount 호출");
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+//        // 어드민 아이디 토큰에서 가져오기
+//        long adminId = 234212;
+//        List<ReservationCountDto> reservationCountDtoList = administratorService.getReservationCount(rmonth, adminId, storeId);
+//    }
 
+    @GetMapping("/reservation/day")
+    @ApiOperation(value = "관리자 페이지 일별 예약 관리")
+    public ResponseEntity<ReservationAdminDayDto> getReservationAdminDay(@RequestParam Date reservationDay, long storeId) {
+        LOGGER.info("[AdministratorController] getReservationCount 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
+        long adminId = 234212;
+        ReservationAdminDayDto reservationAdminDay = administratorService.getReservationAdminDay(storeId ,reservationDay, adminId);
+
+        return new ResponseEntity<>(reservationAdminDay, headers, HttpStatus.OK);
+
+    }
 
 
 }

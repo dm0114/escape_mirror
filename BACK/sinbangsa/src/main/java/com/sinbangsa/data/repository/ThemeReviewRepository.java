@@ -54,9 +54,9 @@ public interface ThemeReviewRepository extends JpaRepository<ThemeReview,Long> {
             "where themeReview.reviewTheme =:theme")
     Optional<Double> getAvgLock(@Param("theme") Theme theme);
 
-    Optional<List<ThemeReview>> findAllByReviewTheme(Theme theme);
+    List<ThemeReview> findAllByReviewTheme(Theme theme);
 
-    Optional<List<ThemeReview>> findAllByReviewUser(User user);
+    List<ThemeReview> findAllByReviewUser(User user);
 
 
 }

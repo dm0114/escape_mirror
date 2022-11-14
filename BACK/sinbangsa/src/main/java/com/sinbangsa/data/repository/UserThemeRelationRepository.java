@@ -17,5 +17,5 @@ public interface UserThemeRelationRepository extends JpaRepository<UserThemeRela
 
     UserThemeRelation findByUserRelationThemeAndThemeRelationUser(Theme theme, User user);
 
-    Optional<List<UserThemeRelation>> findAllByThemeRelationUser(User user);
+    List<UserThemeRelation> findAllByThemeRelationUser(User user);
 }

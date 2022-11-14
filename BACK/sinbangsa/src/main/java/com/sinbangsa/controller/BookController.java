@@ -15,8 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,35 +38,51 @@ public class BookController {
 
     @GetMapping("/store")
     @ApiOperation(value = "지역별 카페리스트")
-    public ResponseEntity<List<StoreDto>> getStoreList(@RequestParam String region) {
+    public ResponseEntity<List<StoreDto>> getStoreList(@RequestParam String region, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookController] getCafeList 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        List<StoreDto> result = bookService.getStoreList(region);
-        return new ResponseEntity<List<StoreDto>>(result, headers, HttpStatus.OK);
-
+        try {
+            List<StoreDto> result = bookService.getStoreList(region, httpServletRequest);
+            return new ResponseEntity<List<StoreDto>>(result, headers, HttpStatus.OK);
+        } catch (NullPointerException e) {
+            List<StoreDto> tmp = new ArrayList<>();
+            return new ResponseEntity<List<StoreDto>>(tmp, headers, HttpStatus.BAD_REQUEST);
+        }
 
     }
 
 
     @GetMapping("/store/{storeId}")
     @ApiOperation(value = "카페 상세정보")
-    public ResponseEntity<StoreDetailDto> getStoreDetail(@PathVariable Long storeId) {
+    public ResponseEntity<StoreDetailDto> getStoreDetail(@PathVariable Long storeId, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookController] getStoreDetail 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        StoreDetailDto result = bookService.getStoreDetail(storeId);
-        return new ResponseEntity<StoreDetailDto>(result, headers, HttpStatus.OK);
+        try {
+            StoreDetailDto result = bookService.getStoreDetail(storeId, httpServletRequest);
+            return new ResponseEntity<StoreDetailDto>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            StoreDetailDto result = new StoreDetailDto();
+            return new ResponseEntity<StoreDetailDto>(result, headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/theme")
     @ApiOperation(value = "카페별 테마리스트")
-    public ResponseEntity<List<ThemeForThemeListDto>> getThemeList(@RequestParam long storeId) {
+    public ResponseEntity<List<ThemeForThemeListDto>> getThemeList(@RequestParam long storeId, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookController] getThemeList 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        List<ThemeForThemeListDto> result = bookService.getThemeList(storeId);
-        return new ResponseEntity<List<ThemeForThemeListDto>>(result, headers, HttpStatus.OK);
+        try {
+            List<ThemeForThemeListDto> result = bookService.getThemeList(storeId, httpServletRequest);
+            return new ResponseEntity<List<ThemeForThemeListDto>>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            List<ThemeForThemeListDto> result = new ArrayList<>();
+            return new ResponseEntity<List<ThemeForThemeListDto>>(result, headers, HttpStatus.BAD_REQUEST);
+        }
+
 
     }
 
@@ -74,28 +92,43 @@ public class BookController {
         LOGGER.info("[BookController] getStoreDetail 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        ThemeDetailInfoDto result = bookService.getThemeDetail(themeId);
-        return new ResponseEntity<ThemeDetailInfoDto>(result, headers, HttpStatus.OK);
+        try {
+            ThemeDetailInfoDto result = bookService.getThemeDetail(themeId);
+            return new ResponseEntity<ThemeDetailInfoDto>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            ThemeDetailInfoDto result = new ThemeDetailInfoDto();
+            return new ResponseEntity<ThemeDetailInfoDto>(result, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/theme/{themeId}/like")
     @ApiOperation(value = "테마 찜하기")
-    public ResponseEntity<Boolean> themeLike(@PathVariable long themeId) {
+    public ResponseEntity<Boolean> themeLike(@PathVariable long themeId, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookController] themeLike 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        boolean result = bookService.themeLike(themeId);
-        return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+        try {
+            boolean result = bookService.themeLike(themeId, httpServletRequest);
+            return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            boolean result = false;
+            return new ResponseEntity<Boolean>(result, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/theme/{themeId}/like")
     @ApiOperation(value = "테마 찜하기 취소")
-    public ResponseEntity<Boolean> themeLikeCancel(@PathVariable long themeId) {
+    public ResponseEntity<Boolean> themeLikeCancel(@PathVariable long themeId, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookController] themeLikeCancel 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        boolean result = bookService.themeLikeCancel(themeId);
-        return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+        try {
+            boolean result = bookService.themeLikeCancel(themeId, httpServletRequest);
+            return new ResponseEntity<Boolean>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            boolean result = false;
+            return new ResponseEntity<Boolean>(result, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

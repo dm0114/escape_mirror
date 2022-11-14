@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface MypageService {
 
-    MypageInfoDto getMyPageInfo();
+    MypageInfoDto getMyPageInfo(HttpServletRequest httpServletRequest);
 
-    List<MypageLikeDto> getLikes();
+    List<MypageLikeDto> getLikes(HttpServletRequest httpServletRequest);
 
-    List<MypageReviewDto> getReviews();
+    List<MypageReviewDto> getReviews(HttpServletRequest httpServletRequest);
 
-    MypageMyRoomDto getMypageMyRooms();
+    MypageMyRoomDto getMypageMyRooms(HttpServletRequest httpServletRequest);
 
     void updateUserInfo(UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest);
 

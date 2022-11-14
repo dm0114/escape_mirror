@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,12 +34,17 @@ public class MypageController {
 
     @GetMapping
     @ApiOperation(value = "정보 받아오기")
-    public ResponseEntity<MypageInfoDto> getMypageInfo() {
+    public ResponseEntity<MypageInfoDto> getMypageInfo(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageController] getMyPageInfo 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        MypageInfoDto result = mypageService.getMyPageInfo();
-        return new ResponseEntity<MypageInfoDto>(result, headers, HttpStatus.OK);
+        try {
+            MypageInfoDto result = mypageService.getMyPageInfo(httpServletRequest);
+            return new ResponseEntity<MypageInfoDto>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(headers, HttpStatus.BAD_REQUEST);
+        }
+
 
     }
 
@@ -46,32 +52,50 @@ public class MypageController {
 
     @GetMapping("/likes")
     @ApiOperation(value = "찜 목록")
-    public ResponseEntity<List<MypageLikeDto>> getLikes() {
+    public ResponseEntity<List<MypageLikeDto>> getLikes(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageController] getLikes 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        List<MypageLikeDto> result = mypageService.getLikes();
-        return new ResponseEntity<List<MypageLikeDto>>(result, headers, HttpStatus.OK);
+        try {
+            List<MypageLikeDto> result = mypageService.getLikes(httpServletRequest);
+            return new ResponseEntity<List<MypageLikeDto>>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            List<MypageLikeDto> result = new ArrayList<>();
+            return new ResponseEntity<List<MypageLikeDto>>(result, headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/reviews")
     @ApiOperation(value = "리뷰 목록")
-    public ResponseEntity<List<MypageReviewDto>> getReviews() {
+    public ResponseEntity<List<MypageReviewDto>> getReviews(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageController] getReviews 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        List<MypageReviewDto> result = mypageService.getReviews();
-        return new ResponseEntity<List<MypageReviewDto>>(result, headers, HttpStatus.OK);
+        try {
+            List<MypageReviewDto> result = mypageService.getReviews(httpServletRequest);
+            return new ResponseEntity<List<MypageReviewDto>>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            List<MypageReviewDto> result = new ArrayList<>();
+            return new ResponseEntity<List<MypageReviewDto>>(result, headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/acts")
     @ApiOperation(value = "활동 내역 목록")
-    public ResponseEntity<MypageMyRoomDto> getMyRooms() {
+    public ResponseEntity<MypageMyRoomDto> getMyRooms(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageController] getMyRooms 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        MypageMyRoomDto result = mypageService.getMypageMyRooms();
-        return new ResponseEntity<MypageMyRoomDto>(result, headers, HttpStatus.OK);
+        try {
+            MypageMyRoomDto result = mypageService.getMypageMyRooms(httpServletRequest);
+            return new ResponseEntity<MypageMyRoomDto>(result, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            MypageMyRoomDto result = new MypageMyRoomDto();
+            return new ResponseEntity<MypageMyRoomDto>(result, headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PutMapping("/update")

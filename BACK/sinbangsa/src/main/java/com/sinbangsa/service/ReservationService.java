@@ -4,11 +4,12 @@ package com.sinbangsa.service;
 import com.sinbangsa.data.dto.ReservationDto;
 import com.sinbangsa.data.dto.ThemeTimeDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface ReservationService {
 
-    boolean createReservation(ReservationDto reservationDto);
+    boolean createReservation(ReservationDto reservationDto, HttpServletRequest httpServletRequest);
 
     List<ThemeTimeDto> getThemeTime(long themeId);
 

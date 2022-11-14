@@ -2,8 +2,11 @@ package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.*;
 import com.sinbangsa.data.entity.ThemeTime;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface AdministratorService {
     List<AdminStoreDto> getAdminStoreDetail(long adminId);
@@ -19,4 +22,6 @@ public interface AdministratorService {
     Boolean updateThemeTime(ThemeTimeDto themeTime, long adminId);
     Boolean deleteThemeTime(long themeTimeId, long adminId);
     Boolean deleteTheme(long themeId, long adminId);
+//    List<ReservationCountDto> getReservationCount(int rmonth, long adminId, long storeId);
+    ReservationAdminDayDto getReservationAdminDay(long storeId, Date reservationDay, long adminId);
 }

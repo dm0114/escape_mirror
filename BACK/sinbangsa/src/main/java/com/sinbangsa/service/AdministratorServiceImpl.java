@@ -1,14 +1,8 @@
 package com.sinbangsa.service;
 
 import com.sinbangsa.data.dto.*;
-import com.sinbangsa.data.entity.Admin;
-import com.sinbangsa.data.entity.Store;
-import com.sinbangsa.data.entity.Theme;
-import com.sinbangsa.data.entity.ThemeTime;
-import com.sinbangsa.data.repository.AdministratorRepository;
-import com.sinbangsa.data.repository.StoreRepository;
-import com.sinbangsa.data.repository.ThemeRepository;
-import com.sinbangsa.data.repository.ThemeTimeRepository;
+import com.sinbangsa.data.entity.*;
+import com.sinbangsa.data.repository.*;
 import com.sinbangsa.exception.AccessDeniedException;
 import com.sinbangsa.exception.StoreNotFoundException;
 import com.sinbangsa.exception.ThemeNotFoundException;
@@ -18,9 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +27,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final StoreRepository storeRepository;
     private final ThemeRepository themeRepository;
     private final ThemeTimeRepository themeTimeRepository;
+    private final ReservationRepository reservationRepository;
 
     public List<AdminStoreDto> getAdminStoreDetail(long adminId){
         LOGGER.info("[AdministratorService] getAdminStoreDetail 호출");
@@ -89,7 +87,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Boolean updateStoreDetail(AdminStoreDto adminStoreDto, long adminId){
         LOGGER.info("[AdministratorService] updateStoreDetail 호출");
 
-        Store updateStore = storeRepository.findByStoreId(adminStoreDto.getStoreId());
+        Store updateStore = storeRepository.findByStoreId(adminStoreDto.getStoreId()).orElse(null);
+
+        if(updateStore == null) {
+            throw new StoreNotFoundException();
+        }
 
         if (adminId != updateStore.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
@@ -116,10 +118,13 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     public List<ThemeListDto> getThemeList(long storeId, long adminId){
         LOGGER.info("[AdministratorService] getThemeList 호출");
-        Store store = storeRepository.findByStoreId(storeId);
+        Store store = storeRepository.findByStoreId(storeId).orElse(null);
 
         if (adminId != store.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
+        }
+        if(store == null) {
+            throw new StoreNotFoundException();
         }
 
         List<Theme> themeList = store.getThemes();
@@ -180,12 +185,12 @@ public class AdministratorServiceImpl implements AdministratorService {
         LOGGER.info("[AdministratorService] registerTheme 호출");
 
         // orElse 붙이기(null 처리)
-        Store store = storeRepository.findByStoreId(themeRegisterDto.getStoreId());
+        Store store = storeRepository.findByStoreId(themeRegisterDto.getStoreId()).orElse(null);
         if (store == null) {
             throw new StoreNotFoundException();
         }
 
-        if (adminId != storeRepository.findByStoreId(themeRegisterDto.getStoreId()).getStoreAdmin().getId()) {
+        if (adminId != store.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
         Long createdThemeId = registerTheme(themeRegisterDto);
@@ -196,8 +201,11 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     public Long registerTheme(ThemeRegisterDto themeRegister){
         LOGGER.info("[AdministratorService] registerTheme 호출");
-        Store store = storeRepository.findByStoreId(themeRegister.getStoreId());
+        Store store = storeRepository.findByStoreId(themeRegister.getStoreId()).orElse(null);
 
+        if(store == null) {
+            throw new StoreNotFoundException();
+        }
         try {
             long newId = themeRepository.getNewId(store.getStoreId());
             if (newId == 0) {
@@ -236,9 +244,13 @@ public class AdministratorServiceImpl implements AdministratorService {
             int cnt = 1;
             for (String themeTime : themeTimes) {
                 long newId = createdThemeId*100+cnt;
+                Theme themeRepo = themeRepository.findById(createdThemeId).orElse(null);
+                if (themeRepo == null) {
+                    throw new ThemeNotFoundException();
+                }
                 ThemeTime createThemeTime = ThemeTime.builder()
                         .time(themeTime)
-                        .theme(themeRepository.findById(createdThemeId))
+                        .theme(themeRepo)
                         .id(newId)
                         .build();
 
@@ -373,14 +385,13 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Boolean deleteTheme(long themeId, long adminId){
         LOGGER.info("[AdministratorService] deleteTheme 호출");
         Theme theme = themeRepository.getById(themeId).orElse(null);
+        if (theme == null) {
+            throw new ThemeNotFoundException();
+        }
+        if (adminId != theme.getStore().getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
         try {
-            if (theme == null) {
-                throw new ThemeNotFoundException();
-            }
-            if (adminId != theme.getStore().getStoreAdmin().getId()) {
-                throw new AccessDeniedException();
-            }
-
             List<ThemeTime> themeTimeList = themeTimeRepository.findAllByThemeId(themeId);
             for (ThemeTime themeTime : themeTimeList){
                 themeTimeRepository.delete(themeTime);
@@ -394,5 +405,67 @@ public class AdministratorServiceImpl implements AdministratorService {
 
 
     }
+
+//    public List<ReservationCountDto> getReservationCount(int rmonth, long adminId, long storeId){
+//        LOGGER.info("[AdministratorService] getReservationCount 호출");
+//        Store store = storeRepository.getByStoreId(storeId).orElse(null);
+//        if (store == null) {
+//            throw new StoreNotFoundException();
+//        }
+//
+//        if (adminId != store.getStoreAdmin().getId()) {
+//            throw new AccessDeniedException();
+//        }
+//
+//        List<ReservationCountDto> reservationCountList = new ArrayList<>();
+//
+//    }
+
+    public ReservationAdminDayDto getReservationAdminDay(long storeId, Date reservationDay, long adminId){
+        LOGGER.info("[AdministratorService] getReservationCount 호출");
+        Store store = storeRepository.getByStoreId(storeId).orElse(null);
+        if (store == null) {
+            throw new StoreNotFoundException();
+        }
+
+        if (adminId != store.getStoreAdmin().getId()) {
+            throw new AccessDeniedException();
+        }
+
+        ReservationAdminDayDto reservationAdminDayDto = new ReservationAdminDayDto();
+        reservationAdminDayDto.setStoreName(store.getStoreName());
+        List<Theme> themes = store.getThemes();
+        if (themes.size() == 0) {
+            throw new ThemeNotFoundException();
+        }
+
+        List<ReservationAdminDayDto.ThemeReservationDto> themeReservationDtoList = new ArrayList<>();
+
+        for (Theme theme : themes) {
+            ReservationAdminDayDto.ThemeReservationDto themeReservationDto = new ReservationAdminDayDto.ThemeReservationDto();
+            themeReservationDto.setThemeId(theme.getId());
+            themeReservationDto.setThemeName(theme.getThemeName());
+            List<ThemeTime> themeTimes = theme.getThemeTimes();
+            List<ReservationAdminDayDto.TimeReservationDto> timeReservationDtos = new ArrayList<>();
+            for (ThemeTime themeTime : themeTimes) {
+                Reservation reservation = reservationRepository.findByDateAndThemeTime(reservationDay, themeTime).orElse(null);
+                if (reservation != null) {
+                    ReservationAdminDayDto.TimeReservationDto timeReservationDto = new ReservationAdminDayDto.TimeReservationDto();
+                    timeReservationDto.setReservationTime(reservation.getThemeTime().getTime());
+                    timeReservationDto.setReservationTimeId(reservation.getThemeTime().getId());
+                    timeReservationDto.setUserName(reservation.getReservationUser().getNickname());
+                    timeReservationDto.setStatus(reservation.getStatus());
+                    timeReservationDto.setAccept(reservation.getAccept());
+                    timeReservationDtos.add(timeReservationDto);
+                }
+            }
+            themeReservationDto.setTimeReservationDto(timeReservationDtos);
+            themeReservationDtoList.add(themeReservationDto);
+        }
+        reservationAdminDayDto.setThemeReservationList(themeReservationDtoList);
+        return reservationAdminDayDto;
+    }
+
+
 
 }
