@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ReservationService {
 
-    boolean createReservation(ReservationDto reservationDto, HttpServletRequest httpServletRequest);
+    Long createReservation(ReservationDto reservationDto, HttpServletRequest httpServletRequest);
 
     List<ThemeTimeDto> getThemeTime(long themeId);
 

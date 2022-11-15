@@ -40,8 +40,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     private static final Long VALIDATE_FAIL = (long) 0;
 
-    @Transactional
-    public boolean createReservation(ReservationDto reservationDto, HttpServletRequest httpServletRequest) {
+
+    public Long createReservation(ReservationDto reservationDto, HttpServletRequest httpServletRequest) {
         LOGGER.info("[ReservationServiceImpl] createReservation 호출");
 
         try {
@@ -52,7 +52,6 @@ public class ReservationServiceImpl implements ReservationService {
             if (userRepo == null) {
                 throw new NullPointerException("유저 정보가 잘못되었습니다.");
             }
-
             ThemeTime reservationTime = themeTimeRepository.findById(reservationDto.getThemeTimeId()).orElse(null);
             if (reservationTime == null) {
                 throw new ThemeTimeNotFoundException();
@@ -64,11 +63,15 @@ public class ReservationServiceImpl implements ReservationService {
                         .reservationUser(userRepo)
                         .date(reservationDto.getReservationDate())
                         .themeTime(reservationTime)
+                        .accept(false)
+                        .status(0)
                         .build();
-                reservationRepository.save(reservation);
-                return true;
+
+                Long reservationId = reservationRepository.save(reservation).getReservationId();
+
+                return reservationId;
             } else {
-                return false;
+                throw new NullPointerException();
             }
 
         } catch (Exception e) {
