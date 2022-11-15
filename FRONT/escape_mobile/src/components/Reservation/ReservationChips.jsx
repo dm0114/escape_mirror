@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { ScrollView, Text, useWindowDimensions, View } from "react-native";
+import { ScrollView, Text, useWindowDimensions, View, TouchableOpacity } from "react-native";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useSetRecoilState } from 'recoil';
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { reservationApi } from "../../apis/api";
 
 import LoadingScreen from "../../screens/LoadingScreen";
+import { POSTReservationData } from "../../store/Atom";
 
 function ReservationChips({ themeId, date }) {
+  const [selectTime, setSelectTime] = useState();
   /**
    * 레이아웃
    */
@@ -17,16 +21,14 @@ function ReservationChips({ themeId, date }) {
   /**
    * API (예약 가능한 값)
    */
-  console.log(themeId, date);
   const { isLoading, data, status } = useQuery(
     ["ReservedTime", themeId, date],
     reservationApi.getReservationDate
   );
 
-  useEffect(() => {
-    console.log(data);
-  }, [data])
-
+  // 리코일로 themeTimeId 올리기
+  const setReserveData = useSetRecoilState(POSTReservationData)
+  
   /**
    * 캐싱된 값 접근
    */
@@ -34,7 +36,7 @@ function ReservationChips({ themeId, date }) {
   const ReservationData = queryClient.getQueryData(["Reservation", themeId]);
 
   /**
-   * TimeTable Setting
+   * TimeTable Setting (예약 / 미예약 테이블 렌더링)
    */
   const [timeTable, setTimeTable] = useState({});
   useEffect(() => {
@@ -46,23 +48,33 @@ function ReservationChips({ themeId, date }) {
       tmp[item.themeTimeId] = true;
     });
     setTimeTable(tmp);
+
+    /**
+     * POST용 리코일 데이터 셋팅
+     */
+    
   }, [data]);
 
-  /**
-   *
-   */
+  useEffect(() => {
+    if (!!selectTime) {setReserveData({selectTime, themeId, date})}
+  }, [selectTime])
+
 
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <View style={{flex:1}}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
+      <BottomSheetScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
         horizontal={true}
+        style={{marginBottom: 4}}
       >
         {ReservationData.map((item, idx) => {
           if (timeTable[item.themeTimeId]) {
             return (
-              <Reservable key={idx}>
+              <Reservable key={idx} onPress={()=>{
+                setSelectTime(item.themeTimeId)
+              }}
+              style={selectTime === item.themeTimeId ? {backgroundColor:'#ddd'} : null}
+              >
                 <ReservableText>{item.time}</ReservableText>
               </Reservable>
             );
@@ -74,12 +86,12 @@ function ReservationChips({ themeId, date }) {
             );
           }
         })}
-      </ScrollView>
-    </View>
+      </BottomSheetScrollView>
+
   );
 }
 
-const Chip = styled.View`
+const Chip = styled.TouchableOpacity`
   width: 80px;
   height: 40px;
   margin: 0px 5px 0px 5px;
@@ -109,4 +121,6 @@ const ReservedText = styled(ReservationText)`
   color: #9b989b;
 `;
 const ReservableText = styled(ReservationText)``;
+
 export default ReservationChips;
+

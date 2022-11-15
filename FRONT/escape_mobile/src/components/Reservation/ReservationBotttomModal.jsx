@@ -18,14 +18,17 @@ import {
   View,
 } from "react-native";
 import styled from "styled-components/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MainContentWrapper } from "../../styles/Search/CafeList";
 
 import { useQuery } from "@tanstack/react-query";
 import { reservationApi } from "../../apis/api";
-import { MainContentWrapper } from "../../styles/Search/CafeList";
+import { useRecoilValue } from "recoil";
+import { POSTReservationData } from "../../store/Atom";
+
 import { KorTime } from "./KorTimeComponent";
 import ReservationChips from "./ReservationChips";
 import LoadingScreen from "../../screens/LoadingScreen";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 // 예약 가능 시간이 모든 예약 가능 시간
 // 예약
@@ -58,6 +61,16 @@ function ReservationBotttomModal({ themeId, PriceData }) {
     reservationApi.getReservationTime
   );
 
+  const reserveParams = useRecoilValue(POSTReservationData);
+  const { data: postReservationData, refetch } = useQuery(
+    ["ReservationResult", reserveParams],
+    reservationApi.postReservation,
+    { enabled: false }
+  );
+  useEffect(() => {
+    console.log(postReservationData);
+  }, [postReservationData])
+
   /**
    * 카운터
    */
@@ -86,13 +99,12 @@ function ReservationBotttomModal({ themeId, PriceData }) {
    */
   return status === "success" ? (
     <BottomSheetModalProvider>
-      <View style={{ position: "absolute", bottom: 0, backgroundColor: 'red'}}>
-        {
-          toggler ? null :
+      <View style={{ position: "absolute", bottom: 0, backgroundColor: "red" }}>
+        {toggler ? null : (
           <ButtonContainer left={Width} onPress={handlePresentModalPress}>
             <SubTitle>예약하기</SubTitle>
           </ButtonContainer>
-        }
+        )}
 
         <BottomSheetModal
           ref={bottomSheetModalRef}
@@ -104,7 +116,6 @@ function ReservationBotttomModal({ themeId, PriceData }) {
             달력, 타임 테이블
            */}
           <View style={styles.contentContainer}>
-            
             {/* 
             KorTime 
             */}
@@ -117,21 +128,40 @@ function ReservationBotttomModal({ themeId, PriceData }) {
               <RowContainer>
                 <RowContainer>
                   <Circle onPress={number <= 4 ? onIncrease : null}>
-                    <MaterialCommunityIcons name="plus-thick" size={14} color="black" />
+                    <MaterialCommunityIcons
+                      name="plus-thick"
+                      size={14}
+                      color="black"
+                    />
                   </Circle>
 
                   <PriceContainer>
-                    <SubTitle>{number}인  {!!PriceData[number] ? PriceData[number] : 0}원</SubTitle>
+                    <SubTitle>
+                      {number}인 {!!PriceData[number] ? PriceData[number] : 0}원
+                    </SubTitle>
                   </PriceContainer>
-                  
+
                   <Circle onPress={number >= 2 ? onDecrease : null}>
-                    <MaterialCommunityIcons name="minus-thick" size={14} color="black" />
+                    <MaterialCommunityIcons
+                      name="minus-thick"
+                      size={14}
+                      color="black"
+                    />
                   </Circle>
                 </RowContainer>
               </RowContainer>
             </InfoTextWrapper>
-          </View>
 
+            {/* 집가서 포스트 요청 */}
+            {reserveParams ? (
+              <ButtonContainer
+                left={Width}
+                onPress={refetch}
+              >
+                <SubTitle>예약완료</SubTitle>
+              </ButtonContainer>
+            ) : null}
+          </View>
         </BottomSheetModal>
       </View>
     </BottomSheetModalProvider>
@@ -189,11 +219,11 @@ const Circle = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   background-color: #f6f5e9;
-`
+`;
 const PriceContainer = styled.View`
   width: 128px;
   align-items: center;
-`
+`;
 
 const SubTitle = styled.Text`
   font-family: "SUIT-Bold";

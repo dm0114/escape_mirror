@@ -6,7 +6,6 @@ const setData = async (key, value) => {
 
 const getData = async (key) => {
   return await SecureStore.getItemAsync(key);
-  // console.log(result)
 }
 
 export const SecureState = {setData, getData}

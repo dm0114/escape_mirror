@@ -28,6 +28,7 @@ const requestToken = async (code ) => {
   try {
     const tokenResponse = await axios.post(requestTokenUrl, options);
     const ACCESS_TOKEN = tokenResponse.data.access_token;
+    console.log(ACCESS_TOKEN);
     // 3. 토큰 받으면 화면 로그인 상태로 변경
     
     const body = {
@@ -39,13 +40,11 @@ const requestToken = async (code ) => {
     const value = response.data;    
     await SecureState.setData('accessToken', `Bearer ${value.accessToken}`);
     
-    /**
-     * Get AccessToken
-     */
-    await SecureState.getData('accessToken');
+
     // await AsyncState.setData(ACCESS_TOKEN);
     // await AsyncState.getData();
 
+<<<<<<< HEAD
 
     // const result = await storeUser(value);
     // if (result === 'stored') {
@@ -53,6 +52,14 @@ const requestToken = async (code ) => {
     //   dispatch(read_S(user));
     //   await navigation.navigate('Main');
     // }
+=======
+  // const result = await storeUser(value);
+  //   if (result === 'stored') {
+  //     const user = await getData('user');
+  //     dispatch(read_S(user));
+  //     await navigation.navigate('Main');
+  //   }
+>>>>>>> 5bc9e977a2f3455c6a75e2929b92d622b38b9d93
   } catch (e) {
     console.log(e);
   }
