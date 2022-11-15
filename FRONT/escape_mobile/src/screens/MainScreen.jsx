@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ImageBackground, View } from "react-native";
 
 import styled from "styled-components/native";
@@ -22,6 +22,10 @@ export default function MainScreen() {
     ["PreloadingData"],
     getPreloading
   );
+  useEffect(() => {
+    console.log(data);
+  },[])
+  
   
 
   return (

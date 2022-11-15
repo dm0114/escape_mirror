@@ -11,24 +11,13 @@ import SearchScreen from "../screens/SearchScreen";
 import Mypage from '../screens/User/MypageScreen';
 import Assignment from '../screens/Assignment';
 
-const FirstRoute = () => (
-  // 토큰 없으면 로그인페이지
-  <LoginScreen/>
-);
 
-const SecondRoute = () => <MainScreen />
+const FirstRoute = () => <MainScreen />
+const SecondRoute = () => <SearchScreen />
+const ThirdRoute = () => <BookMain />
+const FourthRoute = () => <Assignment />
+const FifthRoute = () => <Mypage />
 
-
-const ThirdRoute = () => <SearchScreen />
-
-
-const FourthRoute = () => (
-  <BookMain />
-);
-
-const FifthRoute = () => <Assignment />;
-
-const SixthRoute = () => <Mypage />;
 
 const renderScene = SceneMap({
   first: FirstRoute,
@@ -36,7 +25,6 @@ const renderScene = SceneMap({
   third: ThirdRoute,
   fourth: FourthRoute,
   fifth: FifthRoute,
-  sixth: SixthRoute
 });
 
 export default function TabViewExample() {
@@ -49,7 +37,6 @@ export default function TabViewExample() {
     { key: "third" },
     { key: "fourth" },
     { key: "fifth" },
-    { key: "sixth" }
   ]);
 
   return (

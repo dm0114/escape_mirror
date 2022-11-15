@@ -1,5 +1,5 @@
+import axios from 'axios'
 import { SecureState } from "../store/SecureStore";
-
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 
 
@@ -16,6 +16,7 @@ const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 
 // 메인
 export const getPreloading = async () => {
+  console.log('getPreloading');
   // /mainpage
   return await (
     await fetch(`${BASE_URL}/mainpage`, {
@@ -28,15 +29,18 @@ export const getPreloading = async () => {
 
 // 검색
 const getSearch = async ({ queryKey }) => {
+  console.log('getSearch');
   let [_, query] = queryKey;
   query = new URLSearchParams({
     searchWord: query,
+    page: 0
   });
   const response = await (
     await fetch(`${BASE_URL}/mainpage/search?${query}`, {
       headers: {
         Authorization: await SecureState.getData("accessToken"),
       },
+      
     })
   ).json();
   return response;
@@ -54,9 +58,13 @@ const getCafeDetail = async ({ queryKey }) => {
 };
 
 const getThemeDetail = async ({ queryKey }) => {
+  console.log('getThemeDetail');
   let [_, themeId] = queryKey;
+  const query = new URLSearchParams({
+    page: 0
+  });
   return await (
-    await fetch(`${BASE_URL}/book/theme/${themeId}`, {
+    await fetch(`${BASE_URL}/book/theme/${themeId}?${query}`, {
       headers: {
         Authorization: await SecureState.getData("accessToken"),
       },
@@ -111,6 +119,7 @@ const getReservationDate = async ({ queryKey }) => {
 
 //예약하기
 const postReservation = async ({ queryKey }) => {
+  console.log('postReservation');
   // api/reservation
   const {themeId, selectTime, date} = queryKey[1];
   const data = {
@@ -118,16 +127,16 @@ const postReservation = async ({ queryKey }) => {
     themeId: themeId,
     themeTimeId: selectTime,
   }
-  console.log(`${BASE_URL}/reservation`);
-  const res = 
-    await fetch(`${BASE_URL}/reservation`, {
-      method: 'POST',
-      headers: {
-        Authorization: await SecureState.getData("accessToken"),
-      },
-      body: JSON.stringify(data)
-    })
-  
+
+  const res = await axios({
+    url:`${BASE_URL}/reservation`, 
+    method: 'post',
+    data: JSON.stringify(data), 
+    headers: { 
+      Authorization: await SecureState.getData("accessToken"),
+      'Content-Type': 'application/json' 
+    }
+  })
   console.log(res);
   return res
 };
