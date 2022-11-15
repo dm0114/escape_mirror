@@ -6,6 +6,7 @@ import { SecureState } from '../../store/SecureStore';
 import { AsyncState } from '../../store/AsyncStore';
 
 
+
 const REST_API_KEY = '6cb2dd1e35672b64fb0dac71ee59315f'
 const REDIRECT_URI = 'http://localhost:8082'
 const APIURI = 'http://k7c104.p.ssafy.io:8080/api/user/kakao'
@@ -27,6 +28,7 @@ const requestToken = async (code ) => {
   try {
     const tokenResponse = await axios.post(requestTokenUrl, options);
     const ACCESS_TOKEN = tokenResponse.data.access_token;
+    console.log(ACCESS_TOKEN);
     // 3. 토큰 받으면 화면 로그인 상태로 변경
     
     const body = {
@@ -42,12 +44,22 @@ const requestToken = async (code ) => {
     // await AsyncState.setData(ACCESS_TOKEN);
     // await AsyncState.getData();
 
+<<<<<<< HEAD
+
     // const result = await storeUser(value);
     // if (result === 'stored') {
     //   const user = await getData('user');
     //   dispatch(read_S(user));
     //   await navigation.navigate('Main');
     // }
+=======
+  // const result = await storeUser(value);
+  //   if (result === 'stored') {
+  //     const user = await getData('user');
+  //     dispatch(read_S(user));
+  //     await navigation.navigate('Main');
+  //   }
+>>>>>>> 5bc9e977a2f3455c6a75e2929b92d622b38b9d93
   } catch (e) {
     console.log(e);
   }

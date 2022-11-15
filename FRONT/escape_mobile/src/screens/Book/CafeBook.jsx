@@ -6,38 +6,6 @@ import {ProgressBar} from 'react-native-ui-lib';
 import { getCafeThemeList } from '../../apis/BookApi';
 import {useQuery} from '@tanstack/react-query';
 
-// const data = [
-//     {
-//     'themeId':1,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'themeName':'새벽 베이커리',
-//     'isClear':0
-//     },
-//     {
-//     'themeId':2,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'themeName':'새벽 베이커리',
-//     'isClear':2
-//     },
-//     {
-//     'themeId':3,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'themeName':'새벽 베이커리',
-//     'isClear':1
-//     },
-//     {
-//     'themeId':4,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'themeName':'새벽 베이커리',
-//     'isClear':2
-//     },
-//     {
-//     'themeId':5,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'themeName':'새벽 베이커리',
-//     'isClear':1
-//     }
-// ]
 
 const testUnity = 'https://user-images.githubusercontent.com/97578425/199651092-ce04c889-71c8-431f-bfae-1732e4c72f8c.png'
 
@@ -50,10 +18,11 @@ export default function CafeBook({navigation, route}){
         ['CafeTheme', storeId],
         getCafeThemeList
         )
+    console.log(storeId)
     return(
         <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/book_room01.gif'}} style={{flex:1}}>
         <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20, marginTop:10}}>
-        <Modal isOpen={isModal} onClose={()=>setIsModal(false)}>
+        {/* <Modal isOpen={isModal} onClose={()=>setIsModal(false)}>
             <Modal.Content>
                 <Modal.CloseButton />
                 <Modal.Header>테마이름</Modal.Header>
@@ -61,7 +30,7 @@ export default function CafeBook({navigation, route}){
                     리뷰 내용이 들어가야 함
                 </Modal.Body>
             </Modal.Content>
-        </Modal>
+        </Modal> */}
         <CafeNavBtn style={{flexDirection:'row', marginTop:20, marginBottom:20}}
             onPress={()=>{
                 navigation.navigate('CafeDetailScreen', {
@@ -91,12 +60,12 @@ export default function CafeBook({navigation, route}){
                     obj.index % 3 == 2 ? {marginRight:0} : {marginRight:20}]}
                 onPress={()=>{
                     navigation.navigate('ThemeDetailScreen', {
-                    storeId:obj.item.themeId
+                    themeId:obj.item.themeId
                     })}}
                 >
                     <View style={{backgroundColor:'black', height:180, width:117, position:'absolute', zIndex:3, elevation:3, borderRadius:10, opacity:opacity_list[obj.item.isClear]}} />
                     <ThemeView
-                        source={{uri:obj.item.themeImg}}
+                        source={{uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${obj.item.themeImg}`}}
                         resizeMode="cover"
                         imageStyle={{borderRadius:10}}
                         />

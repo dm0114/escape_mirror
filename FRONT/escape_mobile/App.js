@@ -15,7 +15,7 @@ import SearchScreen from "./src/screens/SearchScreen";
 
 import { NativeBaseProvider } from "native-base";
 import { useWindowDimensions } from "react-native";
-
+import { RecoilRoot } from "recoil";
 
 /**
  * 전역 관리
@@ -27,15 +27,13 @@ const RootContainer = styled.View`
   background-color: #212121;
 `;
 
-
 export default function App() {
   /**
    * 레이아웃 컨텍스트
    */
-   
+
   const dimensions = useWindowDimensions();
-  const LayoutValue = {Width : dimensions.width, Height : dimensions.height}
-  
+  const LayoutValue = { Width: dimensions.width, Height: dimensions.height };
 
   const [appIsReady, setAppIsReady] = useState(false);
   const onLayoutRootView = useCallback(async () => {
@@ -82,14 +80,16 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <LayoutContext.Provider value={LayoutValue}>
-          <RootContainer>
-            <NavigationContainer>
-              <NativeBaseProvider>
-                <Root />
-              </NativeBaseProvider>
-              {/* <MainScreen /> */}
-            </NavigationContainer>
-          </RootContainer>
+          <RecoilRoot>
+            <RootContainer>
+              <NavigationContainer>
+                <NativeBaseProvider>
+                  <Root />
+                </NativeBaseProvider>
+                {/* <MainScreen /> */}
+              </NavigationContainer>
+            </RootContainer>
+          </RecoilRoot>
         </LayoutContext.Provider>
         <StatusBar style="auto" />
       </ThemeProvider>

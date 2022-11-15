@@ -10,12 +10,6 @@ const nowTime = moment().tz('Asia/Seoul').format("YYYY-MM-DDTHH:mm:ss")
 const KoTIme = () => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const now = new Date(nowTime) // 현재 시간
-  const nowDay = now.getDay()
-  
-  console.log(now);
-  // console.log(nowTime.getDate());
-  
-
   const Days = [
     [
       `${now.getFullYear()}-${
@@ -38,7 +32,6 @@ export const Timer = (date, reserveTime) => {
   // 시간 나면 캐싱
   // 한국 시간
   var now = new Date(nowTime);
-  console.log(now);
 
   // 현재시간 
   var year = now.getFullYear();     // 연도
@@ -78,7 +71,7 @@ export const KorTime = ({themeId}) => {
     setToggleData(tmp);
     setDayData([arr[0], arr[2]]);
   };
-  // useEffect(() => {}, [dayData]);
+  
   return (
     <View style={{flex: 3}}>
       <View style={{flex: 2, alignItems:"center"}}>
@@ -113,7 +106,9 @@ export const KorTime = ({themeId}) => {
       {/* 
         시간 Chip
       */}
-      {dayData[0] != "날짜를" ? <ReservationChips date={dayData[0]} themeId={themeId}/> : null}
+      <View style={{flex:1}}>
+        {dayData[0] != "날짜를" ? <ReservationChips date={dayData[0]} themeId={themeId}/> : null}
+      </View>
     </View>
   );
 };

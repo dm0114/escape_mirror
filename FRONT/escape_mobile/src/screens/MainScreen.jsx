@@ -6,41 +6,26 @@ import "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
 import ReservationComponent from "../components/Reservation/ReservationComponent";
 import { LayoutContext } from "../../App";
+import { useQuery } from "@tanstack/react-query";
+import LoadingScreen from "./LoadingScreen";
+import { getPreloading } from "../apis/api";
 
 const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
 
 
 export default function MainScreen() {
+
+
   const {Width, Height} = useContext(LayoutContext);
   // 프리로딩 API 연결
-  const data = {
-    reservations: [
-      {
-        reservationId: 1,
-        themeName: "테마이름",
-        storeName: "카페이름",
-        date: "2022-11-14",
-        reserveTime: "17:20",
-      },
-      {
-        reservationId: 2,
-        themeName: "테마이름",
-        storeName: "카페이름",
-        date: "2022-11-15",
-        reserveTime: "12:20",
-      },
-      {
-        reservationId: 3,
-        themeName: "테마이름",
-        storeName: "카페이름",
-        date: "2022-12-08",
-        reserveTime: "16:20",
-      },
-    ],
-  };
-
+  const { data, isLoading } = useQuery(
+    ["PreloadingData"],
+    getPreloading
+  );
+  
 
   return (
+    isLoading ? LoadingScreen :
     <ImageBackground  source={{uri:testUri}} style={{flex:1}}>
       <MainContainer>
         <MainText>
@@ -53,7 +38,7 @@ export default function MainScreen() {
           width={Width - 40}
           height={Width / 3.5}
           autoPlay={false}
-          data={data.reservations}
+          data={data.reservationList}
           mode={'parallax'}
           modeConfig={
             {
@@ -69,8 +54,8 @@ export default function MainScreen() {
               reservationId={item.reservationId}
               themeName={item.themeName}
               storeName={item.storeName}
-              date={item.date}
-              reserveTime={item.reserveTime}
+              date={item.reservationDate}
+              reserveTime={item.reservationTime}
             />
           )}
         />

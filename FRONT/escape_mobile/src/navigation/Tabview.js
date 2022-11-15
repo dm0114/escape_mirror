@@ -9,6 +9,7 @@ import LoginScreen from "../screens/login/Login";
 import MainScreen from "../screens/MainScreen";
 import SearchScreen from "../screens/SearchScreen";
 import Mypage from '../screens/User/MypageScreen';
+import Assignment from '../screens/Assignment';
 
 const FirstRoute = () => (
   // 토큰 없으면 로그인페이지
@@ -25,7 +26,9 @@ const FourthRoute = () => (
   <BookMain />
 );
 
-const FifthRoute = () => <Mypage />;
+const FifthRoute = () => <Assignment />;
+
+const SixthRoute = () => <Mypage />;
 
 const renderScene = SceneMap({
   first: FirstRoute,
@@ -33,6 +36,7 @@ const renderScene = SceneMap({
   third: ThirdRoute,
   fourth: FourthRoute,
   fifth: FifthRoute,
+  sixth: SixthRoute
 });
 
 export default function TabViewExample() {
@@ -45,6 +49,7 @@ export default function TabViewExample() {
     { key: "third" },
     { key: "fourth" },
     { key: "fifth" },
+    { key: "sixth" }
   ]);
 
   return (
