@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface MainpageService {
-    MainpageDto getSearchResult(String searchWord);
+    MainpageDto getSearchResult(String searchWord, int page);
     PreLoadingDto getPreLoading();
 
     List<TransferDto> getTransfers(String region);

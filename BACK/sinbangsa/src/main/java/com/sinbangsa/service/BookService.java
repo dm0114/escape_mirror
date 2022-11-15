@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface BookService {
 
-    List<StoreDto> getStoreList(String region, HttpServletRequest httpServletRequest);
+    List<StoreDto> getStoreList(String region, int page, HttpServletRequest httpServletRequest);
 
     StoreDetailDto getStoreDetail(long storeId, HttpServletRequest httpServletRequest);
 
-    ThemeDetailInfoDto getThemeDetail(long themeId);
+    ThemeDetailInfoDto getThemeDetail(long themeId, int page);
 
     List<ThemeForThemeListDto> getThemeList(long storeId, HttpServletRequest httpServletRequest);
 

@@ -4,6 +4,7 @@ package com.sinbangsa.data.repository;
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.ThemeTime;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +20,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     Optional<Theme> findById(long id);
     Optional<Theme> getById(long themeId);
     List<Theme> findAllByStore(Store store);
-    List<Theme> findAllByThemeNameContaining(String searchWord);
+    List<Theme> findAllByThemeNameContaining(String searchWord, PageRequest pageRequest);
     int countByStore(Store store);
 
     @Query(value = "select ifnull(max(t.id),0) from theme t where t.id > :storeId * 100",nativeQuery = true)

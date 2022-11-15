@@ -8,6 +8,7 @@ import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,7 @@ public class BookServiceImpl implements BookService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public List<StoreDto> getStoreList(String region, HttpServletRequest httpServletRequest) {
+    public List<StoreDto> getStoreList(String region, int page, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookService] getCafeList 호출");
         List<StoreDto> cafeList = new ArrayList<>();
 
@@ -60,7 +61,9 @@ public class BookServiceImpl implements BookService {
             }
             LOGGER.info("유저정보 호출 성공");
 
-            List<Store> storesRepo = storeRepository.findAllByRegionContaining(region);
+            PageRequest pageRequest = PageRequest.of(page, 6);
+
+            List<Store> storesRepo = storeRepository.findAllByRegionContaining(region, pageRequest);
             for (Store storeRepo : storesRepo) {
                 StoreDto storeDto = new StoreDto();
                 storeDto.setStoreId(storeRepo.getStoreId());
@@ -166,7 +169,7 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    public ThemeDetailInfoDto getThemeDetail(long themeId) {
+    public ThemeDetailInfoDto getThemeDetail(long themeId, int page) {
         LOGGER.info("[BookService] getThemeDetail 호출");
         ThemeDetailInfoDto themeDetailInfoDto = new ThemeDetailInfoDto();
 
@@ -205,8 +208,10 @@ public class BookServiceImpl implements BookService {
             Double lock = themeReviewRepository.getAvgLock(themeRepo).orElse((double) 0);
             themeDetailInfoDto.setLock((int) Math.round(lock));
 
+            PageRequest pageRequest = PageRequest.of(page, 5);
+
             List<ReviewThemeDetailInfoDto> reviews = new ArrayList<>();
-            List<ThemeReview> themeReviewsRepo = themeReviewRepository.findAllByReviewTheme(themeRepo);
+            List<ThemeReview> themeReviewsRepo = themeReviewRepository.findAllByReviewTheme(themeRepo, pageRequest);
             for (ThemeReview themeReviewRepo : themeReviewsRepo) {
                 ReviewThemeDetailInfoDto reviewThemeDetailInfoDto = new ReviewThemeDetailInfoDto();
                 reviewThemeDetailInfoDto.setReviewId(themeReviewRepo.getId());

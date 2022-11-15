@@ -11,6 +11,7 @@ import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +34,14 @@ public class MainpageServiceImpl implements MainpageService{
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public MainpageDto getSearchResult(String searchWord) {
+    public MainpageDto getSearchResult(String searchWord, int page) {
         LOGGER.info("[MainpageService] getSearchResult 호출");
         MainpageDto searchResult = new MainpageDto();
         List<MainpageDto.LStoreDto> lStoreDto = new ArrayList<>();
         List<MainpageDto.LThemeDto> lThemeDto = new ArrayList<>();
 
-        List<Store> rplStorelist = storeRepository.findAllByStoreNameContaining(searchWord);
+        PageRequest pageRequest = PageRequest.of(page, 4);
+        List<Store> rplStorelist = storeRepository.findAllByStoreNameContaining(searchWord, pageRequest);
         for (Store store : rplStorelist){
             System.out.println("---------");
             MainpageDto.LStoreDto searchStore = new MainpageDto.LStoreDto();
@@ -89,7 +91,7 @@ public class MainpageServiceImpl implements MainpageService{
         }
         searchResult.setStoreList(lStoreDto);
 
-        List<Theme> rplThemeList = themeRepository.findAllByThemeNameContaining(searchWord);
+        List<Theme> rplThemeList = themeRepository.findAllByThemeNameContaining(searchWord, pageRequest);
         for (Theme theme : rplThemeList) {
             MainpageDto.LThemeDto searchTheme = new MainpageDto.LThemeDto();
             searchTheme.setThemeId(theme.getId());

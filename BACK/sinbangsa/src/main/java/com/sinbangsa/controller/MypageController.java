@@ -51,12 +51,12 @@ public class MypageController {
 
     @GetMapping("/likes")
     @ApiOperation(value = "찜 목록")
-    public ResponseEntity<List<MypageLikeDto>> getLikes(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<MypageLikeDto>> getLikes(@RequestParam int page, HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageController] getLikes 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         try {
-            List<MypageLikeDto> result = mypageService.getLikes(httpServletRequest);
+            List<MypageLikeDto> result = mypageService.getLikes(page,httpServletRequest);
             return new ResponseEntity<List<MypageLikeDto>>(result, headers, HttpStatus.OK);
         } catch (Exception e) {
             List<MypageLikeDto> result = new ArrayList<>();
@@ -67,12 +67,12 @@ public class MypageController {
 
     @GetMapping("/reviews")
     @ApiOperation(value = "리뷰 목록")
-    public ResponseEntity<List<MypageReviewDto>> getReviews(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<MypageReviewDto>> getReviews(@RequestParam int page, HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageController] getReviews 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         try {
-            List<MypageReviewDto> result = mypageService.getReviews(httpServletRequest);
+            List<MypageReviewDto> result = mypageService.getReviews(page, httpServletRequest);
             return new ResponseEntity<List<MypageReviewDto>>(result, headers, HttpStatus.OK);
         } catch (Exception e) {
             List<MypageReviewDto> result = new ArrayList<>();

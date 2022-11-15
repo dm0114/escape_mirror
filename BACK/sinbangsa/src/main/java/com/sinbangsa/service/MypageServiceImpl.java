@@ -9,6 +9,7 @@ import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +57,7 @@ public class MypageServiceImpl implements MypageService {
     }
 
 
-    public List<MypageLikeDto> getLikes(HttpServletRequest httpServletRequest) {
+    public List<MypageLikeDto> getLikes(int page, HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageService] getLikes 호출");
         List<MypageLikeDto> likes = new ArrayList<>();
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -67,8 +68,9 @@ public class MypageServiceImpl implements MypageService {
             if (userRepo == null) {
                 throw new NullPointerException("유저 정보가 잘못되었습니다.");
             }
+            PageRequest pageRequest = PageRequest.of(page,18);
 
-            List<UserThemeRelation> userThemeRelations = userThemeRelationRepository.findAllByThemeRelationUser(userRepo);
+            List<UserThemeRelation> userThemeRelations = userThemeRelationRepository.findAllByThemeRelationUser(userRepo,pageRequest);
             for (UserThemeRelation userThemeRelation : userThemeRelations) {
                 MypageLikeDto mypageLikeDto = new MypageLikeDto();
                 Theme theme = userThemeRelation.getUserRelationTheme();
@@ -85,7 +87,7 @@ public class MypageServiceImpl implements MypageService {
 
     }
 
-    public List<MypageReviewDto> getReviews(HttpServletRequest httpServletRequest) {
+    public List<MypageReviewDto> getReviews(int page, HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageServiceImpl] getReviews 호출");
         List<MypageReviewDto> reviews = new ArrayList<>();
 
@@ -97,7 +99,8 @@ public class MypageServiceImpl implements MypageService {
             if (userRepo == null) {
                 throw new NullPointerException("유저 정보가 잘못되었습니다.");
             }
-            List<ThemeReview> themeReviewsRepo = themeReviewRepository.findAllByReviewUser(userRepo);
+            PageRequest pageRequest = PageRequest.of(page, 5);
+            List<ThemeReview> themeReviewsRepo = themeReviewRepository.findAllByReviewUser(userRepo, pageRequest);
             for (ThemeReview themeReviewRepo : themeReviewsRepo) {
                 MypageReviewDto mypageReviewDto = new MypageReviewDto();
                 mypageReviewDto.setReviewId(themeReviewRepo.getId());
