@@ -13,6 +13,8 @@ import { TextArea, Box, Center, NativeBaseProvider,Select } from "native-base";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AWS from 'aws-sdk';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { getActiveLog } from '../../apis/MyPage';
 // {
 // ”themeId”: 5,
 // ”reviewImg”:”리뷰 이미지 경로”,
@@ -29,6 +31,9 @@ import axios from 'axios';
 
 
 export default function ReviewCreateScreen() {
+  const { data: activeData } = useQuery(['myActive'], getActiveLog)
+  console.log(activeData)
+  
   const [isImage, setImage] = useState(false);
   //별 rating -- 별 반개가 1점이게 보내야함
   const [rating, setRating] = useState(0);
@@ -45,73 +50,116 @@ export default function ReviewCreateScreen() {
 
   // console.log(rating, different, textAreaValue)
 
-  const UploadImage = async()=> {
-    // const image = {
-    //   uri: '',
-    //   type: '',
-    //   name: '',
-    // }
+  const UploadImage = async () => {
+    const image = {
+      uri: '',
+      type: '',
+      name: '',
+    };
+    await launchImageLibrary({}, (res) => {
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (res.errorCode) {
+        console.log('ImagePicker Error: ', res.errorCode);
+      }
+      else if (res.assets) { //정상적으로 사진을 반환 받았을 때
+        console.log('ImagePicker data: ', res.assets);
+        image.name = res.assets[0].fileName;
+        image.type = res.assets[0].type;
+        image.uri = Platform.OS === 'android' ? res.assets[0].uri : res.assets[0].uri.replace('file://', '');
+      }
+    })
 
     const formdata = new FormData();
+    formdata.append('pureblood3-image-for-user', image); //key(=fieldname)이 곧 사진이 업로드 될 S3의 폴더 이름임
 
-    await launchImageLibrary({}, (res) => {
-    if(res.didCancel){
-      console.log('User cancelled image picker');
-    }
-    else if(res.errorCode){
-      console.log('ImagePicker Error: ', res.errorCode);
-    }
-    else if(res.assets){ //정상적으로 사진을 반환 받았을 때
-      console.log('ImagePicker res', res);
-      // image.name = res.assets[0].fileName;
-      // image.type = res.assets[0].type;
-      // image.uri = Platform.OS === 'android' ? res.assets[0].uri : res.assets[0].uri.replace('file://', '');
-      formdata.append(res.assets[0])
-    }
-    })
-    // const formdata = new FormData();
-    // formdata.append('photoImg', image)
-    // console.log('image',image);
-    // console.log('data',formdata);
-  
-    const ACCESS_KEY = 'AKIAQGFLFS7ERZZCFDOO';
-    const SECRET_ACCESS_KEY = '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';
-    const REGION = "ap-northeast-2";
-    const S3_BUCKET = 'pureblood3-image-for-user';
-
-    // AWS ACCESS KEY를 세팅합니다.
-    AWS.config.update({
-      accessKeyId: ACCESS_KEY,
-      secretAccessKey: SECRET_ACCESS_KEY
-    });
-
-    // 버킷에 맞는 이름과 리전을 설정합니다.
-    const myBucket = new AWS.S3({
-      params: { Bucket: S3_BUCKET},
-      region: REGION,
-    });
-
-    // const file = e.target.files[0];
     console.log(formdata)
-    const file = formdata
-    console.log('file',file)
-
-    // 파일과 파일이름을 넘겨주면 됩니다.
-    const params = {
-      ACL: 'public-read',
-      Body: file,
-      Bucket: S3_BUCKET,
-      Key: file.fileName
+    const requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+      field: 'file',
+      headers: {
+        'Content-Type': 'multipart/form-data; ',
+      },
+      // headers :{'Content-Type': 'multipart/form-data'} 헤더를 지정해줄거면 multipart/form-data로 지정해주어야함
+      // headers를 위처럼 따로 지정해 주지 않아도 되긴 함
     };
-    
-    myBucket.putObject(params)
-      .on('httpUploadProgress', (evt) => {
-        alert("SUCCESS")
-      })
-      .send((err) => {
-        if (err) console.log(err)
-      })
+
+    await fetch("https://pureblood3-image-for-user.s3.ap-northeast-2.amazonaws.com", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
   }
+
+  // const UploadImage = async()=> {
+  //   // const image = {
+  //   //   uri: '',
+  //   //   type: '',
+  //   //   name: '',
+  //   // }
+
+  //   const formdata = new FormData();
+
+  //   await launchImageLibrary({}, (res) => {
+  //   if(res.didCancel){
+  //     console.log('User cancelled image picker');
+  //   }
+  //   else if(res.errorCode){
+  //     console.log('ImagePicker Error: ', res.errorCode);
+  //   }
+  //   else if(res.assets){ //정상적으로 사진을 반환 받았을 때
+  //     console.log('ImagePicker res', res);
+  //     // image.name = res.assets[0].fileName;
+  //     // image.type = res.assets[0].type;
+  //     // image.uri = Platform.OS === 'android' ? res.assets[0].uri : res.assets[0].uri.replace('file://', '');
+  //     formdata.append(res.assets[0])
+  //   }
+  //   })
+  //   // const formdata = new FormData();
+  //   // formdata.append('photoImg', image)
+  //   // console.log('image',image);
+  //   // console.log('data',formdata);
+  
+  //   const ACCESS_KEY = 'AKIAQGFLFS7ERZZCFDOO';
+  //   const SECRET_ACCESS_KEY = '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';
+  //   const REGION = "ap-northeast-2";
+  //   const S3_BUCKET = 'pureblood3-image-for-user';
+
+  //   // AWS ACCESS KEY를 세팅합니다.
+  //   AWS.config.update({
+  //     accessKeyId: ACCESS_KEY,
+  //     secretAccessKey: SECRET_ACCESS_KEY
+  //   });
+
+  //   // 버킷에 맞는 이름과 리전을 설정합니다.
+  //   const myBucket = new AWS.S3({
+  //     params: { Bucket: S3_BUCKET},
+  //     region: REGION,
+  //   });
+
+  //   // const file = e.target.files[0];
+  //   console.log(formdata)
+  //   const file = formdata
+  //   console.log('file',file)
+
+  //   // 파일과 파일이름을 넘겨주면 됩니다.
+  //   const params = {
+  //     ACL: 'public-read',
+  //     Body: file,
+  //     Bucket: S3_BUCKET,
+  //     Key: file.fileName
+  //   };
+    
+  //   myBucket.putObject(params)
+  //     .on('httpUploadProgress', (evt) => {
+  //       alert("SUCCESS")
+  //     })
+  //     .send((err) => {
+  //       if (err) console.log(err)
+  //     })
+  // }
 
   
 
@@ -121,9 +169,9 @@ export default function ReviewCreateScreen() {
 
       <ThemeTitleView>
         {/*GET 테마 이름*/}
-        <ThemeTitleTxt>킹스맨</ThemeTitleTxt>
+        {/* <ThemeTitleTxt>{activeData[0]?.themeName}</ThemeTitleTxt> */}
         {/*GET 방문 일시 */}
-        <DateTxt>2022.09.07</DateTxt>
+        {/* <DateTxt>{activeData[0]?.doneDate}</DateTxt> */}
       </ThemeTitleView>
       {/* 평점 - ”star” 별 반개가 1점!!*/}
       <StarView>

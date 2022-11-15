@@ -3,6 +3,7 @@ import { SecureState } from "../store/SecureStore";
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const BASE_URL2 = "https://my-json-server.typicode.com/dm0113";
 const ACCESS_TOKEN = SecureState.getData('accessToken');
+// const Token = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b29qaDQ1NkBuYXZlci5jb20iLCJyb2xlcyI6IlVzZXIiLCJ1c2VySWQiOjIsImlzcyI6ImVzY2FwZWRpY3Rpb25hcnkuY29tIiwiaWF0IjoxNjY4NDA4MzIxLCJleHAiOjE2Njg0OTQ3MjF9.FkbJ_SprhWX_Fvqgd7ezkt3d0rB_0-48JfL9zD2XED4`
 const Token = `Bearer ${ACCESS_TOKEN}`
 
 // 참고
@@ -29,11 +30,11 @@ export const getPreloading = (mapX, mapY) => {
 const getSearch = async ({ queryKey }) => {
   let [_, query] = queryKey
   query = new URLSearchParams({
-    searchWord: query
+    searchWord: await SecureState.getData("accessToken")
   })
   const response = await (await fetch(`${BASE_URL}/mainpage/search?${query}`,{
     headers : {
-      Authorization : Token
+      Authorization : await SecureState.getData("accessToken")
     }
   })).json()
   return response
@@ -43,7 +44,7 @@ const getCafeDetail = async({queryKey}) => {
   let [_, storeId] = queryKey
   return await (await fetch(`${BASE_URL}/book/store/${storeId}`,{
     headers : {
-      Authorization : Token
+      Authorization : await SecureState.getData("accessToken")
     }
   })).json();
 }
@@ -52,7 +53,7 @@ const getThemeDetail = async({queryKey}) => {
   let [_, themeId] = queryKey
   return await (await fetch(`${BASE_URL}/book/theme/${themeId}`,{
     headers : {
-      Authorization : Token
+      Authorization : await SecureState.getData("accessToken")
     }
   })).json();
 }
@@ -81,7 +82,7 @@ const getReservationTime = async({queryKey}) => {
   })
   return await (await fetch(`${BASE_URL}/reservation?${themeId}`,{
     headers : {
-      Authorization : Token
+      Authorization : await SecureState.getData("accessToken")
     }
   })).json();
 }
@@ -95,7 +96,7 @@ const getReservationDate = async({queryKey}) => {
   })
   return await (await fetch(`${BASE_URL}/reservation/date?${themeId}`,{
     headers : {
-      Authorization : Token
+      Authorization : await SecureState.getData("accessToken")
     }
   })).json();
 }

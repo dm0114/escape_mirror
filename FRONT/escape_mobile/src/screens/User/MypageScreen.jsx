@@ -22,7 +22,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 export default function MypageScreen() {
   const navigation = useNavigation();
   const { data:UserInfo } = useQuery(['myInfo'], getMyInfo)
-
+  console.log(UserInfo)
   //edit가 False일 때 : 마이페이지 뷰 
   //edit가 True일 때 : 수정페이지 뷰
   const [edit, setEdit] = useState(false);

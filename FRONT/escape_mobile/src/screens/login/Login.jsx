@@ -36,21 +36,18 @@ const requestToken = async (code ) => {
 
     const response = await axios.post(APIURI, body);
     const value = response.data;    
-    await SecureState.setData('accessToken', value.accessToken);
+    await SecureState.setData('accessToken', `Bearer ${value.accessToken}`);
     
-    /**
-     * Get AccessToken
-     */
-    await SecureState.getData('accessToken');
+
     // await AsyncState.setData(ACCESS_TOKEN);
     // await AsyncState.getData();
 
-    const result = await storeUser(value);
-    if (result === 'stored') {
-      const user = await getData('user');
-      dispatch(read_S(user));
-      await navigation.navigate('Main');
-    }
+    // const result = await storeUser(value);
+    // if (result === 'stored') {
+    //   const user = await getData('user');
+    //   dispatch(read_S(user));
+    //   await navigation.navigate('Main');
+    // }
   } catch (e) {
     console.log(e);
   }
