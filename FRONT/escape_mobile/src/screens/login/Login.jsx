@@ -6,6 +6,7 @@ import { SecureState } from '../../store/SecureStore';
 import { AsyncState } from '../../store/AsyncStore';
 
 
+
 const REST_API_KEY = '6cb2dd1e35672b64fb0dac71ee59315f'
 const REDIRECT_URI = 'http://localhost:8082'
 const APIURI = 'http://k7c104.p.ssafy.io:8080/api/user/kakao'
@@ -43,12 +44,22 @@ const requestToken = async (code ) => {
     // await AsyncState.setData(ACCESS_TOKEN);
     // await AsyncState.getData();
 
+<<<<<<< HEAD
+
+    // const result = await storeUser(value);
+    // if (result === 'stored') {
+    //   const user = await getData('user');
+    //   dispatch(read_S(user));
+    //   await navigation.navigate('Main');
+    // }
+=======
   // const result = await storeUser(value);
   //   if (result === 'stored') {
   //     const user = await getData('user');
   //     dispatch(read_S(user));
   //     await navigation.navigate('Main');
   //   }
+>>>>>>> 5bc9e977a2f3455c6a75e2929b92d622b38b9d93
   } catch (e) {
     console.log(e);
   }

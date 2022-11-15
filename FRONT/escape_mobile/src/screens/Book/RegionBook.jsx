@@ -69,14 +69,19 @@ export default function RegionBook({navigation, route}){
     const itemsList = RegionList[num].map((item) => {
         return {label:item, value:item}
     })
-    const {data} = useQuery(
+    const {data} = useQuery(                                                         
         ['RegionCafe', specificRegion, name],
         getRegionCafeList,
         {enabled:!!specificRegion}
     )
 
+    console.log(data)
+
     useEffect(()=>{
         itemsList.length ? setSelectRegion(`${name}/null`) : setSelectRegion(`${name}`)
+        if(name == '강원' || name == '제주'){
+            setSpecificRegion('전체')
+        }
     }, [])
 
     const renderItem = (obj) => {
@@ -101,6 +106,7 @@ export default function RegionBook({navigation, route}){
                         obj.index !== data.length-1 && obj.index %2 == 1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
                     : {marginRight:10}}
                     >
+                        {/* <Text style={{color:'red', fontSize:20}}>{obj.item.storeImg}</Text> */}
                         <ThemeTitleView style={{flex:1}}>
                             <ThemeTitle>진행도</ThemeTitle>
                             <ThemeTitle>{obj.item.clearCnt}/{obj.item.totalTheme}</ThemeTitle>

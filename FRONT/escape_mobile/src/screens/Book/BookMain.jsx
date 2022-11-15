@@ -9,14 +9,12 @@ const BookMain = () => {
     return(
         <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_book2.gif'}} style={{flex:1}}>
             <MainBookView style={{flex:1}}>
-                <MainBookText>어서오세요</MainBookText>
-                <MainBookText>ㅇㅇㅇ님의 저택이에요.</MainBookText>
-                <MainBookText>모든 방문을 열어야만</MainBookText>
-                <MainBookText>이 저택의 진정한 주인이 되실 수 있어요.</MainBookText>
-                <MainBookText>지금 바로 저택에 입성해보세요.</MainBookText>
+                <MainBookText>ㅇㅇㅇ님을 기다리는 저택이에요.</MainBookText>
+                <MainBookText>모든 방문을 열어</MainBookText>
+                <MainBookText>저택의 주인이 되어주세요.</MainBookText>
             </MainBookView>
             <Enter style={{flex:2}} onPress={()=>{navigation.navigate('Book')}}>
-                <EnterText>저택 들어가기</EnterText>
+                <EnterText>저택 입성하기</EnterText>
             </Enter>
         </ImageBackground>
     )
@@ -30,7 +28,7 @@ const MainBookView = styled.View`
     align-items: center;
 `
 const MainBookText = styled.Text`
-    font-size: 20px;
+    font-size: ${({ theme }) => theme.fontSizes.title2};
     color:white;
     font-family: 'SUIT-Bold';
     margin-bottom: 20px;
