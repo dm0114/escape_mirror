@@ -9,4 +9,6 @@ public interface UserService {
     KakaoLoginResponseDto kakaoLogin(String kakaotoken);
 
     User getUserinfoByToken(String kakaotoken);
+
+    Boolean kakaoLogout(String refreshToken);
 }

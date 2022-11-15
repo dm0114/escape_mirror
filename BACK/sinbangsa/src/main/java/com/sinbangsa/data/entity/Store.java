@@ -18,7 +18,7 @@ public class Store {
 
     @ManyToOne
     @JoinColumn(name = "admin")
-    private Admin storeAdmin;
+    private User storeAdmin;
 
 
     @OneToMany(mappedBy = "store")

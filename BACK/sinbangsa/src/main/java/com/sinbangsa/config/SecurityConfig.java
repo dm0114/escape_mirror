@@ -41,6 +41,8 @@ public class SecurityConfig {
 
         http
                 .httpBasic().disable() //restapi를 위해 기본 설정 해제
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .csrf().disable() // csrf 보안 토큰 disable
                 .headers()
                 .frameOptions()
@@ -51,13 +53,12 @@ public class SecurityConfig {
                 // 인증처리에서는 세션을 사용하지 않는다는 뜻
                 .and()
                 .authorizeRequests() //요청에 관해 인증체크
-                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/user/**","/api/admin/auth/**").permitAll()
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**","/swagger*/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().hasRole("USER")
                 .and()
                 .formLogin().disable()
-                .cors()
-                .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
 
@@ -76,7 +77,6 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+
     }
-
-
 }

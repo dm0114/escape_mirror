@@ -1,10 +1,10 @@
 package com.sinbangsa.data.repository;
 
-import com.sinbangsa.data.dto.MainpageDto;
-import com.sinbangsa.data.entity.Admin;
+
 import com.sinbangsa.data.entity.Store;
 import com.sinbangsa.data.entity.Theme;
 import org.springframework.data.domain.PageRequest;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
