@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
+<<<<<<< HEAD
         <!-- <domain includeSubdomains="true">http://k7c104.p.ssafy.io:8080</domain> -->
         <domain includeSubdomains="true">127.0.0.1</domain>
+=======
+        <domain includeSubdomains="true">Your URL(ex: 127.0.0.1)</domain>
+>>>>>>> 83f4bcf4d2da829b6eb9ba3214fc089de167eb65
     </domain-config>
 </network-security-config>

@@ -39,10 +39,7 @@ const requestToken = async (code ) => {
     const value = response.data;    
     await SecureState.setData('accessToken', `Bearer ${value.accessToken}`);
     
-    /**
-     * Get AccessToken
-     */
-    await SecureState.getData('accessToken');
+
     // await AsyncState.setData(ACCESS_TOKEN);
     // await AsyncState.getData();
 

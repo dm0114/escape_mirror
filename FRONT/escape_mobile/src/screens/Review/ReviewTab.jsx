@@ -6,6 +6,8 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 import { Ionicons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import StarRating from 'react-native-star-rating-widget';
+import { useQuery } from '@tanstack/react-query';
+import { getMyReview } from '../../apis/MyPage';
 // ”star”:9,
 // ”diff”:8,
 // ”story”:6,
@@ -48,6 +50,8 @@ const data = [
 ]
 export default function ReviewTab() {
   const navigation = useNavigation();
+  // const { data } = useQuery(['myReview'], getMyReview)
+  // console.log(data)
   //리뷰 컴포넌트
   function RenderReview({ item }) {
     const rating = item.star/2
