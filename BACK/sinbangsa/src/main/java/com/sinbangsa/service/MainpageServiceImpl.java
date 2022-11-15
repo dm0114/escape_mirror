@@ -41,11 +41,9 @@ public class MainpageServiceImpl implements MainpageService{
 
         List<Store> rplStorelist = storeRepository.findAllByStoreNameContaining(searchWord);
         for (Store store : rplStorelist){
-            System.out.println("---------");
             MainpageDto.LStoreDto searchStore = new MainpageDto.LStoreDto();
             searchStore.setStoreId(store.getStoreId());
             searchStore.setStoreName(store.getStoreName());
-            System.out.println(store.getStoreName());
             searchStore.setStoreImg(store.getPoster());
             searchStore.setStoreAddress(store.getAddress());
             searchStore.setLikeCount(userStoreRelationRepository.countByUserRelationStore(store));
@@ -95,6 +93,7 @@ public class MainpageServiceImpl implements MainpageService{
             searchTheme.setThemeId(theme.getId());
             searchTheme.setThemeName(theme.getThemeName());
             searchTheme.setThemeImg(theme.getPoster());
+            searchTheme.setStoreName(theme.getStore().getStoreName());
             if (themeReviewRepository.countAllByReviewTheme(theme) == 0) {
                 searchTheme.setStar(-1);
                 searchTheme.setRandomReview("리뷰가 없습니다.");
