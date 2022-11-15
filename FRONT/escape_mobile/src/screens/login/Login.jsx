@@ -6,6 +6,7 @@ import { SecureState } from '../../store/SecureStore';
 import { AsyncState } from '../../store/AsyncStore';
 
 
+
 const REST_API_KEY = '6cb2dd1e35672b64fb0dac71ee59315f'
 const REDIRECT_URI = 'http://localhost:8082'
 const APIURI = 'http://k7c104.p.ssafy.io:8080/api/user/kakao'
@@ -36,7 +37,7 @@ const requestToken = async (code ) => {
 
     const response = await axios.post(APIURI, body);
     const value = response.data;    
-    await SecureState.setData('accessToken', value.accessToken);
+    await SecureState.setData('accessToken', `Bearer ${value.accessToken}`);
     
     /**
      * Get AccessToken
@@ -45,12 +46,13 @@ const requestToken = async (code ) => {
     // await AsyncState.setData(ACCESS_TOKEN);
     // await AsyncState.getData();
 
-    const result = await storeUser(value);
-    if (result === 'stored') {
-      const user = await getData('user');
-      dispatch(read_S(user));
-      await navigation.navigate('Main');
-    }
+
+    // const result = await storeUser(value);
+    // if (result === 'stored') {
+    //   const user = await getData('user');
+    //   dispatch(read_S(user));
+    //   await navigation.navigate('Main');
+    // }
   } catch (e) {
     console.log(e);
   }

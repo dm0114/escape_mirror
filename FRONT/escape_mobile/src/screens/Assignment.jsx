@@ -5,13 +5,18 @@ import theme from "../../theme";
 import { Select, Box, Center } from "native-base";
 import { Modal } from 'native-base';
 import { Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { useQuery } from '@tanstack/react-query';
+import { getRegionAssign, getSearchAssign } from '../apis/Assignment';
+import { useNavigation } from '@react-navigation/native';
+
 
 // 화면 너비, 높이 구하는 방법
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const halfSelectWidth = (windowWidth-80)/2;
-const halfViewWidth = (windowWidth-60)/2;
+const halfViewWidth = (windowWidth-70)/2;
 
 const RegionLittleList = {
     // 서울
@@ -98,16 +103,27 @@ const obj = [
 ]
 
 const Assignment = () => {
+    const navigation = useNavigation(); 
     const [text, onChangeText] = React.useState();
     const [selectRegion, setSelectRegion] = useState();
     const [selectLittleRegion, setSelectLittleRegion] = useState();
     const [resultRegion, setResultRegion] = useState();
     const [selectItem, setSelectItem] = useState();
     const [isModal, setIsModal] = useState(false);
+    const {data:SelectData} = useQuery(['AssignmentSelect', selectRegion, selectLittleRegion], getRegionAssign, {
+        enabled:!!(selectRegion&&selectLittleRegion)
+    })
+    const [searchKeyword, setSearchKeyword] = useState();
+    const {data:SearchData} = useQuery(['AssignmentSearch', searchKeyword], getSearchAssign, {
+        enabled:!!searchKeyword
+    })
+    console.log(SearchData)
 
     useEffect(()=>{
         setResultRegion(`${selectRegion}/${selectLittleRegion}`)
     }, [selectLittleRegion])
+
+
 
     // const SelectItem = (data) => {
     //     return(
@@ -116,16 +132,34 @@ const Assignment = () => {
     //         }
     //     )
     // }
+
+    useEffect(()=>{
+        if(selectItem){
+            console.log(selectItem.storeId)
+        }
+    }, [selectItem])
     
     const AssignItem = ({item}) => {
+        console.log(item)
+        const [year, month, day] = item.reservedDate.split("-");
         return(
-            <AssignItemView style={{backgroundColor:'white', width:halfViewWidth, marginBottom:20, alignItems:'center'}}
+            <AssignItemView style={{backgroundColor:'white', width:halfViewWidth, marginBottom:20}}
             onPress={()=>{setSelectItem(item)
             setIsModal(true)}}>
-                <SUIT style={{fontSize:15}}>{item.storeName}</SUIT>
-                <SUIT style={{fontSize:25}}>{item.themeName}</SUIT>
-                <SUIT style={{fontSize:18}}>{item.date}</SUIT>
-                <SUIT style={{fontSize:25}}>{item.time}</SUIT>
+                {/* <View style={{flexDirection:'row', alignItems:'center'}}>
+                    <Ionicons name="person" size={25} color="red" />
+                    <SUIT style={{fontSize:20, marginLeft:5}}>{item.user}</SUIT>
+                </View>
+                <View style={{borderBottomColor: 'grey', borderBottomWidth:1, marginTop:10, marginBottom:10}} /> */}
+                <View style={{alignItems:'center'}}>
+                    <SUITSemiBold style={{fontSize:13}}>{item.storeName}</SUITSemiBold>
+                    <SUIT style={{fontSize:25}}>{item.themeName}</SUIT>
+                </View>
+                <View style={{borderBottomColor: 'grey', borderBottomWidth:1, marginTop:10, marginBottom:10}} />
+                <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
+                    <SUIT style={{fontSize:18}}>{month}월 {day}일</SUIT>
+                    <SUIT style={{fontSize:30}}>{item.reservedTime}</SUIT>
+                </View>
             </AssignItemView>
         )
     }
@@ -136,31 +170,45 @@ const Assignment = () => {
             <Modal.Content>
                 <Modal.CloseButton />
                 {/* <Modal.Header>테마이름</Modal.Header> */}
-                <Modal.Body style={{justifyContent:'center', alignItems:'center'}}>
-                    <View style={{flexDirection:'row', alignItems:'center'}}>
-                        <SUIT style={{fontSize:20}}>{selectItem.user}</SUIT>
-                        <Text style={{fontFamily:'SUIT-SemiBold', fontSize:20, marginTop:5, marginBottom:5}}>님의 예약</Text>
+                <Modal.Body style={{justifyContent:'center', paddingLeft:40, paddingRight:40, paddingBottom:30}}>
+                    <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
+                        <Ionicons name="person" size={25} color="red" />
+                        <SUIT style={{fontSize:20, marginLeft:5}}>{selectItem.reservedName}</SUIT>
+                        <SUITSemiBold style={{fontSize:20}}>님의 예약</SUITSemiBold>
                     </View>
-                    <TouchableOpacity style={{flexDirection:'row', alignItems:'center', marginTop:10, marginBottom:10}}
-                    onPress={()=>{}}>
-                        {/* <Feather name="link" size={24} color="black" /> */}
-                        <Text style={{marginLeft:10, fontSize:18}}>{selectItem.storeName}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}}
-                    onPress={()=>{}}>
-                        {/* <Feather name="link" size={24} color="black" /> */}
-                        <Text style={{fontSize:35, marginLeft:10}}>{selectItem.themeName}</Text>
-                    </TouchableOpacity>
-                    <Text style={{fontSize:25, marginTop:10, marginBottom:0}}>{selectItem.date}</Text>
-                    <Text style={{fontSize:35, marginTop:10, marginBottom:10}}>{selectItem.time}</Text>
+                    <View style={{flexDirection:'column', alignItems:'center', marginTop:20, marginBottom:20}}>
+                        <TouchableOpacity style={{flexDirection:'row', alignItems:'center', marginTop:10, marginBottom:10}}
+                        // onPress={()=>{console.log(selectItem.storeId)}}
+                        onPress={()=>{
+                            navigation.navigate('CafeDetailScreen', {
+                            storeId:selectItem.storeId
+                            })}}
+                            >
+                            {/* <Feather name="link" size={24} color="black" /> */}
+                            <SUITSemiBold style={{marginLeft:10, fontSize:18}}>{selectItem.storeName}</SUITSemiBold>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}}
+                        onPress={()=>{
+                            navigation.navigate('ThemeDetailScreen', {
+                            themeId:selectItem.themeId
+                            })}}
+                            >
+                            {/* <Feather name="link" size={24} color="black" /> */}
+                            <SUIT style={{fontSize:35, marginLeft:10}}>{selectItem.themeName}</SUIT>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{flexDirection:'column', alignItems:'center', marginBottom:20}}>
+                        <SUIT style={{fontSize:25, marginTop:10, marginBottom:0}}>{selectItem.reservedDate}</SUIT>
+                        <SUIT style={{fontSize:35, marginTop:10, marginBottom:10}}>{selectItem.reservedTime}</SUIT>
+                    </View>
                     <Button title='양도 받기' color="black"/>
                 </Modal.Body>
             </Modal.Content>
         </Modal>}
-        <Container>
+        <Container style={{flex:1}}>
             <Title>새로운 초대장이 도착했어요.</Title>
             <SearchInput
-                onChangeText={onChangeText}
+                onChangeText={(value)=>{setSearchKeyword(value)}}
                 value={text}
             />
             <SubTitle>지역을 선택해주세요</SubTitle>
@@ -194,25 +242,23 @@ const Assignment = () => {
                 
                 (selectRegion !== undefined && selectLittleRegion !== undefined) && 
                 <FlatList
-                style={{marginTop:20}}
+                style={{marginTop:20, padding:5, marginBottom:20}}
                 columnWrapperStyle={{ flex: 1, justifyContent: "space-between" }}
                 numColumns={2}
                 key={3}
-                data={obj}
+                data={SelectData}
                 renderItem={AssignItem} />
             }
-            {/* <ScrollViewStyle horizontal={true} style={{color:'white', flexDirection:'row'}}>
-                {
-                    RegionList.map((item) => {
-                        return(
-                            <RegionTab style={selectRegion === item ? {backgroundColor:'black', color:'white'} : null}
-                            onPress={()=>{setSelectRegion(item)}}>
-                                <RegionTabText style={selectRegion === item ? {color:'white'} : null}>{item}</RegionTabText>
-                            </RegionTab>
-                        )
-                    })
-                }
-            </ScrollViewStyle> */}
+            {
+                (searchKeyword !== undefined && <FlatList 
+                    style={{marginTop:20, padding:5, marginBottom:20}}
+                    columnWrapperStyle={{ flex: 1, justifyContent: "space-between" }}
+                    numColumns={2}
+                    key={3}
+                    data={SearchData.themeList}
+                    renderItem={AssignItem}
+                />)
+            }
         </Container>
         </ImageBackground>
     )
@@ -222,7 +268,10 @@ const SUIT = styled.Text`
     font-family: 'SUIT-Bold';
     margin: 5px 0;
 `
-
+const SUITSemiBold = styled.Text`
+    font-family: 'SUIT-SemiBold';
+    margin: 5px 0;
+`
 const Title = styled.Text`
     font-size: ${({theme}) => theme.fontSizes.title2};
     font-family: 'SUIT-SemiBold';

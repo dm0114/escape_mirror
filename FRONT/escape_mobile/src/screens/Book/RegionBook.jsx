@@ -75,6 +75,8 @@ export default function RegionBook({navigation, route}){
         {enabled:!!specificRegion}
     )
 
+    console.log(data)
+
     useEffect(()=>{
         itemsList.length ? setSelectRegion(`${name}/null`) : setSelectRegion(`${name}`)
         if(name == '강원' || name == '제주'){

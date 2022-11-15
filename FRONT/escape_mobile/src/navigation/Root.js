@@ -18,6 +18,8 @@ import Book from '../screens/Book/Book';
 import CafeBook from '../screens/Book/CafeBook';
 import BookMain from '../screens/Book/BookMain';
 
+import Assignment from '../screens/Assignment';
+
 import CommunityScreen from '../screens/CommunityScreen';
 import CommunityDetailScreen from '../screens/CommunityDetailScreen';
 import TabViewExample from './Tabview';
@@ -62,6 +64,7 @@ const Root = () =>
       <Nav.Screen name="MypageMoreScreen" component={MypageMoreScreen} />
       <Nav.Screen name="KakaoLogin" component={KakaoLogin} />
       <Nav.Screen name="ReviewCreateScreen" component={ReviewCreateScreen} />
+      <Nav.Screen name="Assignment" component={Assignment} />
   </Nav.Navigator>
 
   export default Root

@@ -18,6 +18,7 @@ export default function CafeBook({navigation, route}){
         ['CafeTheme', storeId],
         getCafeThemeList
         )
+    console.log(storeId)
     return(
         <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/book_room01.gif'}} style={{flex:1}}>
         <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20, marginTop:10}}>
@@ -59,7 +60,7 @@ export default function CafeBook({navigation, route}){
                     obj.index % 3 == 2 ? {marginRight:0} : {marginRight:20}]}
                 onPress={()=>{
                     navigation.navigate('ThemeDetailScreen', {
-                    storeId:obj.item.themeId
+                    themeId:obj.item.themeId
                     })}}
                 >
                     <View style={{backgroundColor:'black', height:180, width:117, position:'absolute', zIndex:3, elevation:3, borderRadius:10, opacity:opacity_list[obj.item.isClear]}} />
