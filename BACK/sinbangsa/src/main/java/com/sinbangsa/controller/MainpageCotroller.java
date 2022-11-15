@@ -62,12 +62,12 @@ public class MainpageCotroller {
 
     @GetMapping("/search")
     @ApiOperation(value = "검색")
-    public ResponseEntity<MainpageDto> getSearchResult(@RequestParam String searchWord) {
+    public ResponseEntity<MainpageDto> getSearchResult(@RequestParam String searchWord, @RequestParam int page) {
         LOGGER.info("[MainpageController] getSearchResult 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try {
-            MainpageDto searchResult = mainpageService.getSearchResult(searchWord);
+            MainpageDto searchResult = mainpageService.getSearchResult(searchWord, page);
             return new ResponseEntity<>(searchResult, headers, HttpStatus.OK);
         } catch (Exception e) {
             MainpageDto mainpageDto = new MainpageDto();

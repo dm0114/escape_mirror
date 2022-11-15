@@ -3,6 +3,7 @@ package com.sinbangsa.data.repository;
 import com.sinbangsa.data.entity.Theme;
 import com.sinbangsa.data.entity.ThemeReview;
 import com.sinbangsa.data.entity.User;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -54,9 +55,9 @@ public interface ThemeReviewRepository extends JpaRepository<ThemeReview,Long> {
             "where themeReview.reviewTheme =:theme")
     Optional<Double> getAvgLock(@Param("theme") Theme theme);
 
-    List<ThemeReview> findAllByReviewTheme(Theme theme);
+    List<ThemeReview> findAllByReviewTheme(Theme theme, PageRequest pageRequest);
 
-    List<ThemeReview> findAllByReviewUser(User user);
+    List<ThemeReview> findAllByReviewUser(User user, PageRequest pageRequest);
     Optional<ThemeReview> findById(long reviewId);
 
 

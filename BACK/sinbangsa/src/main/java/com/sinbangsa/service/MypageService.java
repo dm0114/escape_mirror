@@ -10,9 +10,9 @@ public interface MypageService {
 
     MypageInfoDto getMyPageInfo(HttpServletRequest httpServletRequest);
 
-    List<MypageLikeDto> getLikes(HttpServletRequest httpServletRequest);
+    List<MypageLikeDto> getLikes(int page, HttpServletRequest httpServletRequest);
 
-    List<MypageReviewDto> getReviews(HttpServletRequest httpServletRequest);
+    List<MypageReviewDto> getReviews(int page, HttpServletRequest httpServletRequest);
 
     MypageMyRoomDto getMypageMyRooms(HttpServletRequest httpServletRequest);
 

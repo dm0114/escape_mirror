@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.print.Pageable;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,12 +40,12 @@ public class BookController {
 
     @GetMapping("/store")
     @ApiOperation(value = "지역별 카페리스트")
-    public ResponseEntity<List<StoreDto>> getStoreList(@RequestParam String region, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<StoreDto>> getStoreList(@RequestParam String region, @RequestParam int page, HttpServletRequest httpServletRequest, Pageable pageable) {
         LOGGER.info("[BookController] getCafeList 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         try {
-            List<StoreDto> result = bookService.getStoreList(region, httpServletRequest);
+            List<StoreDto> result = bookService.getStoreList(region, page, httpServletRequest);
             return new ResponseEntity<List<StoreDto>>(result, headers, HttpStatus.OK);
         } catch (NullPointerException e) {
             List<StoreDto> tmp = new ArrayList<>();
@@ -88,12 +90,12 @@ public class BookController {
 
     @GetMapping("/theme/{themeId}")
     @ApiOperation(value = "테마 상세정보")
-    public ResponseEntity<ThemeDetailInfoDto> getThemeDetail(@PathVariable Long themeId) {
+    public ResponseEntity<ThemeDetailInfoDto> getThemeDetail(@PathVariable Long themeId, @RequestParam int page) {
         LOGGER.info("[BookController] getStoreDetail 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         try {
-            ThemeDetailInfoDto result = bookService.getThemeDetail(themeId);
+            ThemeDetailInfoDto result = bookService.getThemeDetail(themeId, page);
             return new ResponseEntity<ThemeDetailInfoDto>(result, headers, HttpStatus.OK);
         } catch (Exception e) {
             ThemeDetailInfoDto result = new ThemeDetailInfoDto();
