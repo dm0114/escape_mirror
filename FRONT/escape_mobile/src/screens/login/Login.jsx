@@ -44,22 +44,14 @@ const requestToken = async (code ) => {
     // await AsyncState.setData(ACCESS_TOKEN);
     // await AsyncState.getData();
 
-<<<<<<< HEAD
 
-    // const result = await storeUser(value);
-    // if (result === 'stored') {
-    //   const user = await getData('user');
-    //   dispatch(read_S(user));
-    //   await navigation.navigate('Main');
-    // }
-=======
   // const result = await storeUser(value);
   //   if (result === 'stored') {
   //     const user = await getData('user');
   //     dispatch(read_S(user));
   //     await navigation.navigate('Main');
   //   }
->>>>>>> 5bc9e977a2f3455c6a75e2929b92d622b38b9d93
+
   } catch (e) {
     console.log(e);
   }
