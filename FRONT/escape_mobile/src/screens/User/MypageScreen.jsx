@@ -7,9 +7,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useNavigation } from '@react-navigation/native';
 import Modal from "react-native-modal";
 import { Input, Stack, Center, NativeBaseProvider } from "native-base";
-//카메라, 앨범 접근 라이브러리
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
+import { getMyInfo } from '../../apis/MyPage';
+import { useQuery } from '@tanstack/react-query';
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // 마이페이지
 //프로필 사진, 등급명, 닉네임명, 후기|내가찜한테마|예약확인
@@ -20,7 +21,8 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 //이 상태에 회원탈퇴와 로그아웃까지
 export default function MypageScreen() {
   const navigation = useNavigation();
-
+  const { data:UserInfo } = useQuery(['myInfo'], getMyInfo)
+  console.log(UserInfo)
   //edit가 False일 때 : 마이페이지 뷰 
   //edit가 True일 때 : 수정페이지 뷰
   const [edit, setEdit] = useState(false);
@@ -32,12 +34,13 @@ export default function MypageScreen() {
     const gradeModal = () => {
       setGradeModalVisible(!isGradeModalVisible);
     };
+    console.log(UserInfo)
     return (
       <MypageContainer>
-         {/* 프로필 이미지 */}
+         {/* 프로필 이미지
         <ProfileView>
           <ProfileImg></ProfileImg>
-        </ProfileView>
+        </ProfileView> */}
 
         {/* 톱니 바퀴 - 설정 */}
         <SettingsView>
@@ -48,8 +51,8 @@ export default function MypageScreen() {
 
         {/* 등급명 및 닉네임 */}
         <MypageTxtView >
-          <GradeTxt onPress={gradeModal}>집주인</GradeTxt>
-          <NickNameTxt>명탐정 셜록</NickNameTxt>
+          <GradeTxt onPress={gradeModal}>{UserInfo?.grade}</GradeTxt>
+          <NickNameTxt>{UserInfo?.nickname}</NickNameTxt>
         </MypageTxtView>
 
         {/* 찜테마 | 후기 | 내 예약 */}
@@ -77,30 +80,32 @@ export default function MypageScreen() {
       setModalVisible(!isModalVisible);
     };
 
-    function ShowPicker() {
-        //launchImageLibrary : 사용자 앨범 접근
-    launchImageLibrary({}, (res)=>{
-      alert(res.assets[0].uri)
-      const formdata = new FormData()
-      formdata.append('file', res.assets[0].uri);
-      console.log(res);
-    })
-    }
+
+    // function ShowPicker() {
+    //     //launchImageLibrary : 사용자 앨범 접근
+    // launchImageLibrary({}, (res)=>{
+    //   alert(res.assets[0].uri)
+    //   const formdata = new FormData()
+    //   formdata.append('file', res.assets[0].uri);
+    //   console.log(res);
+    // })
+    // }
     return (
       <MypageContainer>
         {/* edit가 TRUE일 때, 수정 뷰 */}
-        {/* 프로필 사진 수정 */}
+        {/* 프로필 사진 수정
         <ProfileEditView onPress={ShowPicker}>
           <ProfileEditImg>
             <Ionicons name="camera-outline" size={60} color="white" /> 
           </ProfileEditImg>
-        </ProfileEditView>
+        </ProfileEditView> */}
 
 
         {/* 확인 버튼 */}
         <SettingsCheckView>
           <SettingsCheckTouch onPress={() => setEdit(false)}>
-            <Ionicons name="checkmark" size={30} color="color" />
+            <Ionicons name="checkmark-circle" size={30} color="white" />
+            {/* <Ionicons name="checkmark" size={30} color="color" /> */}
           </SettingsCheckTouch>
         </SettingsCheckView>
 
@@ -108,8 +113,8 @@ export default function MypageScreen() {
         <View>
           {/* 업적명 & 닉네임명 */}
           <EditTxtView>
-            <GradeTxt >집주인</GradeTxt>
-            <NickNameEdit placeholder={nick} textAlign='center' />
+            <GradeTxt >{UserInfo?.grade}</GradeTxt>
+            <NickNameEdit placeholder={UserInfo?.nickname} textAlign='center' />
           </EditTxtView>
         </View>  
 
@@ -130,7 +135,7 @@ export default function MypageScreen() {
         </Modal>
 
         
-      </MypageContainer>
+        </MypageContainer>
     )
   }
 
@@ -138,8 +143,7 @@ export default function MypageScreen() {
     <Container>
     <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_mypage.gif'}} style={{flex:1}}>
       {/* 상단 이미지 */}
-      <MypageView>
-        
+      <MypageView flex={5}>
       {/*Edit가 True일 때 ? EditScreen , False일 때 MypageScreen*/}
         {edit ? <EditScreen /> : <MyPageScreen />}
       </MypageView>
@@ -246,6 +250,7 @@ const NickNameEdit = styled.TextInput`
   /* max-width: fit-content; */
   border: none;
   background-color: white;
+  width: SCREEN_WIDTH;
 `
 
 

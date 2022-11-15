@@ -9,7 +9,12 @@ import { Incubator,Colors,Typography } from 'react-native-ui-lib';
 //카메라, 앨범 접근 라이브러리
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { TextArea, Box, Center, NativeBaseProvider,Select } from "native-base";
-import _ from 'lodash';
+// import _ from 'lodash';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AWS from 'aws-sdk';
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { getActiveLog } from '../../apis/MyPage';
 // {
 // ”themeId”: 5,
 // ”reviewImg”:”리뷰 이미지 경로”,
@@ -24,28 +29,11 @@ import _ from 'lodash';
 // }
 //별 반개가 1점!
 
-// const numberItems = _.map([
-//   10,9,8,7,6,5,4,3,2,1,0
-//   // 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-// ],
-//   item => ({ label: item, value: item, align: Incubator.WheelPickerAlign.RIGHT }));
 
-// const diffItems = _.times(11, i => i)
-//   .reverse()
-//   .map(item => ({ label: `${item}`, value: item }))
-
-// const activeItems = _.times(10, i => i)
-//   .reverse()
-//   .map(item => ({ label: `${item}`, value: item }))
-  
-// const horrorItems = _.times(10, i => i)
-//   .reverse()
-//   .map(item => ({ label: `${item}`, value: item }))
-// const lockerItems = _.times(10, i => i)
-//   .reverse()
-//   .map(item => ({ label: `${item}`, value: item }))
-  
 export default function ReviewCreateScreen() {
+  const { data: activeData } = useQuery(['myActive'], getActiveLog)
+  console.log(activeData)
+  
   const [isImage, setImage] = useState(false);
   //별 rating -- 별 반개가 1점이게 보내야함
   const [rating, setRating] = useState(0);
@@ -60,25 +48,130 @@ export default function ReviewCreateScreen() {
   //내용 작성
   const [textAreaValue, setTextAreaValue] = useState("");
 
-  console.log(rating,different,textAreaValue)
+  // console.log(rating, different, textAreaValue)
 
-  function ShowPicker() {
-      //launchImageLibrary : 사용자 앨범 접근
-    launchImageLibrary({}, (res)=>{
-    alert(res.assets[0].uri)
-    const formdata = new FormData()
-    formdata.append('file', res.assets[0].uri);
-    console.log(res);
-  })
+  const UploadImage = async () => {
+    const image = {
+      uri: '',
+      type: '',
+      name: '',
+    };
+    await launchImageLibrary({}, (res) => {
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (res.errorCode) {
+        console.log('ImagePicker Error: ', res.errorCode);
+      }
+      else if (res.assets) { //정상적으로 사진을 반환 받았을 때
+        console.log('ImagePicker data: ', res.assets);
+        image.name = res.assets[0].fileName;
+        image.type = res.assets[0].type;
+        image.uri = Platform.OS === 'android' ? res.assets[0].uri : res.assets[0].uri.replace('file://', '');
+      }
+    })
+
+    const formdata = new FormData();
+    formdata.append('pureblood3-image-for-user', image); //key(=fieldname)이 곧 사진이 업로드 될 S3의 폴더 이름임
+
+    console.log(formdata)
+    const requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+      field: 'file',
+      headers: {
+        'Content-Type': 'multipart/form-data; ',
+      },
+      // headers :{'Content-Type': 'multipart/form-data'} 헤더를 지정해줄거면 multipart/form-data로 지정해주어야함
+      // headers를 위처럼 따로 지정해 주지 않아도 되긴 함
+    };
+
+    await fetch("https://pureblood3-image-for-user.s3.ap-northeast-2.amazonaws.com", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
   }
+
+  // const UploadImage = async()=> {
+  //   // const image = {
+  //   //   uri: '',
+  //   //   type: '',
+  //   //   name: '',
+  //   // }
+
+  //   const formdata = new FormData();
+
+  //   await launchImageLibrary({}, (res) => {
+  //   if(res.didCancel){
+  //     console.log('User cancelled image picker');
+  //   }
+  //   else if(res.errorCode){
+  //     console.log('ImagePicker Error: ', res.errorCode);
+  //   }
+  //   else if(res.assets){ //정상적으로 사진을 반환 받았을 때
+  //     console.log('ImagePicker res', res);
+  //     // image.name = res.assets[0].fileName;
+  //     // image.type = res.assets[0].type;
+  //     // image.uri = Platform.OS === 'android' ? res.assets[0].uri : res.assets[0].uri.replace('file://', '');
+  //     formdata.append(res.assets[0])
+  //   }
+  //   })
+  //   // const formdata = new FormData();
+  //   // formdata.append('photoImg', image)
+  //   // console.log('image',image);
+  //   // console.log('data',formdata);
+  
+  //   const ACCESS_KEY = 'AKIAQGFLFS7ERZZCFDOO';
+  //   const SECRET_ACCESS_KEY = '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';
+  //   const REGION = "ap-northeast-2";
+  //   const S3_BUCKET = 'pureblood3-image-for-user';
+
+  //   // AWS ACCESS KEY를 세팅합니다.
+  //   AWS.config.update({
+  //     accessKeyId: ACCESS_KEY,
+  //     secretAccessKey: SECRET_ACCESS_KEY
+  //   });
+
+  //   // 버킷에 맞는 이름과 리전을 설정합니다.
+  //   const myBucket = new AWS.S3({
+  //     params: { Bucket: S3_BUCKET},
+  //     region: REGION,
+  //   });
+
+  //   // const file = e.target.files[0];
+  //   console.log(formdata)
+  //   const file = formdata
+  //   console.log('file',file)
+
+  //   // 파일과 파일이름을 넘겨주면 됩니다.
+  //   const params = {
+  //     ACL: 'public-read',
+  //     Body: file,
+  //     Bucket: S3_BUCKET,
+  //     Key: file.fileName
+  //   };
+    
+  //   myBucket.putObject(params)
+  //     .on('httpUploadProgress', (evt) => {
+  //       alert("SUCCESS")
+  //     })
+  //     .send((err) => {
+  //       if (err) console.log(err)
+  //     })
+  // }
+
+  
+
   return (
+    <KeyboardAwareScrollView>
     <Container>
 
       <ThemeTitleView>
         {/*GET 테마 이름*/}
-        <ThemeTitleTxt>킹스맨</ThemeTitleTxt>
+        {/* <ThemeTitleTxt>{activeData[0]?.themeName}</ThemeTitleTxt> */}
         {/*GET 방문 일시 */}
-        <DateTxt>2022.09.07</DateTxt>
+        {/* <DateTxt>{activeData[0]?.doneDate}</DateTxt> */}
       </ThemeTitleView>
       {/* 평점 - ”star” 별 반개가 1점!!*/}
       <StarView>
@@ -89,9 +182,9 @@ export default function ReviewCreateScreen() {
       </StarView>
       {/* 리뷰사진 - ”reviewImg”*/}
       <ReviewView>
-        <CameraBtn>
+        <CameraBtn onPress={UploadImage} >
           <Ionicons name="camera" size={24} color="white" />
-          <CameraTxt onPress={ShowPicker}>사진 첨부하기</CameraTxt>
+          <CameraTxt >사진 첨부하기</CameraTxt>
         </CameraBtn>
         {isImage?<Image source={{ uri: 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg' }} style={styles.tinyImage}></Image>:<></>}
       </ReviewView>
@@ -216,7 +309,8 @@ export default function ReviewCreateScreen() {
       </EnrollView>
 
 
-    </Container>
+      </Container>
+    </KeyboardAwareScrollView>
   )
 }
 
@@ -286,6 +380,7 @@ const EvalTxt = styled.Text`
   line-height:  ${({ theme }) => theme.fontHeight.body};
   color: white;
   margin-top: 25px;
+  /* margin: 2; */
 `
 
 const EvalCntView = styled(EvalTxtView)`
@@ -323,3 +418,123 @@ const styles = StyleSheet.create({
   },
 })
 
+// const numberItems = _.map([
+//   10,9,8,7,6,5,4,3,2,1,0
+//   // 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+// ],
+//   item => ({ label: item, value: item, align: Incubator.WheelPickerAlign.RIGHT }));
+
+// const diffItems = _.times(11, i => i)
+//   .reverse()
+//   .map(item => ({ label: `${item}`, value: item }))
+
+// const activeItems = _.times(10, i => i)
+//   .reverse()
+//   .map(item => ({ label: `${item}`, value: item }))
+  
+// const horrorItems = _.times(10, i => i)
+//   .reverse()
+//   .map(item => ({ label: `${item}`, value: item }))
+// const lockerItems = _.times(10, i => i)
+//   .reverse()
+//   .map(item => ({ label: `${item}`, value: item }))
+
+
+// function onFileUpload(e) {
+  //   const ACCESS_KEY = 'AKIAQGFLFS7ERZZCFDOO';
+  //   const SECRET_ACCESS_KEY = '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';
+  //   const REGION = "ap-northeast-2";
+  //   const S3_BUCKET = 'pureblood3-image-for-user';
+
+    
+    
+
+  //   // AWS ACCESS KEY를 세팅합니다.
+  //   AWS.config.update({
+  //     accessKeyId: ACCESS_KEY,
+  //     secretAccessKey: SECRET_ACCESS_KEY
+  //   });
+
+  //   // 버킷에 맞는 이름과 리전을 설정합니다.
+  //   const myBucket = new AWS.S3({
+  //     params: { Bucket: S3_BUCKET},
+  //     region: REGION,
+  //   });
+
+  //   const file = e.target.files[0];
+
+  //   // 파일과 파일이름을 넘겨주면 됩니다.
+  //   const params = {
+  //     ACL: 'public-read',
+  //     Body: file,
+  //     Bucket: S3_BUCKET,
+  //     Key: file.name
+  //   };
+    
+  //   myBucket.putObject(params)
+  //     .on('httpUploadProgress', (evt) => {
+  //       alert("SUCCESS")
+  //     })
+  //     .send((err) => {
+  //       if (err) console.log(err)
+  //     })
+  // }
+
+
+  //++++++++++++++++++++++++++++++
+      // formdata.append('fileImg', {
+    //   uri: image.uri.includes(':')
+    //     ? image.uri
+    //     : 'file://' + image.uri,
+    //   type: image.type,
+    //   name: image.name,
+    // });
+    // console.log(formdata)
+    // const result = await axios.put(`${BASE_URL}`, formdata, {
+    //   redirect: 'follow',
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    //   transformRequest: (data, headers) => {
+    //     return data;
+    //   },
+    // })
+    
+    // const headers = {
+    //   'Content-Type': image.type,
+    // };
+    // console.log('image',image);
+    // console.log('formdata',formdata);
+
+//     axios.post("https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/", formdata, {headers: headers})
+//     // axios.post("https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/", formdata)
+//     .then(response => {
+//       if(response){ 
+//         console.log('ok',response.data)
+//       }
+//     })
+//     .catch((error)=> {
+//     if (error.response) {
+//       // The request was made and the server responded with a status code
+//       // that falls out of the range of 2xx
+//       console.log('err',error.response.data);
+//       console.log('err',error.response.status);
+//       console.log('err',error.response.headers);
+//     } else if (error.request) {
+//       // The request was made but no response was received
+//       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+//       // http.ClientRequest in node.js
+//       console.log('err',error.request);
+//     } else {
+//       // Something happened in setting up the request that triggered an Error
+//       console.log('Error', error.message);
+//     }
+//  })
+
+    // //launchImageLibrary : 사용자 앨범 접근
+    // launchImageLibrary({}, (res) => {
+    //   alert(res.assets[0].uri)
+    // const formdata = new FormData()
+    // formdata.append('file', res.assets[0].uri);
+    // console.log(res);
+    // })
