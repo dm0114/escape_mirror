@@ -141,7 +141,7 @@ export default function MypageScreen() {
 
   return (
     <Container>
-    <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_mypage.gif'}} style={{flex:1}}>
+    <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_mypage.gif'}} style={{flex:1, width:SCREEN_WIDTH}}>
       {/* 상단 이미지 */}
       <MypageView flex={5}>
       {/*Edit가 True일 때 ? EditScreen , False일 때 MypageScreen*/}
@@ -164,7 +164,6 @@ export default function MypageScreen() {
 
 const Container = styled.View `
   flex: 1;
-  
   /* background-color: tomato; */
   /* width:SCREEN_WIDTH, */
 `

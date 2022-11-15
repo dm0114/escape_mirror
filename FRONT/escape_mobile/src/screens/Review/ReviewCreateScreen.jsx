@@ -79,7 +79,7 @@ export default function ReviewCreateScreen() {
       method: 'POST',
       body: formdata,
       redirect: 'follow',
-      field: 'file',
+      // field: 'file',
       headers: {
         'Content-Type': 'multipart/form-data; ',
       },
@@ -93,73 +93,6 @@ export default function ReviewCreateScreen() {
       .catch(error => console.log('error', error));
   }
 
-  // const UploadImage = async()=> {
-  //   // const image = {
-  //   //   uri: '',
-  //   //   type: '',
-  //   //   name: '',
-  //   // }
-
-  //   const formdata = new FormData();
-
-  //   await launchImageLibrary({}, (res) => {
-  //   if(res.didCancel){
-  //     console.log('User cancelled image picker');
-  //   }
-  //   else if(res.errorCode){
-  //     console.log('ImagePicker Error: ', res.errorCode);
-  //   }
-  //   else if(res.assets){ //정상적으로 사진을 반환 받았을 때
-  //     console.log('ImagePicker res', res);
-  //     // image.name = res.assets[0].fileName;
-  //     // image.type = res.assets[0].type;
-  //     // image.uri = Platform.OS === 'android' ? res.assets[0].uri : res.assets[0].uri.replace('file://', '');
-  //     formdata.append(res.assets[0])
-  //   }
-  //   })
-  //   // const formdata = new FormData();
-  //   // formdata.append('photoImg', image)
-  //   // console.log('image',image);
-  //   // console.log('data',formdata);
-  
-  //   const ACCESS_KEY = 'AKIAQGFLFS7ERZZCFDOO';
-  //   const SECRET_ACCESS_KEY = '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';
-  //   const REGION = "ap-northeast-2";
-  //   const S3_BUCKET = 'pureblood3-image-for-user';
-
-  //   // AWS ACCESS KEY를 세팅합니다.
-  //   AWS.config.update({
-  //     accessKeyId: ACCESS_KEY,
-  //     secretAccessKey: SECRET_ACCESS_KEY
-  //   });
-
-  //   // 버킷에 맞는 이름과 리전을 설정합니다.
-  //   const myBucket = new AWS.S3({
-  //     params: { Bucket: S3_BUCKET},
-  //     region: REGION,
-  //   });
-
-  //   // const file = e.target.files[0];
-  //   console.log(formdata)
-  //   const file = formdata
-  //   console.log('file',file)
-
-  //   // 파일과 파일이름을 넘겨주면 됩니다.
-  //   const params = {
-  //     ACL: 'public-read',
-  //     Body: file,
-  //     Bucket: S3_BUCKET,
-  //     Key: file.fileName
-  //   };
-    
-  //   myBucket.putObject(params)
-  //     .on('httpUploadProgress', (evt) => {
-  //       alert("SUCCESS")
-  //     })
-  //     .send((err) => {
-  //       if (err) console.log(err)
-  //     })
-  // }
 
   
 
@@ -509,7 +442,7 @@ const styles = StyleSheet.create({
 //     axios.post("https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/", formdata, {headers: headers})
 //     // axios.post("https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/", formdata)
 //     .then(response => {
-//       if(response){ 
+//       if(response){
 //         console.log('ok',response.data)
 //       }
 //     })
@@ -538,3 +471,72 @@ const styles = StyleSheet.create({
     // formdata.append('file', res.assets[0].uri);
     // console.log(res);
     // })
+    
+    //======================================
+      // const UploadImage = async()=> {
+  //   // const image = {
+  //   //   uri: '',
+  //   //   type: '',
+  //   //   name: '',
+  //   // }
+
+  //   const formdata = new FormData();
+
+  //   await launchImageLibrary({}, (res) => {
+  //   if(res.didCancel){
+  //     console.log('User cancelled image picker');
+  //   }
+  //   else if(res.errorCode){
+  //     console.log('ImagePicker Error: ', res.errorCode);
+  //   }
+  //   else if(res.assets){ //정상적으로 사진을 반환 받았을 때
+  //     console.log('ImagePicker res', res);
+  //     // image.name = res.assets[0].fileName;
+  //     // image.type = res.assets[0].type;
+  //     // image.uri = Platform.OS === 'android' ? res.assets[0].uri : res.assets[0].uri.replace('file://', '');
+  //     formdata.append(res.assets[0])
+  //   }
+  //   })
+  //   // const formdata = new FormData();
+  //   // formdata.append('photoImg', image)
+  //   // console.log('image',image);
+  //   // console.log('data',formdata);
+  
+  //   const ACCESS_KEY = 'AKIAQGFLFS7ERZZCFDOO';
+  //   const SECRET_ACCESS_KEY = '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';
+  //   const REGION = "ap-northeast-2";
+  //   const S3_BUCKET = 'pureblood3-image-for-user';
+
+  //   // AWS ACCESS KEY를 세팅합니다.
+  //   AWS.config.update({
+  //     accessKeyId: ACCESS_KEY,
+  //     secretAccessKey: SECRET_ACCESS_KEY
+  //   });
+
+  //   // 버킷에 맞는 이름과 리전을 설정합니다.
+  //   const myBucket = new AWS.S3({
+  //     params: { Bucket: S3_BUCKET},
+  //     region: REGION,
+  //   });
+
+  //   // const file = e.target.files[0];
+  //   console.log(formdata)
+  //   const file = formdata
+  //   console.log('file',file)
+
+  //   // 파일과 파일이름을 넘겨주면 됩니다.
+  //   const params = {
+  //     ACL: 'public-read',
+  //     Body: file,
+  //     Bucket: S3_BUCKET,
+  //     Key: file.fileName
+  //   };
+    
+  //   myBucket.putObject(params)
+  //     .on('httpUploadProgress', (evt) => {
+  //       alert("SUCCESS")
+  //     })
+  //     .send((err) => {
+  //       if (err) console.log(err)
+  //     })
+  // }
