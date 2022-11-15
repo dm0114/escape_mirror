@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -42,9 +43,9 @@ public class JwtTokenProvider {
 
     public static final String ISSUER = "escapedictionary.com";
 
-    public String createAccessToken(String email,Long id){
+    public String createAccessToken(String email, Long id, List<Role> roles){
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles","User");
+        claims.put("roles",roles);
         claims.put("userId",id);
         Date now = new Date();
 
@@ -61,12 +62,12 @@ public class JwtTokenProvider {
     }
 
     @Transactional
-    public String createRefreshToken(String email,Long userId){
+    public String createRefreshToken(String email,Long userId,List<Role> roles){
 
         LOGGER.info("[createRefreshToken] 토큰 생성 시작");
 
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles","User");
+        claims.put("roles",roles);
         claims.put("userId",userId);
         Date now = new Date();
 
@@ -77,6 +78,7 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now.getTime() + refreshExpireTime))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
+
 
         RefreshToken findRefreshToken = refreshTokenRepository.findByEmail(email)
                         .orElse(RefreshToken.createToken(email, token));
@@ -93,8 +95,9 @@ public class JwtTokenProvider {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getEmail(token));
         LOGGER.info("권한 테스트");
+        LOGGER.info("{}",userDetails);
         return new UsernamePasswordAuthenticationToken(userDetails, "",userDetails.getAuthorities());
-    }
+    } //
 
     public String getEmail(String Token){
         String info = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(Token).getBody().getSubject();
@@ -103,7 +106,6 @@ public class JwtTokenProvider {
 
     public Long getUserId(String Token){
         Long info = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(Token).getBody().get("userId",Long.class);
-        System.out.println(info);
         return info;
     }
 

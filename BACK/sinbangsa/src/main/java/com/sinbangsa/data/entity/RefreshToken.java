@@ -1,9 +1,10 @@
 package com.sinbangsa.data.entity;
 
 import lombok.AccessLevel;
+
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     @Column(name = "refresh_token_id")
     private Long id;
 

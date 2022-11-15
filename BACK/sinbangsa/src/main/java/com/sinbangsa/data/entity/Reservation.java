@@ -36,6 +36,9 @@ public class Reservation {
     @Column
     private int status=0;
 
+    @Builder
+
+
     public void update(int status) {
         this.status = status;
     }

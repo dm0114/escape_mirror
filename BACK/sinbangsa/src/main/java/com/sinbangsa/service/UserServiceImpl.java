@@ -5,9 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinbangsa.data.dto.KakaoLoginResponseDto;
 import com.sinbangsa.data.dto.KakaoUserDto;
+import com.sinbangsa.data.entity.RefreshToken;
 import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.repository.RefreshTokenRepository;
 import com.sinbangsa.data.repository.UserRepository;
 import com.sinbangsa.utils.JwtTokenProvider;
+import com.sinbangsa.utils.Role;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 
 
 @Service
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     @Value("${kakaoRestApiKey}")
@@ -54,8 +60,8 @@ public class UserServiceImpl implements UserService {
             String userEmail = loginUser.getEmail();
             Long userId = loginUser.getId();
 
-            String accessToken = jwtTokenProvider.createAccessToken(userEmail,userId);
-            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail,userId);
+            String accessToken = jwtTokenProvider.createAccessToken(userEmail,userId,loginUser.getRoles());
+            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail,userId,loginUser.getRoles());
 
             KakaoLoginResponseDto kakaoLoginResponseDto = new KakaoLoginResponseDto();
             kakaoLoginResponseDto.setRefreshToken(refreshToken);
@@ -84,19 +90,33 @@ public class UserServiceImpl implements UserService {
 
 
         String email = kakaoUser.getKakaoAccount().getEmail();
+
         User user = userRepository.getByEmail(email).orElse(null);
+
 
         if (user == null) {
             User loginUser = User.builder()
                     .email(kakaoUser.getKakaoAccount().getEmail())
                     .profile(kakaoUser.getProperties().getThumbnailImage())
                     .nickname(kakaoUser.getProperties().getNickname())
+                    .roles(Collections.singletonList(Role.USER))
                     .build();
 
             user = userRepository.save(loginUser);
         }
 
         return user;
+    }
+
+    public Boolean kakaoLogout(String refreshToken){
+
+        RefreshToken ref = refreshTokenRepository.findRefreshTokenByRefreshToken(refreshToken).orElse(null);
+        if (ref == null) {
+            return false;
+        }
+        refreshTokenRepository.delete(ref);
+        return true;
+
     }
 }
 
