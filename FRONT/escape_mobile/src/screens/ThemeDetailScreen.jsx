@@ -66,18 +66,13 @@ function ThemeDetailScreen({ navigation, route }) {
     ["ThemeDetail", themeId],
     searchApi.getThemeDetail
   );
-
+  
+  useEffect(() => {console.log(data);},[data])
+  
   /**
    * 애니메이션
    */
   const { Width, Height } = useContext(LayoutContext);
-  // const Width = (dimensions.width - 256) / 2;
-  // const Height = dimensions.height / 2;
-  const [showMenu, setShowMenu] = useState(false);
-
-  const offsetValue2 = useRef(new Animated.Value(2)).current;
-  const scaleValue2 = useRef(new Animated.Value(3)).current;
-  const closeButtonOffset = useRef(new Animated.Value(2)).current;
 
   /**
    * 차트
@@ -135,86 +130,9 @@ function ThemeDetailScreen({ navigation, route }) {
     showlegend: false, // @4
   };
 
-  const ThemeDatas = {
-    themeId: 3,
-    themeName: "비밀의 가족",
-    genre: "공포/스릴러",
-    capacity: "2인 이상",
-    price: "/44000/66000/88000/110000",
-    difficulty: 8,
-    leadtime: 60,
-    description: "string(상세설명)",
-    themeImg: "url",
-    star: 8,
-    feeldifficulty: 8,
-    feelstrory: 8,
-    feelinterior: 8,
-    feelactivity: 6,
-    feelhorror: 8,
-    lock: 60,
-    reviews: [
-      {
-        reviewId: 4,
-        User: "리뷰 작성자",
-        content: "리뷰 내용",
-        star: 8,
-        reviewImg: "리뷰이미지 링크",
-        created_at: "2022-08-08",
-        clearDate: "2022-08-01",
-        usedHint: 3,
-        clearTime: "76:52",
-      },
-      {
-        reviewId: 5,
-        User: "리뷰 작성자",
-        content: "리뷰 내용",
-        star: 8,
-        reviewImg: "리뷰이미지 링크",
-        created_at: "2022-08-08",
-        clearDate: "2022-08-01",
-        usedHint: 3,
-        clearTime: "76:52",
-      },
-      {
-        reviewId: 6,
-        User: "리뷰 작성자",
-        content: "리뷰 내용",
-        star: 8,
-        reviewImg: "리뷰이미지 링크",
-        created_at: "2022-08-08",
-        clearDate: "2022-08-01",
-        usedHint: 3,
-        clearTime: "76:52",
-      },
-    ],
-    noHintRanking: [
-      {
-        userNickname: "방탈출랭커",
-        cleartime: "72:12",
-      },
-      {
-        userNickname: "방탈출랭커2",
-        cleartime: "72:13",
-      },
-      {
-        userNickname: "방탈출랭커3",
-        cleartime: "72:14",
-      },
-    ],
-    hintRanking: [
-      {
-        userNickname: "방탈출고수",
-        cleartime: "72:12",
-        usedHint: 4,
-      },
-    ],
-  };
-
-  const PriceData = [0, ...ThemeDatas?.price.split("/")];
-
   return status === "success" || !isLoading ? (
     <SafeAreaView style={styles.container}>
-      <HeaderPosterImage />
+      <HeaderPosterImage themeImg={data.themeImg} />
 
       <MainContainer>
         <View
@@ -265,39 +183,39 @@ function ThemeDetailScreen({ navigation, route }) {
             marginHorizontal: 20,
           }}
         >
-          {ThemeDatas.noHintRanking ? (
+          {!!data.noHintRanking.length ? (
             <RankingContainer>
               <RankingInfoContainer>
                 <RankingSub>
-                  <RankingBody>{ThemeDatas.noHintRanking[1].cleartime}</RankingBody>
+                  <RankingBody>{data.noHintRanking[1].cleartime}</RankingBody>
                 </RankingSub>
-                <RankingName>{ThemeDatas.noHintRanking[1].userNickname}</RankingName>
+                <RankingName>{data.noHintRanking[1].userNickname}</RankingName>
               </RankingInfoContainer>
               <RankingInfoContainer>
                 <RankingMain>
-                  <RankingBody>{ThemeDatas.noHintRanking[0].cleartime}</RankingBody>
+                  <RankingBody>{data.noHintRanking[0].cleartime}</RankingBody>
                 </RankingMain>
-                <RankingName>{ThemeDatas.noHintRanking[0].userNickname}</RankingName>
+                <RankingName>{data.noHintRanking[0].userNickname}</RankingName>
               </RankingInfoContainer>
               <RankingInfoContainer>
                 <RankingSub>
-                  <RankingBody>{ThemeDatas.noHintRanking[2].cleartime}</RankingBody>
+                  <RankingBody>{data.noHintRanking[2].cleartime}</RankingBody>
                 </RankingSub>
-                <RankingName>{ThemeDatas.noHintRanking[2].userNickname}</RankingName>
+                <RankingName>{data.noHintRanking[2].userNickname}</RankingName>
               </RankingInfoContainer>
             </RankingContainer>
           ) : (
-            <SubTitle>데이터가 없습니다</SubTitle>
+            <SubTitle>랭킹 데이터가 없습니다!</SubTitle>
           )}
         </View>
 
         <RankingWrapper>
-          <ReviewTitle>후기 ({ThemeDatas.reviews.length})</ReviewTitle>
+          <ReviewTitle>후기 ({data.reviews.length})</ReviewTitle>
           <ChartContainer>
             <Plotly data={ChartData} layout={ChartLayout} enableFullPlotly />
           </ChartContainer>
 
-          {ThemeDatas.reviews.map((item, idx) => {
+          {data.reviews.map((item, idx) => {
             return (
               <ReviewWrapper key={idx}>
                 <StarRating
@@ -352,7 +270,7 @@ function ThemeDetailScreen({ navigation, route }) {
       {/* 
         바텀 시트 모달 
       */}
-      <ReservationBotttomModal themeId={themeId} PriceData={PriceData} />
+      <ReservationBotttomModal themeId={themeId} Price={data.price} />
     </SafeAreaView>
   ) : (
     <LoadingScreen />
@@ -391,23 +309,3 @@ export default ThemeDetailScreen;
           </RatingView>
         </Shadow> */
 }
-// {
-//   "themeName": "셜록홈즈: 살인누명",
-//   "genre": "추리",
-//   "capacity": "2인~6인",
-//   "price": "/44000/60000/76000/90000",
-//   "difficulty": 0,
-//   "leadTime": 60,
-//   "description": "\"왓슨군, 보는 것과 관찰하는 것은 다른 것이라네.“\\n\\n다급한 홈즈의 전화를 받고 단숨에 달려왔다.\\n그런데 사무실에는 아무도 없다.\\n무언가 수상하다.\\n\\n이건 뭐지? 홈즈의 메시지인가?\\n이럴 수가… 홈즈가 위기에 빠진 게 분명하다.?\\n당황하고 있을 시간이 없다.\"",
-//   "themeImg": "p3207.jpg",
-//   "star": 0,
-//   "feelDifficulty": 0,
-//   "feelStory": 0,
-//   "feelInterior": 0,
-//   "feelActivity": 0,
-//   "feelHorror": 0,
-//   "lock": 0,
-//   "reviews": [],
-//   "noHintRanking": [],
-//   "hintRanking": []
-// }

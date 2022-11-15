@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState, useContext } from 'react'
+import React, { useEffect, useRef, useContext } from 'react'
 import { Animated, Image } from 'react-native';
 import { LayoutContext } from '../../App';
-const cardImage = require("../assets/mocks/image.png");
 
-const HeaderPosterImage = () => {
+
+const HeaderPosterImage = ({themeImg}) => {
   /**
   * 애니메이션
   */
@@ -40,9 +40,12 @@ const HeaderPosterImage = () => {
           zIndex: 999,
           transform: [{ scale: scaleValue }, { translateY: offsetValue }],
         }}
-      >
+      >        
         <Image
-          source={cardImage}
+          source={ themeImg 
+            ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${themeImg}`} 
+            : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} 
+
           style={{
             width: Width - 40,
             height: Height / 4,
@@ -51,7 +54,7 @@ const HeaderPosterImage = () => {
             borderBottomRightRadius: 40,
             marginLeft: 20,
           }}
-          blurRadius={0}
+          resizeMode="cover"
         />
       </Animated.View>
   )

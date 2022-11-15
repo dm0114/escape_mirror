@@ -32,7 +32,9 @@ import LoadingScreen from "../../screens/LoadingScreen";
 
 // 예약 가능 시간이 모든 예약 가능 시간
 // 예약
-function ReservationBotttomModal({ themeId, PriceData }) {
+function ReservationBotttomModal({ themeId, Price }) {
+  const priceInfo = [0, ...Price.split('/')]
+  
   /**
    * 레이아웃
    */
@@ -67,6 +69,7 @@ function ReservationBotttomModal({ themeId, PriceData }) {
     reservationApi.postReservation,
     { enabled: false }
   );
+
   useEffect(() => {
     console.log(postReservationData);
   }, [postReservationData])
@@ -137,7 +140,7 @@ function ReservationBotttomModal({ themeId, PriceData }) {
 
                   <PriceContainer>
                     <SubTitle>
-                      {number}인 {!!PriceData[number] ? PriceData[number] : 0}원
+                      {number}인 {!!priceInfo[number] ? priceInfo[number] : 0}원
                     </SubTitle>
                   </PriceContainer>
 

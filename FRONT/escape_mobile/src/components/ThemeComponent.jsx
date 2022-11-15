@@ -1,11 +1,10 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components/native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-const cardImage = require("../assets/mocks/image.png");
 
 function ThemeComponent({
   themeId,
@@ -35,7 +34,10 @@ function ThemeComponent({
             borderRadius: 8,
           }}
       />
-      <Image source={cardImage} style={styles.img} />
+      <Image source={ themeImg 
+        ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${themeImg}`} 
+        : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} 
+        resizeMode="cover" style={styles.img}/>
 
       {/* <Text>{themeImg}</Text> */}
       <InfoContainer>
