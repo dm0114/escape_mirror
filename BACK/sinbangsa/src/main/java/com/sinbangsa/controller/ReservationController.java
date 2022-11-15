@@ -40,16 +40,14 @@ public class ReservationController {
 
     @PostMapping
     @ApiOperation(value = "예약하기")
-    public ResponseEntity<String> createReservation(@RequestBody ReservationDto reservationDto, HttpServletRequest httpServletRequest) {
-        LOGGER.info("[]");
+    public ResponseEntity<Long> createReservation(@RequestBody ReservationDto reservationDto, HttpServletRequest httpServletRequest) {
+        LOGGER.info("[ReservationController] createReservation 호출");
         try {
-            boolean result = reservationService.createReservation(reservationDto, httpServletRequest);
-            if (!result) {
-                return new ResponseEntity<String>("같은 시간에 예약이 이미 존재합니다.", HttpStatus.ALREADY_REPORTED);
-            }
-            return new ResponseEntity<String>("예약되었습니다.", HttpStatus.CREATED);
+            Long result = reservationService.createReservation(reservationDto, httpServletRequest);
+            LOGGER.info("{}",result);
+            return new ResponseEntity<Long>(result, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<String>("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
     }
