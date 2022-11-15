@@ -2,20 +2,27 @@ package com.sinbangsa.data.entity;
 
 import com.sinbangsa.utils.Role;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@Builder
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
+
+    @OneToMany(mappedBy = "storeAdmin")
+    private List<Store> stores;
 
 
     @OneToMany(mappedBy = "reservationUser")
@@ -41,6 +48,9 @@ public class User {
     private String email;
 
     @Column
+    private String password;
+
+    @Column
     private String profile;
 
     @Column
@@ -49,17 +59,53 @@ public class User {
     @Column
     private String nickname;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> roles = new ArrayList<>();
+
+    boolean accountNonExpired;
+    boolean accountNonLocked;
+    boolean credentialNonExpired;
+    boolean enabled = false;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
+    @Override
+    public String getPassword() { return this.password; }
+
+    @Override
+    public  String getUsername() { return  this.nickname; }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 
 
 
     @Builder
-    public User(String email, String profile, String nickname, Role role){
+    public User(String email, String profile, String nickname, List<Role> role){
         this.email = email;
         this.profile = profile;
         this.nickname = nickname;
-        this.role = role;
+        this.roles = role;
     }
 
     public void update(String nickname, String profile) {

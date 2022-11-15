@@ -20,7 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdministratorServiceImpl implements AdministratorService {
     private final Logger LOGGER = LoggerFactory.getLogger(AdministratorServiceImpl.class);
-    private final AdministratorRepository administratorRepository;
     private final StoreRepository storeRepository;
     private final ThemeRepository themeRepository;
     private final ThemeTimeRepository themeTimeRepository;
@@ -30,7 +29,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     public List<AdminStoreDto> getAdminStoreDetail(long adminId){
         LOGGER.info("[AdministratorService] getAdminStoreDetail 호출");
-        Admin admin = administratorRepository.getAdminById(adminId).orElse(null);
+        User admin = userRepository.findById(adminId).orElse(null);
         List<Store> adminStoreList;
         List<AdminStoreDto> adminStoreDtos = new ArrayList<>();
 
@@ -58,7 +57,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Boolean registerStoreDetail(StoreRegisterDto storeRegisterDto, long adminId){
         LOGGER.info("[AdministratorService] registerStoreDetail 호출");
         // admin token 발급 후 수정 필요
-        Admin admin = administratorRepository.getAdminById(adminId).orElse(null);
+        User admin = userRepository.findById(adminId).orElse(null);
 
         try {
             Store newStore = Store.builder()
@@ -70,8 +69,6 @@ public class AdministratorServiceImpl implements AdministratorService {
                     .region(storeRegisterDto.getRegion())
                     .homepage(storeRegisterDto.getHomepage())
                     .poster(storeRegisterDto.getStoreImg())
-                    .mapX("123")  // DB 지우고 다시 데이터 넣고 돌릴 때 지울부분(not null 옵션 때문에...)
-                    .mapY("1sdf") // DB 지우고 다시 데이터 넣고 돌릴 때 지울부분(not null 옵션 때문에...)
                     .build();
 
             storeRepository.save(newStore);

@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 
 
 @Service
@@ -59,8 +60,8 @@ public class UserServiceImpl implements UserService {
             String userEmail = loginUser.getEmail();
             Long userId = loginUser.getId();
 
-            String accessToken = jwtTokenProvider.createAccessToken(userEmail,userId,"ROLE_USER");
-            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail,userId,"ROLE_USER");
+            String accessToken = jwtTokenProvider.createAccessToken(userEmail,userId,loginUser.getRoles());
+            String refreshToken = jwtTokenProvider.createRefreshToken(userEmail,userId,loginUser.getRoles());
 
             KakaoLoginResponseDto kakaoLoginResponseDto = new KakaoLoginResponseDto();
             kakaoLoginResponseDto.setRefreshToken(refreshToken);
@@ -89,16 +90,16 @@ public class UserServiceImpl implements UserService {
 
 
         String email = kakaoUser.getKakaoAccount().getEmail();
-        LOGGER.info("{}",email);
+
         User user = userRepository.getByEmail(email).orElse(null);
-        LOGGER.info("${}",user);
+
 
         if (user == null) {
             User loginUser = User.builder()
                     .email(kakaoUser.getKakaoAccount().getEmail())
                     .profile(kakaoUser.getProperties().getThumbnailImage())
                     .nickname(kakaoUser.getProperties().getNickname())
-                    .role(Role.ROLE_USER)
+                    .roles(Collections.singletonList(Role.USER))
                     .build();
 
             user = userRepository.save(loginUser);

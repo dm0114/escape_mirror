@@ -17,10 +17,6 @@ public class JWTUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email){
         User user= userRepository.getByEmail(email).orElse(null);
 
-        if (user != null){
-            JWTUserDetails jwtUserDetails = new JWTUserDetails(user);
-            return jwtUserDetails;
-        }
-        return null;
+        return user;
     }
 }

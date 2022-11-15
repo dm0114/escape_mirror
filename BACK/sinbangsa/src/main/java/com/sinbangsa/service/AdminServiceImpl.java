@@ -1,22 +1,30 @@
 package com.sinbangsa.service;
 
+
 import com.sinbangsa.data.dto.AdminLoginRequestDto;
 import com.sinbangsa.data.dto.AdminLoginResponseDto;
 import com.sinbangsa.data.dto.AdminSignupDto;
-import com.sinbangsa.data.entity.Admin;
-import com.sinbangsa.data.repository.AdministratorRepository;
+import com.sinbangsa.data.entity.RefreshToken;
+import com.sinbangsa.data.entity.User;
+import com.sinbangsa.data.repository.RefreshTokenRepository;
+import com.sinbangsa.data.repository.UserRepository;
 import com.sinbangsa.utils.JwtTokenProvider;
+import com.sinbangsa.utils.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService{
 
-    private final AdministratorRepository administratorRepository;
+    private final UserRepository userRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -31,37 +39,39 @@ public class AdminServiceImpl implements AdminService{
 
         String encPassword = passwordEncoder.encode(adminSignupDto.getPassword());
 
-        Admin admin = Admin.builder()
-                .adminName(adminSignupDto.getAdminName())
-                .userId(adminSignupDto.getUserId())
+        User admin = User.builder().email(adminSignupDto.getUserId())
+                .nickname(adminSignupDto.getAdminName())
                 .password(encPassword)
+                .roles(Collections.singletonList(Role.ADMIN))
                 .build();
 
-        administratorRepository.save(admin);
+        userRepository.save(admin);
 
         return "어드민 어드밋";
     }
 
     public AdminLoginResponseDto AdminLogin(AdminLoginRequestDto adminLoginDto){
-        Admin admin = administratorRepository.getAdminByUserId(adminLoginDto.getUserId()).orElse(null);
-        System.out.println(adminLoginDto.getUserId());
-        System.out.println(admin);
+        User admin = userRepository.getByEmail(adminLoginDto.getUserId()).orElse(null);
         if (admin == null){
             return null;
         }
         if (!passwordEncoder.matches(adminLoginDto.getPassword(), admin.getPassword())){
-            System.out.println(admin.getPassword());
             return null;
         }
 
-        String accessToken = jwtTokenProvider.createAccessToken(adminLoginDto.getUserId(),admin.getId(),"ROLE_ADMIN");
-        String refreshToken = jwtTokenProvider.createRefreshToken(adminLoginDto.getUserId(),admin.getId(),"ROLE_ADMIN");
+        String accessToken = jwtTokenProvider.createAccessToken(admin.getEmail(),admin.getId(),admin.getRoles());
+        String refreshToken = jwtTokenProvider.createRefreshToken(admin.getEmail(),admin.getId(),admin.getRoles());
 
         AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto();
         adminLoginResponseDto.setAccessToken(accessToken);
         adminLoginResponseDto.setRefreshToken(refreshToken);
         return adminLoginResponseDto;
 
+    }
 
+    public String AdminLogout(String refreshToken) {
+        RefreshToken ref = refreshTokenRepository.findRefreshTokenByRefreshToken(refreshToken).orElse(null);
+        refreshTokenRepository.delete(ref);
+        return "삭제완료";
     }
 }
