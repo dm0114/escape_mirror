@@ -461,6 +461,7 @@ public class AdministratorServiceImpl implements AdministratorService {
                 Reservation reservation = reservationRepository.findByDateAndThemeTime(reservationDay, themeTime).orElse(null);
                 if (reservation != null) {
                     ReservationAdminDayDto.TimeReservationDto timeReservationDto = new ReservationAdminDayDto.TimeReservationDto();
+                    timeReservationDto.setReservationId(reservation.getReservationId());
                     timeReservationDto.setReservationTime(reservation.getThemeTime().getTime());
                     timeReservationDto.setReservationTimeId(reservation.getThemeTime().getId());
                     timeReservationDto.setUserName(reservation.getReservationUser().getNickname());
