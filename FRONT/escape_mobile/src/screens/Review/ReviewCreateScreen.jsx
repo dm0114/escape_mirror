@@ -2,19 +2,18 @@ import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
 import {Image,StyleSheet,FlatList,useWindowDimensions, ImageBackground, Button, Text, View, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Alert } from 'react-native';
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 import { Ionicons } from '@expo/vector-icons'; 
 import StarRating from 'react-native-star-rating-widget';
-import { Incubator,Colors,Typography } from 'react-native-ui-lib';
-//카메라, 앨범 접근 라이브러리
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { TextArea, Box, Center, NativeBaseProvider,Select } from "native-base";
-// import _ from 'lodash';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import AWS from 'aws-sdk';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { getActiveLog } from '../../apis/MyPage';
+import { RNS3 } from 'react-native-s3-upload';
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+// import _ from 'lodash';
+// import AWS from 'aws-sdk';
+// import axios from 'axios';
 // {
 // ”themeId”: 5,
 // ”reviewImg”:”리뷰 이미지 경로”,
@@ -50,6 +49,8 @@ export default function ReviewCreateScreen() {
 
   // console.log(rating, different, textAreaValue)
 
+
+
   const UploadImage = async () => {
     const image = {
       uri: '',
@@ -71,26 +72,61 @@ export default function ReviewCreateScreen() {
       }
     })
 
-    const formdata = new FormData();
-    formdata.append('pureblood3-image-for-user', image); //key(=fieldname)이 곧 사진이 업로드 될 S3의 폴더 이름임
+  const options = {
+    bucket: "pureblood3-image-for-user",
+    region: "ap-northeast-2",
+    accessKey: "AKIAQGFLFS7ERZZCFDOO",
+    secretKey: "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",
+    successActionStatus: 201
+  }
+ 
+  RNS3.put(image, options).then(response => {
+    if (response.status !== 201)
+      throw new Error("Failed to upload image to S3");
+    console.log(response.body);
+    
+  })
+  .catch(error => {
+  if (error.response) {
+    // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+    console.log(error.response.data)
+    console.log(error.response.status)
+    console.log(error.response.headers)
+  } else if (error.request) {
+    // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+    // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
+    // Node.js의 http.ClientRequest 인스턴스입니다.
+    console.log(error.request)
+  } else {
+    // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+    console.log('Error', error.message)
+  }
+  console.log(error.config)
+  })
+    
+    
+    // const formdata = new FormData();
+    // formdata.append('pureblood3-image-for-user', image); //key(=fieldname)이 곧 사진이 업로드 될 S3의 폴더 이름임
 
-    console.log(formdata)
-    const requestOptions = {
-      method: 'POST',
-      body: formdata,
-      redirect: 'follow',
-      // field: 'file',
-      headers: {
-        'Content-Type': 'multipart/form-data; ',
-      },
-      // headers :{'Content-Type': 'multipart/form-data'} 헤더를 지정해줄거면 multipart/form-data로 지정해주어야함
-      // headers를 위처럼 따로 지정해 주지 않아도 되긴 함
-    };
+    // console.log(formdata)
+    // const requestOptions = {
+    //   method: 'POST',
+    //   body: formdata,
+    //   redirect: 'follow',
 
-    await fetch("https://pureblood3-image-for-user.s3.ap-northeast-2.amazonaws.com", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+    //   headers: {
+    //       'Content-Type': 'application/json' 
+    //     // 'Content-Type': 'multipart/form-data; ',
+    //   },
+    //   // headers :{'Content-Type': 'multipart/form-data'} 헤더를 지정해줄거면 multipart/form-data로 지정해주어야함
+    //   // headers를 위처럼 따로 지정해 주지 않아도 되긴 함
+    // };
+    
+
+    // await fetch("https://pureblood3-image-for-user.s3.ap-northeast-2.amazonaws.com", requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => console.log(result))
+    //   .catch(error => console.log('error', error));
   }
 
 

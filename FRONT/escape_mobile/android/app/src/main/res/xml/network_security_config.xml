@@ -3,7 +3,8 @@
     <domain-config cleartextTrafficPermitted="true">
 
         <!-- <domain includeSubdomains="true">http://k7c104.p.ssafy.io:8080</domain> -->
-        <!-- <domain includeSubdomains="true">127.0.0.1</domain> -->
-        <domain includeSubdomains="true">10.0.0.2:3000</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <!-- <domain includeSubdomains="true">localhost</domain> -->
+        <!-- <domain includeSubdomains="true">10.0.0.2:3000</domain> -->
     </domain-config>
 </network-security-config>

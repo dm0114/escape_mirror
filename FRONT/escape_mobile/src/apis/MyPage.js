@@ -15,17 +15,28 @@ export const getLikeTheme = async ({ queryKey }) => {
 }
 
 
-
 //나의 리뷰 보기
-export const getMyReview = async ({ queryKey }) => { 
-  const response = await (await fetch(`${BASE_URL}/mypage/reviews?page=0`, {
-    headers: {
-      Authorization : await SecureState.getData('accessToken')
-      // Authorization : Token
-    }
-  })).json()
-  return response
-}
+const getMyReview = async ({ queryKey }) => {
+  const query = new URLSearchParams({
+    page: 0
+  });
+  return await (
+    await fetch(`${BASE_URL}/mypage/reviews?${query}`, {
+      headers: {
+        Authorization: await SecureState.getData("accessToken"),
+      },
+    })
+  ).json();
+};
+// export const getMyReview = async ({ queryKey }) => { 
+//   const response = await (await fetch(`${BASE_URL}/mypage/reviews?page=0`, {
+//     headers: {
+//       Authorization : await SecureState.getData('accessToken')
+//       // Authorization : Token
+//     }
+//   })).json()
+//   return response
+// }
 
 //리뷰 작성을 위해 마이페이지 활동내역 get
 export const getActiveLog = async ({ queryKey }) => { 

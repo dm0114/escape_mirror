@@ -49,7 +49,7 @@ const requestToken = async (code, navigation) => {
     //   const user = await getData('user');
     //   dispatch(read_S(user));
     //   await navigation.navigate('Main');
-    // }
+    // }n
 
 
   } catch (e) {
