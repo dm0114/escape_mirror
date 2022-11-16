@@ -100,13 +100,13 @@ public class User implements UserDetails{
 
 
 
-    @Builder
-    public User(String email, String profile, String nickname, List<Role> role){
-        this.email = email;
-        this.profile = profile;
-        this.nickname = nickname;
-        this.roles = role;
-    }
+//    @Builder
+//    public User(String email, String profile, String nickname, List<Role> role){
+//        this.email = email;
+//        this.profile = profile;
+//        this.nickname = nickname;
+//        this.roles = role;
+//    }
 
     public void update(String nickname, String profile) {
         this.nickname = nickname;
