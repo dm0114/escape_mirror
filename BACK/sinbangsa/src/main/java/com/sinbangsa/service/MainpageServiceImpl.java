@@ -41,7 +41,7 @@ public class MainpageServiceImpl implements MainpageService{
         List<MainpageDto.LThemeDto> lThemeDto = new ArrayList<>();
 
         PageRequest pageRequest = PageRequest.of(page, 4);
-        List<Store> rplStorelist = storeRepository.findAllByStoreNameOrRegionContaining(searchWord, pageRequest);
+        List<Store> rplStorelist = storeRepository.findAllByStoreNameContaining(searchWord, pageRequest);
         for (Store store : rplStorelist){
             MainpageDto.LStoreDto searchStore = new MainpageDto.LStoreDto();
             searchStore.setStoreId(store.getStoreId());
