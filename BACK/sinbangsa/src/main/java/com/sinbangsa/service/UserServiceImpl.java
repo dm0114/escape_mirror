@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService {
                     .profile(kakaoUser.getProperties().getThumbnailImage())
                     .nickname(kakaoUser.getProperties().getNickname())
                     .roles(Collections.singletonList(Role.USER))
+                    .grade(0)
                     .build();
 
             user = userRepository.save(loginUser);
