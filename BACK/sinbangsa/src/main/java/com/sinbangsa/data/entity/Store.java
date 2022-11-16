@@ -17,7 +17,7 @@ public class Store {
     private long storeId;
 
     @ManyToOne
-    @JoinColumn(name = "admin")
+    @JoinColumn(name = "adminUser_id")
     private User storeAdmin;
 
 

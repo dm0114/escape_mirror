@@ -43,6 +43,7 @@ public class AdminServiceImpl implements AdminService{
                 .nickname(adminSignupDto.getAdminName())
                 .password(encPassword)
                 .roles(Collections.singletonList(Role.ADMIN))
+                .admin(true)
                 .build();
 
         userRepository.save(admin);
