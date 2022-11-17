@@ -173,7 +173,7 @@ public class MypageServiceImpl implements MypageService {
         }
 
     }
-
+    @Transactional
     public void updateUserInfo(UpdateUserInfoRequestDto updateUserInfoRequestDto, HttpServletRequest httpServletRequest) {
         LOGGER.info("[MypageServiceImpl] updateUserInfo 호출");
         try {
@@ -183,13 +183,10 @@ public class MypageServiceImpl implements MypageService {
             if (userRepo == null) {
                 throw new NullPointerException("유저 정보가 잘못되었습니다.");
             }
-            if (updateUserInfoRequestDto.getUserId() == userId) {
-                userRepo.update(updateUserInfoRequestDto.getNickname(), updateUserInfoRequestDto.getProfileImg());
-            } else {
-                throw new Exception("유저 정보 불일치");
-            }
+            userRepo.update(updateUserInfoRequestDto.getNickname());
 
         } catch (Exception e) {
+            throw e;
         }
     }
 

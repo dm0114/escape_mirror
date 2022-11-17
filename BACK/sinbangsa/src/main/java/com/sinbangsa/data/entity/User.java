@@ -107,9 +107,9 @@ public class User implements UserDetails{
 //        this.roles = role;
 //    }
 
-    public void update(String nickname, String profile) {
+    public void update(String nickname) {
         this.nickname = nickname;
-        this.profile = profile;
+
     }
 
 
