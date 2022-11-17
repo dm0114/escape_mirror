@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState, useContext } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Animated, Image } from 'react-native';
-import { LayoutContext } from '../../App';
-const cardImage = require("../assets/mocks/image.png");
+import { useRecoilValue } from 'recoil';
+import { LayoutData } from '../store/Atom';
 
-const ReservationHeaderPosterImage = () => {
+const ReservationHeaderPosterImage = ({themeImg}) => {
   /**
   * 애니메이션
   */
-  const {Width, Height} = useContext(LayoutContext);
+  const layoutDatas = useRecoilValue(LayoutData)
+  const {Width, Height} = layoutDatas 
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   // const opacityValue = useRef(new Animated.Value(0.9)).current;
@@ -35,9 +36,6 @@ const ReservationHeaderPosterImage = () => {
           left: 0,
           right: 0,
           borderRadius: 50,
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderColor: "#00000020",
           elevation: 100,
           zIndex: 999,
           // opacity: opacityValue,
@@ -45,7 +43,9 @@ const ReservationHeaderPosterImage = () => {
         }}
       >
         <Image
-          source={cardImage}
+          source={ themeImg 
+            ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${themeImg}`} 
+            : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}}
           style={{
             width: Width - 40,
             height: Height / 4,

@@ -1,13 +1,16 @@
-import React, { useEffect, useRef, useContext } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Animated, Image } from 'react-native';
-import { LayoutContext } from '../../App';
+import { useRecoilValue } from 'recoil';
+import { LayoutData } from '../store/Atom';
 
 
 const HeaderPosterImage = ({themeImg}) => {
+  console.log(themeImg);
   /**
   * 애니메이션
   */
-  const {Width, Height} = useContext(LayoutContext);
+  const layoutDatas = useRecoilValue(LayoutData)
+  const {Width, Height} = layoutDatas
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   

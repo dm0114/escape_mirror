@@ -12,11 +12,11 @@ import Mypage from '../screens/User/MypageScreen';
 import Assignment from '../screens/Assignment';
 
 
-const FirstRoute = () => <MainScreen />
-const SecondRoute = () => <SearchScreen />
-const ThirdRoute = () => <BookMain />
-const FourthRoute = () => <Assignment />
-const FifthRoute = () => <Mypage />
+const FirstRoute = () => (<MainScreen />)
+const SecondRoute = () => (<SearchScreen />)
+const ThirdRoute = () => (<BookMain />)
+const FourthRoute = () => (<Assignment />)
+const FifthRoute = () => (<Mypage />)
 
 
 const renderScene = SceneMap({

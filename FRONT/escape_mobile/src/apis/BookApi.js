@@ -3,14 +3,15 @@ const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const Token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkbTEwODAyQGdtYWlsLmNvbSIsInJvbGVzIjoiVXNlciIsInVzZXJJZCI6MSwiaXNzIjoiZXNjYXBlZGljdGlvbmFyeS5jb20iLCJpYXQiOjE2NjgyMjgzMTcsImV4cCI6MTY2ODMxNDcxN30.YZ7W2p59mKkiaxyPGLzBAb3_oAaS6J8gFMO4ZvEt91M'
 // const token = await SecureStore.getItemAsync('secure_token');
 
-export const getRegionCafeList = async (specificRegion, name, page) => {
+export const getRegionCafeList = async (specificRegions, names, pages) => {
+    console.log(specificRegions, names, pages)
     // let [_, specificRegion, name, page] = queryKey;
-    const keyword = `${name}/${specificRegion}`;
+    const keyword = `${names}/${specificRegions}`;
     const RegionCafe = new URLSearchParams({
-        region: `${name}/${specificRegion}`
+        region: `${names}/${specificRegions}`
     });
     const PageNum = new URLSearchParams({
-        page:page
+        page:pages
     })
     const response = await (await fetch(`${BASE_URL}/book/store?${RegionCafe}&${PageNum}`, {
         headers:{

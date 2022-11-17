@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, createContext } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 // import * as SplashScreen from "expo-splash-screen";
 
@@ -14,13 +14,11 @@ import Root from "./src/navigation/Root";
 import SearchScreen from "./src/screens/SearchScreen";
 
 import { NativeBaseProvider } from "native-base";
-import { useWindowDimensions } from "react-native";
 import { RecoilRoot } from "recoil";
 
 /**
  * 전역 관리
  */
-export const LayoutContext = createContext(null);
 const queryClient = new QueryClient();
 const RootContainer = styled.View`
   flex: 1;
@@ -47,7 +45,6 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <LayoutContext.Provider value={LayoutValue}>
           <RecoilRoot>
             <RootContainer>
               <NavigationContainer>
@@ -58,7 +55,6 @@ export default function App() {
               </NavigationContainer>
             </RootContainer>
           </RecoilRoot>
-        </LayoutContext.Provider>
         <StatusBar style="auto" />
       </ThemeProvider>
     </QueryClientProvider>
