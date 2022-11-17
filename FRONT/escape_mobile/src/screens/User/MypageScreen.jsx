@@ -1,17 +1,17 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
-import { ImageBackground,Button, Text, View, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Alert } from 'react-native';
+import { ImageBackground, Text, View, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Aler,StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
 import Modal from "react-native-modal";
-import { Input, Stack, Center, NativeBaseProvider } from "native-base";
+import { Input, Box } from "native-base";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { getMyInfo } from '../../apis/MyPage';
 import { useQuery } from '@tanstack/react-query';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
+import { Button } from "native-base";
 // 마이페이지
 //프로필 사진, 등급명, 닉네임명, 후기|내가찜한테마|예약확인
 //등급명 클릭시 등급 안내 모달창
@@ -51,8 +51,8 @@ export default function MypageScreen() {
 
         {/* 등급명 및 닉네임 */}
         <MypageTxtView >
-          <GradeTxt onPress={gradeModal}>{UserInfo?.grade}</GradeTxt>
-          <NickNameTxt>{UserInfo?.nickname}</NickNameTxt>
+          <GradeTxt onPress={gradeModal}>Level.{UserInfo?.grade}</GradeTxt>
+          <NickNameTxt >{UserInfo?.nickname}</NickNameTxt>
         </MypageTxtView>
 
         {/* 찜테마 | 후기 | 내 예약 */}
@@ -62,44 +62,28 @@ export default function MypageScreen() {
 
         
         {/* 등급 Modal */}
-        <Modal isVisible={isGradeModalVisible}>
+        {/* <Modal isVisible={isGradeModalVisible}>
           <View>
             <Text>Hello!</Text>
             <Button title="Hide modal" onPress={gradeModal} />
           </View>
-        </Modal>
+        </Modal> */}
       </MypageContainer>
     )
   }
 
 
   function EditScreen() {
-    const [nick, setNick] = useState('명탐정 셜록');
+    const nickname = UserInfo.nickname
+    const [nick, setNick] = useState(nickname);
     const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
 
 
-    // function ShowPicker() {
-    //     //launchImageLibrary : 사용자 앨범 접근
-    // launchImageLibrary({}, (res)=>{
-    //   alert(res.assets[0].uri)
-    //   const formdata = new FormData()
-    //   formdata.append('file', res.assets[0].uri);
-    //   console.log(res);
-    // })
-    // }
     return (
       <MypageContainer>
-        {/* edit가 TRUE일 때, 수정 뷰 */}
-        {/* 프로필 사진 수정
-        <ProfileEditView onPress={ShowPicker}>
-          <ProfileEditImg>
-            <Ionicons name="camera-outline" size={60} color="white" /> 
-          </ProfileEditImg>
-        </ProfileEditView> */}
-
 
         {/* 확인 버튼 */}
         <SettingsCheckView>
@@ -110,12 +94,14 @@ export default function MypageScreen() {
         </SettingsCheckView>
 
         {/* input창 클릭 시 focusing되면서 키보드 가려지지 않게  KeyboardAwareScrollView 적용 */}
+        {/* 업적명 & 닉네임명 */}
         <View>
-          {/* 업적명 & 닉네임명 */}
           <EditTxtView>
-            <GradeTxt >{UserInfo?.grade}</GradeTxt>
-            <NickNameEdit placeholder={UserInfo?.nickname} textAlign='center' />
-          </EditTxtView>
+            <GradeTxt >Level.{UserInfo?.grade}</GradeTxt>
+            <Box alignItems="center">
+              <Input mx="5" value={nick} onChange={setNick} w="50%" backgroundColor={'#ffff'} fontFamily="SUIT-Bold" fontSize={35} textAlign="center"/>
+            </Box>
+          </EditTxtView >
         </View>  
 
         <UserView>
@@ -128,10 +114,14 @@ export default function MypageScreen() {
 
         {/* 회원탈퇴 Modal */}
         <Modal isVisible={isModalVisible}>
-          <View>
-            <Text>Hello!</Text>
-            <Button title="Hide modal" onPress={toggleModal} />
-          </View>
+          <SignOutView>
+            <SignOutTxt>신기한 방탈출 사전 서비스에서 탈퇴하시겠습니까?</SignOutTxt>
+            <SignOutBtnView>
+              <Button style={{marginHorizontal:10 }} onPress={toggleModal}>회원탈퇴</Button>
+              <Button variant={'outline'} onPress={toggleModal}>취소</Button>
+            </SignOutBtnView>
+
+          </SignOutView>
         </Modal>
 
         
@@ -230,26 +220,27 @@ const EditTxtView = styled(MypageTxtView)`
 `
 
 const GradeTxt = styled.Text`
-  font-family: "SUIT-Medium";
+  font-family:'Classic';
   font-size:  ${({ theme }) => theme.fontSizes.title2};
   line-height:  ${({ theme }) => theme.fontHeight.title2};
   color: white;
+  margin: 10px;
 `
 const NickNameTxt = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size:  ${({ theme }) => theme.fontSizes.title1};
-  line-height:  ${({ theme }) => theme.fontHeight.title1};
+  font-family:'Classic';
+  font-size:  ${({ theme }) => theme.fontSizes.TitleXL};
+  line-height:  ${({ theme }) => theme.fontHeight.title};
   color: white;
 `
 const NickNameEdit = styled.TextInput`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title2};
+  font-family:'Classic';
+  font-size: ${({ theme }) => theme.fontSizes.TitleXL};
   border-radius: 10px;
-  padding: 5px 10px;
+  padding: 30px;
   /* max-width: fit-content; */
   border: none;
   background-color: white;
-  width: SCREEN_WIDTH;
+
 `
 
 
@@ -266,6 +257,7 @@ const LogOutTxt = styled.Text`
   margin: 20px;
 `
 const MorePageTxt = styled(LogOutTxt)`
+  font-family: "SUIT-Bold";
   font-size:${({ theme }) => theme.fontSizes.body};
   color: tomato;
   
@@ -279,11 +271,38 @@ const CatText = styled.Text`
   line-height:  ${({ theme }) => theme.fontHeight.title2};
  `
 const CatTxtView = styled.View`
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   padding: 100px 50px;
   /* background-color: blueviolet; */
 `
+const SignOutView = styled.View`
+  background-color: white;
+  padding: 40px 0px;
+  justify-content: center;
+  align-items: center;
+`
+
+const SignOutTxt = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size:${({ theme }) => theme.fontSizes.body};
+`
+
+const SignOutBtnView = styled.View`
+  flex-direction: row;
+  margin: 20px;
+  `
+// const styles = StyleSheet.create({
+//   nicknameField: {
+//     fontFamily:'Classic',
+//     fonSize: '40px',
+//     borderRadius: '10px',
+//     padding: '30px',
+//     /* max-width: fit-content; */
+//     border: none,
+//     backgroundColor: 'white'
+//   },
+// });
 
 //===================================================
 // 마이페이지

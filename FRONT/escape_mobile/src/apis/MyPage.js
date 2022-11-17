@@ -65,6 +65,21 @@ export const getMyInfo = async ({ queryKey }) => {
 
 //리뷰 작성 하기
 export const postReview = async ({ queryKey }) => {
+  console.log('postReview')
+  const { } = queryKey[1]
+  const data = {
+  bookId: 0,
+  content: "string",
+  feelActivity: 0,
+  feelDifficulty: 0,
+  feelHorror: 0,
+  feelInterrior: 0,
+  feelStory: 0,
+  locker: 0,
+  reviewImg: "string",
+  star: 0,
+  themeId: 0
+}
   const response = await (await fetch(`${BASE_URL}/review`, {
     method:'POST',
     headers: {
