@@ -5,6 +5,7 @@ import com.sinbangsa.data.entity.*;
 import com.sinbangsa.data.repository.*;
 import com.sinbangsa.exception.*;
 
+import com.sinbangsa.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,8 +31,12 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
-    public List<AdminStoreDto> getAdminStoreDetail(long adminId){
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public List<AdminStoreDto> getAdminStoreDetail(HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] getAdminStoreDetail 호출");
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
         User admin = userRepository.findById(adminId).orElse(null);
         List<Store> adminStoreList;
         List<AdminStoreDto> adminStoreDtos = new ArrayList<>();
@@ -56,8 +62,11 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     };
 
-    public Boolean registerStoreDetail(StoreRegisterDto storeRegisterDto, long adminId){
+    public Boolean registerStoreDetail(StoreRegisterDto storeRegisterDto, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] registerStoreDetail 호출");
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
         // admin token 발급 후 수정 필요
         User admin = userRepository.findById(adminId).orElse(null);
 
@@ -82,8 +91,11 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     };
 
-    public Boolean updateStoreDetail(AdminStoreDto adminStoreDto, long adminId){
+    public Boolean updateStoreDetail(AdminStoreDto adminStoreDto, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] updateStoreDetail 호출");
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 
         Store updateStore = storeRepository.findByStoreId(adminStoreDto.getStoreId()).orElse(null);
 
@@ -114,9 +126,12 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     };
 
-    public List<ThemeListDto> getThemeList(long storeId, long adminId){
+    public List<ThemeListDto> getThemeList(long storeId, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] getThemeList 호출");
         Store store = storeRepository.findByStoreId(storeId).orElse(null);
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 
         if (adminId != store.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
@@ -144,9 +159,12 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
-    public AdministratorThemeDetailDto getThemeDetail(long themeId, long adminId){
+    public AdministratorThemeDetailDto getThemeDetail(long themeId, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] getThemeDetail 호출");
         Theme theme = themeRepository.getById(themeId).orElse(null);
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 //         토큰 넣고 주석 부분 바꾸기
         if (adminId != theme.getStore().getStoreAdmin().getId()) {
             throw new AccessDeniedException();
@@ -179,8 +197,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     };
 
     @Transactional
-    public Boolean registerThemeThemeTime(ThemeRegisterDto themeRegisterDto, long adminId){
+    public Boolean registerThemeThemeTime(ThemeRegisterDto themeRegisterDto, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] registerTheme 호출");
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 
         // orElse 붙이기(null 처리)
         Store store = storeRepository.findByStoreId(themeRegisterDto.getStoreId()).orElse(null);
@@ -267,8 +288,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Transactional
-    public Boolean updateThemeThemeTime(ThemeUpdateDto themeUpdateDto, long adminId){
+    public Boolean updateThemeThemeTime(ThemeUpdateDto themeUpdateDto, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] updateThemeThemeTime 호출");
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 
         Theme theme = themeRepository.getById(themeUpdateDto.getThemeId()).orElse(null);
         if (theme == null) {
@@ -300,13 +324,16 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
-    public Boolean createThemeTime(long themeId, String themeTime, long adminId){
+    public Boolean createThemeTime(long themeId, String themeTime, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] createThemeTime 호출");
 
         Theme theme = themeRepository.getById(themeId).orElse(null);
         if (theme == null) {
             throw new ThemeNotFoundException();
         }
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
         if (adminId != theme.getStore().getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
@@ -335,12 +362,15 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
-    public Boolean updateThemeTime(ThemeTimeDto themeTime, long adminId){
+    public Boolean updateThemeTime(ThemeTimeDto themeTime, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] updateThemeTime 호출");
         ThemeTime updateTime = themeTimeRepository.findById(themeTime.getThemeTimeId()).orElse(null);
         if (updateTime == null) {
             throw new ThemeTimeNotFoundException();
         }
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
         if (adminId != updateTime.getTheme().getStore().getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
@@ -359,7 +389,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
-    public Boolean deleteThemeTime(long themeTimeId, long adminId){
+    public Boolean deleteThemeTime(long themeTimeId, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] deleteThemeTime 호출");
         ThemeTime themetime = themeTimeRepository.findById(themeTimeId).orElse(null);
 
@@ -367,6 +397,9 @@ public class AdministratorServiceImpl implements AdministratorService {
             if (themetime == null) {
                 throw new ThemeTimeNotFoundException();
             }
+
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long adminId = jwtTokenProvider.getUserId(token);
 
             if (adminId != themetime.getTheme().getStore().getStoreAdmin().getId()) {
                 throw new AccessDeniedException();
@@ -380,12 +413,16 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Transactional
-    public Boolean deleteTheme(long themeId, long adminId){
+    public Boolean deleteTheme(long themeId, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] deleteTheme 호출");
         Theme theme = themeRepository.getById(themeId).orElse(null);
         if (theme == null) {
             throw new ThemeNotFoundException();
         }
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
+
         if (adminId != theme.getStore().getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
@@ -404,12 +441,15 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
-    public List<ReservationCountDto> getReservationCount(long adminId, long storeId){
+    public List<ReservationCountDto> getReservationCount(HttpServletRequest httpServletRequest, long storeId){
         LOGGER.info("[AdministratorService] getReservationCount 호출");
         Store store = storeRepository.getByStoreId(storeId).orElse(null);
         if (store == null) {
             throw new StoreNotFoundException();
         }
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 
         if (adminId != store.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
@@ -431,12 +471,15 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     }
 
-    public ReservationAdminDayDto getReservationAdminDay(long storeId, String reservationDay, long adminId){
+    public ReservationAdminDayDto getReservationAdminDay(long storeId, String reservationDay, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] getReservationCount 호출");
         Store store = storeRepository.getByStoreId(storeId).orElse(null);
         if (store == null) {
             throw new StoreNotFoundException();
         }
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 
         if (adminId != store.getStoreAdmin().getId()) {
             throw new AccessDeniedException();
@@ -478,12 +521,15 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Transactional
-    public Boolean approveReservation(long adminId, long reservationId){
+    public Boolean approveReservation(HttpServletRequest httpServletRequest, long reservationId){
         LOGGER.info("[AdministratorService] approveReservation 호출");
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
         if (reservation == null) {
             throw new ReservationNotFound();
         }
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
 
         // admin 안붙어있으면 에러남
         if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
@@ -498,7 +544,7 @@ public class AdministratorServiceImpl implements AdministratorService {
             return false;
         }
     }
-    public Boolean deleteReservation(long reservationId, long adminId){
+    public Boolean deleteReservation(long reservationId, HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] deleteReservation 호출");
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
 
@@ -506,6 +552,9 @@ public class AdministratorServiceImpl implements AdministratorService {
             if (reservation == null) {
                 throw new ReservationNotFound();
             }
+
+            String token = jwtTokenProvider.resolveToken(httpServletRequest);
+            Long adminId = jwtTokenProvider.getUserId(token);
 
             if (adminId != reservation.getThemeTime().getTheme().getStore().getStoreAdmin().getId()) {
                 throw new AccessDeniedException();
@@ -518,12 +567,16 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Transactional
-    public Boolean verificationExit(BookRegisterDto bookRegister,long adminId){
+    public Boolean verificationExit(BookRegisterDto bookRegister,HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorService] deleteReservation 호출");
         Theme theme = themeRepository.getById(bookRegister.getThemeId()).orElse(null);
         if (theme == null) {
             throw new ThemeNotFoundException();
         }
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long adminId = jwtTokenProvider.getUserId(token);
+
         if (adminId != theme.getStore().getStoreAdmin().getId()) {
             throw new AccessDeniedException();
         }
@@ -552,7 +605,7 @@ public class AdministratorServiceImpl implements AdministratorService {
             }
 
         }
-        Boolean del = deleteReservation(bookRegister.getReservationId(), adminId);
+        Boolean del = deleteReservation(bookRegister.getReservationId(), httpServletRequest);
         if (del) {
             return true;
         }else {

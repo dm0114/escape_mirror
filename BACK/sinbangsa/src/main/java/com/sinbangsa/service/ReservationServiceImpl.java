@@ -9,6 +9,8 @@ import com.sinbangsa.data.entity.User;
 import com.sinbangsa.data.repository.ReservationRepository;
 import com.sinbangsa.data.repository.ThemeTimeRepository;
 import com.sinbangsa.data.repository.UserRepository;
+import com.sinbangsa.exception.AccessDeniedException;
+import com.sinbangsa.exception.ReservationNotFound;
 import com.sinbangsa.utils.JwtTokenProvider;
 import com.sinbangsa.exception.ThemeTimeNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -164,6 +166,29 @@ public class ReservationServiceImpl implements ReservationService {
             throw e;
         }
         return VALIDATE_FAIL;
+
+    }
+
+    public Boolean deleteReservation(long reservationId,HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(token);
+
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+
+        try {
+            if (reservation == null) {
+                throw new ReservationNotFound();
+            }
+
+            if (userId != reservation.getReservationUser().getId()) {
+                throw new AccessDeniedException();
+            }
+            reservationRepository.delete(reservation);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+
 
     }
 }

@@ -12,10 +12,6 @@ import lombok.Setter;
 @Getter
 public class UpdateUserInfoRequestDto {
 
-    private long userId;
-
-    private String profileImg;
-
     private String nickname;
 
 }
