@@ -49,11 +49,11 @@ public class MainpageCotroller {
 
     @GetMapping
     @ApiOperation(value = "프리로딩")
-    public ResponseEntity<PreLoadingDto> preLoading() {
+    public ResponseEntity<PreLoadingDto> preLoading(HttpServletRequest httpServletRequest) {
         LOGGER.info("[MainpageController] preLoading 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        PreLoadingDto preLoading = mainpageService.getPreLoading();
+        PreLoadingDto preLoading = mainpageService.getPreLoading(httpServletRequest);
         LOGGER.info("[MainpageController] getPreLoading 반환 성공");
 
         return new ResponseEntity<>(preLoading, headers, HttpStatus.OK);
