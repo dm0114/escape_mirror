@@ -42,11 +42,8 @@ public class AdministratorController {
         LOGGER.info("[AdministratorController] preLoading 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        // 어드민 아이디 토큰에서 가져오기
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
+        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(httpServletRequest);
 
         return new ResponseEntity<>(adminStoreDetail, headers, HttpStatus.OK);
     }
@@ -58,12 +55,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        // 어드민 아이디 토큰에서 가져오기
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-
-        boolean result = administratorService.registerStoreDetail(storeResgesterDto, adminId);
+        boolean result = administratorService.registerStoreDetail(storeResgesterDto, httpServletRequest);
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
         }
@@ -77,10 +69,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        boolean result = administratorService.updateStoreDetail(adminStoreDto, adminId);
+        boolean result = administratorService.updateStoreDetail(adminStoreDto, httpServletRequest);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
@@ -95,11 +84,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-
-        List<ThemeListDto> themeList = administratorService.getThemeList(storeId, adminId);
+        List<ThemeListDto> themeList = administratorService.getThemeList(storeId, httpServletRequest);
         return new ResponseEntity<>(themeList, headers, HttpStatus.OK);
     }
 
@@ -110,11 +95,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-
-        AdministratorThemeDetailDto themeDetail = administratorService.getThemeDetail(themeId, adminId);
+        AdministratorThemeDetailDto themeDetail = administratorService.getThemeDetail(themeId, httpServletRequest);
         return new ResponseEntity<>(themeDetail, headers, HttpStatus.OK);
     }
 
@@ -124,11 +105,7 @@ public class AdministratorController {
         LOGGER.info("[AdministratorController] createTheme 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-
-        Boolean result = administratorService.registerThemeThemeTime(themeRegister, adminId);
+        Boolean result = administratorService.registerThemeThemeTime(themeRegister, httpServletRequest);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
@@ -143,11 +120,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        Boolean result = administratorService.updateThemeThemeTime(themeUpdateDto, adminId);
+        Boolean result = administratorService.updateThemeThemeTime(themeUpdateDto, httpServletRequest);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
@@ -163,10 +136,8 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         // 어드민 아이디 토큰에서 가져오기
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        Boolean result = administratorService.createThemeTime(themeId, themeTime.getThemeTime(), adminId);
+
+        Boolean result = administratorService.createThemeTime(themeId, themeTime.getThemeTime(), httpServletRequest);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
@@ -181,10 +152,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         // 어드민 아이디 토큰에서 가져오기
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        Boolean result = administratorService.updateThemeTime(themeTime, adminId);
+        Boolean result = administratorService.updateThemeTime(themeTime, httpServletRequest);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
@@ -199,11 +167,8 @@ public class AdministratorController {
         LOGGER.info("[AdministratorController] deleteThemeTime 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        // 어드민 아이디 토큰에서 가져오기
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        boolean result = administratorService.deleteThemeTime(themeTimeId, adminId);
+
+        boolean result = administratorService.deleteThemeTime(themeTimeId, httpServletRequest);
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.OK);
         }
@@ -217,10 +182,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         // 어드민 아이디 토큰에서 가져오기
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        boolean result = administratorService.deleteTheme(themeId, adminId);
+        boolean result = administratorService.deleteTheme(themeId, httpServletRequest);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.OK);
@@ -230,13 +192,12 @@ public class AdministratorController {
 
     @GetMapping("/reservation/month/{storeId}")
     @ApiOperation(value = "관리자페이지 월별 예약관리")
-    public ResponseEntity<List<ReservationCountDto>> getReservationCount (@PathVariable long storeId){
+    public ResponseEntity<List<ReservationCountDto>> getReservationCount (@PathVariable long storeId,HttpServletRequest httpServletRequest){
         LOGGER.info("[AdministratorController] getReservationCount 호출");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        // 어드민 아이디 토큰에서 가져오기
-        long adminId = 3;
-        List<ReservationCountDto> reservationCountDtoList = administratorService.getReservationCount(adminId, storeId);
+
+        List<ReservationCountDto> reservationCountDtoList = administratorService.getReservationCount(httpServletRequest, storeId);
 
         return new ResponseEntity<>(reservationCountDtoList, headers, HttpStatus.OK);
     }
@@ -250,10 +211,8 @@ public class AdministratorController {
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        ReservationAdminDayDto reservationAdminDay = administratorService.getReservationAdminDay(storeId ,reservationDay, adminId);
+
+        ReservationAdminDayDto reservationAdminDay = administratorService.getReservationAdminDay(storeId ,reservationDay, httpServletRequest);
 
         return new ResponseEntity<>(reservationAdminDay, headers, HttpStatus.OK);
 
@@ -266,10 +225,7 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        boolean result = administratorService.approveReservation(adminId, reservationId);
+        boolean result = administratorService.approveReservation(httpServletRequest, reservationId);
 
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.ACCEPTED);
@@ -284,10 +240,8 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         // 어드민 아이디 토큰에서 가져오기
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        boolean result = administratorService.deleteReservation(reservationId, adminId);
+
+        boolean result = administratorService.deleteReservation(reservationId, httpServletRequest);
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.OK);
         }
@@ -301,10 +255,8 @@ public class AdministratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         // 어드민 아이디 토큰에서 가져오기
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        Long adminId = jwtTokenProvider.getUserId(token);
-        List<AdminStoreDto> adminStoreDetail = administratorService.getAdminStoreDetail(adminId);
-        boolean result = administratorService.verificationExit(bookRegister, adminId);
+
+        boolean result = administratorService.verificationExit(bookRegister, httpServletRequest);
         if (result) {
             return new ResponseEntity<>(result, headers, HttpStatus.OK);
         }

@@ -19,6 +19,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -70,9 +72,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD","GET","PUT","POST","DELETE"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://k7c104.p.ssafy.io","*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
