@@ -2,50 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { reservationApi } from "../api/reservation";
 import moment from "moment-timezone";
+import { useNavigate } from 'react-router-dom';
 const nowTime = moment().tz('Asia/Seoul').format("YYYY-MM-DDTHH:mm:ss")
 
-/*
-[] true
-[] true
-[]
-{
-    "storeName": "string",
-    "themeReservationList": [
-      {
-        "themeId": 0,
-        "themeName": "string",
-        "timeReservationDto": [
-          {
-            "accept": true,
-            "reservationTime": "string",
-            "reservationTimeId": 0,
-            "status": 0,
-            "userName": "string"
-          }
-        ]
-      }
-    ]
-}
-*/
-interface IGetReservation {
-  storeName: string;
-  themeReservationList: IthemeList[]
-}
-
-interface IthemeList {
-  themeId: number,
-  themeName: string,
-  timeReservationDto: ITimeReservationDto[]
-}
-
-interface ITimeReservationDto {
-  reservationId: number,
-  accept: boolean,
-  reservationTime: string,
-  reservationTimeId: number,
-  status: number,
-  userName: string
-}
 
 const KoTIme = () => {
   const now = new Date(nowTime) // 현재 시간
@@ -59,6 +18,7 @@ const KoTIme = () => {
 };
 
 export default function Reservation() {
+  const navigate = useNavigate();
   const Days = KoTIme();
   const [reservationId, setReservationId] = useState<number>(-1)
   const [reservationDay, setReservationDay] = useState<string>(Days[0])
@@ -69,7 +29,7 @@ export default function Reservation() {
     ["GetReservation", reservationDay, storeId],
     reservationApi.getReservation
   );
-  useEffect(() => {console.log(data), [data];})
+  useEffect(() => {console.log(data), [data]})
 
   const getFunction = (reservationDayParam: string) => {
     setReservationDay(reservationDayParam)
@@ -137,6 +97,7 @@ export default function Reservation() {
                             {elem.accept ? <p>'승인 완료'</p> : <p>'승인 대기'</p>}
                             <button onClick={() => {putFunction(elem.reservationId)}}>승인</button>
                             <button onClick={() => {deleteFunction(elem.reservationId)}}>거부</button>
+                            <button onClick={() => {navigate(`/admin/validation`, {state: [elem.reservationId, el.themeId]});}}>도장 찍기</button>
                             <p>{elem.reservationTime}</p>
                             <p>{elem.reservationTimeId}</p>
                             <p>{elem.status}</p>

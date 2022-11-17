@@ -59,7 +59,7 @@ export const getReservation = async ({ queryKey }: QueryFunctionContext<[string,
   return await (
     await fetch(`${BASE_URL}/reservation/day/${storeId}?${params}`, {
       headers: {
-        Authorization: Token
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sInVzZXJJZCI6MywiaXNzIjoiZXNjYXBlZGljdGlvbmFyeS5jb20iLCJpYXQiOjE2Njg2NDkwODIsImV4cCI6MTY2ODczNTQ4Mn0.iHBK5kii_0RC_zBtDjan5yddQiUittGdRA_oGRHe-FI',
       },
     })
   ).json();

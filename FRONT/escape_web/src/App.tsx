@@ -15,6 +15,7 @@ import UnityTest from './Unity/UnityTest';
 import UnityBookTest from './Unity/UnityBookTest';
 import UnityMainMypage from './Unity/UnityMainMypage';
 import UnityMainReserve from './Unity/UnityMainReserve';
+import Validation from '@pages/Validation';
 
 
 const style = css`
@@ -32,6 +33,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/theme" element={<Theme />} />
           <Route path="/admin/reservation" element={<Reservation />} />
+          <Route path="/admin/validation" element={<Validation />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />}/>
           <Route path="/unity/main/book" element={<UnityMainBook />}/>
