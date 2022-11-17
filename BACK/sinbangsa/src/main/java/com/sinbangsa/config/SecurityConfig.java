@@ -74,7 +74,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("HEAD","GET","PUT","POST","DELETE"));
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://k7c104.p.ssafy.io","*"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000","https://k7c104.p.ssafy.io"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
