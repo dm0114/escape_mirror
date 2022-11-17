@@ -1,13 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
-  TouchableOpacity,
   View,
-  Image,
   StyleSheet,
   Modal,
   Pressable,
-  ImageBackground,
+
 } from "react-native";
 import styled from "styled-components/native";
 
@@ -22,44 +20,71 @@ import { useTimer } from "react-timer-hook";
 import { Timer } from "../components/Reservation/KorTimeComponent";
 import ReservationHeaderPosterImage from "../components/ReservationHeaderPosterImage";
 import theme from "../../theme";
-const cardImage = require("../assets/mocks/image.png");
+import { useRecoilValue } from "recoil";
+import { LayoutData } from "../store/Atom";
 
+/**
+ * 고려 사항 => themeImg가 2개?, Post 요청에 따른 Alert
+ */
 function ReservationDetailScreen({ route, navigation }) {
-  const { Width, Height } = useContext(LayoutContext);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false)
+  /**
+   * 파라미터
+   */
+  const { reservationId, themeName, storeName, date, reserveTime } =
+  route.params;
+
+  /**
+   * 레이아웃
+   */
+  const layoutDatas = useRecoilValue(LayoutData)
+  const {Width, Height} = layoutDatas
   const [query, setQuery] = useState("");
 
+  /**
+   * API
+   */
   const { isLoading, data } = useQuery(
-    ["reservationDetail", query], //토큰 추가
+    ["reservationDetail", reservationId], //토큰 추가
     reservationApi.getReservationDetail
   );
 
-  const tmpData = {
-    storeAddress: "광주 어딘가",
-    themeImg: "S3 주소",
-  };
-
+  const { data: putRes, refetch } = useQuery(
+    ["reservationDetail", reservationId], //토큰 추가
+    reservationApi.putReservationTransfer, {
+      enabled: false
+    }
+  );
+  useEffect(() => {console.log(putRes);}, [putRes])
+    
+  /**
+   * 타이머
+   */
   function MyTimer({ expiryTimestamp }) {
+    const [timeStatus, setTimeStatus] = useState(false)
     const { seconds, minutes, hours, days } = useTimer({
       expiryTimestamp,
-      onExpire: () => console.warn("onExpire called"),
+      onExpire: () => setTimeStatus(true),
     });
 
     return (
       <View style={{ textAlign: "center" }}>
-        <TimeText>
-          {days} : {hours} : {minutes} : {seconds}
-        </TimeText>
+        {timeStatus 
+          ?  <TimeText>입장해주세요</TimeText>
+          :  <TimeText>{days} : {hours} : {minutes} : {seconds}</TimeText>
+        }
       </View>
     );
   }
 
-  const { reservationId, themeName, storeName, date, reserveTime } =
-    route.params;
+
   return isLoading ? (
     <LoadingScreen />
   ) : (
     <Container>
+      {/* 
+        모달
+      */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -70,19 +95,15 @@ function ReservationDetailScreen({ route, navigation }) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <ReservationTransfer
-              reservationId={reservationId}
-              themeName={themeName}
-              storeName={storeName}
-              date={date}
-              reserveTime={reserveTime}
-              storeAddress={tmpData.storeAddress}
-            />
+            <ReservationTransfer/>
 
             <ButtonWrapper>
               <Pressable
                 style={[styles.button, styles.buttonOpen]}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => {
+                  refetch()
+                  setModalVisible(!modalVisible)
+                }}
               >
                 <Text style={[styles.textStyle, styles.openTextStyle]}>예</Text>
               </Pressable>
@@ -100,10 +121,12 @@ function ReservationDetailScreen({ route, navigation }) {
       {/* 
         애니메이션 헤더 포스터 이미지, Absolute라 마진 또는 패딩 탑 FullHeight / 4 필요
       */}
-      <ReservationHeaderPosterImage />
+      <ReservationHeaderPosterImage themeImg={data.themeImg} />
 
       <BlurView
-        source={cardImage}
+        source={ data.themeImg 
+          ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${data.themeImg}`} 
+          : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}}
         resizeMode="cover"
         style={{
           flex: 1,
@@ -152,23 +175,10 @@ function ReservationDetailScreen({ route, navigation }) {
           </RowContainer>
         </ReservationView>
 
-        {/* <Text>{reservationId}</Text> */}
-
-        {/* <Text>{tmpData.themeImg}</Text> */}
-
         <ButtonWrapper>
           <Button
             onPress={() => setModalVisible(true)}
-            // onPress={() => {navigation.navigate('ReservationTransfer', {
-            //   reservationId: reservationId,
-            //   themeName: themeName,
-            //   storeName: storeName,
-            //   date: date,
-            //   reserveTime: reserveTime,
-            //   storeAddress: tmpData.storeAddress
-            // })}}
           >
-            
             <MaterialCommunityIcons name="send-circle-outline" size={36} color={theme.colors.point}/>
             <InfoTitle>예약 양도</InfoTitle>
           </Button>

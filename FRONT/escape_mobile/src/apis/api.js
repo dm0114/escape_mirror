@@ -1,7 +1,6 @@
-import axios from 'axios'
+import axios from "axios";
 import { SecureState } from "../store/SecureStore";
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
-
 
 // 참고
 // return await fetch(`${BASE_URL}/mainpage/search?${query}`,{
@@ -16,7 +15,7 @@ const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 
 // 메인
 export const getPreloading = async () => {
-  console.log('getPreloading');
+  console.log("getPreloading");
   // /mainpage
   return await (
     await fetch(`${BASE_URL}/mainpage`, {
@@ -29,18 +28,17 @@ export const getPreloading = async () => {
 
 // 검색
 const getSearch = async ({ queryKey }) => {
-  console.log('getSearch');
+  console.log("getSearch");
   let [_, query] = queryKey;
   query = new URLSearchParams({
     searchWord: query,
-    page: 0
+    page: 0,
   });
   const response = await (
     await fetch(`${BASE_URL}/mainpage/search?${query}`, {
       headers: {
         Authorization: await SecureState.getData("accessToken"),
       },
-      
     })
   ).json();
   return response;
@@ -48,8 +46,11 @@ const getSearch = async ({ queryKey }) => {
 
 const getCafeDetail = async ({ queryKey }) => {
   let [_, storeId] = queryKey;
+  const query = new URLSearchParams({
+    page: 0,
+  });
   return await (
-    await fetch(`${BASE_URL}/book/store/${storeId}`, {
+    await fetch(`${BASE_URL}/book/store/${storeId}?${query}`, {
       headers: {
         Authorization: await SecureState.getData("accessToken"),
       },
@@ -58,10 +59,11 @@ const getCafeDetail = async ({ queryKey }) => {
 };
 
 const getThemeDetail = async ({ queryKey }) => {
-  console.log('getThemeDetail');
+  console.log("getThemeDetail");
+
   let [_, themeId] = queryKey;
   const query = new URLSearchParams({
-    page: 0
+    page: 0,
   });
   return await (
     await fetch(`${BASE_URL}/book/theme/${themeId}?${query}`, {
@@ -81,13 +83,23 @@ const getMypageActs = () => {
 };
 
 //예약 상세
-const getReservationDetail = (reservationId) => {
-  // /api/mypage/{reservationId}
-  return fetch(`${BASE_URL}/mocksTheme/db`).then((res) => res.json());
+const getReservationDetail = async ({ queryKey }) => {
+  console.log("getReservationDetail");
+
+  let [_, reservationId] = queryKey;
+
+  return await (
+    await fetch(`${BASE_URL}/mypage/${reservationId}`, {
+      headers: {
+        Authorization: await SecureState.getData("accessToken"),
+      },
+    })
+  ).json();
 };
 
 //테마 예약 가능 시간
 const getReservationTime = async ({ queryKey }) => {
+  console.log('getReservationTime');
   let [_, themeId] = queryKey;
   themeId = new URLSearchParams({
     themeId: themeId,
@@ -119,26 +131,26 @@ const getReservationDate = async ({ queryKey }) => {
 
 //예약하기
 const postReservation = async ({ queryKey }) => {
-  console.log('postReservation');
+  console.log("postReservation");
   // api/reservation
-  const {themeId, selectTime, date} = queryKey[1];
+  const { themeId, selectTime, date } = queryKey[1];
   const data = {
     reservationDate: date,
     themeId: themeId,
     themeTimeId: selectTime,
-  }
+  };
 
   const res = await axios({
-    url:`${BASE_URL}/reservation`, 
-    method: 'post',
-    data: JSON.stringify(data), 
-    headers: { 
+    url: `${BASE_URL}/reservation`,
+    method: "post",
+    data: JSON.stringify(data),
+    headers: {
       Authorization: await SecureState.getData("accessToken"),
-      'Content-Type': 'application/json' 
-    }
-  })
+      "Content-Type": "application/json",
+    },
+  });
   console.log(res);
-  return res
+  return res;
 };
 
 // 닉네임 유효성 검사
@@ -148,9 +160,19 @@ const getSearchUser = () => {
 };
 
 // 양도
-const putReservationTransfer = (reservationId, targetId) => {
-  // api/reservation/transfer
-  fetch(`${BASE_URL}/mocks/db`);
+const putReservationTransfer = async ({ queryKey }) => {
+  console.log("putReservation");
+
+  let [_, reservationId] = queryKey;
+  const res = await axios({
+    url: `${BASE_URL}/mypage/${reservationId}`,
+    method: "put",
+    headers: {
+      Authorization: await SecureState.getData("accessToken"),
+    },
+  });
+  console.log(res);
+  return res;
 };
 
 export const reservationApi = {
@@ -182,4 +204,3 @@ export const communityApi = {
   getCommunitySearch,
   getCommunityDetail,
 };
-

@@ -10,8 +10,6 @@ import Toggle from "react-native-toggle-element";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-
 const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
 import SearchCafeList from "../components/SearchCafeList";
 import SearchThemeList from "../components/SearchThemeList";
@@ -22,13 +20,6 @@ import { useNavigation } from "@react-navigation/native";
 
 
 export default function SearchScreen() {
-  /**
-   * 레이아웃
-   */
-  const layout = useWindowDimensions();
-  const Width = layout.width;
-  const Height = layout.height;
-
   /**
    * API
    */
