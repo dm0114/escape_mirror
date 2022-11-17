@@ -39,7 +39,6 @@ public class BookServiceImpl implements BookService {
 
     public List<StoreDto> getStoreList(String region, int page, HttpServletRequest httpServletRequest) {
         LOGGER.info("[BookService] getCafeList 호출");
-        List<StoreDto> cafeList = new ArrayList<>();
 
         String state;
         String city;
@@ -71,6 +70,7 @@ public class BookServiceImpl implements BookService {
                 storeDto.setStoreName(storeRepo.getStoreName());
                 storeDto.setClearCnt(bookRepository.getClearCnt(userRepo, storeRepo));
                 storeDto.setTotalTheme(themeRepository.countByStore(storeRepo));
+                storeDto.setStoreCount(storeRepository.countStoreByRegionContaining(region));
                 stores.add(storeDto);
             }
             return stores;

@@ -17,6 +17,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findAllByStoreNameContaining(String searchWord, PageRequest pageRequest);
 
+    int countStoreByRegionContaining(String region);
 
     List<Store> findAllByRegion(String region);
 
