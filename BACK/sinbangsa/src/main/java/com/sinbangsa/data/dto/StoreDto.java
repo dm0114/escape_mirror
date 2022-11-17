@@ -22,4 +22,6 @@ public class StoreDto {
 
     private int totalTheme;
 
+    private int storeCount;
+
 }

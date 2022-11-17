@@ -115,13 +115,16 @@ public class MainpageServiceImpl implements MainpageService{
     }
 
     @Override
-    public PreLoadingDto getPreLoading(){
+    public PreLoadingDto getPreLoading(HttpServletRequest httpServletRequest){
         LOGGER.info("[MainpageService] getPreLoading 호출");
         PreLoadingDto preLoading = new PreLoadingDto();
         List<PreLoadingDto.ReservationDto> reservationList = new ArrayList<>();
 
+        String apptoken = jwtTokenProvider.resolveToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserId(apptoken);
+
         // 토큰 전까지 임시 user
-        User user = userRepository.findById(1).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
 
         // 해당 유저의 앞으로 예약
         List<Reservation> upcommingReservation = reservationRepository.findAllByReservationUser(user);
