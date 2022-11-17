@@ -3,6 +3,19 @@ const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const ACCESS_TOKEN = SecureState.getData('accessToken');
 const Token = `Bearer ${ACCESS_TOKEN}`
 
+
+// 닉네임 수정
+export const putNickName = async ({ queryKey }) => { 
+  const response = await (await fetch(`${BASE_URL}/mypage/update`, {
+    method: 'PUT',
+    headers: {
+      Authorization : await SecureState.getData('accessToken')
+      // Authorization : Token
+    }
+  })).json()
+  return response
+}
+
 //짬한 테마
 export const getLikeTheme = async ({ queryKey }) => { 
   const response = await (await fetch(`${BASE_URL}/mypage/likes?page=0`, {
@@ -92,3 +105,16 @@ export const postReview = async ({ queryKey }) => {
   })).json()
   return response
 }
+
+//회원탈퇴
+export const logOutPost = async({ queryKey }) => {
+  const response = await (await fetch({
+    method:'POST',
+    headers: {
+      Authorization : await SecureState.getData('accessToken')
+    }
+  })).json()
+  return response 
+}
+
+//로그아웃

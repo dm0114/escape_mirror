@@ -99,7 +99,7 @@ export default function MypageScreen() {
           <EditTxtView>
             <GradeTxt >Level.{UserInfo?.grade}</GradeTxt>
             <Box alignItems="center">
-              <Input mx="5" value={nick} onChange={setNick} w="50%" backgroundColor={'#ffff'} fontFamily="SUIT-Bold" fontSize={35} textAlign="center"/>
+              <Input mx="5" value={nick} onChange={setNick} w="50%" backgroundColor={'#ffff'} fontFamily="Classic" fontSize={35} textAlign="center"/>
             </Box>
           </EditTxtView >
         </View>  
@@ -247,6 +247,7 @@ const NickNameEdit = styled.TextInput`
 const UserView = styled.View`
   flex-direction: row;
   justify-content: center;
+  margin-top: 30px;
   /* border: 1px solid white;
   padding: 5px; */
 `
