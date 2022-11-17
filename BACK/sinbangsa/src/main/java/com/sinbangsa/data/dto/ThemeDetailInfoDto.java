@@ -49,6 +49,7 @@ public class ThemeDetailInfoDto {
     private List<UserOfRankDto> noHintRanking;
 
     private List<UserOfRankDto> hintRanking;
+    private int reviewCount;
 
 
 }

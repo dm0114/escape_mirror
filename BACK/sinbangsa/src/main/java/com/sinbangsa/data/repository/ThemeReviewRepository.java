@@ -56,8 +56,10 @@ public interface ThemeReviewRepository extends JpaRepository<ThemeReview,Long> {
     Optional<Double> getAvgLock(@Param("theme") Theme theme);
 
     List<ThemeReview> findAllByReviewTheme(Theme theme, PageRequest pageRequest);
+    int countThemeReviewByReviewTheme(Theme theme);
 
     List<ThemeReview> findAllByReviewUser(User user, PageRequest pageRequest);
+    int countThemeReviewByReviewUser(User user);
     Optional<ThemeReview> findById(long reviewId);
 
 

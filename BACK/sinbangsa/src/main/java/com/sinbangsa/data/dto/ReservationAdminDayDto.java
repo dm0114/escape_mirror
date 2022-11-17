@@ -17,6 +17,7 @@ public class ReservationAdminDayDto {
     @Getter
     @Setter
     public static class TimeReservationDto {
+        private long reservationId;
         private String reservationTime;
         private long reservationTimeId;
         private String userName;

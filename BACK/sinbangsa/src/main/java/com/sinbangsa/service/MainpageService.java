@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MainpageService {
     MainpageDto getSearchResult(String searchWord, int page);
-    PreLoadingDto getPreLoading();
+    PreLoadingDto getPreLoading(HttpServletRequest httpServletRequest);
 
     List<TransferDto> getTransfers(String region);
 
