@@ -1,21 +1,12 @@
-<<<<<<< HEAD
 import React, { useContext, useEffect, useState } from "react";
 import { ImageBackground, View } from "react-native";
-=======
-import React, { useEffect } from "react";
-import { ImageBackground } from "react-native";
->>>>>>> 4eb7d11223f232e5942f716a2c438094d073dbae
 
 import styled from "styled-components/native";
 import "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
 import ReservationComponent from "../components/Reservation/ReservationComponent";
-<<<<<<< HEAD
 import { LayoutContext } from "../../App";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-=======
-import { useQuery } from "@tanstack/react-query";
->>>>>>> 4eb7d11223f232e5942f716a2c438094d073dbae
 import LoadingScreen from "./LoadingScreen";
 import { getPreloading } from "../apis/api";
 import { LayoutData } from "../store/Atom";

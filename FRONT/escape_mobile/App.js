@@ -39,8 +39,8 @@ export default function App() {
    * 레이아웃 컨텍스트
    */
 
-  const dimensions = useWindowDimensions();
-  const LayoutValue = { Width: dimensions.width, Height: dimensions.height };
+  // const dimensions = useWindowDimensions();
+  // const LayoutValue = { Width: dimensions.width, Height: dimensions.height };
 
   return (
     <QueryClientProvider client={queryClient}>
