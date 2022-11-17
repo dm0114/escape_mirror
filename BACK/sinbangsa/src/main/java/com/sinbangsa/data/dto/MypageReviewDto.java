@@ -32,6 +32,7 @@ public class MypageReviewDto {
 
     private String reviewImg;
 
+    private int reviewCount;
 
 }
 

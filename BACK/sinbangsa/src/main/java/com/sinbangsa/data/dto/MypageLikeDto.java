@@ -20,4 +20,5 @@ public class MypageLikeDto {
 
     private String themeImg;
 
+    private int themeCount;
 }

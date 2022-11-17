@@ -50,7 +50,9 @@ public class MainpageDto {
     }
 
     private List<LStoreDto> storeList;
+    private int storeCount;
     private List<LThemeDto> themelist;
+    private int themeCount;
 
 }
 

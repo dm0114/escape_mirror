@@ -21,6 +21,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     Optional<Theme> getById(long themeId);
     List<Theme> findAllByStore(Store store);
     List<Theme> findAllByThemeNameContaining(String searchWord, PageRequest pageRequest);
+    int countThemeByThemeNameContaining(String searchWord);
     int countByStore(Store store);
 
     @Query(value = "select ifnull(max(t.id),0) from theme t where t.id > :storeId * 100",nativeQuery = true)

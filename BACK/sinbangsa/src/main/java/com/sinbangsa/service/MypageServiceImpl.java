@@ -78,6 +78,7 @@ public class MypageServiceImpl implements MypageService {
                 mypageLikeDto.setStoreName(theme.getStore().getStoreName());
                 mypageLikeDto.setThemeName(theme.getThemeName());
                 mypageLikeDto.setThemeImg(theme.getPoster());
+                mypageLikeDto.setThemeCount(userThemeRelationRepository.countByThemeRelationUser(userRepo));
                 likes.add(mypageLikeDto);
             }
             return likes;
@@ -113,6 +114,7 @@ public class MypageServiceImpl implements MypageService {
                 mypageReviewDto.setHorror(themeReviewRepo.getHorror());
                 mypageReviewDto.setLock(themeReviewRepo.getLocker());
                 mypageReviewDto.setReviewImg(themeReviewRepo.getImageUrl());
+                mypageReviewDto.setReviewCount(themeReviewRepository.countThemeReviewByReviewUser(userRepo));
                 reviews.add(mypageReviewDto);
             }
             return reviews;

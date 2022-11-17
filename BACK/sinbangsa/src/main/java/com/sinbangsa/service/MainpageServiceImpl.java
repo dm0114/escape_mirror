@@ -110,6 +110,8 @@ public class MainpageServiceImpl implements MainpageService{
         }
 
         searchResult.setThemelist(lThemeDto);
+        searchResult.setStoreCount(storeRepository.countStoreByStoreNameContaining(searchWord));
+        searchResult.setThemeCount(themeRepository.countThemeByThemeNameContaining(searchWord));
 
         return searchResult;
     }
