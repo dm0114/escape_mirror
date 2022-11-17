@@ -102,4 +102,18 @@ public class ReservationController {
         }
 
     }
+
+    @DeleteMapping("/{reservationId}")
+    @ApiOperation(value = "예약 삭제")
+    public ResponseEntity<Boolean> deleteReservation(@RequestParam long reservationId, HttpServletRequest httpServletRequest){
+        LOGGER.info("[ReservationController] deleteReservation 호출");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        boolean result = reservationService.deleteReservation(reservationId, httpServletRequest);
+        if (result) {
+            return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, headers, HttpStatus.BAD_REQUEST);
+    }
+
 }

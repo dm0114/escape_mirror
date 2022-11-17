@@ -16,4 +16,5 @@ public interface ReservationService {
     List<Long> canReserve(long themeId, String date);
 
     Long validateNickname(String nickname);
+    Boolean deleteReservation(long reservationId,HttpServletRequest httpServletRequest);
 }
