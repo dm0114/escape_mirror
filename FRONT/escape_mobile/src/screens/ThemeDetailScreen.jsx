@@ -1,18 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import StarRating from "react-native-star-rating-widget";
 
 import {
   View,
-  Text,
-  useWindowDimensions,
-  FlatList,
-  StatusBar,
   SafeAreaView,
-  Image,
-  TouchableOpacity,
-  Animated,
-  ImageBackground,
-  Button,
 } from "react-native";
 import Plotly from "react-native-plotly";
 
@@ -42,22 +33,18 @@ import {
   RankingInfoContainer,
   RankingName,
 } from "../styles/Theme/Info";
-import { Shadow } from "react-native-shadow-2";
-const cardImage = require("../assets/mocks/image.png");
-// import Svg,{ Circle } from 'react-native-svg';
 
-import { useNavigation } from "@react-navigation/native";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { QueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 import LoadingScreen from "./LoadingScreen";
-import ReservationBotttomModal from "../components/Reservation/ReservationBotttomModal";
+import ReservationBotttomModal from '../components/Reservation/ReservationBotttomModal';
 import HeaderPosterImage from "../components/HeaderPosterImage";
-import { LayoutContext } from "../../App";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-function ThemeDetailScreen({ navigation, route }) {
-  const [rating, setRating] = useState(0);
+import { useRecoilValue } from "recoil";
+import { LayoutData } from "../store/Atom";
+
+function ThemeDetailScreen({ route }) {
   /**
    * API
    */
@@ -66,13 +53,13 @@ function ThemeDetailScreen({ navigation, route }) {
     ["ThemeDetail", themeId],
     searchApi.getThemeDetail
   );
-  
-  useEffect(() => {console.log(data);},[data])
+  useEffect(() => {console.log(data)}, [data])
   
   /**
    * 애니메이션
    */
-  const { Width, Height } = useContext(LayoutContext);
+   const layoutDatas = useRecoilValue(LayoutData)
+   const {Width, Height} = layoutDatas
 
   /**
    * 차트
@@ -130,182 +117,140 @@ function ThemeDetailScreen({ navigation, route }) {
     showlegend: false, // @4
   };
 
-  return status === "success" || !isLoading ? (
-    <SafeAreaView style={styles.container}>
-      <HeaderPosterImage themeImg={data.themeImg} />
-
-      <MainContainer>
-        <View
-          style={{
-            marginTop: 40,
-            paddingTop: Height / 4,
-            backgroundColor: "#fff",
-            borderRadius: 8,
-            width: Width - 40,
-            marginHorizontal: 20,
-            paddingHorizontal: 20,
-            paddingBottom: 20,
-          }}
-        >
-          <GenreTitle>{data.genre}</GenreTitle>
-          <MainTitle>{data.themeName}</MainTitle>
-
-          <InfoTextWrapper>
-            <RowContainer>
-              <SubTitle>{data.leadTime}분 • </SubTitle>
-              <SubTitle>{data.capacity} • </SubTitle>
-              <SubTitle>난이도 {data.difficulty}</SubTitle>
-            </RowContainer>
-          </InfoTextWrapper>
-
-          <RatingContainer>
-            <StarRating
-              starSize={24}
-              rating={data.star}
-              onChange={() => {}}
-              style={{ marginLeft: "auto", marginRight: "auto" }}
-            />
-          </RatingContainer>
-
-          <InfoTextWrapper>
-            <Body>{data.description.replace(/\\n/g, " ")}</Body>
-          </InfoTextWrapper>
-        </View>
-
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            height: Height / 6,
-            backgroundColor: "#fff",
-            borderRadius: 8,
-            marginTop: 4,
-            marginHorizontal: 20,
-          }}
-        >
-          {!!data.noHintRanking.length ? (
-            <RankingContainer>
-              <RankingInfoContainer>
-                <RankingSub>
-                  <RankingBody>{data.noHintRanking[1].cleartime}</RankingBody>
-                </RankingSub>
-                <RankingName>{data.noHintRanking[1].userNickname}</RankingName>
-              </RankingInfoContainer>
-              <RankingInfoContainer>
-                <RankingMain>
-                  <RankingBody>{data.noHintRanking[0].cleartime}</RankingBody>
-                </RankingMain>
-                <RankingName>{data.noHintRanking[0].userNickname}</RankingName>
-              </RankingInfoContainer>
-              <RankingInfoContainer>
-                <RankingSub>
-                  <RankingBody>{data.noHintRanking[2].cleartime}</RankingBody>
-                </RankingSub>
-                <RankingName>{data.noHintRanking[2].userNickname}</RankingName>
-              </RankingInfoContainer>
-            </RankingContainer>
-          ) : (
-            <SubTitle>랭킹 데이터가 없습니다!</SubTitle>
-          )}
-        </View>
-
-        <RankingWrapper>
-          <ReviewTitle>후기 ({data.reviews.length})</ReviewTitle>
-          <ChartContainer>
-            <Plotly data={ChartData} layout={ChartLayout} enableFullPlotly />
-          </ChartContainer>
-
-          {data.reviews.map((item, idx) => {
-            return (
-              <ReviewWrapper key={idx}>
-                <StarRating
-                  starSize={14}
-                  starStyle={{
-                    marginLeft: 0,
-                    marginRight: 4,
-                    marginBottom: 10,
-                  }}
-                  rating={item.star}
-                  onChange={() => {}}
-                />
-                <ReviewUser>{`${item.User}  `}</ReviewUser>
-                <ReviewContent>{item.content}</ReviewContent>
-                <ReviewRowContainer>
-                  <ReivewRowInfo>
-                    <FontAwesome5
-                      name="question-circle"
-                      size={12}
-                      color="black"
-                      style={{ marginRight: 6 }}
-                    />
-                    <ReviewInfo>{item.usedHint}</ReviewInfo>
-                  </ReivewRowInfo>
-                  <ReivewRowInfo>
-                    <FontAwesome5
-                      name="clock"
-                      size={12}
-                      color="black"
-                      style={{ marginRight: 6 }}
-                    />
-                    <ReviewInfo>{item.clearTime}</ReviewInfo>
-                  </ReivewRowInfo>
-                </ReviewRowContainer>
-              </ReviewWrapper>
-            );
-          })}
-        </RankingWrapper>
-
-        {/* 
-        리뷰 페이지
-      */}
-
-        {/* <FloatContainer>
-            <FloatLeftContainer>
-              
-              
-            </FloatLeftContainer>
-          </FloatContainer> */}
-      </MainContainer>
-
-      {/* 
-        바텀 시트 모달 
-      */}
-      <ReservationBotttomModal themeId={themeId} Price={data.price} />
-    </SafeAreaView>
-  ) : (
+  return isLoading ? (
     <LoadingScreen />
+  ) : (
+    <SafeAreaView style={styles.container}>
+    <HeaderPosterImage themeImg={data.themeImg} />
+
+    <MainContainer>
+      <View
+        style={{
+          marginTop: 40,
+          paddingTop: Height / 4,
+          backgroundColor: "#fff",
+          borderRadius: 8,
+          width: Width - 40,
+          marginHorizontal: 20,
+          paddingHorizontal: 20,
+          paddingBottom: 20,
+        }}
+      >
+        <GenreTitle>{data.genre}</GenreTitle>
+        <MainTitle>{data.themeName}</MainTitle>
+
+        <InfoTextWrapper>
+          <RowContainer>
+            <SubTitle>{data.leadTime}분 • </SubTitle>
+            <SubTitle>{data.capacity} • </SubTitle>
+            <SubTitle>난이도 {data.difficulty}</SubTitle>
+          </RowContainer>
+        </InfoTextWrapper>
+
+        <RatingContainer>
+          <StarRating
+            starSize={24}
+            rating={data.star}
+            onChange={() => {}}
+            style={{ marginLeft: "auto", marginRight: "auto" }}
+          />
+        </RatingContainer>
+
+        <InfoTextWrapper>
+          <Body>{data.description.replace(/\\n/g, " ")}</Body>
+        </InfoTextWrapper>
+      </View>
+
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          height: Height / 6,
+          backgroundColor: "#fff",
+          borderRadius: 8,
+          marginTop: 4,
+          marginHorizontal: 20,
+        }}
+      >
+        {!!data.noHintRanking.length ? (
+          <RankingContainer>
+            <RankingInfoContainer>
+              <RankingSub>
+                <RankingBody>{data.noHintRanking[1].cleartime}</RankingBody>
+              </RankingSub>
+              <RankingName>{data.noHintRanking[1].userNickname}</RankingName>
+            </RankingInfoContainer>
+            <RankingInfoContainer>
+              <RankingMain>
+                <RankingBody>{data.noHintRanking[0].cleartime}</RankingBody>
+              </RankingMain>
+              <RankingName>{data.noHintRanking[0].userNickname}</RankingName>
+            </RankingInfoContainer>
+            <RankingInfoContainer>
+              <RankingSub>
+                <RankingBody>{data.noHintRanking[2].cleartime}</RankingBody>
+              </RankingSub>
+              <RankingName>{data.noHintRanking[2].userNickname}</RankingName>
+            </RankingInfoContainer>
+          </RankingContainer>
+        ) : (
+          <SubTitle>랭킹 데이터가 없습니다!</SubTitle>
+        )}
+      </View>
+
+      <RankingWrapper>
+        <ReviewTitle>후기 ({data.reviews.length})</ReviewTitle>
+        {/* <ChartContainer>
+          <Plotly data={ChartData} layout={ChartLayout} enableFullPlotly />
+        </ChartContainer> */}
+
+        {data.reviews?.map((item, idx) => {
+          return (
+            <ReviewWrapper key={idx}>
+              <StarRating
+                starSize={14}
+                starStyle={{
+                  marginLeft: 0,
+                  marginRight: 4,
+                  marginBottom: 10,
+                }}
+                rating={item.star}
+                onChange={() => {}}
+              />
+              <ReviewUser>{`${item.User}  `}</ReviewUser>
+              <ReviewContent>{item.content}</ReviewContent>
+              <ReviewRowContainer>
+                <ReivewRowInfo>
+                  <FontAwesome5
+                    name="question-circle"
+                    size={12}
+                    color="black"
+                    style={{ marginRight: 6 }}
+                  />
+                  <ReviewInfo>{item.usedHint}</ReviewInfo>
+                </ReivewRowInfo>
+                <ReivewRowInfo>
+                  <FontAwesome5
+                    name="clock"
+                    size={12}
+                    color="black"
+                    style={{ marginRight: 6 }}
+                  />
+                  <ReviewInfo>{item.clearTime}</ReviewInfo>
+                </ReivewRowInfo>
+              </ReviewRowContainer>
+            </ReviewWrapper>
+          );
+        })}
+      </RankingWrapper>
+    </MainContainer>
+
+    {/* 
+      바텀 시트 모달 
+    */}
+    <ReservationBotttomModal themeId={themeId} Price={data.price} Width={Width} />
+  </SafeAreaView>
   );
 }
 
 export default ThemeDetailScreen;
-
-/**
- * 재사용
- */
-
-{
-  /* <Shadow
-          distance={100}
-          startColor={"#00000050"}
-          endColor={"#00000000"}
-          offset={[0, -50]}
-          containerStyle={{
-            marginLeft: "auto",
-            marginRight: "auto",
-            marginVertical: 40,
-          }}
-          radius={30}
-        >
-          <Image
-            source={cardImage}
-            style={{
-              width: 100,
-              height: 160,
-              borderRadius: 20,
-            }}
-          ></Image>
-          <RatingView>
-            <RatingText>{data.star}</RatingText>
-          </RatingView>
-        </Shadow> */
-}

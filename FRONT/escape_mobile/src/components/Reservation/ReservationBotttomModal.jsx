@@ -32,14 +32,14 @@ import LoadingScreen from "../../screens/LoadingScreen";
 
 // 예약 가능 시간이 모든 예약 가능 시간
 // 예약
-function ReservationBotttomModal({ themeId, Price }) {
+function ReservationBotttomModal({ themeId, Price, Width }) {
+
   const priceInfo = [0, ...Price.split('/')]
   
   /**
    * 레이아웃
    */
-  const dimensions = useWindowDimensions();
-  const Width = (dimensions.width - 256) / 2;
+  const ButtonWidth = (Width - 256) / 2;
 
   /**
    * 모달
@@ -104,7 +104,7 @@ function ReservationBotttomModal({ themeId, Price }) {
     <BottomSheetModalProvider>
       <View style={{ position: "absolute", bottom: 0, backgroundColor: "red" }}>
         {toggler ? null : (
-          <ButtonContainer left={Width} onPress={handlePresentModalPress}>
+          <ButtonContainer left={ButtonWidth} onPress={handlePresentModalPress}>
             <SubTitle>예약하기</SubTitle>
           </ButtonContainer>
         )}
@@ -115,18 +115,10 @@ function ReservationBotttomModal({ themeId, Price }) {
           snapPoints={snapPoints}
           onChange={handleSheetChanges}
         >
-          {/* 
-            달력, 타임 테이블
-           */}
           <View style={styles.contentContainer}>
-            {/* 
-            KorTime 
-            */}
+
             <KorTime themeId={themeId} />
 
-            {/* 
-              Stepper 
-            */}
             <InfoTextWrapper>
               <RowContainer>
                 <RowContainer>
@@ -155,7 +147,6 @@ function ReservationBotttomModal({ themeId, Price }) {
               </RowContainer>
             </InfoTextWrapper>
 
-            {/* 집가서 포스트 요청 */}
             {reserveParams ? (
               <ButtonContainer
                 left={Width}
@@ -166,6 +157,7 @@ function ReservationBotttomModal({ themeId, Price }) {
             ) : null}
           </View>
         </BottomSheetModal>
+        
       </View>
     </BottomSheetModalProvider>
   ) : (

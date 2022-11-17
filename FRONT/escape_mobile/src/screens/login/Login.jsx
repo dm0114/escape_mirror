@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import WebView from 'react-native-webview';
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store';
 import { SecureState } from '../../store/SecureStore';
 import { useNavigation } from '@react-navigation/native';
+import { useSetRecoilState } from 'recoil';
+import { LayoutData } from '../../store/Atom';
 
 
 const REST_API_KEY = '6cb2dd1e35672b64fb0dac71ee59315f'
@@ -72,6 +74,13 @@ const getCode = (target, navigation) => {
 
 
 export default function LoginScreen() {
+  const dimensions = useWindowDimensions();
+  const setLayoutDatas = useSetRecoilState(LayoutData)
+  useEffect(()=> {
+    const LayoutValue = { Width: dimensions.width, Height: dimensions.height };
+    setLayoutDatas(LayoutValue)
+  }, [])
+
   const navigation = useNavigation();
   const [token, setToken] = useState();
   const getToken = async () => {

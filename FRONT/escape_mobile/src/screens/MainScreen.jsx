@@ -1,22 +1,23 @@
-import React, { useContext, useEffect } from "react";
-import { ImageBackground, View } from "react-native";
+import React, { useEffect } from "react";
+import { ImageBackground } from "react-native";
 
 import styled from "styled-components/native";
 import "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
 import ReservationComponent from "../components/Reservation/ReservationComponent";
-import { LayoutContext } from "../../App";
 import { useQuery } from "@tanstack/react-query";
 import LoadingScreen from "./LoadingScreen";
 import { getPreloading } from "../apis/api";
+import { LayoutData } from "../store/Atom";
+import { useRecoilValue } from "recoil";
 
 const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
 
 
 export default function MainScreen() {
-
-
-  const {Width, Height} = useContext(LayoutContext);
+  const layoutDatas = useRecoilValue(LayoutData)
+  const {Width, Height} = layoutDatas
+  
   // 프리로딩 API 연결
   const { data, isLoading } = useQuery(
     ["PreloadingData"],
@@ -24,7 +25,7 @@ export default function MainScreen() {
   );
   useEffect(() => {
     console.log(data);
-  },[])
+  },[data])
   
   
 

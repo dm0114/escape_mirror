@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { useTimer } from "react-timer-hook";
 import { View } from "react-native";
 
 export default function MyTimer({ expiryTimestamp }) {
+  const [timeStatus, setTimeStatus] = useState(false)
   const { seconds, minutes, hours, days } = useTimer({
     expiryTimestamp,
-    onExpire: () => console.warn("onExpire called"),
+    onExpire: () => setTimeStatus(true),
   });
 
   return (
     <View style={{ textAlign: "center" }}>
-      <TimeText>{days} : {hours} : {minutes} : {seconds}</TimeText>
+              {timeStatus 
+          ?  <TimeText>입장해주세요</TimeText>
+          :  <TimeText>{days} : {hours} : {minutes} : {seconds}</TimeText>
+        }
     </View>
   );
 }
