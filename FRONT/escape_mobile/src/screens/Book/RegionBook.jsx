@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import theme from '../../../theme';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import RNPickerSelect from 'react-native-picker-select';
-import {useInfiniteQuery, useQuery} from '@tanstack/react-query'
+import {useInfiniteQuery, useQuery, useQueryClient} from '@tanstack/react-query'
 import { Modal } from "native-base";
 import {ProgressBar} from 'react-native-ui-lib';
 import { getRegionCafeList } from '../../apis/BookApi';
@@ -69,13 +69,38 @@ export default function RegionBook({navigation, route}){
     const itemsList = RegionList[num].map((item) => {
         return {label:item, value:item}
     })
-    const {data} = useQuery(                                                         
-        ['RegionCafe', specificRegion, name],
-        getRegionCafeList,
-        {enabled:!!specificRegion}
-    )
+    let page = 0;
+    const [isLast, setIsLast] = useState(false);
+    const data = () => {
+        const res = getRegionCafeList(specificRegion, name, page)
+        return res
+    }
+    // const {data, refetch} = useQuery(                                                         
+    //     ['RegionCafe', specificRegion, name, page],
+    //     getRegionCafeList,
+    //     {
+    //         enabled:!!(specificRegion&&!isLast)
+    // }
+    // );
 
-    console.log(data)
+    useEffect(()=>{
+        if(specificRegion){
+            console.log(data())
+        }
+    }, [specificRegion])
+
+    // useEffect(()=>{
+    //     if(data && data.length < 6){
+    //         setIsLast(true)
+    //     }
+    //     else if(data && !isLast){
+    //         page ++;
+    //     }
+    // }, [data])
+
+    const loadMore = () => {
+        console.log("하잉")
+    }
 
     useEffect(()=>{
         itemsList.length ? setSelectRegion(`${name}/null`) : setSelectRegion(`${name}`)
@@ -147,8 +172,8 @@ export default function RegionBook({navigation, route}){
                         {/* 세부지역 선택 시 해당 세부지역에 대한 카페 데이터를 보여줌 */}
                         {selectRegion !== `${name}/null` ? 
                         <FlatList
-                            // onEndReached={}
-                            // onEndReachedThreshold={1}
+                            onEndReached={loadMore}
+                            onEndReachedThreshold={0.5}
                             disableVirtualization={false}
                             numColumns={2}
                             // data={data.pages.map(page => page.results).flat}

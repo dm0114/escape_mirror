@@ -113,34 +113,12 @@ const Assignment = () => {
     const {data:SelectData} = useQuery(['AssignmentSelect', selectRegion, selectLittleRegion], getRegionAssign, {
         enabled:!!(selectRegion&&selectLittleRegion)
     })
-    const [searchKeyword, setSearchKeyword] = useState();
-    const {data:SearchData} = useQuery(['AssignmentSearch', searchKeyword], getSearchAssign, {
-        enabled:!!searchKeyword
-    })
-    console.log(SearchData)
-
     useEffect(()=>{
         setResultRegion(`${selectRegion}/${selectLittleRegion}`)
     }, [selectLittleRegion])
 
-
-
-    // const SelectItem = (data) => {
-    //     return(
-    //         {
-    //             data.map((item) => <Select.item key={item} label={item} value={item}/>)
-    //         }
-    //     )
-    // }
-
-    useEffect(()=>{
-        if(selectItem){
-            console.log(selectItem.storeId)
-        }
-    }, [selectItem])
     
     const AssignItem = ({item}) => {
-        console.log(item)
         const [year, month, day] = item.reservedDate.split("-");
         return(
             <AssignItemView style={{backgroundColor:'white', width:halfViewWidth, marginBottom:20}}
@@ -184,7 +162,6 @@ const Assignment = () => {
                             storeId:selectItem.storeId
                             })}}
                             >
-                            {/* <Feather name="link" size={24} color="black" /> */}
                             <SUITSemiBold style={{marginLeft:10, fontSize:18}}>{selectItem.storeName}</SUITSemiBold>
                         </TouchableOpacity>
                         <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}}
@@ -193,7 +170,6 @@ const Assignment = () => {
                             themeId:selectItem.themeId
                             })}}
                             >
-                            {/* <Feather name="link" size={24} color="black" /> */}
                             <SUIT style={{fontSize:35, marginLeft:10}}>{selectItem.themeName}</SUIT>
                         </TouchableOpacity>
                     </View>
@@ -207,15 +183,17 @@ const Assignment = () => {
         </Modal>}
         <Container style={{flex:1}}>
             <Title>새로운 초대장이 도착했어요.</Title>
-            <SearchInput
+            {/* <SearchInput
+                onPress={()=>{setIsSearchClick(true)}}
                 onChangeText={(value)=>{setSearchKeyword(value)}}
                 value={text}
-            />
-            <SubTitle>지역을 선택해주세요</SubTitle>
+            /> */}
+            <SubTitle>지역을 선택해서 초대장을 확인해보세요!</SubTitle>
             <View style={{flexDirection:'row', justifyContent:'space-between', marginRight:10}}>
                 <Box style={{ marginLeft:10, backgroundColor:'white', borderRadius:30, width:halfSelectWidth}}>
                     <Select selectedValue={selectRegion} placeholder="대분류"
                     variant='rounded'
+                    style={{fontSize:15, fontFamily:'SUIT-Regular'}}
                     onValueChange={(item)=>{setSelectRegion(item)}}>
                         {
                             RegionList.map((item) => 
@@ -226,6 +204,7 @@ const Assignment = () => {
                 </Box>
                 {selectRegion && <Box style={{ marginLeft:10, backgroundColor:'white', borderRadius:30, width:halfSelectWidth}}>
                     <Select selectedValue={selectLittleRegion} placeholder="소분류"
+                    style={{fontSize:15, fontFamily:'SUIT-Regular'}}
                     variant='rounded'
                     onValueChange={(item)=>{setSelectLittleRegion(item)}}>
                         {
@@ -249,7 +228,7 @@ const Assignment = () => {
                 data={SelectData}
                 renderItem={AssignItem} />
             }
-            {
+            {/* {
                 (searchKeyword !== undefined && <FlatList 
                     style={{marginTop:20, padding:5, marginBottom:20}}
                     columnWrapperStyle={{ flex: 1, justifyContent: "space-between" }}
@@ -258,7 +237,7 @@ const Assignment = () => {
                     data={SearchData.themeList}
                     renderItem={AssignItem}
                 />)
-            }
+            } */}
         </Container>
         </ImageBackground>
     )
@@ -279,7 +258,7 @@ const Title = styled.Text`
     margin-left: ${({theme}) => theme.screenMargin.titleLeftMargin};
 `
 const SubTitle = styled.Text`
-    font-size: ${({theme}) => theme.fontSizes.title3};
+    font-size: ${({theme}) => theme.fontSizes.body};
     font-family: 'SUIT-SemiBold';
     color:white;
     margin: 20px 0 20px ${({theme}) => theme.screenMargin.titleLeftMargin};
