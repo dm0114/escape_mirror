@@ -225,6 +225,7 @@ public class BookServiceImpl implements BookService {
                 reviews.add(reviewThemeDetailInfoDto);
             }
             themeDetailInfoDto.setReviews(reviews);
+            themeDetailInfoDto.setReviewCount(themeReviewRepository.countThemeReviewByReviewTheme(themeRepo));
             LOGGER.info("[BookService] getThemeDetail themeDetailInfoDto 성공");
 
             List<UserOfRankDto> noHints = new ArrayList<>();
