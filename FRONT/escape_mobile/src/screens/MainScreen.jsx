@@ -12,6 +12,16 @@ import { LayoutData } from "../store/Atom";
 import { useRecoilValue } from "recoil";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 
+
+// const Calendar = React.lazy(() => {
+//   return new Promise(resolve => setTimeout(resolve, 5 * 1000)).then(
+//     () =>
+//       Math.floor(Math.random() * 10) >= 4
+//         ? import("./components/Calendar")
+//         : Promise.reject(new Error())
+//   );
+// });
+
 const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
 
 
@@ -31,6 +41,7 @@ export default function MainScreen() {
       refetch()
     }, [])
   );
+
 
   return (
     isLoading ? LoadingScreen :

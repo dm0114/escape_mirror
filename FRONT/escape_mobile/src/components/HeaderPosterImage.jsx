@@ -5,7 +5,6 @@ import { LayoutData } from '../store/Atom';
 
 
 const HeaderPosterImage = ({themeImg}) => {
-  console.log(themeImg);
   /**
   * 애니메이션
   */

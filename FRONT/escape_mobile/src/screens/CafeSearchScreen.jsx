@@ -44,7 +44,7 @@ export default function CafeSearchScreen({ route }) {
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch,
   );
-
+  useEffect(() => {console.log(data);}, [data])
 
   /**
    * 검색
@@ -80,6 +80,8 @@ export default function CafeSearchScreen({ route }) {
                 storeName={item.storeName}
                 storeImg={item.storeImg}
                 storeAddress={item.storeAddress}
+                storeTel={item.tel}
+                storeHompage={item.homepage}
                 likeCount={item.likeCount}
                 mostReviewedTheme={item.mostReviewedTheme}
               />

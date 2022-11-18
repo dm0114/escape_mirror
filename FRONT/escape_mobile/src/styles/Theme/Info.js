@@ -10,7 +10,6 @@ export const RowContainer = styled.View`
 export const IconContainer = styled.View`
   flex-direction: row;
   justify-content: flex-end;
-  margin-bottom: 20px;
 `
 
 export const MainContainer = styled.ScrollView`

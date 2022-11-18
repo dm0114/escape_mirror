@@ -118,7 +118,7 @@ function ReservationDetailScreen({ route, navigation }) {
         style={{
           flex: 1,
           marginTop: Height / 6,
-          paddingTop: Height / 4,
+          paddingTop: Height / 4.75,
           paddingLeft: 40,
           paddingRight: 40,
           width: Width - 40,
@@ -127,8 +127,9 @@ function ReservationDetailScreen({ route, navigation }) {
         }}
       >
         <TextWrapper>
-          <RowContainer>
-            <MainTitle>{themeName}</MainTitle>
+            
+          <MainTitle>{themeName}</MainTitle>
+            <GenreTitle>{storeName}</GenreTitle>
             <IconContainer>
               <Ionicons
                 name="md-call"
@@ -152,9 +153,7 @@ function ReservationDetailScreen({ route, navigation }) {
                 onPress={()=>{ Linking.openURL(`http://map.naver.com/?query=${data.storeAddress}`)}}
               />
             </IconContainer>
-          </RowContainer>
 
-          <GenreTitle>{storeName}</GenreTitle>
         </TextWrapper>
 
         <ReservationView>
@@ -358,6 +357,7 @@ const MainTitle = styled.Text`
   font-size: ${({ theme }) => theme.fontSizes.title1};
   letter-spacing: -1px;
   color: #000;
+  margin-bottom: 10px;
 `;
 const Title = styled.Text`
   font-family: "SUIT-Bold";
