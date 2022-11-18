@@ -41,6 +41,9 @@ export default function LeftNav(){
             <Link to="/admin/reservation" css={NavMenu}>
                 <p>예약 관리</p>
             </Link>
+            <Link to="/admin/validation" css={NavMenu}>
+                <p>도장 찍기</p>
+            </Link>
         </aside>
         </>
     )
