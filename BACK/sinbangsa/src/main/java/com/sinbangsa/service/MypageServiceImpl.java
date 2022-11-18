@@ -166,6 +166,7 @@ public class MypageServiceImpl implements MypageService {
                 playedRoomDto.setUsedHint(bookRepo.getUsedHint());
                 playedRoomDto.setClearTime(bookRepo.getClearTime());
                 playedRoomDto.setThemeId(bookRepo.getBookTheme().getId());
+                playedRoomDto.setThemeImg(bookRepo.getBookTheme().getPoster());
                 playedRoomsDto.add(playedRoomDto);
             }
             mypageMyRoomDto.setBooks(playedRoomsDto);
