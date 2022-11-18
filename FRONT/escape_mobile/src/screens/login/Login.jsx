@@ -31,11 +31,14 @@ const requestToken = async (code, navigation) => {
   try {
     const tokenResponse = await axios.post(requestTokenUrl, options);
     const ACCESS_TOKEN = tokenResponse.data.access_token;
+    console.log(ACCESS_TOKEN);
     const body = {
       accessToken: ACCESS_TOKEN,
     };
-
+    console.log(1);
     const response = await axios.post(APIURI, body);
+    console.log(2);
+    console.log(response)
     const value = response.data;
     await SecureStore.setItemAsync('accessToken', `Bearer ${value.accessToken}`);
     await SecureStore.getItemAsync('accessToken')
@@ -51,7 +54,8 @@ const requestToken = async (code, navigation) => {
     //   const user = await getData('user');
     //   dispatch(read_S(user));
     //   await navigation.navigate('Main');
-    // }
+    // }n
+
 
   } catch (e) {
     console.log(e);
