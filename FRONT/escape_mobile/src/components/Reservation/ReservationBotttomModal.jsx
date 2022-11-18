@@ -153,7 +153,7 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
                 left={ButtonWidth}
                 onPress={refetch}
               >
-                <SubTitle>예약완료</SubTitle>
+                <SubTitle>선택 완료</SubTitle>
               </ButtonContainer>
             ) : null}
           </View>
