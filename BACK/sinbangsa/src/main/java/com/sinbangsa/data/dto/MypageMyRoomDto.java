@@ -16,13 +16,13 @@ import java.util.List;
 public class MypageMyRoomDto {
 
 
-    private List<ReservationDto> reservations;
+    private List<MyReservationDto> reservations;
 
     private List<PlayedRoomDto> books;
 
     @Getter
     @Setter
-    public static class ReservationDto {
+    public static class MyReservationDto {
 
         private long reservationId;
 
@@ -43,6 +43,8 @@ public class MypageMyRoomDto {
     public static class PlayedRoomDto {
 
         private long bookId;
+
+        private long themeId;
 
         private String themeName;
 
