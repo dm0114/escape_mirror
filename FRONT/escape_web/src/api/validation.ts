@@ -4,11 +4,11 @@ const Token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvb
 
 
 interface IReqBody {
-  clear: number,
+  clear: string,
   clearTime: string,
   reservationId: number,
   themeId: number,
-  usedHint: number,
+  usedHint: string,
   userNicknames: []
 }
 export const postValidation = async ({ queryKey }: QueryFunctionContext<[string, IReqBody]>) => {
@@ -16,16 +16,18 @@ export const postValidation = async ({ queryKey }: QueryFunctionContext<[string,
 
   let [_, reqBody] = queryKey;
   
-  reqBody = {
-    clear: reqBody.clear,
+  const reqData = { 
+    clear: parseInt(reqBody.clear),
     clearTime: reqBody.clearTime,
     reservationId: reqBody.reservationId,
     themeId: reqBody.themeId,
-    usedHint: reqBody.usedHint,
-    userNicknames: reqBody.userNicknames,
+    usedHint: parseInt(reqBody.usedHint),
+    userNicknames: [reqBody.userNicknames],
   }
-  const data = JSON.stringify(reqBody)
-  console.log(reqBody);
+  console.log(reqData.userNicknames);
+  
+  const data = JSON.stringify(reqData)
+  console.log(data);
   
   return await (
     await fetch(`${BASE_URL}/validation`, {

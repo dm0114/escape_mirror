@@ -53,7 +53,7 @@ export const getReservation = async ({ queryKey }: QueryFunctionContext<[string,
   
   let [_, reservationDay, storeId] = queryKey;
   const params = new URLSearchParams({
-    reservationDay: reservationDay
+    reservationDay: reservationDay,
   });
   
   return await (

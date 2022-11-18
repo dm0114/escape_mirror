@@ -4,11 +4,11 @@ import { useLocation } from 'react-router-dom'
 import { postValidation } from '../api/validation';
 
 interface IReqBody {
-  clear: number,
+  clear: string,
   clearTime: string,
   reservationId: number,
   themeId: number,
-  usedHint: number,
+  usedHint: string,
   userNicknames: []
 }
 
@@ -17,11 +17,11 @@ export default function Validation() {
 
 
   const [inputs, setInputs] = useState<IReqBody>({
-    clear: 0,
+    clear: '',
     clearTime: '',
     reservationId: params[0],
     themeId: params[1],
-    usedHint: 0,
+    usedHint: '',
     userNicknames: []
   });
 
@@ -32,6 +32,9 @@ export default function Validation() {
       enabled: false
     }
   );
+
+  useEffect(() => {console.log(data);
+  }, [data])
 
   const { clear, clearTime, themeId, usedHint, userNicknames } = inputs; // 비구조화 할당을 통해 값 추출
 
