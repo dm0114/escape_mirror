@@ -149,7 +149,6 @@ const postReservation = async ({ queryKey }) => {
       "Content-Type": "application/json",
     },
   });
-  console.log(res);
   return res;
 };
 
@@ -171,7 +170,24 @@ const putReservationTransfer = async ({ queryKey }) => {
       Authorization: await SecureState.getData("accessToken"),
     },
   });
-  console.log(res);
+  return res;
+};
+
+// 삭제
+const deleteReservation = async ({ queryKey }) => {
+  console.log("deleteReservation");
+
+  let [_, reservationId] = queryKey;
+  const params = new URLSearchParams({
+    reservationId: reservationId
+  });
+  const res = await axios({
+    url: `${BASE_URL}/reservation/${reservationId}?${params}`,
+    method: "delete",
+    headers: {
+      Authorization: await SecureState.getData("accessToken"),
+    },
+  });
   return res;
 };
 
@@ -183,6 +199,7 @@ export const reservationApi = {
   postReservation,
   getSearchUser,
   putReservationTransfer,
+  deleteReservation
 };
 
 // 커뮤니티

@@ -64,6 +64,7 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
   );
 
   const reserveParams = useRecoilValue(POSTReservationData);
+  console.log(reserveParams);
   const { data: postReservationData, refetch } = useQuery(
     ["ReservationResult", reserveParams],
     reservationApi.postReservation,

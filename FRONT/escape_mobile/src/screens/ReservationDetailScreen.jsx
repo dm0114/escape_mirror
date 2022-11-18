@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
   StyleSheet,
   Modal,
   Pressable,
-
+  Linking
 } from "react-native";
 import styled from "styled-components/native";
 
@@ -19,9 +19,13 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTimer } from "react-timer-hook";
 import { Timer } from "../components/Reservation/KorTimeComponent";
 import ReservationHeaderPosterImage from "../components/ReservationHeaderPosterImage";
+
+const MyTimer = lazy(() => import('../components/Timer'))
 import theme from "../../theme";
+
 import { useRecoilValue } from "recoil";
 import { LayoutData } from "../store/Atom";
+
 
 /**
  * 고려 사항 => themeImg가 2개?, Post 요청에 따른 Alert
@@ -56,27 +60,15 @@ function ReservationDetailScreen({ route, navigation }) {
     }
   );
   useEffect(() => {console.log(putRes);}, [putRes])
+
+  const { refetch: deleteRefetch } = useQuery(
+    ["reservationDetail", reservationId], //토큰 추가
+    reservationApi.deleteReservation, {
+      enabled: false
+    }
+  );
     
-  /**
-   * 타이머
-   */
-  function MyTimer({ expiryTimestamp }) {
-    const [timeStatus, setTimeStatus] = useState(false)
-    const { seconds, minutes, hours, days } = useTimer({
-      expiryTimestamp,
-      onExpire: () => setTimeStatus(true),
-    });
-
-    return (
-      <View style={{ textAlign: "center" }}>
-        {timeStatus 
-          ?  <TimeText>입장해주세요</TimeText>
-          :  <TimeText>{days} : {hours} : {minutes} : {seconds}</TimeText>
-        }
-      </View>
-    );
-  }
-
+  
 
   return isLoading ? (
     <LoadingScreen />
@@ -101,8 +93,7 @@ function ReservationDetailScreen({ route, navigation }) {
               <Pressable
                 style={[styles.button, styles.buttonOpen]}
                 onPress={() => {
-                  refetch()
-                  setModalVisible(!modalVisible)
+                  refetch().then(setModalVisible(!modalVisible)).then(navigation.navigate('TabViewExample'))
                 }}
               >
                 <Text style={[styles.textStyle, styles.openTextStyle]}>예</Text>
@@ -124,10 +115,6 @@ function ReservationDetailScreen({ route, navigation }) {
       <ReservationHeaderPosterImage themeImg={data.themeImg} />
 
       <BlurView
-        source={ data.themeImg 
-          ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${data.themeImg}`} 
-          : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}}
-        resizeMode="cover"
         style={{
           flex: 1,
           marginTop: Height / 6,
@@ -148,18 +135,21 @@ function ReservationDetailScreen({ route, navigation }) {
                 size={21}
                 color="black"
                 style={{ marginRight: 4 }}
+                onPress={()=>{ Linking.openURL(`tel:+${data.tel}`)}}
               />
               <Ionicons
                 name="md-logo-instagram"
                 size={22}
                 color="black"
                 style={{ marginHorizontal: 8 }}
+                onPress={()=>{ Linking.openURL(`${data.homepage}`)}}
               />
               <Ionicons
                 name="md-location-sharp"
                 size={22}
                 color="black"
                 style={{ marginLeft: 4}}
+                onPress={()=>{ Linking.openURL(`http://map.naver.com/?query=${data.storeAddress}`)}}
               />
             </IconContainer>
           </RowContainer>
@@ -176,13 +166,11 @@ function ReservationDetailScreen({ route, navigation }) {
         </ReservationView>
 
         <ButtonWrapper>
-          <Button
-            onPress={() => setModalVisible(true)}
-          >
+          <Button onPress={() => setModalVisible(true)}>
             <MaterialCommunityIcons name="send-circle-outline" size={36} color={theme.colors.point}/>
             <InfoTitle>예약 양도</InfoTitle>
           </Button>
-          <Button>
+          <Button onPress={() => {deleteRefetch().then(navigation.navigate('TabViewExample'))}}>
             <MaterialCommunityIcons name="delete-circle-outline" size={36} color={theme.colors.point}/>
             <InfoTitle>예약 취소</InfoTitle>
           </Button>
@@ -193,9 +181,13 @@ function ReservationDetailScreen({ route, navigation }) {
         <CircleLeft />
         <CircleRight />
         <GenreTitle style={{textAlign: 'center', marginBottom: 8}}>남은 시간</GenreTitle>
-        <TimerView>
-          <MyTimer expiryTimestamp={Timer(date, reserveTime)} />
-        </TimerView>
+
+        <Suspense fallback={null}>
+          <TimerView>
+            <MyTimer expiryTimestamp={Timer(date, reserveTime)} />
+          </TimerView>
+        </Suspense>
+
       </ButtonView>
     </Container>
   );
@@ -219,28 +211,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
-    backgroundColor: '#21212180'
+    backgroundColor: '#00000090'
   },
   modalView: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 40,
+    paddingHorizontal: 40,
+    paddingTop: 30,
+    paddingBottom: 10,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   button: {
     width: 80,
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    elevation: 3,
     margin: 10,
   },
   buttonOpen: {
@@ -358,12 +344,14 @@ const TimeTitleText = styled.Text`
   letter-spacing: -1px;
   color: #000;
 `;
+
 const TimeText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title1};
   letter-spacing: -1px;
   color: #000;
 `;
+
 
 const MainTitle = styled.Text`
   font-family: "SUIT-ExtraBold";
