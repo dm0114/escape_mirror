@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useQuery } from '@tanstack/react-query';
 import { getActiveLog } from '../../apis/MyPage';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 import { RNS3 } from 'react-native-s3-upload';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import {Slider} from 'react-native-ui-lib';
@@ -33,8 +34,13 @@ import {Slider} from 'react-native-ui-lib';
 
 export default function ReviewCreateScreen() {
   const { data: activeData } = useQuery(['myActive'], getActiveLog)
-  console.log(activeData)
-  
+  console.log('activeDate',activeData)
+  // const activeData = [
+  //   {
+  //     'themeName': '킹스맨',
+  //     'doneDate': '2022-11-16'      
+  //   }
+  // ]
   //별 rating -- 별 반개가 1점이게 보내야함
   const [rating, setRating] = useState(0);
   //활동성 feelActivity
@@ -53,7 +59,7 @@ export default function ReviewCreateScreen() {
   //내용 작성
   const [textAreaValue, setTextAreaValue] = useState("");
   // console.log(rating, different, textAreaValue)
-  const lockImg = require('../../assets/images/lockerImg.png')
+  // const lockImg = require('../../assets/images/lockerImg.png')
 
 
   //리뷰 이미지 받아오기 - image picker
@@ -134,10 +140,10 @@ export default function ReviewCreateScreen() {
     <KeyboardAwareScrollView>
     <Container>
       <ThemeTitleView>
-        {activeData[0] !== undefined ?
-        <><ThemeTitleTxt>{activeData[0]?.themeName}</ThemeTitleTxt>
-        <DateTxt>{activeData[0]?.doneDate}</DateTxt></>
-        :<></>}
+
+        {/* <><ThemeTitleTxt>{activeData[0]?.themeName}</ThemeTitleTxt>
+        <DateTxt>{activeData[0]?.doneDate}</DateTxt></> */}
+
       
       {/* 평점 - ”star” 별 반개가 1점!!*/}
       <StarView>
@@ -251,6 +257,7 @@ export default function ReviewCreateScreen() {
 const Container = styled.View`
   flex: 1;
   padding: 80px 20px 30px 20px;
+  height: auto;
   /* justify-content: center;
   align-items: center; */
 `

@@ -1,3 +1,4 @@
+import { ContentType } from 'react-native-ui-lib/src/components/skeletonView';
 import { SecureState } from "../store/SecureStore";
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const ACCESS_TOKEN = SecureState.getData('accessToken');
@@ -5,14 +6,19 @@ const Token = `Bearer ${ACCESS_TOKEN}`
 
 
 // 닉네임 수정
-export const putNickName = async ({ queryKey }) => { 
+export const putNickName = async (nickname) => { 
+  console.log(nickname)
   const response = await (await fetch(`${BASE_URL}/mypage/update`, {
-    method: 'PUT',
+    method: 'put',
     headers: {
-      Authorization : await SecureState.getData('accessToken')
+      Authorization: await SecureState.getData('accessToken'),
+      "Content-Type": "application/json",
       // Authorization : Token
-    }
-  })).json()
+    },
+    body: JSON.stringify({
+      "nickname": nickname
+    })
+  }))//.json()
   return response
 }
 
@@ -102,13 +108,13 @@ export const postReview = async ({ queryKey }) => {
     body: {
       
     }
-  })).json()
+  }))
   return response
 }
 
 //회원탈퇴
-export const logOutPost = async({ queryKey }) => {
-  const response = await (await fetch({
+export const postSignOut = async({ queryKey }) => {
+  const response = await (await fetch(`${BASE_URL}/user/kakao`,{
     method:'POST',
     headers: {
       Authorization : await SecureState.getData('accessToken')
@@ -118,3 +124,12 @@ export const logOutPost = async({ queryKey }) => {
 }
 
 //로그아웃
+export const delLogOut = async ({ queryKey }) => {
+  const response = await (await fetch(`${BASE_URL}/user/logout`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: await SecureState.getData('accessToken')
+    }
+  })).json()
+  return response
+}

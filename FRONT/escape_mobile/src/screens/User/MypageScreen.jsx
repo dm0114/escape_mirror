@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
 import { ImageBackground, Text, View, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Aler,StyleSheet } from 'react-native';
@@ -8,8 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import Modal from "react-native-modal";
 import { Input, Box } from "native-base";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import { getMyInfo } from '../../apis/MyPage';
-import { useQuery } from '@tanstack/react-query';
+import { getMyInfo,putNickName } from '../../apis/MyPage';
+import { useQuery,useMutation } from '@tanstack/react-query';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 import { Button } from "native-base";
 // 마이페이지
@@ -19,22 +19,22 @@ import { Button } from "native-base";
 //우측 상단에 톱니바퀴 누르면 수정 페이지로
 //수정할 것 : 프로필 사진, 닉네임 명
 //이 상태에 회원탈퇴와 로그아웃까지
-export default function MypageScreen() {
+export default function Mypage() {
   const navigation = useNavigation();
-  const { data:UserInfo } = useQuery(['myInfo'], getMyInfo)
+  const { data: UserInfo, refetch } = useQuery(['myInfo'], getMyInfo)
+
   // console.log("userInfo", UserInfo)
   //edit가 False일 때 : 마이페이지 뷰 
   //edit가 True일 때 : 수정페이지 뷰
   const [edit, setEdit] = useState(false);
   // console.log('버튼 클릭 ', edit)
-
-
   function MyPageScreen() {
     const [isGradeModalVisible, setGradeModalVisible] = useState(false);
     const gradeModal = () => {
       setGradeModalVisible(!isGradeModalVisible);
     };
-    console.log(UserInfo)
+    
+
     return (
       <MypageContainer>
          {/* 프로필 이미지
@@ -74,20 +74,22 @@ export default function MypageScreen() {
 
 
   function EditScreen() {
-    const nickname = UserInfo.nickname
+    var nickname = UserInfo.nickname
     const [nick, setNick] = useState(nickname);
+    const [check, setCheck]= useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
-
+    
 
     return (
       <MypageContainer>
 
         {/* 확인 버튼 */}
         <SettingsCheckView>
-          <SettingsCheckTouch onPress={() => setEdit(false)}>
+          <SettingsCheckTouch onPress={() => { 
+            putNickName(nick).then(() => refetch()).then(()=>setEdit(!edit))}}>
             <Ionicons name="checkmark-circle" size={30} color="white" />
             {/* <Ionicons name="checkmark" size={30} color="color" /> */}
           </SettingsCheckTouch>
@@ -99,7 +101,14 @@ export default function MypageScreen() {
           <EditTxtView>
             <GradeTxt >Level.{UserInfo?.grade}</GradeTxt>
             <Box alignItems="center">
-              <Input mx="5" value={nick} onChange={setNick} w="50%" backgroundColor={'#ffff'} fontFamily="Classic" fontSize={35} textAlign="center"/>
+              <Input mx="5" value={nick}
+                onChangeText={ (text)=> setNick(text)}
+                // onChange={(e) => { 
+                // console.log(e.target.value)
+                // setNick(e.target.value)                
+                // }
+                // }
+                 w="50%" backgroundColor={'#ffff'} fontFamily="Classic" fontSize={35} textAlign="center" />
             </Box>
           </EditTxtView >
         </View>  

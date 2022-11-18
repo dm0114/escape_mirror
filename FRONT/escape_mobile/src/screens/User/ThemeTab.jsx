@@ -71,6 +71,7 @@ import { getLikeTheme } from '../../apis/MyPage';
 export default function ThemeTab() {
   const navigation = useNavigation();
   const { data } = useQuery(['likeTheme'], getLikeTheme)
+  console.log(data)
   // console.log(data)
   //테마 컴포넌트
   function RenderTheme({ item }) {
