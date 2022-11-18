@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, View, StyleSheet, Dimensions, FlatList, ScrollView, Alert, Button, ImageBackground, TouchableOpacity} from 'react-native';
+import {Text, TextInput, View, Image, StyleSheet, Dimensions, FlatList, ScrollView, Alert, Button, ImageBackground, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import theme from "../../theme";
 import { Select, Box, Center } from "native-base";
@@ -124,13 +124,26 @@ const Assignment = () => {
         setResultRegion(`${selectRegion}/${selectLittleRegion}`)
     }, [selectLittleRegion])
 
-    const Alert = ()=> Alert.alert(
-        "예약을 양도받으시겠습니까?",
-        [
-            {text:"예", onPress:()=>console.log("ㅎㅎ")},
-            {text:"아니요", onPress:()=>console.log("힝ㅜ")}
-        ]
-    );
+    const deleteItem = () => {
+        Alert.alert(
+          '삭제',
+          '정말로 삭제하시겠습니까?',
+          [
+            {text: '취소', onPress: () => {}, style: 'cancel'},
+            {
+              text: '삭제',
+              onPress: () => {
+                console.log("삭제")
+              },
+              style: 'destructive',
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          },
+        );
+      };
     const AssignItem = ({item}) => {
         const [year, month, day] = item.reservedDate.split("-");
         return(
@@ -185,7 +198,7 @@ const Assignment = () => {
                         <SUIT style={{fontSize:25, marginTop:10, marginBottom:0}}>{selectItem.reservedDate}</SUIT>
                         <SUIT style={{fontSize:35, marginTop:10, marginBottom:10}}>{selectItem.reservedTime}</SUIT>
                     </View>
-                    <MyButton onPress={Alert}>
+                    <MyButton onPress={()=>{createThreeButtonAlert()}}>
                         <MyButtonText>양도 받기</MyButtonText>
                     </MyButton>
                 </Modal.Body>
