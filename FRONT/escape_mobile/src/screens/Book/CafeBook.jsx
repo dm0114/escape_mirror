@@ -8,17 +8,22 @@ import {useQuery} from '@tanstack/react-query';
 
 
 const testUnity = 'https://user-images.githubusercontent.com/97578425/199651092-ce04c889-71c8-431f-bfae-1732e4c72f8c.png'
+const windowWidth = Dimensions.get('window').width;
+
+const themeWidth = (windowWidth-90) / 3;
+
 
 export default function CafeBook({navigation, route}){
     const {storeId, storeImg, storeName, clearCnt, totalTheme} = route.params;
     const progressRate = (clearCnt/totalTheme)*100
     const [isModal, setIsModal] = useState(false);
-    const opacity_list = [0.8, 0.5, 0];
+    const opacity_list = [0.5, 0.3, 0];
     const {data} = useQuery(
         ['CafeTheme', storeId],
         getCafeThemeList
         )
-    console.log(storeId)
+
+
     return(
         <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/book_room01.gif'}} style={{flex:1}}>
         <View style={{justifyContent:'flex-start', flex:1, flexDirection:'column', padding:20, marginTop:10}}>
@@ -56,14 +61,14 @@ export default function CafeBook({navigation, route}){
             key={3}
             renderItem={(obj) => 
                 <>
-                <TouchableOpacity style={[{width:117, position:'relative'}, 
+                <TouchableOpacity style={[{width:themeWidth, position:'relative'}, 
                     obj.index % 3 == 2 ? {marginRight:0} : {marginRight:20}]}
                 onPress={()=>{
                     navigation.navigate('ThemeDetailScreen', {
                     themeId:obj.item.themeId
                     })}}
                 >
-                    <View style={{backgroundColor:'black', height:180, width:117, position:'absolute', zIndex:3, elevation:3, borderRadius:10, opacity:opacity_list[obj.item.isClear]}} />
+                    <View style={{backgroundColor:'black', height:180, width:themeWidth, position:'absolute', zIndex:3, elevation:3, borderRadius:10, opacity:opacity_list[obj.item.isClear]}} />
                     <ThemeView
                         source={{uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${obj.item.themeImg}`}}
                         resizeMode="cover"

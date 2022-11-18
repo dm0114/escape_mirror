@@ -31,16 +31,19 @@ const requestToken = async (code, navigation) => {
   try {
     const tokenResponse = await axios.post(requestTokenUrl, options);
     const ACCESS_TOKEN = tokenResponse.data.access_token;
+    console.log(ACCESS_TOKEN);
     const body = {
       accessToken: ACCESS_TOKEN,
     };
-
+    console.log(1);
     const response = await axios.post(APIURI, body);
+    console.log(2);
+    console.log(response)
     const value = response.data;
     await SecureStore.setItemAsync('accessToken', `Bearer ${value.accessToken}`);
     await SecureStore.getItemAsync('accessToken')
     
-    navigation.navigate('TabViewExample');
+    navigation.navigate('Loading');
     
 
     // await AsyncState.setData(ACCESS_TOKEN);
@@ -51,7 +54,8 @@ const requestToken = async (code, navigation) => {
     //   const user = await getData('user');
     //   dispatch(read_S(user));
     //   await navigation.navigate('Main');
-    // }
+    // }n
+
 
   } catch (e) {
     console.log(e);
@@ -81,7 +85,7 @@ export default function LoginScreen() {
   const [token, setToken] = useState();
   const getToken = async () => {
     setToken(await SecureStore.getItemAsync('accessToken'))
-    console.log(token);
+    // console.log(token);
   }
   
   useEffect(() => {    
@@ -102,7 +106,7 @@ export default function LoginScreen() {
         injectedJavaScript={INJECTED_JAVASCRIPT}
         javaScriptEnabled
         onMessage={event => {
-          console.log('001');
+          // console.log('001');
           const data = event.nativeEvent.url;
           getCode(data, navigation);
         }}

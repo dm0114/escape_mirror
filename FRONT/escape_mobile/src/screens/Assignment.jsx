@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, View, StyleSheet, Dimensions, FlatList, ScrollView, ImageBackground, TouchableOpacity, Button} from 'react-native';
+import {Text, TextInput, View, StyleSheet, Dimensions, FlatList, ScrollView, Alert, Button, ImageBackground, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import theme from "../../theme";
 import { Select, Box, Center } from "native-base";
@@ -64,43 +64,50 @@ const RegionLittleList = {
     '제주':['전체']
 }
 const RegionList = ['서울', '경기', '충청', '경상', '전라', '강원', '제주']
-const obj = [
-    {
-    'user':'니츠',
-    'date':'10-14',
-    'time':'09:30',
-    'storeName':'비밀의화원 광주1호점',
-    'themeName':'명당'
-    },
-    {
-        'user':'니츠',
-        'date':'10-14',
-        'time':'09:30',
-        'storeName':'비밀의화원 광주1호점',
-        'themeName':'명당'
-        },
-        {
-            'user':'니츠',
-            'date':'10-14',
-            'time':'09:30',
-            'storeName':'비밀의화원 광주1호점',
-            'themeName':'명당'
-            },
-            {
-                'user':'니츠',
-                'date':'10-14',
-                'time':'09:30',
-                'storeName':'비밀의화원 광주1호점',
-                'themeName':'명당'
-                },
-                {
-                    'user':'니츠',
-                    'date':'10-14',
-                    'time':'09:30',
-                    'storeName':'비밀의화원 광주1호점',
-                    'themeName':'명당'
-                    },
-]
+// const obj = [
+//     {
+//     'reservedName':'니츠',
+//     'reservedDate':'22-10-14',
+//     'reservedTime':'09:30',
+//     'storeName':'비밀의화원 광주1호점',
+//     'themeName':'명당'
+//     },
+//     {
+//         'reservedName':'니츠',
+//         'reservedDate':'22-10-14',
+//         'reservedTime':'09:30',
+//         'storeName':'비밀의화원 광주1호점',
+//         'themeName':'엉덩이가 큰 그녀는 내가 좋댔어'
+//         },
+//     // {
+//     //     'user':'니츠',
+//     //     'date':'10-14',
+//     //     'time':'09:30',
+//     //     'storeName':'비밀의화원 광주1호점',
+//     //     'themeName':'명당'
+//     //     },
+//     //     {
+//     //         'user':'니츠',
+//     //         'date':'10-14',
+//     //         'time':'09:30',
+//     //         'storeName':'비밀의화원 광주1호점',
+//     //         'themeName':'명당'
+//     //         },
+//     //         {
+//     //             'user':'니츠',
+//     //             'date':'10-14',
+//     //             'time':'09:30',
+//     //             'storeName':'비밀의화원 광주1호점',
+//     //             'themeName':'명당'
+//     //             },
+//     //             {
+//     //                 'user':'니츠',
+//     //                 'date':'10-14',
+//     //                 'time':'09:30',
+//     //                 'storeName':'비밀의화원 광주1호점',
+//     //                 'themeName':'명당'
+//     //                 },
+// ]
 
 const Assignment = () => {
     const navigation = useNavigation(); 
@@ -113,47 +120,26 @@ const Assignment = () => {
     const {data:SelectData} = useQuery(['AssignmentSelect', selectRegion, selectLittleRegion], getRegionAssign, {
         enabled:!!(selectRegion&&selectLittleRegion)
     })
-    const [searchKeyword, setSearchKeyword] = useState();
-    const {data:SearchData} = useQuery(['AssignmentSearch', searchKeyword], getSearchAssign, {
-        enabled:!!searchKeyword
-    })
-    console.log(SearchData)
-
     useEffect(()=>{
         setResultRegion(`${selectRegion}/${selectLittleRegion}`)
     }, [selectLittleRegion])
 
-
-
-    // const SelectItem = (data) => {
-    //     return(
-    //         {
-    //             data.map((item) => <Select.item key={item} label={item} value={item}/>)
-    //         }
-    //     )
-    // }
-
-    useEffect(()=>{
-        if(selectItem){
-            console.log(selectItem.storeId)
-        }
-    }, [selectItem])
-    
+    const Alert = ()=> Alert.alert(
+        "예약을 양도받으시겠습니까?",
+        [
+            {text:"예", onPress:()=>console.log("ㅎㅎ")},
+            {text:"아니요", onPress:()=>console.log("힝ㅜ")}
+        ]
+    );
     const AssignItem = ({item}) => {
-        console.log(item)
         const [year, month, day] = item.reservedDate.split("-");
         return(
-            <AssignItemView style={{backgroundColor:'white', width:halfViewWidth, marginBottom:20}}
+            <AssignItemView style={{backgroundColor:'white', width:halfViewWidth, height:210, marginBottom:20, flexDirection:'column', justifyContent:'center'}}
             onPress={()=>{setSelectItem(item)
             setIsModal(true)}}>
-                {/* <View style={{flexDirection:'row', alignItems:'center'}}>
-                    <Ionicons name="person" size={25} color="red" />
-                    <SUIT style={{fontSize:20, marginLeft:5}}>{item.user}</SUIT>
-                </View>
-                <View style={{borderBottomColor: 'grey', borderBottomWidth:1, marginTop:10, marginBottom:10}} /> */}
                 <View style={{alignItems:'center'}}>
                     <SUITSemiBold style={{fontSize:13}}>{item.storeName}</SUITSemiBold>
-                    <SUIT style={{fontSize:25}}>{item.themeName}</SUIT>
+                    <SUIT style={{fontSize:20}}>{item.themeName}</SUIT>
                 </View>
                 <View style={{borderBottomColor: 'grey', borderBottomWidth:1, marginTop:10, marginBottom:10}} />
                 <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
@@ -172,7 +158,7 @@ const Assignment = () => {
                 {/* <Modal.Header>테마이름</Modal.Header> */}
                 <Modal.Body style={{justifyContent:'center', paddingLeft:40, paddingRight:40, paddingBottom:30}}>
                     <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
-                        <Ionicons name="person" size={25} color="red" />
+                        <Ionicons name="person" size={25} color="#FC6847" />
                         <SUIT style={{fontSize:20, marginLeft:5}}>{selectItem.reservedName}</SUIT>
                         <SUITSemiBold style={{fontSize:20}}>님의 예약</SUITSemiBold>
                     </View>
@@ -184,7 +170,6 @@ const Assignment = () => {
                             storeId:selectItem.storeId
                             })}}
                             >
-                            {/* <Feather name="link" size={24} color="black" /> */}
                             <SUITSemiBold style={{marginLeft:10, fontSize:18}}>{selectItem.storeName}</SUITSemiBold>
                         </TouchableOpacity>
                         <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}}
@@ -193,7 +178,6 @@ const Assignment = () => {
                             themeId:selectItem.themeId
                             })}}
                             >
-                            {/* <Feather name="link" size={24} color="black" /> */}
                             <SUIT style={{fontSize:35, marginLeft:10}}>{selectItem.themeName}</SUIT>
                         </TouchableOpacity>
                     </View>
@@ -201,21 +185,25 @@ const Assignment = () => {
                         <SUIT style={{fontSize:25, marginTop:10, marginBottom:0}}>{selectItem.reservedDate}</SUIT>
                         <SUIT style={{fontSize:35, marginTop:10, marginBottom:10}}>{selectItem.reservedTime}</SUIT>
                     </View>
-                    <Button title='양도 받기' color="black"/>
+                    <MyButton onPress={Alert}>
+                        <MyButtonText>양도 받기</MyButtonText>
+                    </MyButton>
                 </Modal.Body>
             </Modal.Content>
         </Modal>}
         <Container style={{flex:1}}>
             <Title>새로운 초대장이 도착했어요.</Title>
-            <SearchInput
+            {/* <SearchInput
+                onPress={()=>{setIsSearchClick(true)}}
                 onChangeText={(value)=>{setSearchKeyword(value)}}
                 value={text}
-            />
-            <SubTitle>지역을 선택해주세요</SubTitle>
+            /> */}
+            <SubTitle>지역을 선택해서 초대장을 확인해보세요!</SubTitle>
             <View style={{flexDirection:'row', justifyContent:'space-between', marginRight:10}}>
                 <Box style={{ marginLeft:10, backgroundColor:'white', borderRadius:30, width:halfSelectWidth}}>
                     <Select selectedValue={selectRegion} placeholder="대분류"
                     variant='rounded'
+                    style={{fontSize:15, fontFamily:'SUIT-Regular'}}
                     onValueChange={(item)=>{setSelectRegion(item)}}>
                         {
                             RegionList.map((item) => 
@@ -226,6 +214,7 @@ const Assignment = () => {
                 </Box>
                 {selectRegion && <Box style={{ marginLeft:10, backgroundColor:'white', borderRadius:30, width:halfSelectWidth}}>
                     <Select selectedValue={selectLittleRegion} placeholder="소분류"
+                    style={{fontSize:15, fontFamily:'SUIT-Regular'}}
                     variant='rounded'
                     onValueChange={(item)=>{setSelectLittleRegion(item)}}>
                         {
@@ -249,7 +238,7 @@ const Assignment = () => {
                 data={SelectData}
                 renderItem={AssignItem} />
             }
-            {
+            {/* {
                 (searchKeyword !== undefined && <FlatList 
                     style={{marginTop:20, padding:5, marginBottom:20}}
                     columnWrapperStyle={{ flex: 1, justifyContent: "space-between" }}
@@ -258,7 +247,7 @@ const Assignment = () => {
                     data={SearchData.themeList}
                     renderItem={AssignItem}
                 />)
-            }
+            } */}
         </Container>
         </ImageBackground>
     )
@@ -279,7 +268,7 @@ const Title = styled.Text`
     margin-left: ${({theme}) => theme.screenMargin.titleLeftMargin};
 `
 const SubTitle = styled.Text`
-    font-size: ${({theme}) => theme.fontSizes.title3};
+    font-size: ${({theme}) => theme.fontSizes.body};
     font-family: 'SUIT-SemiBold';
     color:white;
     margin: 20px 0 20px ${({theme}) => theme.screenMargin.titleLeftMargin};
@@ -318,5 +307,19 @@ const RegionTab = styled.TouchableOpacity`
 const RegionTabText = styled.Text`
     color:black;
     font-size: ${({theme}) => theme.fontSizes.body};
+`
+const MyButton = styled.TouchableOpacity`
+    background-color: #FC6847;
+    border-radius: 15;
+    height:50px;
+    justify-content: center;
+    align-items: center;
+    /* padding: 20px 0; */
+`
+
+const MyButtonText = styled.Text`
+    font-size: 18px;
+    color:white;
+    font-family:'SUIT-SemiBold';
 `
 export default Assignment;
