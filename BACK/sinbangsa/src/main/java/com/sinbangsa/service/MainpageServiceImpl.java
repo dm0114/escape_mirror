@@ -167,6 +167,7 @@ public class MainpageServiceImpl implements MainpageService{
                     transferDto.setStoreName(storeRepo.getStoreName());
                     transferDto.setThemeId(themeRepo.getId());
                     transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservationId(reservationRepo.getReservationId());
                     transferDto.setReservedDate(reservationRepo.getDate());
                     transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
                     transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
@@ -198,6 +199,7 @@ public class MainpageServiceImpl implements MainpageService{
                     transferDto.setStoreName(storeRepo.getStoreName());
                     transferDto.setThemeId(themeRepo.getId());
                     transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservationId(reservationRepo.getReservationId());
                     transferDto.setReservedDate(reservationRepo.getDate());
                     transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
                     transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
@@ -210,6 +212,7 @@ public class MainpageServiceImpl implements MainpageService{
                     transferDto.setStoreName(storeRepo.getStoreName());
                     transferDto.setThemeId(themeRepo.getId());
                     transferDto.setThemeName(themeRepo.getThemeName());
+                    transferDto.setReservationId(reservationRepo.getReservationId());
                     transferDto.setReservedDate(reservationRepo.getDate());
                     transferDto.setReservedTime(reservationRepo.getThemeTime().getTime());
                     transferDto.setReservedName(reservationRepo.getReservationUser().getNickname());
