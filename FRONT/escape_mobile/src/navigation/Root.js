@@ -37,7 +37,7 @@ const Root = () =>
     initialRouteName="KakaoLogin"
     screenOptions={{
       cardStyle: { backgroundColor: '#212121' },
-      headerShown: false
+      headerShown: false,
     }}
   >
       {/* <Nav.Screen name="Drawer" component={Drawer}/> */}
