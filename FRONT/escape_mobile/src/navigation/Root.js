@@ -28,8 +28,9 @@ import MypageMoreScreen from '../screens/User/MypageMoreScreen';
 import KakaoLogin from '../screens/login/Login';
 import ReviewCreateScreen from '../screens/Review/ReviewCreateScreen';
 
-const Nav = createStackNavigator()
+import Loading from '../screens/Loading';
 
+const Nav = createStackNavigator()
 
 const Root = () => 
   // <Nav.Navigator screenOptions={{ presentation: "modal", headerShown: false }}>
@@ -65,6 +66,7 @@ const Root = () =>
       <Nav.Screen name="KakaoLogin" component={KakaoLogin} />
       <Nav.Screen name="ReviewCreateScreen" component={ReviewCreateScreen} />
       <Nav.Screen name="Assignment" component={Assignment} />
+      <Nav.Screen name="Loading" component={Loading} />
   </Nav.Navigator>
 
   export default Root

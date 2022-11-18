@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import {ImageBackground, View, Text, TouchableOpacity, Animated} from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
+import {useInfiniteQuery, useQuery, useQueryClient} from '@tanstack/react-query'
 
 const BookMain = () => {
     const navigation = useNavigation();
-    
+    const queryClient = useQueryClient();
+    const userInfo = queryClient.getQueryData(['myInfo']);
     return(
         <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_book2.gif'}} style={{flex:1}}>
             <MainBookView style={{flex:1}}>
-                <MainBookText>ㅇㅇㅇ님을 기다리는 저택이에요.</MainBookText>
+                <MainBookText>{userInfo.nickname}님을 기다리는 저택이에요.</MainBookText>
                 <MainBookText>모든 방문을 열어</MainBookText>
                 <MainBookText>저택의 주인이 되어주세요.</MainBookText>
             </MainBookView>

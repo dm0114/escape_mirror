@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
-import { ImageBackground } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { ImageBackground, View } from "react-native";
 
 import styled from "styled-components/native";
 import "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
 import ReservationComponent from "../components/Reservation/ReservationComponent";
-import { useQuery } from "@tanstack/react-query";
+import { LayoutContext } from "../../App";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingScreen from "./LoadingScreen";
 import { getPreloading } from "../apis/api";
 import { LayoutData } from "../store/Atom";
@@ -24,6 +25,17 @@ export default function MainScreen() {
     ["PreloadingData"],
     getPreloading
   );
+  useEffect(() => {
+    console.log(data);
+  },[])
+
+  const queryClient = useQueryClient();
+  const userInfo = queryClient.getQueryData(['myInfo']);
+  // console.log(userInfo.nickname)
+  // useEffect(()=>{
+  //   setNickname(userInfo.nickname)
+  // }, [])
+  // },[data])
   
   // refetch
   useFocusEffect(
@@ -37,7 +49,7 @@ export default function MainScreen() {
     <ImageBackground  source={{uri:testUri}} style={{flex:1}}>
       <MainContainer>
         <MainText>
-          안녕하세요, {}님.{"\n"}
+          안녕하세요, {userInfo.nickname}님.{"\n"}
           오랜만에 저택으로 돌아오셨네요.{"\n"}
           받으신 초대장 목록을 보여드릴게요.
         </MainText>

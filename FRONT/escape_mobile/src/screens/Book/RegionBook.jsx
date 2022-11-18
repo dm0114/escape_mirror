@@ -5,10 +5,11 @@ import { LinearGradient } from 'expo-linear-gradient'
 import theme from '../../../theme';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import RNPickerSelect from 'react-native-picker-select';
-import {useInfiniteQuery, useQuery} from '@tanstack/react-query'
+import {useInfiniteQuery, useQuery, useQueryClient} from '@tanstack/react-query'
 import { Modal } from "native-base";
 import {ProgressBar} from 'react-native-ui-lib';
 import { getRegionCafeList } from '../../apis/BookApi';
+
 
 const RegionList = {
     // 서울
@@ -56,11 +57,9 @@ const RegionList = {
     '064':[]
 }
 
-const LIMIT  = 20
+const windowWidth = Dimensions.get('window').width;
 
-const testImg = 'https://media.4-paws.org/1/e/d/6/1ed6da75afe37d82757142dc7c6633a532f53a7d/VIER%20PFOTEN_2019-03-15_001-2886x1999-1920x1330.jpg';
-const testUnity = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation.gif'
-
+const cafeWidth = (windowWidth-60) / 2;
 
 export default function RegionBook({navigation, route}){
     const {num, name} = route.params;
@@ -69,13 +68,44 @@ export default function RegionBook({navigation, route}){
     const itemsList = RegionList[num].map((item) => {
         return {label:item, value:item}
     })
-    const {data} = useQuery(                                                         
-        ['RegionCafe', specificRegion, name],
-        getRegionCafeList,
-        {enabled:!!specificRegion}
-    )
+    const [page, setPage] = useState(0);
+    const [isLast, setIsLast] = useState(false);
+    // const {data} = useQuery(                                                         
+    //     ['RegionCafe', specificRegion, name],
+    //     getRegionCafeList,
+    //     {
+    //         enabled:!!specificRegion,
+    // }
+    // );
 
-    console.log(data)
+    const [piecedata, setPieceData] = useState();
+    const [data, setData] = useState();
+
+      useEffect(()=>{
+        if(piecedata && (piecedata.length == 0 || piecedata.length < 6)){
+            setIsLast(true)
+        }
+      }, [piecedata])
+    
+    const fetchData = () => {
+        if(specificRegion && isLast == false){
+            getRegionCafeList(specificRegion, name, page).then((res) => {
+                setPieceData(res)
+                if(!!data){
+                    setData([...data, ...res])
+                    setPage(page+1)
+                }else{
+                    setData(res)
+                    setPage(page+1)
+                }
+                
+                })
+        }
+    }
+
+    useEffect(()=>{
+        fetchData()
+    }, [specificRegion])
 
     useEffect(()=>{
         itemsList.length ? setSelectRegion(`${name}/null`) : setSelectRegion(`${name}`)
@@ -83,6 +113,7 @@ export default function RegionBook({navigation, route}){
             setSpecificRegion('전체')
         }
     }, [])
+    // console.log("data", data)
 
     const renderItem = (obj) => {
         return(
@@ -96,15 +127,14 @@ export default function RegionBook({navigation, route}){
             })}}>
                 <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
                 style={[obj.index !== data.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                    : {marginRight:10}, {height:180, width:186, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
+                    : {marginLeft:10}, {height:180, width:cafeWidth, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
                 <CafeView
                     source={ obj.item.storeImg ? {uri:
                         `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${obj.item.storeImg}`} : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}}
                     resizeMode="cover"
                     imageStyle={{borderRadius:10}}
-                    style={
-                        obj.index !== data.length-1 && obj.index %2 == 1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                    : {marginRight:10}}
+                    style={[obj.index !== data.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+                        : {marginLeft:10}]}
                     >
                         {/* <Text style={{color:'red', fontSize:20}}>{obj.item.storeImg}</Text> */}
                         <ThemeTitleView style={{flex:1}}>
@@ -135,7 +165,11 @@ export default function RegionBook({navigation, route}){
                             style={{inputAndroid: styles.rnpicker}}
                             onValueChange={(value) => {
                                 setSelectRegion(`${name}/${value}`)
-                                setSpecificRegion(value)}}
+                                setSpecificRegion(value)
+                                setPage(0)
+                                setData(undefined)
+                                setIsLast(false)
+                            }}
                             items={itemsList}
                             value={specificRegion}
                             useNativeAndroidPickerStyle={false}
@@ -147,8 +181,12 @@ export default function RegionBook({navigation, route}){
                         {/* 세부지역 선택 시 해당 세부지역에 대한 카페 데이터를 보여줌 */}
                         {selectRegion !== `${name}/null` ? 
                         <FlatList
-                            // onEndReached={}
-                            // onEndReachedThreshold={1}
+                            onEndReached={()=>{
+                                if(!isLast){
+                                    fetchData()
+                                }
+                            }}
+                            onEndReachedThreshold={0.8}
                             disableVirtualization={false}
                             numColumns={2}
                             // data={data.pages.map(page => page.results).flat}
