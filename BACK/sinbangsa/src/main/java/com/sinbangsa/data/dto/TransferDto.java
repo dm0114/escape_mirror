@@ -19,6 +19,8 @@ public class TransferDto {
 
     private String themeName;
 
+    private Long reservationId;
+
     private String reservedDate;
 
     private String reservedTime;
