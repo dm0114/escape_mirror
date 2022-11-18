@@ -71,6 +71,7 @@ import { getLikeTheme } from '../../apis/MyPage';
 export default function ThemeTab() {
   const navigation = useNavigation();
   const { data } = useQuery(['likeTheme'], getLikeTheme)
+  console.log(data)
   // console.log(data)
   //테마 컴포넌트
   function RenderTheme({ item }) {
@@ -81,7 +82,9 @@ export default function ThemeTab() {
           navigation.navigate("ThemeDetailScreen", { themeId: item.themeId });
           }}
         >
-          <Image source={{ uri: `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${item.themeImg}` }} style={styles.tinyImage} />
+          
+          <Image source={item.themeImg ? { uri: `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${item.themeImg}` } :
+        {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} style={styles.tinyImage} />
         </TouchableOpacity>
       </RenderView>
     )

@@ -1,33 +1,30 @@
+import { ContentType } from 'react-native-ui-lib/src/components/skeletonView';
 import { SecureState } from "../store/SecureStore";
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const ACCESS_TOKEN = SecureState.getData('accessToken');
 const Token = `Bearer ${ACCESS_TOKEN}`
-// const Token = `Bearer  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5b29qaDQ1NkBuYXZlci5jb20iLCJyb2xlcyI6IlVzZXIiLCJ1c2VySWQiOjIsImlzcyI6ImVzY2FwZWRpY3Rpb25hcnkuY29tIiwiaWF0IjoxNjY4NDA5MDkxLCJleHAiOjE2Njg0OTU0OTF9.S1YtYt-iJ4ZcrckQhEZ85x02HYjorC-NiVmF8-VUT1M`
 
-//짬한 테마
-// export const getLikeTheme = async ({ queryKey }) => { 
-//   const response = await (await fetch(`${BASE_URL}/mypage/likes`, {
-//     headers: {
-//       Authorization : await SecureState.getData('accessToken')
-//       // Authorization : Token
-//     }
-//   })).json()
-//   return response
-// }
 
-export const getLikeTheme = async (key) => {
-  const response = await (await fetch(`${BASE_URL}/mypage/likes`, {
-    headers:{
-      Authorization : await SecureState.getData('accessToken')
-    }
-  })).json()
+// 닉네임 수정
+export const putNickName = async (nickname) => { 
+  console.log(nickname)
+  const response = await (await fetch(`${BASE_URL}/mypage/update`, {
+    method: 'put',
+    headers: {
+      Authorization: await SecureState.getData('accessToken'),
+      "Content-Type": "application/json",
+      // Authorization : Token
+    },
+    body: JSON.stringify({
+      "nickname": nickname
+    })
+  }))//.json()
   return response
-  // console.log(result)
 }
 
-//나의 리뷰 보기
-export const getMyReview = async ({ queryKey }) => { 
-  const response = await (await fetch(`${BASE_URL}/mypage/reviews`, {
+//짬한 테마
+export const getLikeTheme = async ({ queryKey }) => { 
+  const response = await (await fetch(`${BASE_URL}/mypage/likes?page=0`, {
     headers: {
       Authorization : await SecureState.getData('accessToken')
       // Authorization : Token
@@ -35,6 +32,30 @@ export const getMyReview = async ({ queryKey }) => {
   })).json()
   return response
 }
+
+
+//나의 리뷰 보기
+const getMyReview = async ({ queryKey }) => {
+  const query = new URLSearchParams({
+    page: 0
+  });
+  return await (
+    await fetch(`${BASE_URL}/mypage/reviews?${query}`, {
+      headers: {
+        Authorization: await SecureState.getData("accessToken"),
+      },
+    })
+  ).json();
+};
+// export const getMyReview = async ({ queryKey }) => { 
+//   const response = await (await fetch(`${BASE_URL}/mypage/reviews?page=0`, {
+//     headers: {
+//       Authorization : await SecureState.getData('accessToken')
+//       // Authorization : Token
+//     }
+//   })).json()
+//   return response
+// }
 
 //리뷰 작성을 위해 마이페이지 활동내역 get
 export const getActiveLog = async ({ queryKey }) => { 
@@ -63,6 +84,21 @@ export const getMyInfo = async ({ queryKey }) => {
 
 //리뷰 작성 하기
 export const postReview = async ({ queryKey }) => {
+  console.log('postReview')
+  const { } = queryKey[1]
+  const data = {
+  bookId: 0,
+  content: "string",
+  feelActivity: 0,
+  feelDifficulty: 0,
+  feelHorror: 0,
+  feelInterrior: 0,
+  feelStory: 0,
+  locker: 0,
+  reviewImg: "string",
+  star: 0,
+  themeId: 0
+}
   const response = await (await fetch(`${BASE_URL}/review`, {
     method:'POST',
     headers: {
@@ -71,6 +107,28 @@ export const postReview = async ({ queryKey }) => {
     },
     body: {
       
+    }
+  }))
+  return response
+}
+
+//회원탈퇴
+export const postSignOut = async({ queryKey }) => {
+  const response = await (await fetch(`${BASE_URL}/user/kakao`,{
+    method:'POST',
+    headers: {
+      Authorization : await SecureState.getData('accessToken')
+    }
+  })).json()
+  return response 
+}
+
+//로그아웃
+export const delLogOut = async ({ queryKey }) => {
+  const response = await (await fetch(`${BASE_URL}/user/logout`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: await SecureState.getData('accessToken')
     }
   })).json()
   return response
