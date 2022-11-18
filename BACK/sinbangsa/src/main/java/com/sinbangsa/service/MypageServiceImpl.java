@@ -137,10 +137,10 @@ public class MypageServiceImpl implements MypageService {
             if (userRepo == null) {
                 throw new NullPointerException("유저 정보가 잘못되었습니다.");
             }
-            List<MypageMyRoomDto.ReservationDto> reservationsDto = new ArrayList<>();
+            List<MypageMyRoomDto.MyReservationDto> reservationsDto = new ArrayList<>();
             List<Reservation> reservationsRepo = reservationRepository.findAllByReservationUser(userRepo);
             for (Reservation reservationRepo : reservationsRepo) {
-                MypageMyRoomDto.ReservationDto reservationDto = new MypageMyRoomDto.ReservationDto();
+                MypageMyRoomDto.MyReservationDto reservationDto = new MypageMyRoomDto.MyReservationDto();
                 reservationDto.setReservationId(reservationRepo.getReservationId());
 
                 Theme themeRepo = reservationRepo.getThemeTime().getTheme();
@@ -165,6 +165,7 @@ public class MypageServiceImpl implements MypageService {
                 playedRoomDto.setDoneDate(bookRepo.getDoneDate());
                 playedRoomDto.setUsedHint(bookRepo.getUsedHint());
                 playedRoomDto.setClearTime(bookRepo.getClearTime());
+                playedRoomDto.setThemeId(bookRepo.getBookTheme().getId());
                 playedRoomsDto.add(playedRoomDto);
             }
             mypageMyRoomDto.setBooks(playedRoomsDto);
