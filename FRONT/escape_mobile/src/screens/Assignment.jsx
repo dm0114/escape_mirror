@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, View, StyleSheet, Dimensions, FlatList, ScrollView, ImageBackground, TouchableOpacity, Button} from 'react-native';
+import {Text, TextInput, View, StyleSheet, Dimensions, FlatList, ScrollView, Button, ImageBackground, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import theme from "../../theme";
 import { Select, Box, Center } from "native-base";
@@ -66,40 +66,47 @@ const RegionLittleList = {
 const RegionList = ['서울', '경기', '충청', '경상', '전라', '강원', '제주']
 const obj = [
     {
-    'user':'니츠',
-    'date':'10-14',
-    'time':'09:30',
+    'reservedName':'니츠',
+    'reservedDate':'22-10-14',
+    'reservedTime':'09:30',
     'storeName':'비밀의화원 광주1호점',
     'themeName':'명당'
     },
     {
-        'user':'니츠',
-        'date':'10-14',
-        'time':'09:30',
+        'reservedName':'니츠',
+        'reservedDate':'22-10-14',
+        'reservedTime':'09:30',
         'storeName':'비밀의화원 광주1호점',
-        'themeName':'명당'
+        'themeName':'엉덩이가 큰 그녀는 내가 좋댔어'
         },
-        {
-            'user':'니츠',
-            'date':'10-14',
-            'time':'09:30',
-            'storeName':'비밀의화원 광주1호점',
-            'themeName':'명당'
-            },
-            {
-                'user':'니츠',
-                'date':'10-14',
-                'time':'09:30',
-                'storeName':'비밀의화원 광주1호점',
-                'themeName':'명당'
-                },
-                {
-                    'user':'니츠',
-                    'date':'10-14',
-                    'time':'09:30',
-                    'storeName':'비밀의화원 광주1호점',
-                    'themeName':'명당'
-                    },
+    // {
+    //     'user':'니츠',
+    //     'date':'10-14',
+    //     'time':'09:30',
+    //     'storeName':'비밀의화원 광주1호점',
+    //     'themeName':'명당'
+    //     },
+    //     {
+    //         'user':'니츠',
+    //         'date':'10-14',
+    //         'time':'09:30',
+    //         'storeName':'비밀의화원 광주1호점',
+    //         'themeName':'명당'
+    //         },
+    //         {
+    //             'user':'니츠',
+    //             'date':'10-14',
+    //             'time':'09:30',
+    //             'storeName':'비밀의화원 광주1호점',
+    //             'themeName':'명당'
+    //             },
+    //             {
+    //                 'user':'니츠',
+    //                 'date':'10-14',
+    //                 'time':'09:30',
+    //                 'storeName':'비밀의화원 광주1호점',
+    //                 'themeName':'명당'
+    //                 },
 ]
 
 const Assignment = () => {
@@ -121,7 +128,7 @@ const Assignment = () => {
     const AssignItem = ({item}) => {
         const [year, month, day] = item.reservedDate.split("-");
         return(
-            <AssignItemView style={{backgroundColor:'white', width:halfViewWidth, marginBottom:20}}
+            <AssignItemView style={{backgroundColor:'white', width:halfViewWidth, height:210, marginBottom:20, flexDirection:'column', justifyContent:'center'}}
             onPress={()=>{setSelectItem(item)
             setIsModal(true)}}>
                 {/* <View style={{flexDirection:'row', alignItems:'center'}}>
@@ -131,7 +138,7 @@ const Assignment = () => {
                 <View style={{borderBottomColor: 'grey', borderBottomWidth:1, marginTop:10, marginBottom:10}} /> */}
                 <View style={{alignItems:'center'}}>
                     <SUITSemiBold style={{fontSize:13}}>{item.storeName}</SUITSemiBold>
-                    <SUIT style={{fontSize:25}}>{item.themeName}</SUIT>
+                    <SUIT style={{fontSize:20}} numberOfLines={2}>{item.themeName}</SUIT>
                 </View>
                 <View style={{borderBottomColor: 'grey', borderBottomWidth:1, marginTop:10, marginBottom:10}} />
                 <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
@@ -150,7 +157,7 @@ const Assignment = () => {
                 {/* <Modal.Header>테마이름</Modal.Header> */}
                 <Modal.Body style={{justifyContent:'center', paddingLeft:40, paddingRight:40, paddingBottom:30}}>
                     <View style={{flexDirection:'row', alignItems:'center', marginTop:15}}>
-                        <Ionicons name="person" size={25} color="red" />
+                        <Ionicons name="person" size={25} color="#FC6847" />
                         <SUIT style={{fontSize:20, marginLeft:5}}>{selectItem.reservedName}</SUIT>
                         <SUITSemiBold style={{fontSize:20}}>님의 예약</SUITSemiBold>
                     </View>
@@ -177,7 +184,9 @@ const Assignment = () => {
                         <SUIT style={{fontSize:25, marginTop:10, marginBottom:0}}>{selectItem.reservedDate}</SUIT>
                         <SUIT style={{fontSize:35, marginTop:10, marginBottom:10}}>{selectItem.reservedTime}</SUIT>
                     </View>
-                    <Button title='양도 받기' color="black"/>
+                    <MyButton>
+                        <Text>양도 받기</Text>
+                    </MyButton>
                 </Modal.Body>
             </Modal.Content>
         </Modal>}
@@ -225,7 +234,7 @@ const Assignment = () => {
                 columnWrapperStyle={{ flex: 1, justifyContent: "space-between" }}
                 numColumns={2}
                 key={3}
-                data={SelectData}
+                data={obj}
                 renderItem={AssignItem} />
             }
             {/* {
@@ -297,5 +306,12 @@ const RegionTab = styled.TouchableOpacity`
 const RegionTabText = styled.Text`
     color:black;
     font-size: ${({theme}) => theme.fontSizes.body};
+`
+const MyButton = styled.TouchableOpacity`
+    background-color: #FC6847;
+    border-radius: 10;
+    height:20px;
+    justify-content: center;
+    align-items: center;
 `
 export default Assignment;

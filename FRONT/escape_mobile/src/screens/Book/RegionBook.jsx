@@ -9,9 +9,7 @@ import {useInfiniteQuery, useQuery, useQueryClient} from '@tanstack/react-query'
 import { Modal } from "native-base";
 import {ProgressBar} from 'react-native-ui-lib';
 import { getRegionCafeList } from '../../apis/BookApi';
-import { SecureState } from '../../store/SecureStore';
-import { set } from 'lodash';
-const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
+
 
 const RegionList = {
     // 서울
@@ -58,6 +56,10 @@ const RegionList = {
     // 제주 
     '064':[]
 }
+
+const windowWidth = Dimensions.get('window').width;
+
+const cafeWidth = (windowWidth-60) / 2;
 
 export default function RegionBook({navigation, route}){
     const {num, name} = route.params;
@@ -125,15 +127,14 @@ export default function RegionBook({navigation, route}){
             })}}>
                 <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
                 style={[obj.index !== data.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                    : {marginRight:10}, {height:180, width:186, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
+                    : {marginLeft:10}, {height:180, width:cafeWidth, position:'absolute', zIndex:3, elevation:3, borderRadius:10}]} />
                 <CafeView
                     source={ obj.item.storeImg ? {uri:
                         `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${obj.item.storeImg}`} : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}}
                     resizeMode="cover"
                     imageStyle={{borderRadius:10}}
-                    style={
-                        obj.index !== data.length-1 && obj.index %2 == 1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
-                    : {marginRight:10}}
+                    style={[obj.index !== data.length-1 ? obj.index % 2 == 0 ? {marginRight: 10} : {marginLeft: 10}
+                        : {marginLeft:10}]}
                     >
                         {/* <Text style={{color:'red', fontSize:20}}>{obj.item.storeImg}</Text> */}
                         <ThemeTitleView style={{flex:1}}>
