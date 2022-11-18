@@ -28,6 +28,8 @@ public class MypageMyRoomDto {
 
         private String themeName;
 
+        private String themeImg;
+
         private String storeName;
 
         private String Date;
