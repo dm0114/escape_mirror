@@ -24,10 +24,8 @@ export const postValidation = async ({ queryKey }: QueryFunctionContext<[string,
     usedHint: parseInt(reqBody.usedHint),
     userNicknames: [reqBody.userNicknames],
   }
-  console.log(reqData.userNicknames);
   
   const data = JSON.stringify(reqData)
-  console.log(data);
   
   return await (
     await fetch(`${BASE_URL}/validation`, {
