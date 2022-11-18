@@ -10,6 +10,7 @@ import LoadingScreen from "./LoadingScreen";
 import { getPreloading } from "../apis/api";
 import { LayoutData } from "../store/Atom";
 import { useRecoilValue } from "recoil";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 
 const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
 
@@ -17,17 +18,19 @@ const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_
 export default function MainScreen() {
   const layoutDatas = useRecoilValue(LayoutData)
   const {Width, Height} = layoutDatas
-  
+
   // 프리로딩 API 연결
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ["PreloadingData"],
     getPreloading
   );
-  useEffect(() => {
-    console.log(data);
-  },[data])
   
-  
+  // refetch
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch()
+    }, [])
+  );
 
   return (
     isLoading ? LoadingScreen :

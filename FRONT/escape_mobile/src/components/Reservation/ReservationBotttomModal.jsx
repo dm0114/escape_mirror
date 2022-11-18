@@ -64,6 +64,7 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
   );
 
   const reserveParams = useRecoilValue(POSTReservationData);
+  console.log(reserveParams);
   const { data: postReservationData, refetch } = useQuery(
     ["ReservationResult", reserveParams],
     reservationApi.postReservation,
@@ -149,7 +150,7 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
 
             {reserveParams ? (
               <ButtonContainer
-                left={Width}
+                left={ButtonWidth}
                 onPress={refetch}
               >
                 <SubTitle>예약완료</SubTitle>
