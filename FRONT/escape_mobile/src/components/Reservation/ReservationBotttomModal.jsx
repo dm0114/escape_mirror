@@ -11,6 +11,8 @@ import {
 } from "@gorhom/bottom-sheet";
 import {
   Button,
+  Modal,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -29,10 +31,17 @@ import { POSTReservationData } from "../../store/Atom";
 import { KorTime } from "./KorTimeComponent";
 import ReservationChips from "./ReservationChips";
 import LoadingScreen from "../../screens/LoadingScreen";
+import { useNavigation } from "@react-navigation/native";
+import theme from "../../../theme";
+import { ButtonWrapper } from "../../screens/ReservationDetailScreen";
+
 
 // 예약 가능 시간이 모든 예약 가능 시간
 // 예약
 function ReservationBotttomModal({ themeId, Price, Width }) {
+  const navigation = useNavigation()
+  const [modalVisible, setModalVisible] = useState(false)
+  // 
 
   const priceInfo = [0, ...Price.split('/')]
   
@@ -73,6 +82,8 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
 
   useEffect(() => {
     console.log(postReservationData);
+    // setModalVisible(!modalVisible)
+    // navigation.navigate('TabViewExample')
   }, [postReservationData])
 
   /**
@@ -103,6 +114,39 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
    */
   return status === "success" ? (
     <BottomSheetModalProvider>
+            {/* 
+        모달
+      */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Container>
+              <Title>예약이 완료되었습니다!</Title>
+            </Container>
+
+            <ButtonWrapper>
+              <Pressable
+                style={[styles.button, styles.buttonOpen]}
+                onPress={() => {
+                    setModalVisible(!modalVisible)
+                    navigation.replace('TabViewExample')
+                  }
+                }
+              >
+                <Text style={[styles.textStyle, styles.openTextStyle]}>확인</Text>
+              </Pressable>
+            </ButtonWrapper>
+          </View>
+        </View>
+      </Modal>
+
       <View style={{ position: "absolute", bottom: 0, backgroundColor: "red" }}>
         {toggler ? null : (
           <ButtonContainer left={ButtonWidth} onPress={handlePresentModalPress}>
@@ -151,7 +195,7 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
             {reserveParams ? (
               <ButtonContainer
                 left={ButtonWidth}
-                onPress={refetch}
+                onPress={()=>{refetch().then(setModalVisible(!modalVisible))}}
               >
                 <SubTitle>선택 완료</SubTitle>
               </ButtonContainer>
@@ -175,6 +219,49 @@ const styles = StyleSheet.create({
 
     zIndex: 100,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+    backgroundColor: '#00000090'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingHorizontal: 40,
+    paddingTop: 30,
+    paddingBottom: 10,
+    alignItems: "center",
+  },
+  button: {
+    width: 80,
+    borderRadius: 20,
+    padding: 10,
+    elevation: 3,
+    margin: 10,
+  },
+  buttonOpen: {
+    backgroundColor: theme.colors.point 
+  },
+  buttonClose: {
+    borderWidth: 1,
+    borderStyle: "solid",
+    backgroundColor: '#fff',
+    borderColor: '#aaa' 
+  },
+  textStyle: {
+    fontFamily: "SUIT-SemiBold",
+    fontSize: 15,
+    textAlign: "center",
+  },
+  openTextStyle: {
+    color: '#fff',
+  },
+  closeTextStyle: {
+    color: '#aaa',
+  }
 });
 
 const InfoTextWrapper = styled.View`
@@ -235,5 +322,17 @@ const Body = styled.Text`
   letter-spacing: 0.5px;
   color: #9b989b;
   text-align: center;
+`;
+
+const Container = styled.View`
+  align-items: center;
+`
+
+const Title = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.body};
+  line-height: ${({ theme }) => theme.fontHeight.body};
+  margin-bottom: 20px;
+  color: #000;
 `;
 export default ReservationBotttomModal;

@@ -65,26 +65,27 @@ export default function SearchScreen() {
             가는 것도 큰 재미이죠.{"\n"}
             새로운 곳에 가보시겠어요?
           </MainText>
-          <Toggle
-            trackBarStyle={{
-              backgroundColor: theme.colors.point,              
-            }}
-            thumbButton={{
-              activeBackgroundColor: '#fff',
-              inActiveBackgroundColor: '#fff',
-              width: 30,
-              height: 30,
-            }}
-            trackBar={{
-              width: 60,
-              height: 20,
-              borderActiveColor: theme.colors.point,
-              borderInActiveColor: theme.colors.point,
-            }}
-            value={toggleValue}
-            onPress={(newState) => setToggleValue(newState)}
-          />
+
         </RowContainer>
+        <ToggleContainer>
+          {toggleValue 
+          ? <ToggleButtonLeft onPress={() => {setToggleValue(false)}}>
+              <SubText>테마 검색</SubText>
+            </ToggleButtonLeft>
+          : <FocusedButtonLeft>
+              <FocusedSubText>테마 검색</FocusedSubText>
+            </FocusedButtonLeft>
+           }
+            
+            {toggleValue 
+            ? <FocusedButtonRight>
+                <FocusedSubText>카페 검색</FocusedSubText>
+              </FocusedButtonRight>
+            : <ToggleButtonRight onPress={() => {setToggleValue(true)}}>
+                <FocusedSubText>카페 검색</FocusedSubText>
+              </ToggleButtonRight>
+            }
+        </ToggleContainer>
       </TextContainer>
       <SearchTextInput
         placeholder={toggleValue ? "카페를 입력하세요." : "테마를 입력하세요."}
@@ -136,6 +137,45 @@ const SerachResultView = styled.View`
   height: 100%;
 `
 
+const ToggleContainer = styled.View`
+  margin-top: 40px;
+  margin-bottom: 10px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+const ToggleButton = styled.TouchableOpacity`
+  padding: 10px 30px 10px 30px;
+  border-width: 1px;
+  border-style: solid;
+`
+const ToggleButtonLeft = styled(ToggleButton)`
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;  
+  border-color: #fff;
+  border-right-width: 0;
+`
+const FocusedButtonLeft = styled(ToggleButton)`
+  background-color: #ff5f3f;
+  border-color: #ff5f3f;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+`
+const ToggleButtonRight = styled(ToggleButton)`
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #fff;
+  border-left-width: 0;
+`
+const FocusedButtonRight = styled(ToggleButton)`
+  background-color: #ff5f3f;
+  border-color: #ff5f3f;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+`
+
 
 /**
  * 요소
@@ -164,7 +204,13 @@ const MainText = styled.Text`
 
 const SubText = styled.Text`
   font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.title3};
+  font-size: ${({ theme }) => theme.fontSizes.body2};
+  /* color: #ff5f3f; */
+  color: #fff;
+`;
+const FocusedSubText = styled.Text`
+  font-family: "SUIT-SemiBold";
+  font-size: ${({ theme }) => theme.fontSizes.body2};
   color: #fff;
 `;
 

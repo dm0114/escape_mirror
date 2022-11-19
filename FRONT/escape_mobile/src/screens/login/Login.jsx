@@ -91,7 +91,7 @@ export default function LoginScreen() {
   useEffect(() => {    
     getToken()
     if (token) {
-      navigation.navigate('TabViewExample')
+      navigation.navigate('MainTabView')
     }
   }, [])
 

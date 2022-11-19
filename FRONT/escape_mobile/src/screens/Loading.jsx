@@ -73,9 +73,9 @@ const Loading = () => {
     if(!ready){
         return(
             <AppLoading
-            startAsync={startLoading}
-            onFinish={onFinish}
-            onError={console.error} />
+                startAsync={startLoading}
+                onFinish={onFinish}
+                onError={console.error} />
         )
     }
     return navigation.navigate('TabViewExample')

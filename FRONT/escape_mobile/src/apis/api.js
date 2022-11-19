@@ -149,6 +149,7 @@ const postReservation = async ({ queryKey }) => {
       "Content-Type": "application/json",
     },
   });
+  console.log(res);
   return res;
 };
 

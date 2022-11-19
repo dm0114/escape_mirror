@@ -1,9 +1,10 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
 import MyTimer from '../TimerComponent';
+import { useNavigation } from '@react-navigation/native';
 import { Timer } from './KorTimeComponent';
+import { Animated } from 'react-native';
+
 
 export default function ReservationComponent({
   reservationId,
@@ -12,27 +13,43 @@ export default function ReservationComponent({
   date,
   reserveTime
 }) {
+  const [fadeAnim ] = useState(new Animated.Value(0));
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true
+    }).start();
+  }, []);
+
   const navigation = useNavigation()
 
   return (
-    <ReservationContainer 
-      style={{elevation: 10}}
-      onPress={() => {navigation.navigate('ReservationDetailScreen', {
-        reservationId: reservationId,
-        themeName: themeName,
-        storeName: storeName,
-        date: date,
-        reserveTime: reserveTime
-      })}}
-      >
-      <TextContainer>
-        <ThemeTitle>{themeName}</ThemeTitle>
-        <CafeTitle>{storeName}</CafeTitle>
-      </TextContainer>
-      <TimeContainer>
-        <MyTimer expiryTimestamp={Timer(date, reserveTime)} />
-      </TimeContainer>
-    </ReservationContainer>
+    <Animated.View
+      style={{
+        opacity: fadeAnim,
+      }}
+    >
+      <ReservationContainer 
+        activeOpacity={0.6}
+        style={{elevation: 10}}
+        onPress={() => {navigation.navigate('ReservationDetailScreen', {
+          reservationId: reservationId,
+          themeName: themeName,
+          storeName: storeName,
+          date: date,
+          reserveTime: reserveTime
+        })}}
+        >
+        <TextContainer>
+          <ThemeTitle>{themeName}</ThemeTitle>
+          <CafeTitle>{storeName}</CafeTitle>
+        </TextContainer>
+        <TimeContainer>
+          <MyTimer expiryTimestamp={Timer(date, reserveTime)} />
+        </TimeContainer>
+      </ReservationContainer>
+    </Animated.View>
   )
 }
 

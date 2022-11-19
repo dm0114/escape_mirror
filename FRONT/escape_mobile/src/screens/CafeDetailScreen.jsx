@@ -57,7 +57,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
     searchApi.getCafeDetail
   );
   useEffect(() => {
-    setProgressRate((data.clearCnt / data.themeList.length) * 100);
+    if (data) {setProgressRate((data.clearCnt / data.themeList.length) * 100)}    
   }, [data]);
 
   /**
@@ -163,10 +163,6 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
                 style={{ height: 20 }}
               />
             </MainTextContainer>
-            {/* <RepThemeContainer>
-              <SubTitle>진행율</SubTitle>
-              <SubTitle>{data.clearCnt} / {data.totalTheme}</SubTitle>
-            </RepThemeContainer> */}
           </SubContentWrapper>
         </Container>
       </Animated.View>

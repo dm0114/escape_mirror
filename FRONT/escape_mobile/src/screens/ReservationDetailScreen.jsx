@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Modal,
   Pressable,
-  Linking
+  Linking,
+  Animated
 } from "react-native";
 import styled from "styled-components/native";
 
@@ -25,13 +26,25 @@ import theme from "../../theme";
 
 import { useRecoilValue } from "recoil";
 import { LayoutData } from "../store/Atom";
+import ReservationDelete from "./ReservationDelete";
 
 
 /**
  * 고려 사항 => themeImg가 2개?, Post 요청에 따른 Alert
  */
 function ReservationDetailScreen({ route, navigation }) {
+  const [fadeAnim] = useState(new Animated.Value(0));
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true
+    }).start();
+  }, []);
+
   const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible2, setModalVisible2] = useState(false)
   /**
    * 파라미터
    */
@@ -53,13 +66,12 @@ function ReservationDetailScreen({ route, navigation }) {
     reservationApi.getReservationDetail
   );
 
-  const { data: putRes, refetch } = useQuery(
+  const { refetch } = useQuery(
     ["reservationDetail", reservationId], //토큰 추가
     reservationApi.putReservationTransfer, {
       enabled: false
     }
   );
-  useEffect(() => {console.log(putRes);}, [putRes])
 
   const { refetch: deleteRefetch } = useQuery(
     ["reservationDetail", reservationId], //토큰 추가
@@ -93,7 +105,7 @@ function ReservationDetailScreen({ route, navigation }) {
               <Pressable
                 style={[styles.button, styles.buttonOpen]}
                 onPress={() => {
-                  refetch().then(setModalVisible(!modalVisible)).then(navigation.navigate('TabViewExample'))
+                  refetch().then(setModalVisible(!modalVisible)).then(navigation.replace('TabViewExample'))
                 }}
               >
                 <Text style={[styles.textStyle, styles.openTextStyle]}>예</Text>
@@ -110,10 +122,52 @@ function ReservationDetailScreen({ route, navigation }) {
       </Modal>
 
       {/* 
+        모달2
+      */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={() => {
+          setModalVisible2(!modalVisible2);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ReservationDelete />
+
+            <ButtonWrapper>
+              <Pressable
+                style={[styles.button, styles.buttonOpen]}
+                onPress={() => {
+                  deleteRefetch().then(setModalVisible2(!modalVisible2)).then(navigation.replace('TabViewExample'))
+                }}
+              >
+                <Text style={[styles.textStyle, styles.openTextStyle]}>예</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible2(!modalVisible2)}
+              >
+                <Text style={[styles.textStyle, styles.closeTextStyle]}>아니오</Text>
+              </Pressable>
+            </ButtonWrapper>
+          </View>
+        </View>
+      </Modal>
+
+
+      {/* 
         애니메이션 헤더 포스터 이미지, Absolute라 마진 또는 패딩 탑 FullHeight / 4 필요
       */}
       <ReservationHeaderPosterImage themeImg={data.themeImg} />
-
+      
+      <Animated.View
+        style={{
+          flex: 1,
+          opacity: fadeAnim,
+        }}
+      >
       <BlurView
         style={{
           flex: 1,
@@ -130,7 +184,7 @@ function ReservationDetailScreen({ route, navigation }) {
             
           <MainTitle>{themeName}</MainTitle>
             <GenreTitle>{storeName}</GenreTitle>
-            <IconContainer>
+            <IconContainer>                                    
               <Ionicons
                 name="md-call"
                 size={21}
@@ -169,7 +223,7 @@ function ReservationDetailScreen({ route, navigation }) {
             <MaterialCommunityIcons name="send-circle-outline" size={36} color={theme.colors.point}/>
             <InfoTitle>예약 양도</InfoTitle>
           </Button>
-          <Button onPress={() => {deleteRefetch().then(navigation.navigate('TabViewExample'))}}>
+          <Button onPress={() => setModalVisible2(true)}>
             <MaterialCommunityIcons name="delete-circle-outline" size={36} color={theme.colors.point}/>
             <InfoTitle>예약 취소</InfoTitle>
           </Button>
@@ -188,6 +242,7 @@ function ReservationDetailScreen({ route, navigation }) {
         </Suspense>
 
       </ButtonView>
+      </Animated.View>
     </Container>
   );
 }
@@ -295,7 +350,7 @@ const ButtonView = styled.View`
 const TextWrapper = styled.View`
 `;
 
-const ButtonWrapper = styled.View`
+export const ButtonWrapper = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;

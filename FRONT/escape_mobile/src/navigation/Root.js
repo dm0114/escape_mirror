@@ -23,6 +23,7 @@ import Assignment from '../screens/Assignment';
 import CommunityScreen from '../screens/CommunityScreen';
 import CommunityDetailScreen from '../screens/CommunityDetailScreen';
 import TabViewExample from './Tabview';
+import MainTabView from './MainTabView'
 
 import MypageMoreScreen from '../screens/User/MypageMoreScreen';
 import KakaoLogin from '../screens/login/Login';
@@ -39,11 +40,13 @@ const Root = () =>
     screenOptions={{
       cardStyle: { backgroundColor: '#212121' },
       headerShown: false,
+      animationEnabled: false,      
     }}
   >
       {/* <Nav.Screen name="Drawer" component={Drawer}/> */}
       
       <Nav.Screen name="TabViewExample" component={TabViewExample} />
+      <Nav.Screen name="MainTabView" component={MainTabView} />
       <Nav.Screen name="SearchScreen" component={SearchScreen} />
 
       <Nav.Screen name="ReservationScreen" component={ReservationScreen} />

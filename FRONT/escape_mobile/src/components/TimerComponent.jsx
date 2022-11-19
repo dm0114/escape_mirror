@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useTimer } from "react-timer-hook";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 export default function MyTimer({ expiryTimestamp }) {
+  const [isLoading, setIsLoading] = useState(true)
   const [timeStatus, setTimeStatus] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false)  
+      }, 1100);
+  }, []);
+
   const { seconds, minutes, hours, days } = useTimer({
     expiryTimestamp,
     onExpire: () => setTimeStatus(true),
@@ -12,13 +20,22 @@ export default function MyTimer({ expiryTimestamp }) {
 
   return (
     <View style={{ textAlign: "center" }}>
-              {timeStatus 
-          ?  <TimeText>입장해주세요</TimeText>
-          :  <TimeText>{days} : {hours} : {minutes} : {seconds}</TimeText>
-        }
+      {isLoading ? <LoadingView><ActivityIndicator color="#ff5f3f"/></LoadingView> : timeStatus ? (
+        <TimeText>입장해주세요</TimeText>
+      ) : (
+        <TimeText>
+          {days} : {hours} : {minutes} : {seconds}
+        </TimeText>
+      ) }
     </View>
   );
 }
+
+const LoadingView = styled.View`
+  height: 31px;
+  justify-content: center;
+  align-items: center;
+`
 
 const TimeText = styled.Text`
   font-family: "SUIT-Bold";

@@ -4,7 +4,7 @@ import { ImageBackground, View } from "react-native";
 import styled from "styled-components/native";
 import "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
-import ReservationComponent from "../components/Reservation/ReservationComponent";
+// import ReservationComponent from "../components/Reservation/ReservationComponent";
 import { LayoutContext } from "../../App";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingScreen from "./LoadingScreen";
@@ -14,45 +14,39 @@ import { useRecoilValue } from "recoil";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 
 
-// const Calendar = React.lazy(() => {
-//   return new Promise(resolve => setTimeout(resolve, 5 * 1000)).then(
-//     () =>
-//       Math.floor(Math.random() * 10) >= 4
-//         ? import("./components/Calendar")
-//         : Promise.reject(new Error())
-//   );
-// });
+const ReservationComponent = React.lazy(() => {
+  return new Promise(resolve => setTimeout(resolve, 1 * 1000)).then(
+    () => import("../components/Reservation/ReservationComponent")
+  );
+});
 
 const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
 
 
-export default function MainScreen() {
+export default function MainScreen({navigation, route}) {
   const layoutDatas = useRecoilValue(LayoutData)
   const {Width, Height} = layoutDatas
 
   // 프리로딩 API 연결
   const { data, isLoading, refetch } = useQuery(
     ["PreloadingData"],
-    getPreloading
+    getPreloading, {
+      enabled: false
+    }
   );
-  useEffect(() => {
-    console.log(data);
-  },[])
 
   const queryClient = useQueryClient();
   const userInfo = queryClient.getQueryData(['myInfo']);
-  // console.log(userInfo.nickname)
-  // useEffect(()=>{
-  //   setNickname(userInfo.nickname)
-  // }, [])
-  // },[data])
-  
-  // refetch
-  useFocusEffect(
-    React.useCallback(() => {
-      refetch()
-    }, [])
-  );
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     refetch()
+  //   }, [])
+  // );
+  const isFocused = useIsFocused();
+    useEffect(() => {
+        refetch()
+    }, [isFocused])
 
 
   return (
