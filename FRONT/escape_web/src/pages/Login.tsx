@@ -4,7 +4,7 @@ import { jsx, css } from "@emotion/react"
 import React, {useEffect, useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 
 const Main = css`
     display: grid;
@@ -31,6 +31,7 @@ const LoginSection = css`
 `
 
 export default function Login(){
+    const navigate = useNavigate();
     const [userId, setUserId] = useState<string | undefined>();
     const [userPw, setUserPw] = useState<string | undefined>();
     const [isLogin, setIsLogin] = useState(false);
@@ -52,8 +53,8 @@ export default function Login(){
             }
         })
         .then((data) => {
-            localStorage.setItem("accessToken", data.accessToken)
-            setIsLogin(true)
+            localStorage.setItem("accessToken", `Bearer ${data.accessToken}`)
+            navigate("/admin");
         }))
         // .json()
         return response
