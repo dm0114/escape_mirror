@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, View, StyleSheet, Dimensions, FlatList, ScrollView, Alert, Button, ImageBackground, TouchableOpacity} from 'react-native';
+import {Text, TextInput, View, Image, StyleSheet, Dimensions, FlatList, ScrollView, Alert, Button, ImageBackground, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import theme from "../../theme";
 import { Select, Box, Center } from "native-base";
@@ -7,7 +7,7 @@ import { Modal } from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
-import { getRegionAssign, getSearchAssign } from '../apis/Assignment';
+import { getRegionAssign, getSearchAssign, postAssign } from '../apis/Assignment';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -117,20 +117,45 @@ const Assignment = () => {
     const [resultRegion, setResultRegion] = useState();
     const [selectItem, setSelectItem] = useState();
     const [isModal, setIsModal] = useState(false);
-    const {data:SelectData} = useQuery(['AssignmentSelect', selectRegion, selectLittleRegion], getRegionAssign, {
+    const {data:SelectData, refetch} = useQuery(['AssignmentSelect', selectRegion, selectLittleRegion], getRegionAssign, {
         enabled:!!(selectRegion&&selectLittleRegion)
     })
     useEffect(()=>{
         setResultRegion(`${selectRegion}/${selectLittleRegion}`)
     }, [selectLittleRegion])
 
-    const Alert = ()=> Alert.alert(
-        "예약을 양도받으시겠습니까?",
-        [
-            {text:"예", onPress:()=>console.log("ㅎㅎ")},
-            {text:"아니요", onPress:()=>console.log("힝ㅜ")}
-        ]
-    );
+    const postAssignAlert = (reserveId) => {
+
+        Alert.alert(
+          '양도받기',
+          '해당 예약을 양도 받으시겠어요?',
+          [
+            {text: '아니오', onPress: () => {}, style: 'cancel'},
+            {
+              text: '예',
+              onPress: () => {
+                const results = postAssign(reserveId).then((res) => {
+                    if(res){
+                        setIsModal(false)
+                        refetch()
+                    }
+                })
+                // console.log("결과물", typeof(results), results)
+                // if(postAssign(reserveId) === 'true'){
+                //     console.log("굿~")
+                //     setIsModal(false)
+                //     refetch()
+                // }
+              },
+              style: 'destructive',
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          },
+        );
+      };
     const AssignItem = ({item}) => {
         const [year, month, day] = item.reservedDate.split("-");
         return(
@@ -151,7 +176,7 @@ const Assignment = () => {
     }
 
     return(
-        <ImageBackground style={{flex:1}} source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'}}>
+        <ImageBackground style={{flex:1}} source={require('../assets/images/assign.gif')}>
         {selectItem !== undefined && <Modal isOpen={isModal} onClose={()=>setIsModal(false)}>
             <Modal.Content>
                 <Modal.CloseButton />
@@ -185,7 +210,7 @@ const Assignment = () => {
                         <SUIT style={{fontSize:25, marginTop:10, marginBottom:0}}>{selectItem.reservedDate}</SUIT>
                         <SUIT style={{fontSize:35, marginTop:10, marginBottom:10}}>{selectItem.reservedTime}</SUIT>
                     </View>
-                    <MyButton onPress={Alert}>
+                    <MyButton onPress={()=>{postAssignAlert(selectItem.reservationId)}}>
                         <MyButtonText>양도 받기</MyButtonText>
                     </MyButton>
                 </Modal.Body>
