@@ -20,9 +20,9 @@ export default function ReservationScreen() {
     <LoadingScreen />
   ) : (
     <ReservationListScroll
-      data={data.books}
+      data={data?.books}
       ListHeaderComponent={
-        <>
+        <ReserveView>
           <ReservationListScroll
             data={data.reservations}
             ListHeaderComponent={<MainText>받으신 초대장 목록이에요.</MainText>}
@@ -34,26 +34,30 @@ export default function ReservationScreen() {
                 themeName={item.themeName}
                 storeName={item.storeName}
                 date={item.date}
-                reserveTime={item.reserveTime}
+                reserveTime={item.reservatedTime}
               />
             )}
           />
           <MainText>최근 초대받아 다녀오신 곳들이에요.</MainText>
-        </>
+        </ReserveView>
       }
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingTop: 30 }}
-      renderItem={({ item }) => (
+        renderItem={({ item }) => (
+        <BookView>
         <BookComponent
           bookId={item.bookId}
+          themeId={item.themeId}
           themeName={item.themeName}
           storeName={item.storeName}
           isClear={item.isClear}
-          isReview={item.isReview}
+          isReview={item.review}
           doneDate={item.doneDate}
           usedHint={item.usedHint}
           clearTime={item.clearTime}
-        />
+          themeImg={item.themeImg}
+            />
+        </BookView>
       )}
     />
   );
@@ -68,6 +72,17 @@ const MainText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
   color: #fff;
+  padding: 0px 10px;
+  margin: 10px 0px;
 `;
 
-const ReservationListScroll = styled.FlatList``;
+const ReservationListScroll = styled.FlatList`
+  flex: 1;
+`;
+
+const BookView = styled.View`
+  padding: 0px 10px;
+`
+const ReserveView = styled(BookView)`
+  
+`
