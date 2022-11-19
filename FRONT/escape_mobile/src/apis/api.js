@@ -2,16 +2,6 @@ import axios from "axios";
 import { SecureState } from "../store/SecureStore";
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 
-// 참고
-// return await fetch(`${BASE_URL}/mainpage/search?${query}`,{
-//   headers : {
-//        Authorization : //토큰 추가
-//   },
-// })
-// .then((res) => {
-//   console.log(res.json());
-//   res.json()
-// })
 
 // 메인
 export const getPreloading = async () => {

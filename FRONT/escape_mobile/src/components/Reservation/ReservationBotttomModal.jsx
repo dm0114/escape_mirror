@@ -10,18 +10,14 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import {
-  Button,
   Modal,
   Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import styled from "styled-components/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { MainContentWrapper } from "../../styles/Search/CafeList";
 
 import { useQuery } from "@tanstack/react-query";
 import { reservationApi } from "../../apis/api";
@@ -29,7 +25,6 @@ import { useRecoilValue } from "recoil";
 import { POSTReservationData } from "../../store/Atom";
 
 import { KorTime } from "./KorTimeComponent";
-import ReservationChips from "./ReservationChips";
 import LoadingScreen from "../../screens/LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
 import theme from "../../../theme";
@@ -73,18 +68,11 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
   );
 
   const reserveParams = useRecoilValue(POSTReservationData);
-  console.log(reserveParams);
   const { data: postReservationData, refetch } = useQuery(
     ["ReservationResult", reserveParams],
     reservationApi.postReservation,
     { enabled: false }
   );
-
-  useEffect(() => {
-    console.log(postReservationData);
-    // setModalVisible(!modalVisible)
-    // navigation.navigate('TabViewExample')
-  }, [postReservationData])
 
   /**
    * 카운터
@@ -147,7 +135,7 @@ function ReservationBotttomModal({ themeId, Price, Width }) {
         </View>
       </Modal>
 
-      <View style={{ position: "absolute", bottom: 0, backgroundColor: "red" }}>
+      <View style={{ position: "absolute", bottom: 0 }}>
         {toggler ? null : (
           <ButtonContainer left={ButtonWidth} onPress={handlePresentModalPress}>
             <SubTitle>예약하기</SubTitle>
@@ -315,14 +303,6 @@ const SubTitle = styled.Text`
   letter-spacing: -0.5px;
 `;
 
-const Body = styled.Text`
-  font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
-  letter-spacing: 0.5px;
-  color: #9b989b;
-  text-align: center;
-`;
 
 const Container = styled.View`
   align-items: center;

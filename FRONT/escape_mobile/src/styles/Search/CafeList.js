@@ -57,6 +57,7 @@ export const MainTitle = styled.Text`
   font-size: ${({ theme }) => theme.fontSizes.title2};
   line-height: ${({ theme }) => theme.fontHeight.title2};
   letter-spacing: -0.5px;
+  overflow: hidden;
 `;
 export const MainSubTitle = styled.Text`
   font-family: "SUIT-Medium";

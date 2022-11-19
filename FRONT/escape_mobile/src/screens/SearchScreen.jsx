@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from "react";
-
+import { ImageBackground } from "react-native";
 import styled from "styled-components/native";
 import theme from "../../theme"
-import { useWindowDimensions, Text, ImageBackground } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import Carousel from "react-native-reanimated-carousel";
-import Toggle from "react-native-toggle-element";
 
-import { useQuery } from "@tanstack/react-query";
-import { searchApi } from "../apis/api";
-
-const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
-import SearchCafeList from "../components/SearchCafeList";
-import SearchThemeList from "../components/SearchThemeList";
-import LoadingScreen from "./LoadingScreen";
-import ThemeComponent from "../components/ThemeComponent";
 import { useNavigation } from "@react-navigation/native";
+const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
 
 
 
@@ -24,11 +13,6 @@ export default function SearchScreen() {
    * API
    */
   const [query, setQuery] = useState("");
-  const { isLoading, isFetching, data, refetch } = useQuery(
-    ["searchCafeAndTheme", query], //토큰 추가
-    searchApi.getSearch,
-    { enabled: false }
-  );
 
   /**
    * 토글
@@ -48,11 +32,11 @@ export default function SearchScreen() {
     }
 
     if (toggleValue) {
-      return navigation.navigate("CafeSearchScreen", { queryParam: query });
+      return navigation.navigate("CafeSearchScreen", { queryParam: query, toggleState: true });
     }
     
     else {
-      return navigation.navigate("ThemeSearchScreen", { queryParam: query });
+      return navigation.navigate("CafeSearchScreen", { queryParam: query, toggleState: false });
     }
   };
 
@@ -73,16 +57,16 @@ export default function SearchScreen() {
               <SubText>테마 검색</SubText>
             </ToggleButtonLeft>
           : <FocusedButtonLeft>
-              <FocusedSubText>테마 검색</FocusedSubText>
+              <SubText>테마 검색</SubText>
             </FocusedButtonLeft>
            }
             
             {toggleValue 
             ? <FocusedButtonRight>
-                <FocusedSubText>카페 검색</FocusedSubText>
+                <SubText>카페 검색</SubText>
               </FocusedButtonRight>
             : <ToggleButtonRight onPress={() => {setToggleValue(true)}}>
-                <FocusedSubText>카페 검색</FocusedSubText>
+                <SubText>카페 검색</SubText>
               </ToggleButtonRight>
             }
         </ToggleContainer>
@@ -94,9 +78,6 @@ export default function SearchScreen() {
         autoComplete ='off'
         caretHidden={true}
       />
-      {/* <SerachResultView>
-        <SearchResult />
-      </SerachResultView> */}
     </ImageBackground>
   );
 }
@@ -120,48 +101,32 @@ const TextContainer = styled.View`
   margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
 `;
 
-const ThemeListScroll = styled.FlatList``;
 
-const CafeListScroll = styled.FlatList``;
-
-const SearchView = styled.View`
-  flex: ${(props) => props.flex};
-  background-color: ${(props) => props.backgroundColor};
-  justify-content: center;
-`;
-
-const SerachResultView = styled.View`
-  /* background-color: #212121; */
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  height: 100%;
-`
-
-const ToggleContainer = styled.View`
+export const ToggleContainer = styled.View`
   margin-top: 40px;
   margin-bottom: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 `
-const ToggleButton = styled.TouchableOpacity`
+export const ToggleButton = styled.TouchableOpacity`
   padding: 10px 30px 10px 30px;
   border-width: 1px;
   border-style: solid;
 `
-const ToggleButtonLeft = styled(ToggleButton)`
+export const ToggleButtonLeft = styled(ToggleButton)`
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;  
   border-color: #fff;
   border-right-width: 0;
 `
-const FocusedButtonLeft = styled(ToggleButton)`
+export const FocusedButtonLeft = styled(ToggleButton)`
   background-color: #ff5f3f;
   border-color: #ff5f3f;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 `
-const ToggleButtonRight = styled(ToggleButton)`
+export const ToggleButtonRight = styled(ToggleButton)`
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   border-width: 1px;
@@ -169,7 +134,7 @@ const ToggleButtonRight = styled(ToggleButton)`
   border-color: #fff;
   border-left-width: 0;
 `
-const FocusedButtonRight = styled(ToggleButton)`
+export const FocusedButtonRight = styled(ToggleButton)`
   background-color: #ff5f3f;
   border-color: #ff5f3f;
   border-top-right-radius: 20px;
@@ -208,22 +173,8 @@ const SubText = styled.Text`
   /* color: #ff5f3f; */
   color: #fff;
 `;
-const FocusedSubText = styled.Text`
+export const FocusedSubText = styled.Text`
   font-family: "SUIT-SemiBold";
   font-size: ${({ theme }) => theme.fontSizes.body2};
   color: #fff;
 `;
-
-
-
-const ErrorText = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title3};
-  line-height: ${({ theme }) => theme.fontHeight.title3};
-  letter-spacing: -0.5px;
-  color: #fff;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-`

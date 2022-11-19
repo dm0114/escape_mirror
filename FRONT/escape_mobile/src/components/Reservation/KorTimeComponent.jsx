@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { useState } from "react";
+import { View } from "react-native";
 import styled from "styled-components/native";
 import ReservationChips from "./ReservationChips";
 import moment from "moment-timezone";

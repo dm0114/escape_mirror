@@ -85,7 +85,3 @@ const CafeTitle = styled.Text`
   font-size: ${({ theme }) => theme.fontSizes.body2};
   color: #9b989b;
 `
-const TimeText = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title2};
-`;

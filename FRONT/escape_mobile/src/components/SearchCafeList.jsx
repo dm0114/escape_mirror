@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Image, View, Linking, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { Ionicons, Fontisto, FontAwesome5  } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5  } from "@expo/vector-icons";
 import { BestBadge, Container, IconContainer, MainContentWrapper, MainSubTitle, MainTextContainer, MainTitle, RepThemeContainer, StoreImgContainer, SubContentWrapper, styles } from "../styles/Search/CafeList";
 
 
@@ -39,7 +39,7 @@ export default function SearchCafeList({
 
         <SubContentWrapper>
           <MainTextContainer>
-            <MainTitle>{storeName}</MainTitle>
+            <MainTitle>{storeName.length >= 12 ? `${storeName.slice(0, 12)}...` : storeName}</MainTitle>
             <MainSubTitle>{storeAddress}</MainSubTitle>
             <IconContainer>
               <Ionicons
@@ -71,12 +71,8 @@ export default function SearchCafeList({
               ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${themeImg}`} 
               : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} 
             style={styles.img} />
-            {/* <Title>{storeName}</Title> */}
             <BestBadge>
-              {/* <SubTitle>BEST</SubTitle> */}
               <FontAwesome5 name="trophy" size={17} color="white" />
-              {/* <FontAwesome5 name="medal" size={17} color="white" /> */}
-              {/* <Fontisto name="fire" size={17} color="white" /> */}
             </BestBadge>
             
           </RepThemeContainer>
