@@ -74,7 +74,7 @@ public class MypageServiceImpl implements MypageService {
             for (UserThemeRelation userThemeRelation : userThemeRelations) {
                 MypageLikeDto mypageLikeDto = new MypageLikeDto();
                 Theme theme = userThemeRelation.getUserRelationTheme();
-                mypageLikeDto.setThemeId(userThemeRelation.getId());
+                mypageLikeDto.setThemeId(theme.getId());
                 mypageLikeDto.setStoreName(theme.getStore().getStoreName());
                 mypageLikeDto.setThemeName(theme.getThemeName());
                 mypageLikeDto.setThemeImg(theme.getPoster());
