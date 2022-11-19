@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 import theme from "../../theme"
 
 import { useNavigation } from "@react-navigation/native";
-const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
 
 
 
@@ -41,7 +40,7 @@ export default function SearchScreen() {
   };
 
   return (
-    <ImageBackground source={{uri:testUri}} style={{flex:1}}>
+    <ImageBackground source={require('../assets/images/search.gif')} style={{flex:1}}>
       <TextContainer>
         <RowContainer>
           <MainText>

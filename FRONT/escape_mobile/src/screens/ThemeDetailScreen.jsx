@@ -35,11 +35,11 @@ import {
 } from "../styles/Theme/Info";
 
 import { useQuery } from "@tanstack/react-query";
-import { searchApi } from "../apis/api";
+import { likeApi, searchApi } from "../apis/api";
 import LoadingScreen from "./LoadingScreen";
 import ReservationBotttomModal from '../components/Reservation/ReservationBotttomModal';
 import HeaderPosterImage from "../components/HeaderPosterImage";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 import { useRecoilValue } from "recoil";
 import { LayoutData } from "../store/Atom";
@@ -49,12 +49,19 @@ function ThemeDetailScreen({ route }) {
    * API
    */
   const { themeId } = route.params;
-  console.log('테마아이디', themeId);
   const { isLoading, data, status } = useQuery(
     ["ThemeDetail", themeId],
     searchApi.getThemeDetail
   );
-  useEffect(() => {console.log(data);}, [data])
+  useEffect(() => {console.log(1);}, [data])
+  
+  const { refetch } = useQuery(
+    ["ThemeDetail", themeId],
+    likeApi.postLike, {
+      enabled: false,
+    }
+  );
+  
   
   /**
    * 애니메이션
@@ -134,6 +141,13 @@ function ThemeDetailScreen({ route }) {
             paddingBottom: 20,
           }}
         >
+              <Ionicons
+                name="heart"
+                size={19}
+                color="tomato"
+                style={{ position: 'absolute', marginLeft: 'auto', bottom: Height/2.8, right: 20 }}
+                onPress={()=>{refetch()}}
+              />
           <GenreTitle>{data.genre}</GenreTitle>
           <MainTitle>{data.themeName}</MainTitle>
 
@@ -170,25 +184,25 @@ function ThemeDetailScreen({ route }) {
             marginHorizontal: 20,
           }}
         >
-          {!!data.noHintRanking.length ? (
+          {!!data.hintRanking.length ? (
             <RankingContainer>
               <RankingInfoContainer>
                 <RankingSub>
-                  <RankingBody>{data.noHintRanking[1].cleartime}</RankingBody>
+                  <RankingBody>{data.hintRanking[1] ? data.hintRanking[1].clearTime : '데이터가 없습니다.'}</RankingBody>
                 </RankingSub>
-                <RankingName>{data.noHintRanking[1].userNickname}</RankingName>
+                <RankingName>{data.hintRanking[1] ? data.hintRanking[1].userNickname : '데이터가 없습니다.'}</RankingName>
               </RankingInfoContainer>
               <RankingInfoContainer>
                 <RankingMain>
-                  <RankingBody>{data.noHintRanking[0].cleartime}</RankingBody>
+                  <RankingBody>{data.hintRanking[0] ? data.hintRanking[0].clearTime : '데이터가 없습니다.'}</RankingBody>
                 </RankingMain>
-                <RankingName>{data.noHintRanking[0].userNickname}</RankingName>
+                <RankingName>{data.hintRanking[0] ? data.hintRanking[0].userNickname : '데이터가 없습니다.'}</RankingName>
               </RankingInfoContainer>
               <RankingInfoContainer>
                 <RankingSub>
-                  <RankingBody>{data.noHintRanking[2].cleartime}</RankingBody>
+                  <RankingBody>{data.hintRanking[2] ? data.hintRanking[2].clearTime : '데이터가 없습니다.'}</RankingBody>
                 </RankingSub>
-                <RankingName>{data.noHintRanking[2].userNickname}</RankingName>
+                <RankingName>{data.hintRanking[2] ? data.hintRanking[2].userNickname : '데이터가 없습니다.'}</RankingName>
               </RankingInfoContainer>
             </RankingContainer>
           ) : (

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import theme from "../../theme"
 
+import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
@@ -20,16 +21,12 @@ import { useRecoilValue } from "recoil";
 
 
 export default function CafeSearchScreen({ route }) {
-  const { queryParam, toggleState } = route.params;
   /**
    * 토글
    */
-  const [toggleValue, setToggleValue] = useState(toggleState);
-  useEffect(() => {
-    console.log(toggleValue);
-    console.log(data);
-  }, [toggleValue, data])
-
+  console.log(route.params);
+  const [toggleValue, setToggleValue] = useState(route.params.toggleState);
+  
   /**
   * 레이아웃
   */
@@ -38,13 +35,9 @@ export default function CafeSearchScreen({ route }) {
      
   /**
    * API
-   */  
-  const [query, setQuery] = useState("");
-  useEffect(()=> {
-    refetch()
-    setQuery(queryParam)
-  }, [])
-  
+   */
+  const [query, setQuery] = useState(route.params.queryParam);
+  console.log(query);
   const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch, {
@@ -63,15 +56,16 @@ export default function CafeSearchScreen({ route }) {
     refetch();
   };
 
+  useEffect(() => {refetch()}, [])
+  useEffect(() => {}, [data])
+  useEffect(() => {}, [toggleValue])
+
 
   /**
    * 검색 결과
    */
   const SearchResult = () => {
-    if (!isLoading && !isFetching) {
-      if ( data.error || !data || (!data.storeList?.length && !data.themeList?.length) ) {
-        return ( <ErrorText>검색된 정보가 없어요 😥</ErrorText>)
-      }
+    try {
       if (toggleValue) {
         return (
           <CafeListScroll
@@ -127,7 +121,11 @@ export default function CafeSearchScreen({ route }) {
         )}
       />)
       }
-    } else if (isLoading && isFetching) return <LoadingScreen />;
+    }
+
+    catch {
+      return <LoadingScreen />;
+    }
   };
 
   return (
@@ -172,11 +170,16 @@ export default function CafeSearchScreen({ route }) {
 /**
  * 뷰
  */
+const RowContainer = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+`
 
 const TextContainer = styled.View`
   padding-left: ${({ theme }) => theme.screenMargin.padding};
   padding-right: ${({ theme }) => theme.screenMargin.padding};
-  padding-top: 40px;
+  padding-top: ${({ theme }) => theme.screenMargin.paddingTop};
   margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
   margin-right: ${({ theme }) => theme.screenMargin.titleLeftMargin};
   margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
@@ -186,6 +189,11 @@ const ThemeListScroll = styled.FlatList``;
 
 const CafeListScroll = styled.FlatList``;
 
+const SearchView = styled.View`
+  flex: ${(props) => props.flex};
+  background-color: ${(props) => props.backgroundColor};
+  justify-content: center;
+`;
 
 const SerachResultView = styled.View`
   /* background-color: #212121; */
@@ -211,6 +219,19 @@ const SearchTextInput = styled.TextInput`
 /**
  * 텍스트
  */
+const MainText = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.title2};
+  color: #fff;
+  line-height: ${({ theme }) => theme.fontHeight.title2};
+  letter-spacing: -1px;
+`;
+
+const SubText = styled.Text`
+  font-family: "SUIT-SemiBold";
+  font-size: ${({ theme }) => theme.fontSizes.title3};
+  color: #fff;
+`;
 
 const ToggleSubText = styled.Text`
   font-family: "SUIT-SemiBold";

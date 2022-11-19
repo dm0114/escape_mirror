@@ -42,7 +42,7 @@ export default function ReservationComponent({
         })}}
         >
         <TextContainer>
-          <ThemeTitle>{themeName}</ThemeTitle>
+          <ThemeTitle>{themeName.length >= 12 ? `${themeName.slice(0, 12)}...` : themeName }</ThemeTitle>
           <CafeTitle>{storeName}</CafeTitle>
         </TextContainer>
         <TimeContainer>

@@ -19,8 +19,6 @@ const ReservationComponent = React.lazy(() => {
   );
 });
 
-const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_reservation2.gif'
-
 
 export default function MainScreen() {
   const layoutDatas = useRecoilValue(LayoutData)
@@ -47,7 +45,7 @@ export default function MainScreen() {
   
     try {
       return (
-        <ImageBackground  source={{uri:testUri}} style={{flex:1}}>
+        <ImageBackground source={require('../../assets/images/main.gif')} style={{flex:1}}>
           <MainContainer>
             <MainText>
               안녕하세요, {userInfo.nickname}님.{"\n"}
