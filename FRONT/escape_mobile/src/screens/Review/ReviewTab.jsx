@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
 import {Image,StyleSheet,FlatList,useWindowDimensions, ImageBackground, Button, Text, View, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Alert } from 'react-native';
@@ -14,44 +14,45 @@ import { getMyReview } from '../../apis/MyPage';
 // ”interior”:5,
 // ”horror”4,
 // ”lock”:60(장치비율),
-const data = [
-  {
-    'reviewId': 1,
-    'themeTitle': '킹스맨',
-    'content': '타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-    'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'star': 9,
-    'diff':8,    
-  },
-  {
-    'reviewId': 2,
-    'themeTitle':'킹스맨',
-    'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-    'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'star': 9,
-    'diff':8,    
-  },
-  {
-    'reviewId': 3,
-    'themeTitle':'킹스맨',
-    'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-    'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-    'star': 9,
-    'diff':8,    
-  },
-  {
-    'reviewId': 4,
-    'themeTitle':'킹스맨',
-    'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-    'reviewImg': '',
-    'star': 9,
-    'diff':8,    
-  }
-]
+// const data = [
+//   {
+//     'reviewId': 1,
+//     'themeTitle': '킹스맨',
+//     'content': '타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
+//     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'star': 9,
+//     'diff':8,    
+//   },
+//   {
+//     'reviewId': 2,
+//     'themeTitle':'킹스맨',
+//     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
+//     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'star': 9,
+//     'diff':8,    
+//   },
+//   {
+//     'reviewId': 3,
+//     'themeTitle':'킹스맨',
+//     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
+//     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
+//     'star': 9,
+//     'diff':8,    
+//   },
+//   {
+//     'reviewId': 4,
+//     'themeTitle':'킹스맨',
+//     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
+//     'reviewImg': '',
+//     'star': 9,
+//     'diff':8,    
+//   }
+// ]
 export default function ReviewTab() {
   const navigation = useNavigation();
-  // const { data } = useQuery(['myReview'], getMyReview)
-  // console.log(data)
+  const { data } = useQuery(['myReview'], getMyReview)
+  useEffect(() => {console.log(data);}, [data])
+  
   //리뷰 컴포넌트
   function RenderReview({ item }) {
     const rating = item.star/2
@@ -60,7 +61,7 @@ export default function ReviewTab() {
         {/* 리뷰 이미지 | 이미지 링크가 없을땐 출력 x, 있으면 이미지 o */}
         {item.reviewImg == '' ?
             <></> :
-            <ImageView><Image source={{uri:item.reviewImg}} style={styles.tinyImage}/></ImageView>}
+            <ImageView><Image source={{uri:`https://pureblood3-image-for-user.s3.ap-northeast-2.amazonaws.com/${item.reviewImg}`}} style={styles.tinyImage}/></ImageView>}
         {/* 리뷰의 제목 */}
         <TitleView>
           <TitleTxt>{item.themeTitle}</TitleTxt>
@@ -85,12 +86,12 @@ export default function ReviewTab() {
         </ContentView>
         {/* 수정 삭제 버튼 */}
         <BtnView>
-          <UpdateBtn>
+          {/* <UpdateBtn>
             <UpdateTxt
             onPress={() => {
             navigation.navigate("ReviewCreateScreen");
             }}>수정</UpdateTxt>
-          </UpdateBtn>
+          </UpdateBtn> */}
           {/* <DeleteBtn>
             <DeleteTxt>삭제</DeleteTxt>
           </DeleteBtn> */}

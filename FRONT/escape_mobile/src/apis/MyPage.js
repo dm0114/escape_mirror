@@ -1,5 +1,6 @@
 import { ContentType } from 'react-native-ui-lib/src/components/skeletonView';
 import { SecureState } from "../store/SecureStore";
+import axios from "axios";
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 const ACCESS_TOKEN = SecureState.getData('accessToken');
 const Token = `Bearer ${ACCESS_TOKEN}`
@@ -35,10 +36,11 @@ export const getLikeTheme = async ({ queryKey }) => {
 
 
 //나의 리뷰 보기
-const getMyReview = async ({ queryKey }) => {
+export const getMyReview = async () => {
   const query = new URLSearchParams({
     page: 0
   });
+  console.log('주소',`${BASE_URL}/mypage/reviews?${query}`)
   return await (
     await fetch(`${BASE_URL}/mypage/reviews?${query}`, {
       headers: {
@@ -85,31 +87,30 @@ export const getMyInfo = async ({ queryKey }) => {
 //리뷰 작성 하기
 export const postReview = async ({ queryKey }) => {
   console.log('postReview')
-  const { } = queryKey[1]
+  const {themeId,bookId,rating,active,different,horror,interrior,story,locker,reviewImg,textAreaValue } = queryKey[1]
   const data = {
-  bookId: 0,
-  content: "string",
-  feelActivity: 0,
-  feelDifficulty: 0,
-  feelHorror: 0,
-  feelInterrior: 0,
-  feelStory: 0,
-  locker: 0,
-  reviewImg: "string",
-  star: 0,
-  themeId: 0
+    bookId: bookId,
+    content: textAreaValue,
+    feelActivity: active,
+    feelDifficulty: different,
+    feelHorror: horror,
+    feelInterrior: interrior,
+    feelStory: story,
+    locker: locker,
+    reviewImg: reviewImg,
+    star: rating,
+    themeId: themeId
 }
-  const response = await (await fetch(`${BASE_URL}/review`, {
-    method:'POST',
+  const res = await axios({
+    url: `${BASE_URL}/review`,
+    method: "post",
+    data: JSON.stringify(data),
     headers: {
-      // Authorization: Token
-      Authorization: await SecureState.getData('accessToken')
+      Authorization: await SecureState.getData("accessToken"),
+      "Content-Type": "application/json",
     },
-    body: {
-      
-    }
-  }))
-  return response
+  });
+  return res;
 }
 
 //회원탈퇴

@@ -49,11 +49,12 @@ function ThemeDetailScreen({ route }) {
    * API
    */
   const { themeId } = route.params;
+  console.log('테마아이디', themeId);
   const { isLoading, data, status } = useQuery(
     ["ThemeDetail", themeId],
     searchApi.getThemeDetail
   );
-  useEffect(() => {console.log(data)}, [data])
+  useEffect(() => {console.log(data);}, [data])
   
   /**
    * 애니메이션
@@ -116,141 +117,141 @@ function ThemeDetailScreen({ route }) {
     },
     showlegend: false, // @4
   };
+  try {
+  return (<SafeAreaView style={styles.container}>
+      <HeaderPosterImage themeImg={data.themeImg} />
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
-    <SafeAreaView style={styles.container}>
-    <HeaderPosterImage themeImg={data.themeImg} />
+      <MainContainer>
+        <View
+          style={{
+            marginTop: 40,
+            paddingTop: Height / 4,
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            width: Width - 40,
+            marginHorizontal: 20,
+            paddingHorizontal: 20,
+            paddingBottom: 20,
+          }}
+        >
+          <GenreTitle>{data.genre}</GenreTitle>
+          <MainTitle>{data.themeName}</MainTitle>
 
-    <MainContainer>
-      <View
-        style={{
-          marginTop: 40,
-          paddingTop: Height / 4,
-          backgroundColor: "#fff",
-          borderRadius: 8,
-          width: Width - 40,
-          marginHorizontal: 20,
-          paddingHorizontal: 20,
-          paddingBottom: 20,
-        }}
-      >
-        <GenreTitle>{data.genre}</GenreTitle>
-        <MainTitle>{data.themeName}</MainTitle>
+          <InfoTextWrapper>
+            <RowContainer>
+              <SubTitle>{data.leadTime}분 • </SubTitle>
+              <SubTitle>{data.capacity} • </SubTitle>
+              <SubTitle>난이도 {data.difficulty}</SubTitle>
+            </RowContainer>
+          </InfoTextWrapper>
 
-        <InfoTextWrapper>
-          <RowContainer>
-            <SubTitle>{data.leadTime}분 • </SubTitle>
-            <SubTitle>{data.capacity} • </SubTitle>
-            <SubTitle>난이도 {data.difficulty}</SubTitle>
-          </RowContainer>
-        </InfoTextWrapper>
+          <RatingContainer>
+            <StarRating
+              starSize={24}
+              rating={data.star}
+              onChange={() => {}}
+              style={{ marginLeft: "auto", marginRight: "auto" }}
+            />
+          </RatingContainer>
 
-        <RatingContainer>
-          <StarRating
-            starSize={24}
-            rating={data.star}
-            onChange={() => {}}
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          />
-        </RatingContainer>
+          <InfoTextWrapper>
+            <Body>{data.description?.replace(/\\n/g, " ")}</Body>
+          </InfoTextWrapper>
+        </View>
 
-        <InfoTextWrapper>
-          <Body>{data.description.replace(/\\n/g, " ")}</Body>
-        </InfoTextWrapper>
-      </View>
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            height: Height / 6,
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            marginTop: 4,
+            marginHorizontal: 20,
+          }}
+        >
+          {!!data.noHintRanking.length ? (
+            <RankingContainer>
+              <RankingInfoContainer>
+                <RankingSub>
+                  <RankingBody>{data.noHintRanking[1].cleartime}</RankingBody>
+                </RankingSub>
+                <RankingName>{data.noHintRanking[1].userNickname}</RankingName>
+              </RankingInfoContainer>
+              <RankingInfoContainer>
+                <RankingMain>
+                  <RankingBody>{data.noHintRanking[0].cleartime}</RankingBody>
+                </RankingMain>
+                <RankingName>{data.noHintRanking[0].userNickname}</RankingName>
+              </RankingInfoContainer>
+              <RankingInfoContainer>
+                <RankingSub>
+                  <RankingBody>{data.noHintRanking[2].cleartime}</RankingBody>
+                </RankingSub>
+                <RankingName>{data.noHintRanking[2].userNickname}</RankingName>
+              </RankingInfoContainer>
+            </RankingContainer>
+          ) : (
+            <SubTitle>랭킹 데이터가 없습니다!</SubTitle>
+          )}
+        </View>
 
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          height: Height / 6,
-          backgroundColor: "#fff",
-          borderRadius: 8,
-          marginTop: 4,
-          marginHorizontal: 20,
-        }}
-      >
-        {!!data.noHintRanking.length ? (
-          <RankingContainer>
-            <RankingInfoContainer>
-              <RankingSub>
-                <RankingBody>{data.noHintRanking[1].cleartime}</RankingBody>
-              </RankingSub>
-              <RankingName>{data.noHintRanking[1].userNickname}</RankingName>
-            </RankingInfoContainer>
-            <RankingInfoContainer>
-              <RankingMain>
-                <RankingBody>{data.noHintRanking[0].cleartime}</RankingBody>
-              </RankingMain>
-              <RankingName>{data.noHintRanking[0].userNickname}</RankingName>
-            </RankingInfoContainer>
-            <RankingInfoContainer>
-              <RankingSub>
-                <RankingBody>{data.noHintRanking[2].cleartime}</RankingBody>
-              </RankingSub>
-              <RankingName>{data.noHintRanking[2].userNickname}</RankingName>
-            </RankingInfoContainer>
-          </RankingContainer>
-        ) : (
-          <SubTitle>랭킹 데이터가 없습니다!</SubTitle>
-        )}
-      </View>
+        <RankingWrapper>
+          <ReviewTitle>후기 ({data.reviews.length})</ReviewTitle>
+          {/* <ChartContainer>
+            <Plotly data={ChartData} layout={ChartLayout} enableFullPlotly />
+          </ChartContainer> */}
 
-      <RankingWrapper>
-        <ReviewTitle>후기 ({data.reviews.length})</ReviewTitle>
-        {/* <ChartContainer>
-          <Plotly data={ChartData} layout={ChartLayout} enableFullPlotly />
-        </ChartContainer> */}
+          {data.reviews?.map((item, idx) => {
+            return (
+              <ReviewWrapper key={idx}>
+                <StarRating
+                  starSize={14}
+                  starStyle={{
+                    marginLeft: 0,
+                    marginRight: 4,
+                    marginBottom: 10,
+                  }}
+                  rating={item.star}
+                  onChange={() => {}}
+                />
+                <ReviewUser>{`${item.User}  `}</ReviewUser>
+                <ReviewContent>{item.content}</ReviewContent>
+                <ReviewRowContainer>
+                  <ReivewRowInfo>
+                    <FontAwesome5
+                      name="question-circle"
+                      size={12}
+                      color="black"
+                      style={{ marginRight: 6 }}
+                    />
+                    <ReviewInfo>{item.usedHint}</ReviewInfo>
+                  </ReivewRowInfo>
+                  <ReivewRowInfo>
+                    <FontAwesome5
+                      name="clock"
+                      size={12}
+                      color="black"
+                      style={{ marginRight: 6 }}
+                    />
+                    <ReviewInfo>{item.clearTime}</ReviewInfo>
+                  </ReivewRowInfo>
+                </ReviewRowContainer>
+              </ReviewWrapper>
+            );
+          })}
+        </RankingWrapper>
+      </MainContainer>
 
-        {data.reviews?.map((item, idx) => {
-          return (
-            <ReviewWrapper key={idx}>
-              <StarRating
-                starSize={14}
-                starStyle={{
-                  marginLeft: 0,
-                  marginRight: 4,
-                  marginBottom: 10,
-                }}
-                rating={item.star}
-                onChange={() => {}}
-              />
-              <ReviewUser>{`${item.User}  `}</ReviewUser>
-              <ReviewContent>{item.content}</ReviewContent>
-              <ReviewRowContainer>
-                <ReivewRowInfo>
-                  <FontAwesome5
-                    name="question-circle"
-                    size={12}
-                    color="black"
-                    style={{ marginRight: 6 }}
-                  />
-                  <ReviewInfo>{item.usedHint}</ReviewInfo>
-                </ReivewRowInfo>
-                <ReivewRowInfo>
-                  <FontAwesome5
-                    name="clock"
-                    size={12}
-                    color="black"
-                    style={{ marginRight: 6 }}
-                  />
-                  <ReviewInfo>{item.clearTime}</ReviewInfo>
-                </ReivewRowInfo>
-              </ReviewRowContainer>
-            </ReviewWrapper>
-          );
-        })}
-      </RankingWrapper>
-    </MainContainer>
-
-    {/* 
-      바텀 시트 모달 
-    */}
-    <ReservationBotttomModal themeId={themeId} Price={data.price} Width={Width} />
-  </SafeAreaView>
-  );
+      {/* 
+        바텀 시트 모달 
+      */}
+      <ReservationBotttomModal themeId={themeId} Price={data.price} Width={Width} />
+    </SafeAreaView>)
+    }
+  catch { 
+    return <LoadingScreen />
+  }
 }
 
 export default ThemeDetailScreen;

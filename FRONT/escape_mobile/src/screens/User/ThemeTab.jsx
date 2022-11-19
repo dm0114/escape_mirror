@@ -82,7 +82,6 @@ export default function ThemeTab() {
           navigation.navigate("ThemeDetailScreen", { themeId: item.themeId });
           }}
         >
-          
           <Image source={item.themeImg ? { uri: `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${item.themeImg}` } :
         {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} style={styles.tinyImage} />
         </TouchableOpacity>
@@ -105,7 +104,7 @@ export default function ThemeTab() {
 
 const Container = styled.View`
   flex: 1;
-
+  background-color: ${({ theme }) => theme.colors.backgroundDark};
 `
 
 const styles = StyleSheet.create({
