@@ -265,7 +265,7 @@ export default function ReviewCreateScreen({ route }) {
       </Box> 
       <EnrollView>
         <EnrollBtn onPress={() => {
-          refetch().then(navigation.navigate('MypageScreen'))
+          refetch().then(navigation.navigate('MypageMoreScreen'))
         }}>
           <EnrollTxt>등록</EnrollTxt>
         </EnrollBtn>

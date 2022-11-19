@@ -138,7 +138,7 @@ export default function Mypage() {
 
   return (
     <Container>
-    <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_mypage.gif'}} style={{flex:1, width:SCREEN_WIDTH}}>
+    <ImageBackground source={require('../../assets/images/mypage.gif')} style={{flex:1, width:SCREEN_WIDTH}}>
       {/* 상단 이미지 */}
       <MypageView flex={5}>
       {/*Edit가 True일 때 ? EditScreen , False일 때 MypageScreen*/}
