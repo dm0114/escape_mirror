@@ -114,11 +114,9 @@ export default function Mypage() {
         </View>  
 
         <UserView>
-          {/* 회원 탈퇴하기 */}
-          <EscapeTxt onPress={toggleModal}>회원 탈퇴</EscapeTxt>
+          {/* <EscapeTxt onPress={toggleModal}>회원 탈퇴</EscapeTxt>
           <EscapeTxt>|</EscapeTxt>
-          {/* 로그아웃 */}
-          <LogOutTxt>로그아웃</LogOutTxt>
+          <LogOutTxt>로그아웃</LogOutTxt> */}
         </UserView>
 
         {/* 회원탈퇴 Modal */}

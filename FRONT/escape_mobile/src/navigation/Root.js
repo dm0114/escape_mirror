@@ -25,6 +25,7 @@ import CommunityDetailScreen from '../screens/CommunityDetailScreen';
 import TabViewExample from './Tabview';
 import MainTabView from './MainTabView'
 
+import MypageScreen from '../screens/User/MypageScreen';
 import MypageMoreScreen from '../screens/User/MypageMoreScreen';
 import KakaoLogin from '../screens/login/Login';
 import ReviewCreateScreen from '../screens/Review/ReviewCreateScreen';
@@ -66,6 +67,7 @@ const Root = () =>
       <Nav.Screen name="CommunityDetailScreen" component={CommunityDetailScreen} />
       <Nav.Screen name="Stack" component={Stack} />
       <Nav.Screen name="MypageMoreScreen" component={MypageMoreScreen} />
+      <Nav.Screen name="MypageScreen" component={MypageScreen} />
       <Nav.Screen name="KakaoLogin" component={KakaoLogin} />
       <Nav.Screen name="ReviewCreateScreen" component={ReviewCreateScreen} />
       <Nav.Screen name="Assignment" component={Assignment} />

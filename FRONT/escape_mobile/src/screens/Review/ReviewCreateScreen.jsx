@@ -1,19 +1,19 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useEffect,useState, useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import theme from '../../../theme';
 import {Image,StyleSheet,FlatList,useWindowDimensions, ImageBackground, Button, Text, View, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import StarRating from 'react-native-star-rating-widget';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { TextArea, Box, Center, NativeBaseProvider,Select } from "native-base";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {TextArea, Box, Center, NativeBaseProvider,Select } from "native-base";
 import { useQuery } from '@tanstack/react-query';
-import { getActiveLog } from '../../apis/MyPage';
+import { getActiveLog,postReview } from '../../apis/MyPage';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 import { RNS3 } from 'react-native-s3-upload';
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { useNavigation } from '@react-navigation/native';
 import {Slider} from 'react-native-ui-lib';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // import _ from 'lodash';
 // import axios from 'axios';
@@ -31,10 +31,15 @@ import {Slider} from 'react-native-ui-lib';
 // }
 //별 반개가 1점!
 
-
-export default function ReviewCreateScreen() {
-  const { data: activeData } = useQuery(['myActive'], getActiveLog)
-  console.log('activeDate',activeData)
+// book id
+// themename
+// donedate
+// themeid
+export default function ReviewCreateScreen({ route }) {
+  const navigation = useNavigation();
+  const { themeId, bookId, themeName, doneDate } = route.params
+  // const { data: activeData } = useQuery(['myActive'], getActiveLog)
+  // console.log('activeDate',activeData)
   // const activeData = [
   //   {
   //     'themeName': '킹스맨',
@@ -55,9 +60,17 @@ export default function ReviewCreateScreen() {
   const [story, setStory] = useState(0);
   //잠금장치 locker
   const [locker, setLocker] = useState(0);
-
   //내용 작성
   const [textAreaValue, setTextAreaValue] = useState("");
+  //이미지
+  const [reviewImg, setReviewImg] = useState("");
+  console.log('리뷰이미지',reviewImg)
+  const { data, refetch } = useQuery(
+    ["ReviewResult", {themeId,bookId,rating,active,different,horror,interrior,story,locker,reviewImg,textAreaValue}],
+    postReview,
+    { enabled: false }
+  );
+
   // console.log(rating, different, textAreaValue)
   // const lockImg = require('../../assets/images/lockerImg.png')
 
@@ -70,13 +83,13 @@ export default function ReviewCreateScreen() {
       console.log('Response = ', response);
       setUploadSuccessMessage('');
       if (response.didCancel) {
-        alert('User cancelled camera picker');
+        // alert('');
         return;
       } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera not available on device');
+        alert('카메라를 이용할 수 없습니다');
         return;
       } else if (response.errorCode == 'permission') {
-        alert('Permission not satisfied');
+        alert('허가되지 않은 오류입니다');
         return;
       } else if (response.errorCode == 'others') {
         alert(response.errorMessage);
@@ -85,11 +98,16 @@ export default function ReviewCreateScreen() {
       setFilePath(response);
     });
   };
-  console.log('filePath',filePath)
+
+  useEffect(() => {
+    try { setReviewImg(filePath.assets[0].fileName) }
+    catch {}
+  },[filePath])
+
   //image s3 서버 전송
   const uploadFile = () => {
     if (Object.keys(filePath).length == 0) {
-      alert('Please select image first');
+      alert('이미지를 먼저 선택해주세요!');
       return;
     }
     RNS3.put(
@@ -117,7 +135,7 @@ export default function ReviewCreateScreen() {
       )
       .then((response) => {
         if (response.status !== 201)
-          alert('Failed to upload image to S3');
+          alert('업로드 실패!');
         console.log(response.body);
         setFilePath('');
         let {
@@ -140,11 +158,8 @@ export default function ReviewCreateScreen() {
     <KeyboardAwareScrollView>
     <Container>
       <ThemeTitleView>
-
-        {/* <><ThemeTitleTxt>{activeData[0]?.themeName}</ThemeTitleTxt>
-        <DateTxt>{activeData[0]?.doneDate}</DateTxt></> */}
-
-      
+        <ThemeTitleTxt>{themeName}</ThemeTitleTxt>
+        <DateTxt>{doneDate[0]}년 {doneDate[1]}월 {doneDate[2]}일</DateTxt>
       {/* 평점 - ”star” 별 반개가 1점!!*/}
       <StarView>
         <StarRating
@@ -154,16 +169,18 @@ export default function ReviewCreateScreen() {
           
       </StarView>
       {/* 리뷰사진 - ”reviewImg”*/}
-        <ReviewView>
+          <ReviewView>
+          {reviewImg == '' ? 
           <CameraBtn onPress={UploadImage} >
             <Ionicons name="camera" size={24} color="white" />
             <CameraTxt >사진 불러오기</CameraTxt>
           </CameraBtn>
+              :
           <UploadBtn onPress={uploadFile}>
               <Ionicons name="md-cloud-upload-outline" size={24} color="white" />
               <CameraTxt >사진 업로드하기</CameraTxt>
-          </UploadBtn>
-          {uploadSuccessMessage ? (<EvalTxt>{uploadSuccessMessage}</EvalTxt>) : <></>}
+          </UploadBtn>}
+            {uploadSuccessMessage ? (<EvalTxt>{filePath.assets[0].fileName} {uploadSuccessMessage} </EvalTxt>) : <></>}
         </ReviewView>
       </ThemeTitleView>
 
@@ -229,7 +246,12 @@ export default function ReviewCreateScreen() {
             minimumTrackTintColor='#3e5616'
           />
       {/* 내용 작성 - ”content” */}
-      <Box alignItems="center" w="100%">
+          <Box alignItems="center" w="100%">
+            {/* <TextInput
+              onChange={text => setTextAreaValue(text)}
+              value={textAreaValue}
+              style={{width:SCREEN_WIDTH, height:100}}
+            /> */}
         <TextArea
           value={textAreaValue}
           placeholder="리뷰를 작성해주세요!"
@@ -242,7 +264,9 @@ export default function ReviewCreateScreen() {
           />
       </Box> 
       <EnrollView>
-        <EnrollBtn>
+        <EnrollBtn onPress={() => {
+          refetch().then(navigation.navigate('MypageScreen'))
+        }}>
           <EnrollTxt>등록</EnrollTxt>
         </EnrollBtn>
       </EnrollView>
@@ -254,8 +278,8 @@ export default function ReviewCreateScreen() {
   )
 }
 
-const Container = styled.View`
-  flex: 1;
+const Container = styled.KeyboardAvoidingView`
+  /* flex: 1; */
   padding: 80px 20px 30px 20px;
   height: auto;
   /* justify-content: center;

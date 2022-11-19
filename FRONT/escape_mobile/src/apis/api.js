@@ -77,9 +77,16 @@ const getThemeDetail = async ({ queryKey }) => {
 export const searchApi = { getSearch, getCafeDetail, getThemeDetail };
 
 // 예약
-const getMypageActs = () => {
+const getMypageActs = async ({queryKey}) => {
   // api/mypage/acts
-  return fetch(`${BASE_URL}/mocksTheme/db`).then((res) => res.json());
+  const response = await (await fetch(`${BASE_URL}/mypage/acts`, {
+    headers: {
+      Authorization : await SecureState.getData('accessToken')
+      // Authorization : Token
+    }
+  })).json()
+  return response
+  // return fetch(`${BASE_URL}/mocksTheme/db`).then((res) => res.json());
 };
 
 //예약 상세
