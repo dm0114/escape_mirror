@@ -6,68 +6,7 @@ import ThemeCompo from '../../components/ThemeCompo';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { getLikeTheme } from '../../apis/MyPage';
-// const data = [
-//   {
-//     'themeId': 1,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 2,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 3,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 4,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 5,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 6,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 7,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 8,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 9,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 10,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 11,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 12,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 13,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 14,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-//   {
-//     'themeId': 15,
-//     'themeImg':'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//   },
-// ]
+
 export default function ThemeTab() {
   const navigation = useNavigation();
   const { data } = useQuery(['likeTheme'], getLikeTheme)

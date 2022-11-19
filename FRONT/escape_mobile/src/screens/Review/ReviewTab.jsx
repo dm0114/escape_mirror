@@ -7,55 +7,36 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import StarRating from 'react-native-star-rating-widget';
 import { useQuery } from '@tanstack/react-query';
-import { getMyReview } from '../../apis/MyPage';
-// ”star”:9,
-// ”diff”:8,
-// ”story”:6,
-// ”interior”:5,
-// ”horror”4,
-// ”lock”:60(장치비율),
-// const data = [
-//   {
-//     'reviewId': 1,
-//     'themeTitle': '킹스맨',
-//     'content': '타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-//     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'star': 9,
-//     'diff':8,    
-//   },
-//   {
-//     'reviewId': 2,
-//     'themeTitle':'킹스맨',
-//     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-//     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'star': 9,
-//     'diff':8,    
-//   },
-//   {
-//     'reviewId': 3,
-//     'themeTitle':'킹스맨',
-//     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-//     'reviewImg': 'https://pbs.twimg.com/media/E80HdMrUcAQv4hi.jpg',
-//     'star': 9,
-//     'diff':8,    
-//   },
-//   {
-//     'reviewId': 4,
-//     'themeTitle':'킹스맨',
-//     'content':'타인보다 우수하다고 해서 고귀한 것은 아니다. 과거의 자신보다 우수한 것이야 말로 진정으로 고귀한 것이다.',
-//     'reviewImg': '',
-//     'star': 9,
-//     'diff':8,    
-//   }
-// ]
+import { getMyReview, delReview } from '../../apis/MyPage';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { ReviewIdData } from "../../store/Atom";
+
 export default function ReviewTab() {
   const navigation = useNavigation();
   const { data } = useQuery(['myReview'], getMyReview)
-  useEffect(() => {console.log(data);}, [data])
+  useEffect(() => { console.log(data); }, [data])
+
+  // const reviewParams = useRecoilValue(ReviewIdData)
+  // const { data: reviewData, refetch } = useQuery(
+  //   ["ReviewResult", reviewParams],
+  //   delReview,
+  //   { enabled: false }
+  // );
   
+  // useEffect(() => {
+  //   console.log(reviewData);
+  // }, [reviewData])
+
   //리뷰 컴포넌트
   function RenderReview({ item }) {
-    const rating = item.star/2
+    const rating = item.star / 2
+    console.log(item)
+    const [review, setReview] = useState(0);
+    // const setReviewData = useSetRecoilState(ReviewIdData)
+    // useEffect(() => {
+    //   if (!!review) {setReviewData({review})}
+    // }, [selectTime])
+
     return (
       <RenderView>
         {/* 리뷰 이미지 | 이미지 링크가 없을땐 출력 x, 있으면 이미지 o */}
@@ -92,8 +73,13 @@ export default function ReviewTab() {
             navigation.navigate("ReviewCreateScreen");
             }}>수정</UpdateTxt>
           </UpdateBtn> */}
+
+          {/* 삭제 버튼@!@@!! */}
           {/* <DeleteBtn>
-            <DeleteTxt>삭제</DeleteTxt>
+            <DeleteTxt onPress={() => {
+              setReview(item.reviewId)
+              // refetch().then(navigation.navigate('MypageMoreScreen'))
+            }}>삭제</DeleteTxt>
           </DeleteBtn> */}
         </BtnView>
       </RenderView>
@@ -188,7 +174,7 @@ const BtnView = styled.View`
 `
 
 const DeleteBtn = styled.TouchableOpacity`
-  background-color: #af8181;
+  background-color: ${({ theme }) => theme.colors.point};
   border-radius: 10px;
   padding: 5px;
   margin: 5px;
@@ -197,6 +183,7 @@ const UpdateBtn = styled(DeleteBtn)`
   background-color: cornsilk;
 `
 const DeleteTxt = styled.Text`
+  color: white;
   font-family: "SUIT-Bold";
   font-size:  ${({ theme }) => theme.fontSizes.caption1};
   line-height:  ${({ theme }) => theme.fontHeight.caption1};
