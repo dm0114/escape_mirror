@@ -26,3 +26,18 @@ export const getSearchAssign = async({queryKey}) => {
     })).json()
     return response
 }
+
+export const postAssign = async(reserveId) => {
+    const response = await (await fetch(`${BASE_URL}/mainpage/transfer`, {
+        method:'put',
+        headers:{
+            Authorization : await SecureState.getData('accessToken'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "reservationId": reserveId
+          })
+    })).json()
+    console.log("response", response)
+    return response
+}
