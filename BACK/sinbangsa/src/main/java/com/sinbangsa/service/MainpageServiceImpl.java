@@ -98,6 +98,7 @@ public class MainpageServiceImpl implements MainpageService{
             searchTheme.setThemeImg(theme.getPoster());
             searchTheme.setStoreName(theme.getStore().getStoreName());
             searchTheme.setGenre(theme.getGenre());
+            searchTheme.setLikeCount(theme.getLikeThemes().size());
             if (themeReviewRepository.countAllByReviewTheme(theme) == 0) {
                 searchTheme.setStar(-1);
                 searchTheme.setRandomReview("리뷰가 없습니다.");
