@@ -1,53 +1,115 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { ImageBackground } from "react-native";
 
-import styled from 'styled-components/native';
-import theme from '../../theme';
+import styled from "styled-components/native";
+import "react-native-reanimated";
+import Carousel from "react-native-reanimated-carousel";
 
-import ReservationComponent from '../components/ReservationComponent';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import LoadingScreen from "./LoadingScreen";
+import { getPreloading } from "../apis/api";
+import { LayoutData, LikeThemeAtom } from "../store/Atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useIsFocused } from "@react-navigation/native";
+import { getLikeTheme } from "../apis/MyPage";
+
+
+const ReservationComponent = React.lazy(() => {
+  return new Promise(resolve => setTimeout(resolve, 1 * 1000)).then(
+    () => import("../components/Reservation/ReservationComponent")
+  );
+});
+
 
 export default function MainScreen() {
-  return (
-    <Container>
-      <MainView flex={1}>
-        <MainTextView flex={1}>
-          <MainText>
-            안녕하세요, {}님.{"\n"}
-            오랜만에 저택으로 돌아오셨네요.{"\n"}
-            받으신 초대장 목록을 보여드릴게요.
-          </MainText>
-        </MainTextView>
-        <ReservationComponent />
-      </MainView>
-      <MainView flex={2} backgroundColor="blue">
-        <MainText>
-          안녕하세요, {}님.{"\n"}
-          오랜만에 저택으로 돌아오셨네요.{"\n"}
-          받으신 초대장 목록을 보여드릴게요.
-        </MainText>
-      </MainView>
-    </Container>
+  const setLikeData = useSetRecoilState(LikeThemeAtom)
+  const layoutDatas = useRecoilValue(LayoutData)
+  const {Width, Height} = layoutDatas
+
+  // 프리로딩 API 연결
+  const { data, refetch } = useQuery(
+    ["PreloadingData"],
+    getPreloading, {
+      enabled: false
+    }
   );
+  const { data: likeTheme, refetch: likeRefetch } = useQuery(
+    ["LikeThemeData"],
+    getLikeTheme, {
+      enabled: false
+    }
+  );
+
+  const queryClient = useQueryClient();
+  const userInfo = queryClient.getQueryData(['myInfo']);
+  
+  useEffect(() => {}, [data, userInfo])
+
+  const isFocused = useIsFocused();
+    useEffect(() => {
+        refetch()
+        likeRefetch().then(setLikeData(likeTheme))
+    }, [isFocused])
+
+  
+    try {
+      return (
+        <ImageBackground source={require('../assets/images/main.gif')} style={{flex:1}}>
+          <MainContainer>
+            <MainText>
+              안녕하세요, {userInfo.nickname ? userInfo.nickname : 코난}님.{"\n"}
+              오랜만에 저택으로 돌아오셨네요.{"\n"}
+              받으신 초대장 목록을 보여드릴게요.
+            </MainText>
+            <Carousel
+              loop={false}
+              width={Width - 40}
+              height={Width / 3.5}
+              autoPlay={false}
+              data={data.reservationList}
+              mode={'parallax'}
+              modeConfig={
+                {
+                  parallaxScrollingScale: 1,
+                  parallaxAdjacentItemScale: 0.9
+                }
+              }
+              vertical={true}
+              scrollAnimationDuration={2000}
+              renderItem={({item}) => (
+                <ReservationComponent
+                  key={item.reservationId}
+                  reservationId={item.reservationId}
+                  themeName={item.themeName}
+                  storeName={item.storeName}
+                  date={item.reservationDate}
+                  reserveTime={item.reservationTime}
+                  transferStatus={item.status}
+                />
+              )}
+            />
+            
+          </MainContainer>
+        </ImageBackground>
+      );
+    }
+    catch {
+      return <LoadingScreen />
+    }
+  
 }
 
-const Container = styled.View`
+const MainContainer = styled.View`
   flex: 1;
-`
-const MainView = styled.View`
-  flex: ${props=> props.flex};
-  background-color: ${props => props.backgroundColor};
-`
-
-const MainTextView = styled.View`
-  flex: ${props=> props.flex};
-  justify-content: center;
-  align-items: center;
-`
-const MainReservationView = styled.View`
-  flex: ${props=> props.flex};
-`
-
+  padding-left: ${({ theme }) => theme.screenMargin.padding};
+  padding-right: ${({ theme }) => theme.screenMargin.padding};
+  padding-top: ${({ theme }) => theme.screenMargin.paddingTop};
+`;
 const MainText = styled.Text`
   font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.title2};
   color: #fff;
-`
+  line-height: ${({ theme }) => theme.fontHeight.title2};
+  margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
+  margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
+`;

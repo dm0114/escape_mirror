@@ -1,52 +1,148 @@
-import React from 'react'
+import React, { useState } from "react";
+import styled from "styled-components/native";
 
-import styled from 'styled-components/native';
-import theme from '../../theme';
-
-import ReservationComponent from '../components/ReservationComponent';
+import { useQuery } from "@tanstack/react-query";
+import { communityApi } from "../apis/api";
+import { Text, TouchableOpacity, View } from "react-native";
+import LoadingScreen from '../screens/LoadingScreen'
+import { useNavigation } from "@react-navigation/native";
 
 export default function CommunityScreen() {
+  const navigation = useNavigation();
+  const [query, setQuery] = useState("");
+  const { isLoading, data } = useQuery(
+    ["CommunityList", query],
+    communityApi.getCommunityList
+  );
+
+  const SearchResult = () => {
+    if (!isLoading && !isFetching) {
+      const CafeRoute = () => (
+        <CafeListScroll
+          data={data.storeList}
+          contentContainerStyle={{ paddingTop: 40 }}
+          renderItem={({ item }) => (
+            <SearchCafeList
+              storeId={item.storeId}
+              storeName={item.storeName}
+              storeImg={item.storeImg}
+              storeAddress={item.storeAddress}
+              likeCount={item.likeCount}
+            />
+          )}
+        />
+      );
+
+      const ThemeRoute = () => (
+        <ThemeListScroll
+          data={data.themeList}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingTop: 40,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <SearchThemeList
+              themeId={item.themeId}
+              themeName={item.themeName}
+              storeName={item.storeName}
+              themeImg={item.themeImg}
+              likeCount={item.likeCount}
+              star={item.star}
+            />
+          )}
+        />
+      );
+
+      const layout = useWindowDimensions();
+
+      const [index, setIndex] = React.useState(0);
+      const [routes] = React.useState([
+        { key: "Cafe", title: "카페 검색 결과" },
+        { key: "Theme", title: "테마 검색 결과" },
+      ]);
+
+      return (
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={SceneMap({
+            Cafe: CafeRoute,
+            Theme: ThemeRoute,
+          })}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          renderTabBar={(props) => (
+            <TabBar {...props} style={{ backgroundColor: null }} />
+          )}
+        />
+      );
+    } else if (isLoading && isFetching) return <LoadingScreen />;
+    else {
+      return (
+        <>
+          <SearchView flex={1}>
+            <SubText>지금 주변에서 인기 있는 곳</SubText>
+            {/* 이미지 및 슬라이더 추가 */}
+          </SearchView>
+        </>
+      );
+    }
+  };
+
   return (
-    <Container>
-      <MainView flex={1}>
-        <MainTextView flex={1}>
-          <MainText>
-            안녕하세요, {}님.{"\n"}
-            오랜만에 저택으로 돌아오셨네요.{"\n"}
-            받으신 초대장 목록을 보여드릴게요.
-          </MainText>
-        </MainTextView>
-        <ReservationComponent />
-      </MainView>
-      <MainView flex={2} backgroundColor="blue">
-        <MainText>
-          안녕하세요, {}님.{"\n"}
-          오랜만에 저택으로 돌아오셨네요.{"\n"}
-          받으신 초대장 목록을 보여드릴게요.
-        </MainText>
-      </MainView>
-    </Container>
+    isLoading ? <LoadingScreen /> :
+    <View>
+      <MainText>동료들과 이야기를 나눠보세요</MainText>
+      <Text>토글1</Text>
+      <Text>토글2</Text>
+      <Text>토글3</Text>
+      {/* 커뮤니티는 토글로 필터링 */}
+      {data.articles.map((item) => {
+        return (
+          <ArticleComponent
+            key={item.articleId}
+            // onPress={() => {navigation.navigate('CommunityDetailScreen', 
+            // {articleId: item.articleId })}}
+            onPress={() => {navigation.navigate('CommunityDetailScreen', {articleId:item.articleId})}}
+            style={{ backgroundColor: "#FBFBFB"}}
+          >
+            <ArticleTitle>{item.Title}</ArticleTitle>
+            <ArticleWriter>{item.writerName}</ArticleWriter>
+          </ArticleComponent>
+        )
+      })}
+    </View>
   );
 }
+// 뷰
 
-const Container = styled.View`
-  flex: 1;
-`
-const MainView = styled.View`
-  flex: ${props=> props.flex};
-  background-color: ${props => props.backgroundColor};
-`
-
-const MainTextView = styled.View`
-  flex: ${props=> props.flex};
-  justify-content: center;
-  align-items: center;
-`
-const MainReservationView = styled.View`
-  flex: ${props=> props.flex};
+// 요소
+const ArticleComponent = styled.TouchableOpacity`
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
 `
 
+// 텍스트
 const MainText = styled.Text`
   font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title2};
+  font-size: ${({ theme }) => theme.fontSizes.title3};
+  color: #fff;
+  line-height: ${({ theme }) => theme.fontHeight.title3};
+  margin-left: ${({ theme }) => theme.screenMargin.titleLeftMargin};
+  margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
+`;
+
+const ArticleTitle = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.title3};
+  line-height: ${({ theme }) => theme.fontHeight.title3};
+`
+const ArticleWriter = styled.Text`
+  font-family: "SUIT-SemiBold";
+  font-size: ${({ theme }) => theme.fontSizes.caption1};
+  line-height: ${({ theme }) => theme.fontHeight.caption1};
+  color: #999;
 `
