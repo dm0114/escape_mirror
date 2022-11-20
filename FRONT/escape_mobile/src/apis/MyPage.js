@@ -32,6 +32,7 @@ export const getLikeTheme = async ({ queryKey }) => {
       // Authorization : Token
     }
   })).json()
+  console.log(response);
   return response
 }
 
@@ -113,6 +114,23 @@ export const postReview = async ({ queryKey }) => {
   });
   return res;
 }
+
+export const delReview = async ({ queryKey }) => {
+  console.log('delReview')
+  let [_, reviewId] = queryKey;
+
+  const res = await axios({
+    url: `${BASE_URL}/review/${reviewId}`,
+    method: "delete",
+    headers: {
+      Authorization: await SecureState.getData("accessToken"),
+      "Content-Type": "application/json",
+    },
+  });
+  console.log(res);
+  return res;
+}
+
 
 //회원탈퇴
 export const postSignOut = async({ queryKey }) => {

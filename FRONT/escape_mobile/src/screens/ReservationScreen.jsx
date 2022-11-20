@@ -41,6 +41,7 @@ export default function ReservationScreen() {
                 storeName={item.storeName}
                 date={item.date}
                 reserveTime={item.reservatedTime}
+                transferStatus={item.status}
               />
             )}
           />

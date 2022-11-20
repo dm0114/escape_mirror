@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import {
   Text,
   View,
@@ -14,10 +14,8 @@ import LoadingScreen from "./LoadingScreen";
 import { useQuery } from "@tanstack/react-query";
 import { reservationApi } from "../apis/api";
 import ReservationTransfer from "./ReservationTransfer";
-import { LayoutContext } from "../../App";
 import { IconContainer } from "../styles/Theme/Info";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTimer } from "react-timer-hook";
 import { Timer } from "../components/Reservation/KorTimeComponent";
 import ReservationHeaderPosterImage from "../components/ReservationHeaderPosterImage";
 
@@ -177,7 +175,7 @@ function ReservationDetailScreen({ route, navigation }) {
           paddingRight: 40,
           width: Width - 40,
           marginHorizontal: 20,
-          elevation: 50,
+          elevation: 50
         }}
       >
         <TextWrapper>
@@ -343,7 +341,7 @@ const ButtonView = styled.View`
   margin-top: 4px;
   margin-left: 20px;
   margin-right: 20px;
-  margin-bottom: 80px;
+  margin-bottom: 60px;
   padding: 20px 40px 20px 40px;
 `;
 

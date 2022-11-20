@@ -201,10 +201,9 @@ export const reservationApi = {
 };
 
 // 찜하기
-const postLike =  async ({ queryKey }) => {
+const postLike =  async (themeId) => {
   console.log("postLike");
 
-  let [_, themeId] = queryKey;
   console.log(themeId);
   const res = await axios({
     url: `${BASE_URL}/book/theme/${themeId}/like`,
@@ -213,14 +212,14 @@ const postLike =  async ({ queryKey }) => {
       Authorization: await SecureState.getData("accessToken"),
     },
   });
+  console.log(res);
   return res;
 };
 
 // 찜하기 취소
-const deleteLike = async ({ queryKey }) => {
+const deleteLike = async (themeId) => {
   console.log("deleteLike");
 
-  let [_, themeId] = queryKey;
   console.log(themeId);
   const res = await axios({
     url: `${BASE_URL}/book/theme/${themeId}/like`,
@@ -229,6 +228,7 @@ const deleteLike = async ({ queryKey }) => {
       Authorization: await SecureState.getData("accessToken"),
     },
   });
+  console.log(res);
   return res;
 };
 

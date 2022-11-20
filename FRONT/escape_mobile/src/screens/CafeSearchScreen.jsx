@@ -66,6 +66,7 @@ export default function CafeSearchScreen({ route }) {
    */
   const SearchResult = () => {
     try {
+      console.log(data);
       if (toggleValue) {
         return (
           <CafeListScroll
@@ -93,7 +94,9 @@ export default function CafeSearchScreen({ route }) {
         )
       }
       else {
-         return (<Carousel
+        console.log(data);
+         return (
+         <Carousel
           loop={false}
           width={Width}
           height={Height}
@@ -115,6 +118,7 @@ export default function CafeSearchScreen({ route }) {
               themeName={item.themeName}
               storeName={item.storeName}
               themeImg={item.themeImg}
+              genre={item.genre}
               likeCount={item.likeCount}
               star={item.star}
             />

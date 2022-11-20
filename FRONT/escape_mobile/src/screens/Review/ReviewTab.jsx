@@ -11,88 +11,84 @@ import { getMyReview, delReview } from '../../apis/MyPage';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { ReviewIdData } from "../../store/Atom";
 
+
+//리뷰 컴포넌트
+export function RenderReview({ items }) {
+  const navigation = useNavigation()
+  const {item } = items
+  console.log(item);
+
+  const rating = item.star / 2
+
+  const { data: reviewData, refetch } = useQuery(
+    ["ReviewResult", item.reviewId],
+    delReview,
+    { enabled: false }
+  );
+
+  return (
+    <RenderView>
+      {/* 리뷰 이미지 | 이미지 링크가 없을땐 출력 x, 있으면 이미지 o */}
+      {item.reviewImg == '' ?
+          <></> :
+          <ImageView><Image source={{uri:`https://pureblood3-image-for-user.s3.ap-northeast-2.amazonaws.com/${item.reviewImg}`}} style={styles.tinyImage}/></ImageView>}
+      {/* 리뷰의 제목 */}
+      <TitleView>
+        <TitleTxt>{item.themeTitle}</TitleTxt>
+      </TitleView>
+      {/* 별점 */}
+      <StarView>
+        <StarRating
+          rating={rating}
+          starSize={20}
+        />
+        {/* <Ionicons name="star" size={20} color="yellow" />
+        <StarTxt>{item.star}</StarTxt> */}
+      </StarView>
+      {/* 난이도 */}
+      <DiffView>
+        <DiffTxt>난이도</DiffTxt>
+        <DiffNum>{item.diff}</DiffNum>
+      </DiffView>
+      {/* 리뷰내용 */}
+      <ContentView>
+        <ContentTxt>{item.content}</ContentTxt>
+      </ContentView>
+      {/* 수정 삭제 버튼 */}
+      <BtnView>
+        {/* <UpdateBtn>
+          <UpdateTxt
+          onPress={() => {
+          navigation.navigate("ReviewCreateScreen");
+          }}>수정</UpdateTxt>
+        </UpdateBtn> */}
+
+        {/* 삭제 버튼@!@@!! */}
+        <DeleteBtn>
+          <DeleteTxt onPress={() => {refetch().then(navigation.replace('MypageMoreScreen'))}}>삭제</DeleteTxt>
+        </DeleteBtn>
+      </BtnView>
+    </RenderView>
+  )
+}
+
+
 export default function ReviewTab() {
   const navigation = useNavigation();
   const { data } = useQuery(['myReview'], getMyReview)
   useEffect(() => { console.log(data); }, [data])
 
-  // const reviewParams = useRecoilValue(ReviewIdData)
-  // const { data: reviewData, refetch } = useQuery(
-  //   ["ReviewResult", reviewParams],
-  //   delReview,
-  //   { enabled: false }
-  // );
-  
+
   // useEffect(() => {
   //   console.log(reviewData);
   // }, [reviewData])
-
-  //리뷰 컴포넌트
-  function RenderReview({ item }) {
-    const rating = item.star / 2
-    console.log(item)
-    const [review, setReview] = useState(0);
-    // const setReviewData = useSetRecoilState(ReviewIdData)
-    // useEffect(() => {
-    //   if (!!review) {setReviewData({review})}
-    // }, [selectTime])
-
-    return (
-      <RenderView>
-        {/* 리뷰 이미지 | 이미지 링크가 없을땐 출력 x, 있으면 이미지 o */}
-        {item.reviewImg == '' ?
-            <></> :
-            <ImageView><Image source={{uri:`https://pureblood3-image-for-user.s3.ap-northeast-2.amazonaws.com/${item.reviewImg}`}} style={styles.tinyImage}/></ImageView>}
-        {/* 리뷰의 제목 */}
-        <TitleView>
-          <TitleTxt>{item.themeTitle}</TitleTxt>
-        </TitleView>
-        {/* 별점 */}
-        <StarView>
-          <StarRating
-            rating={rating}
-            starSize={20}
-          />
-          {/* <Ionicons name="star" size={20} color="yellow" />
-          <StarTxt>{item.star}</StarTxt> */}
-        </StarView>
-        {/* 난이도 */}
-        <DiffView>
-          <DiffTxt>난이도</DiffTxt>
-          <DiffNum>{item.diff}</DiffNum>
-        </DiffView>
-        {/* 리뷰내용 */}
-        <ContentView>
-          <ContentTxt>{item.content}</ContentTxt>
-        </ContentView>
-        {/* 수정 삭제 버튼 */}
-        <BtnView>
-          {/* <UpdateBtn>
-            <UpdateTxt
-            onPress={() => {
-            navigation.navigate("ReviewCreateScreen");
-            }}>수정</UpdateTxt>
-          </UpdateBtn> */}
-
-          {/* 삭제 버튼@!@@!! */}
-          {/* <DeleteBtn>
-            <DeleteTxt onPress={() => {
-              setReview(item.reviewId)
-              // refetch().then(navigation.navigate('MypageMoreScreen'))
-            }}>삭제</DeleteTxt>
-          </DeleteBtn> */}
-        </BtnView>
-      </RenderView>
-    )
-  }
-
 
   return (
     <Container>
       {/* {data.map((item, index) => <RenderReview key={index} {...item} />)} */}
       <FlatList
         data={data}
-        renderItem={RenderReview}
+        renderItem={(object) => <RenderReview items={object}/>}
         keyExtractor={(data) => data.reviewId}
         style={{ margin: 20 }}
       />

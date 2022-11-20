@@ -68,8 +68,8 @@ const TextContainer = styled.View`
 
 const TimeContainer = styled.View`
   position: absolute;
-  width: 100;
-  right: -5;
+  width: 100px;
+  right: -5px;
   bottom: 0;
   z-index: 999;
 `
