@@ -351,7 +351,7 @@ export default function Theme(){
                 }}>삭제</p>
             </div>)}
             <div css={FormDiv} style={{justifyContent:'flex-start', paddingLeft:19}}>
-<Form.Control type="text" placeholder="시간 입력" style={{width:100, marginRight:10}} onChange={(e)=>{setNewTime(e.target.value)}}/>                
+        <Form.Control type="text" placeholder="시간 입력" style={{width:100, marginRight:10}} onChange={(e)=>{setNewTime(e.target.value)}}/>                
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16"
                 style={{cursor:'pointer'}} onClick={()=>{postTime(nThemeId, newTime).then((res)=>{if(res){
                     alert("추가 완료")
