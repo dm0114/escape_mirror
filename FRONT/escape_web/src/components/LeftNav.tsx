@@ -15,7 +15,7 @@ const NavBack = css`
     padding: 50px 50px 50px 50px;
     background-color: #F5F5F5;
     width:300px;
-    height:100vh;
+    min-height: 100vh;
     h1 {
         margin:0;
     }

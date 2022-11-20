@@ -19,7 +19,7 @@ export const CafeSection = css`
     flex-direction: column;
     align-items: baseline;
     margin-top:40px;
-    padding: 0 60px;
+    padding: 0 60px 30px 60px;
     width:100vw;
 `
 
