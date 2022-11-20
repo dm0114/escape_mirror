@@ -191,6 +191,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
               storeName={item.storeName}
               themeImg={item.themeImg}
               likeCount={item.likeCount}
+              genre={item.genre}
               star={item.star}
             />
           )}

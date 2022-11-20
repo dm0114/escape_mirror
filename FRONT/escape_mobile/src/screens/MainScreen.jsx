@@ -43,7 +43,7 @@ export default function MainScreen() {
   const queryClient = useQueryClient();
   const userInfo = queryClient.getQueryData(['myInfo']);
   
-  useEffect(() => {}, [data, userInfo])
+  useEffect(() => {console.log(data);}, [data, userInfo])
 
   const isFocused = useIsFocused();
     useEffect(() => {
@@ -57,7 +57,7 @@ export default function MainScreen() {
         <ImageBackground source={require('../assets/images/main.gif')} style={{flex:1}}>
           <MainContainer>
             <MainText>
-              안녕하세요, {userInfo.nickname}님.{"\n"}
+              안녕하세요, {userInfo ? userInfo.nickname : 코난}님.{"\n"}
               오랜만에 저택으로 돌아오셨네요.{"\n"}
               받으신 초대장 목록을 보여드릴게요.
             </MainText>
@@ -84,6 +84,7 @@ export default function MainScreen() {
                   storeName={item.storeName}
                   date={item.reservationDate}
                   reserveTime={item.reservationTime}
+                  transferStatus={item.status}
                 />
               )}
             />

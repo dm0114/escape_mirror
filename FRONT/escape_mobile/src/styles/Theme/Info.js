@@ -215,18 +215,20 @@ export const Body = styled.Text`
 `;
 export const RankingBody = styled.Text`
   font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
+  font-size: ${({ theme }) => theme.fontSizes.caption2};
   letter-spacing: 0.5px;
   text-align: center;
+  color: #ccc;
+
 `;
 export const RankingName = styled.Text`
-  font-family: "SUIT-SemiBold";
+  font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
+  margin-top: 6px;
+  margin-bottom: 3px;
   letter-spacing: 0.5px;
   text-align: center;
-  color: #000;
+  color: #fff;
 `;
 export const RatingText = styled.Text`
   font-family: "SUIT-ExtraBold";

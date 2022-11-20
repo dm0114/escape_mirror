@@ -14,6 +14,7 @@ function ThemeComponent({
   likeCount,
   star,
   randomReview,
+  genre
 }) {
   const navigation = useNavigation();
   return (
@@ -56,6 +57,7 @@ function ThemeComponent({
           </Chip>
         </RowContainer>
         <MainTitle>{themeName}</MainTitle>
+        <GenreTitle>{genre}</GenreTitle>
         <DescriptionView>
           <FontAwesome name="quote-left" size={24} color="white" />
             <Description>
@@ -140,6 +142,14 @@ const Description = styled.Text`
   line-height: ${({ theme }) => theme.fontHeight.body};
   letter-spacing: -0.3px;
   color: #ddd;
+`;
+
+const GenreTitle = styled.Text`
+  font-family: "SUIT-Bold";
+  font-size: ${({ theme }) => theme.fontSizes.body2};
+  letter-spacing: -0.5px;
+  text-align: center;
+  color: #9b989b;
 `;
 
 export const styles = StyleSheet.create({
