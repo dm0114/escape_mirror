@@ -149,6 +149,7 @@ public class MypageServiceImpl implements MypageService {
                 reservationDto.setDate(reservationRepo.getDate());
                 reservationDto.setReservatedTime(reservationRepo.getThemeTime().getTime());
                 reservationDto.setThemeImg(themeRepo.getPoster());
+                reservationDto.setStatus(reservationRepo.getStatus());
                 reservationsDto.add(reservationDto);
             }
             mypageMyRoomDto.setReservations(reservationsDto);

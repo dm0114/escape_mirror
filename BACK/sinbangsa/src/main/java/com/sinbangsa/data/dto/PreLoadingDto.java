@@ -21,6 +21,7 @@ public class PreLoadingDto {
         String storeName;
         String reservationDate;
         String reservationTime;
+        int status;
     }
     List<ReservationDto> reservationList;
 }

@@ -36,6 +36,8 @@ public class MypageMyRoomDto {
 
         private String reservatedTime;
 
+        private int status;
+
     }
 
     @Getter

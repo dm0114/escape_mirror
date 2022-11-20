@@ -47,6 +47,7 @@ public class MainpageDto {
         private int likeCount;
         private double star;
         private String randomReview;
+        private String genre;
     }
 
     private List<LStoreDto> storeList;
