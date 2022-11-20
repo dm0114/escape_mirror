@@ -7,9 +7,11 @@ import {
   Image,
   TouchableOpacity,
   Animated,
+  Linking,
 } from "react-native";
-import { Linking, TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Carousel from "react-native-reanimated-carousel";
+import { ProgressBar } from "react-native-ui-lib";
 
 import styled from "styled-components/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -35,10 +37,17 @@ import { searchApi } from "../apis/api";
 
 import LoadingScreen from "./LoadingScreen";
 import SearchThemeList from "../components/SearchThemeList";
-import { SerachResultView, ThemeListTitle, ThemeListView } from "../styles/Search/CafeDetail";
+import {
+  SerachResultView,
+  ThemeListTitle,
+  ThemeListView,
+} from "../styles/Search/CafeDetail";
 import ThemeComponent from "../components/ThemeComponent";
+import { RowContainer } from "../styles/Theme/Info";
 
 function CafeDetailScreen({ navigation: { navigate }, route }) {
+  const [progressRate, setProgressRate] = useState(0);
+
   /**
    * API
    */
@@ -47,7 +56,9 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
     ["CafeDetail", storeId],
     searchApi.getCafeDetail
   );
-
+  useEffect(() => {
+    if (data) {setProgressRate((data.clearCnt / data.themeList.length) * 100)}    
+  }, [data]);
 
   /**
    * 애니메이션 추가
@@ -62,18 +73,20 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
   useEffect(() => {
     Animated.timing(offsetValue, {
       // YOur Random Value...
-      toValue: -(Height / 2),
+      toValue: Height / 4,
       duration: 700,
       useNativeDriver: true,
     }).start();
   }, []);
 
-  return status === "success" ? (
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <>
       <Animated.View
         style={{
-          position: 'relative',
-          top: Height / 2,
+          position: "relative",
+          top: -(Height / 4),
           left: 0,
           right: 0,
           borderRadius: 8,
@@ -86,7 +99,15 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
             <StoreImgContainer>
               <View style={styles.storeImgContainer} />
               <Image
-                source={storeImage}
+                source={
+                  data.storeImg
+                    ? {
+                        uri: `https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${data.storeImg}`,
+                      }
+                    : {
+                        uri: "https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png",
+                      }
+                }
                 style={styles.storeImg}
                 blurRadius={3}
               />
@@ -95,72 +116,88 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
 
           <SubContentWrapper>
             <MainTextContainer>
-              <MainTitle>{data.storeName}</MainTitle>
-              <MainSubTitle>{data.storeAddress}</MainSubTitle>
-              <IconContainer>
-                <TouchableOpacity onPress={() => {}}>
-                  <Ionicons
-                    name="md-call"
-                    size={19}
-                    color="black"
-                    style={{ marginRight: 4 }}
-                  />
-                </TouchableOpacity>
-                <Ionicons
-                  name="md-logo-instagram"
-                  size={20}
-                  color="black"
-                  style={{ marginHorizontal: 8 }}
-                />
-                <Ionicons
-                  name="md-location-sharp"
-                  size={20}
-                  color="black"
-                  style={{ marginLeft: 4 }}
-                />
-              </IconContainer>
+              <View>
+                <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+                  <MainTitle>{data.storeName}</MainTitle>
+                  <View style={{flexDirection: 'row', marginTop: 4}}>
+                    <TouchableOpacity onPress={() => {}}>
+                      <Ionicons
+                        name="md-call"
+                        size={19}
+                        color="black"
+                        style={{ marginRight: 4 }}
+                        onPress={() => {
+                          Linking.openURL(`tel:+${data.tel}`);
+                        }}
+                      />
+                    </TouchableOpacity>
+                    <Ionicons
+                      name="md-logo-instagram"
+                      size={20}
+                      color="black"
+                      style={{ marginHorizontal: 8 }}
+                      onPress={() => {
+                        Linking.openURL(`${data.homepage}`);
+                      }}
+                    />
+                    <Ionicons
+                      name="md-location-sharp"
+                      size={20}
+                      color="black"
+                      style={{ marginLeft: 4 }}
+                      onPress={() => {
+                        Linking.openURL(
+                          `http://map.naver.com/?query=${data.storeAddress}`
+                        );
+                      }}
+                    />
+                  </View>
+                </View>
+
+                <MainSubTitle>{data.storeAddress}</MainSubTitle>
+              </View>
+
+              <ProgressBar
+                progress={progressRate}
+                progressColor={"red"}
+                style={{ height: 20 }}
+              />
             </MainTextContainer>
-            {/* <RepThemeContainer>
-              <SubTitle>진행율</SubTitle>
-              <SubTitle>{data.clearCnt} / {data.totalTheme}</SubTitle>
-            </RepThemeContainer> */}
           </SubContentWrapper>
         </Container>
       </Animated.View>
 
-      <ThemeListTitle>테마 종류</ThemeListTitle>     
+      <ThemeListTitle>테마 종류</ThemeListTitle>
 
       <SerachResultView>
         <Carousel
-            loop={false}
-            width={CarouselWidth}
-            height={CarouselHeight}
-            autoPlay={false}
-            data={data.themeList}
-            mode={'parallax'}
-            modeConfig={
-              {
-                parallaxScrollingOffset: 140,
-                parallaxScrollingScale: 1,
-                parallaxAdjacentItemScale: 0.9,
-              }
-            }
-            vertical={false}
-            scrollAnimationDuration={1000}
-            renderItem={({item}) => (
-                <ThemeComponent
-                  themeId={item.themeId}
-                  themeName={item.themeName}
-                  storeName={item.storeName}
-                  themeImg={item.themeImg}
-                  likeCount={item.likeCount}
-                  star={item.star}
-                />
-            )}
-          />
+          loop={false}
+          width={CarouselWidth}
+          height={CarouselHeight}
+          autoPlay={false}
+          data={data.themeList}
+          mode={"parallax"}
+          modeConfig={{
+            parallaxScrollingOffset: 140,
+            parallaxScrollingScale: 1,
+            parallaxAdjacentItemScale: 0.9,
+          }}
+          vertical={false}
+          scrollAnimationDuration={1000}
+          renderItem={({ item }) => (
+            <ThemeComponent
+              themeId={item.themeId}
+              themeName={item.themeName}
+              storeName={item.storeName}
+              themeImg={item.themeImg}
+              likeCount={item.likeCount}
+              star={item.star}
+            />
+          )}
+        />
       </SerachResultView>
 
-        {/* <FlatList
+      {/* <FlatList
           data={data?.themeList}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -181,25 +218,7 @@ function CafeDetailScreen({ navigation: { navigate }, route }) {
           )}
         /> */}
     </>
-  ) : (
-    <LoadingScreen />
   );
 }
 
-/**
- * 재사용 할 수도 있는 코드
- */
-// useEffect(()=> {
-//   console.log(`tel:${data.tel.replace(/-/gi, '')}`);
-//   Linking.openURL(`tel:+${data.tel.replace(/-/gi, '')}`)
-// }, [data])
-
-// <SubTitle>{data.mapX}</SubTitle>
-//         <SubTitle>{data.mapY}</SubTitle>
-//         <SubTitle>{data.tel} </SubTitle>
-//         <SubTitle>{data.homepage} </SubTitle>
-//         <SubTitle> {data.storeImg} </SubTitle>
-
-//         <SubTitle>{data.region}</SubTitle>
-//         <SubTitle>{data.clearCnt} / {data.totalTheme}</SubTitle>
 export default CafeDetailScreen;

@@ -1,22 +1,24 @@
 import React from "react";
-import { TouchableOpacity, Image, View } from "react-native";
+import { TouchableOpacity, Image, View, Linking, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { Ionicons, Fontisto, FontAwesome5  } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5  } from "@expo/vector-icons";
 import { BestBadge, Container, IconContainer, MainContentWrapper, MainSubTitle, MainTextContainer, MainTitle, RepThemeContainer, StoreImgContainer, SubContentWrapper, styles } from "../styles/Search/CafeList";
-const cardImage = require("../assets/mocks/image.png");
-const storeImage = require("../assets/mocks/storeImg.png");
+
 
 export default function SearchCafeList({
   storeId,
   storeName,
   storeImg,
+  storeTel,
+  storeHomepage,
   storeAddress,
   likeCount,
   mostReviewedTheme,
 }) {
   const navigation = useNavigation();
   const { themeId, themeName, themeImg, star } = mostReviewedTheme;
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -27,13 +29,17 @@ export default function SearchCafeList({
         <MainContentWrapper>
           <StoreImgContainer>
             <View style={styles.storeImgContainer} />
-            <Image source={storeImage} style={styles.storeImg} blurRadius={3} />
+            <ImageBackground
+              source={ storeImg 
+                ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${storeImg}`} 
+                : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} 
+              style={styles.storeImg} blurRadius={3} />
           </StoreImgContainer>
         </MainContentWrapper>
 
         <SubContentWrapper>
           <MainTextContainer>
-            <MainTitle>{storeName}</MainTitle>
+            <MainTitle>{storeName.length >= 12 ? `${storeName.slice(0, 12)}...` : storeName}</MainTitle>
             <MainSubTitle>{storeAddress}</MainSubTitle>
             <IconContainer>
               <Ionicons
@@ -41,29 +47,32 @@ export default function SearchCafeList({
                 size={19}
                 color="black"
                 style={{ marginRight: 4 }}
+                onPress={()=>{ Linking.openURL(`tel:+${storeTel}`)}}
               />
               <Ionicons
                 name="md-logo-instagram"
                 size={20}
                 color="black"
                 style={{ marginHorizontal: 8 }}
+                onPress={()=>{ Linking.openURL(`${storeHomepage}`)}}
               />
               <Ionicons
                 name="md-location-sharp"
                 size={20}
                 color="black"
                 style={{ marginLeft: 4 }}
+                onPress={()=>{ Linking.openURL(`http://map.naver.com/?query=${storeAddress}`)}}
               />
             </IconContainer>
           </MainTextContainer>
           <RepThemeContainer>
-            <Image source={cardImage} style={styles.img} />
-            {/* <Title>{storeName}</Title> */}
+            <Image 
+            source={ themeImg 
+              ? {uri:`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${themeImg}`} 
+              : {uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/NoImage.png'}} 
+            style={styles.img} />
             <BestBadge>
-              {/* <SubTitle>BEST</SubTitle> */}
               <FontAwesome5 name="trophy" size={17} color="white" />
-              {/* <FontAwesome5 name="medal" size={17} color="white" /> */}
-              {/* <Fontisto name="fire" size={17} color="white" /> */}
             </BestBadge>
             
           </RepThemeContainer>

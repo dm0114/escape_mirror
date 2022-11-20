@@ -2,16 +2,6 @@ import axios from "axios";
 import { SecureState } from "../store/SecureStore";
 const BASE_URL = "http://k7c104.p.ssafy.io:8080/api";
 
-// 참고
-// return await fetch(`${BASE_URL}/mainpage/search?${query}`,{
-//   headers : {
-//        Authorization : //토큰 추가
-//   },
-// })
-// .then((res) => {
-//   console.log(res.json());
-//   res.json()
-// })
 
 // 메인
 export const getPreloading = async () => {
@@ -156,6 +146,7 @@ const postReservation = async ({ queryKey }) => {
       "Content-Type": "application/json",
     },
   });
+  console.log(res);
   return res;
 };
 
@@ -209,22 +200,40 @@ export const reservationApi = {
   deleteReservation
 };
 
-// 커뮤니티
-const getCommunityList = (head, page) => {
-  // api/community
-  return fetch(`${BASE_URL2}/communityList/db`).then((res) => res.json());
-};
-const getCommunitySearch = (searchWord) => {
-  // api/community/search
-  return fetch(`${BASE_URL2}/communitySearch/db`).then((res) => res.json());
-};
-const getCommunityDetail = (articleId) => {
-  // api/community/{articleId}
-  return fetch(`${BASE_URL2}/communityDetail/db`).then((res) => res.json());
+// 찜하기
+const postLike =  async ({ queryKey }) => {
+  console.log("postLike");
+
+  let [_, themeId] = queryKey;
+  console.log(themeId);
+  const res = await axios({
+    url: `${BASE_URL}/book/theme/${themeId}/like`,
+    method: "post",
+    headers: {
+      Authorization: await SecureState.getData("accessToken"),
+    },
+  });
+  return res;
 };
 
-export const communityApi = {
-  getCommunityList,
-  getCommunitySearch,
-  getCommunityDetail,
+// 찜하기 취소
+const deleteLike = async ({ queryKey }) => {
+  console.log("deleteLike");
+
+  let [_, themeId] = queryKey;
+  console.log(themeId);
+  const res = await axios({
+    url: `${BASE_URL}/book/theme/${themeId}/like`,
+    method: "delete",
+    headers: {
+      Authorization: await SecureState.getData("accessToken"),
+    },
+  });
+  return res;
+};
+
+
+export const likeApi = {
+  postLike,
+  deleteLike
 };

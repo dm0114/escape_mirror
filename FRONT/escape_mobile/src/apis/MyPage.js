@@ -25,6 +25,7 @@ export const putNickName = async (nickname) => {
 
 //짬한 테마
 export const getLikeTheme = async ({ queryKey }) => { 
+  console.log('getLikeTheme');
   const response = await (await fetch(`${BASE_URL}/mypage/likes?page=0`, {
     headers: {
       Authorization : await SecureState.getData('accessToken')

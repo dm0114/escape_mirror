@@ -10,7 +10,6 @@ export const RowContainer = styled.View`
 export const IconContainer = styled.View`
   flex-direction: row;
   justify-content: flex-end;
-  margin-bottom: 20px;
 `
 
 export const MainContainer = styled.ScrollView`
@@ -56,7 +55,7 @@ export const CafeImage = styled.View`
 export const RankingWrapper = styled.View`
   background-color: #fff;
   margin-top: 4px;
-  margin-bottom: 4px;
+  margin-bottom: 90px;
   border-radius: 8px;
   padding-top: 20px;
   margin-left: 20px;
@@ -219,7 +218,6 @@ export const RankingBody = styled.Text`
   font-size: ${({ theme }) => theme.fontSizes.caption1};
   line-height: ${({ theme }) => theme.fontHeight.caption1};
   letter-spacing: 0.5px;
-  color: #fff;
   text-align: center;
 `;
 export const RankingName = styled.Text`

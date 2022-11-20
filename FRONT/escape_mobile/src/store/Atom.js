@@ -14,3 +14,8 @@ export const ReviewIdData = atom({
   key: '',
   default:0,
 })
+
+export const LikeThemeAtom = atom({
+  key: 'LikeThemeAtom',
+  default: {},
+})

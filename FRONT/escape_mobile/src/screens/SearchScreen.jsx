@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from "react";
-
+import { ImageBackground } from "react-native";
 import styled from "styled-components/native";
 import theme from "../../theme"
-import { useWindowDimensions, Text, ImageBackground } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import Carousel from "react-native-reanimated-carousel";
-import Toggle from "react-native-toggle-element";
 
-import { useQuery } from "@tanstack/react-query";
-import { searchApi } from "../apis/api";
-
-const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
-import SearchCafeList from "../components/SearchCafeList";
-import SearchThemeList from "../components/SearchThemeList";
-import LoadingScreen from "./LoadingScreen";
-import ThemeComponent from "../components/ThemeComponent";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -24,11 +12,6 @@ export default function SearchScreen() {
    * API
    */
   const [query, setQuery] = useState("");
-  const { isLoading, isFetching, data, refetch } = useQuery(
-    ["searchCafeAndTheme", query], //토큰 추가
-    searchApi.getSearch,
-    { enabled: false }
-  );
 
   /**
    * 토글
@@ -48,16 +31,16 @@ export default function SearchScreen() {
     }
 
     if (toggleValue) {
-      return navigation.navigate("CafeSearchScreen", { queryParam: query });
+      return navigation.navigate("CafeSearchScreen", { queryParam: query, toggleState: true });
     }
     
     else {
-      return navigation.navigate("ThemeSearchScreen", { queryParam: query });
+      return navigation.navigate("CafeSearchScreen", { queryParam: query, toggleState: false });
     }
   };
 
   return (
-    <ImageBackground source={{uri:testUri}} style={{flex:1}}>
+    <ImageBackground source={require('../assets/images/search.gif')} style={{flex:1}}>
       <TextContainer>
         <RowContainer>
           <MainText>
@@ -65,26 +48,27 @@ export default function SearchScreen() {
             가는 것도 큰 재미이죠.{"\n"}
             새로운 곳에 가보시겠어요?
           </MainText>
-          <Toggle
-            trackBarStyle={{
-              backgroundColor: theme.colors.point,              
-            }}
-            thumbButton={{
-              activeBackgroundColor: '#fff',
-              inActiveBackgroundColor: '#fff',
-              width: 30,
-              height: 30,
-            }}
-            trackBar={{
-              width: 60,
-              height: 20,
-              borderActiveColor: theme.colors.point,
-              borderInActiveColor: theme.colors.point,
-            }}
-            value={toggleValue}
-            onPress={(newState) => setToggleValue(newState)}
-          />
+
         </RowContainer>
+        <ToggleContainer>
+          {toggleValue 
+          ? <ToggleButtonLeft onPress={() => {setToggleValue(false)}}>
+              <SubText>테마 검색</SubText>
+            </ToggleButtonLeft>
+          : <FocusedButtonLeft>
+              <SubText>테마 검색</SubText>
+            </FocusedButtonLeft>
+           }
+            
+            {toggleValue 
+            ? <FocusedButtonRight>
+                <SubText>카페 검색</SubText>
+              </FocusedButtonRight>
+            : <ToggleButtonRight onPress={() => {setToggleValue(true)}}>
+                <SubText>카페 검색</SubText>
+              </ToggleButtonRight>
+            }
+        </ToggleContainer>
       </TextContainer>
       <SearchTextInput
         placeholder={toggleValue ? "카페를 입력하세요." : "테마를 입력하세요."}
@@ -93,9 +77,6 @@ export default function SearchScreen() {
         autoComplete ='off'
         caretHidden={true}
       />
-      {/* <SerachResultView>
-        <SearchResult />
-      </SerachResultView> */}
     </ImageBackground>
   );
 }
@@ -119,21 +100,44 @@ const TextContainer = styled.View`
   margin-bottom: ${({ theme }) => theme.screenMargin.marginBottom};
 `;
 
-const ThemeListScroll = styled.FlatList``;
 
-const CafeListScroll = styled.FlatList``;
-
-const SearchView = styled.View`
-  flex: ${(props) => props.flex};
-  background-color: ${(props) => props.backgroundColor};
+export const ToggleContainer = styled.View`
+  margin-top: 40px;
+  margin-bottom: 10px;
+  flex-direction: row;
   justify-content: center;
-`;
-
-const SerachResultView = styled.View`
-  /* background-color: #212121; */
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  height: 100%;
+  align-items: center;
+`
+export const ToggleButton = styled.TouchableOpacity`
+  padding: 10px 30px 10px 30px;
+  border-width: 1px;
+  border-style: solid;
+`
+export const ToggleButtonLeft = styled(ToggleButton)`
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;  
+  border-color: #fff;
+  border-right-width: 0;
+`
+export const FocusedButtonLeft = styled(ToggleButton)`
+  background-color: #ff5f3f;
+  border-color: #ff5f3f;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+`
+export const ToggleButtonRight = styled(ToggleButton)`
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #fff;
+  border-left-width: 0;
+`
+export const FocusedButtonRight = styled(ToggleButton)`
+  background-color: #ff5f3f;
+  border-color: #ff5f3f;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 `
 
 
@@ -164,20 +168,12 @@ const MainText = styled.Text`
 
 const SubText = styled.Text`
   font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.title3};
+  font-size: ${({ theme }) => theme.fontSizes.body2};
+  /* color: #ff5f3f; */
   color: #fff;
 `;
-
-
-
-const ErrorText = styled.Text`
-  font-family: "SUIT-Bold";
-  font-size: ${({ theme }) => theme.fontSizes.title3};
-  line-height: ${({ theme }) => theme.fontHeight.title3};
-  letter-spacing: -0.5px;
+export const FocusedSubText = styled.Text`
+  font-family: "SUIT-SemiBold";
+  font-size: ${({ theme }) => theme.fontSizes.body2};
   color: #fff;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-`
+`;

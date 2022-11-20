@@ -32,7 +32,7 @@ const ReservationHeaderPosterImage = ({themeImg}) => {
       <Animated.View
         style={{
           position: "absolute",
-          top: Height / 8.5,
+          top: Height / 12.5,
           left: 0,
           right: 0,
           borderRadius: 50,
