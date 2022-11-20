@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "escape_mobile",
+    "slug": "escape_mobile",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "escape_mobile"
+}
