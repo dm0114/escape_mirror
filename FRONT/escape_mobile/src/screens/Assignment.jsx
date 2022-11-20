@@ -164,7 +164,7 @@ const Assignment = () => {
             setIsModal(true)}}>
                 <View style={{alignItems:'center'}}>
                     <SUITSemiBold style={{fontSize:13}}>{item.storeName}</SUITSemiBold>
-                    <SUIT style={{fontSize:20}}>{item.themeName}</SUIT>
+                    <SUIT style={{fontSize:20}} numColumns={2}>{item.themeName}</SUIT>
                 </View>
                 <View style={{borderBottomColor: 'grey', borderBottomWidth:1, marginTop:10, marginBottom:10}} />
                 <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
@@ -335,7 +335,7 @@ const RegionTabText = styled.Text`
 `
 const MyButton = styled.TouchableOpacity`
     background-color: #FC6847;
-    border-radius: 15;
+    border-radius: 15px;
     height:50px;
     justify-content: center;
     align-items: center;
