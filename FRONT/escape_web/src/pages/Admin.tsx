@@ -1,23 +1,26 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react"
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import LeftNav from "@components/LeftNav";
 import { BsFillCameraFill } from 'react-icons/bs';
 import { useQuery } from "@tanstack/react-query";
-import { getStore } from "../api/admin";
+import { getStore, putStore } from "../api/admin";
 import Form from 'react-bootstrap/Form';
+import onFileUpload from '../api/AWS';
+import Button from 'react-bootstrap/Button';
 
-const Main = css`
+export const Main = css`
     display:flex;
 `
 
-const CafeSection = css`
+export const CafeSection = css`
     display: flex;
     flex-direction: column;
     align-items: baseline;
-    /* margin-top:20px; */
+    margin-top:40px;
     padding: 0 60px;
+    width:100vw;
 `
 
 const CafeTitle = css`
@@ -29,25 +32,26 @@ const CafeTitle = css`
 const CafeArticle = css`
     display: flex;
     flex-direction: column;
+    width:100%;
 `
 
-const CafeManageSection = css`
+export const CafeManageSection = css`
     display: flex;
     flex-direction: column;
     align-items: baseline;
     background-color: white;
     margin: 20px 0;
-    padding: 30px 40px;
+    padding: 0 40px;
     border-radius: 15px;
 `
 
-const CafeManageHeader = css`
+export const CafeManageHeader = css`
     margin: 0 0 20px 0;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 700;
 `
 
-const CameraIcon = css`
+export const CameraIcon = css`
     z-index: 1;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.5);
@@ -61,7 +65,7 @@ const CameraIcon = css`
     }
 `
 
-const InputImg = css`
+export const InputImg = css`
     display: none;
     position: relative;
     z-index: 0;
@@ -83,7 +87,16 @@ const TextArea = css`
     border-radius: 10px;
 `
 
-const RegionLittleList = {
+const SelectDiv = css`
+    display:flex;
+    /* justify-content: center; */
+`
+
+interface RegionListType {
+    [key:string] : string[];
+}
+
+const RegionLittleList: RegionListType = {
     // 서울
     '서울':[
         '강남',
@@ -132,8 +145,33 @@ const RegionList = ['서울', '경기', '충청', '경상', '전라', '강원', 
 
 export default function Admin(){
 
+    const {data, refetch} = useQuery(["Admin"], getStore)
+    const [fileName, setFileName] = useState<string>();
+    const [choiceRegion, setChoiceRegion] = useState<string>();
+    const [choiceLittleRegion, setChoiceLittleRegion] = useState<string>();
+    const [littleRegion, setLittleRegion] = useState<string[]>();
+    const [changeAddress, setChangeAddress] = useState<string>();
+    const [changeTel, setChangeTel] = useState<string>();
+    const [changeName, setChangeName] = useState<string>();
+    const [changeSNS, setChangeSNS] = useState<string>();
+    const [storeId, setStoreId] = useState<number>();
 
-    const {data} = useQuery(["Admin"], getStore)
+    useEffect(()=>{
+        if(choiceRegion){
+            setLittleRegion(RegionLittleList[choiceRegion])
+        }
+    }, [choiceRegion])
+
+    useEffect(()=>{
+        if(data){
+            setChangeAddress(data[0].address)
+            setChangeTel(data[0].tel)
+            setChangeName(data[0].storeName)
+            setChangeSNS(data[0].homepage)
+            setStoreId(data[0].storeId)
+            setFileName(data[0].storeImg)
+        }
+    }, [data])
 
     return(
         <>
@@ -142,55 +180,95 @@ export default function Admin(){
             <LeftNav />
             <section css={CafeSection}>
                 {/* <header css={CafeTitle}>{data[0].storeName} 관리</header> */}
-                <div style={{display:'flex'}}>
-                    <article css={CafeArticle} style={{marginRight:'50px'}}>
+                <div style={{display:'flex', width:'100%', maxWidth:'1300px'}}>
+                    <article css={CafeArticle} style={{marginRight:'10px'}}>
                         <section css={CafeManageSection}>
                             <header css={CafeManageHeader}>대표 사진</header>
                             <div style={{position:'relative'}}>
                                 <label htmlFor="uploadCafeImage" css={CameraIcon} >
                                     <BsFillCameraFill size={30} color="white" />
                                 </label>
-                                <input type="file" id="uploadCafeImage" css={InputImg} />
+                                <input type="file" id="uploadCafeImage" css={InputImg} onChange={e=>
+                                    {
+                                        onFileUpload(e)
+                                        const temp = e.target.value.replace(" ", "+").split("\\")
+                                        setFileName(temp[2])
+                                    }}
+                                    />
                                 <div />
-                                <img src={`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${data[0].storeImg}`} 
-                                css={css`
-                                    width:300px;
-                                    height:300px;
-                                    border-radius: 15px;
-                                    filter: brightness(50%);
-                                `} />
+                                {
+                                    fileName ? <img src={`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${fileName}`} 
+                                    css={css`
+                                        width:300px;
+                                        height:300px;
+                                        border-radius: 15px;
+                                        filter: brightness(50%);
+                                    `} />
+                                    :
+                                    <img src={`https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/${data[0].storeImg}`} 
+                                    css={css`
+                                        width:300px;
+                                        height:300px;
+                                        border-radius: 15px;
+                                        filter: brightness(50%);
+                                    `} />
+                                }
+                                
                             </div>
                         </section>
-                        {/* 추후 주소 검색 API 사용 */}
                         <section css={CafeManageSection}>
-                            <header css={CafeManageHeader}>카페 주소</header>
-                            <input css={Input} />
+                            <header css={CafeManageHeader}>카페명</header>
+                            <Form.Control type="text" value={changeName} onChange={(e)=>setChangeName(e.target.value)} 
+                            style={{width:'100%'}}/>
+                            {/* <input css={Input} /> */}
                         </section>
                     </article>
                     <article css={CafeArticle}>
                         <section css={CafeManageSection}>
                             <header css={CafeManageHeader}>지역</header>
-                            <div>
-                                <Form.Select onChange={(item) => console.log(item.target.value)}>
-                                    {RegionList.map((item) => <option>{item}</option>)}
+                            <div css={SelectDiv}>
+                                <Form.Select onChange={(e) => {setChoiceRegion(e.target.value)}}
+                                style={{marginRight:10}}>
+                                    <option>대분류</option>
+                                    {RegionList.map((item) => <option key={item}>{item}</option>)}
                                 </Form.Select>
+                                {choiceRegion && littleRegion ? 
+                                    <Form.Select onChange={(e) => {setChoiceLittleRegion(e.target.value)}}>
+                                        <option>중분류</option>
+                                        {littleRegion.map((item) => <option key={item}>{item}</option>)}
+                                    </Form.Select>
+                                    :
+                                    <Form.Select>
+                                        <option>중분류</option>
+                                        <option>...</option>
+                                    </Form.Select>
+                                }
                             </div>
                         </section>
                         <section css={CafeManageSection}>
-                            <header css={CafeManageHeader}>카페 설명</header>
-                            <textarea css={TextArea}></textarea>
+                            <header css={CafeManageHeader}>카페 주소</header>
+                            <Form.Control type="text" value={changeAddress} onChange={(e)=>setChangeAddress(e.target.value)} />
+                            {/* <input css={Input} /> */}
                         </section>
                         <section css={CafeManageSection}>
                             <header css={CafeManageHeader}>연락처</header>
-                            <input css={Input} />
+                            <Form.Control type="text" value={changeTel} onChange={(e)=>setChangeTel(e.target.value)} />
                         </section>
                         <section css={CafeManageSection}>
-                            <header css={CafeManageHeader}>SNS</header>
-                            <div>
-                                <input placeholder="SNS명" />
-                                <input placeholder="SNS 주소" />
-                            </div>
+                            <header css={CafeManageHeader}>홈페이지</header>
+                            <Form.Control type="text" value={changeSNS} onChange={(e)=>setChangeSNS(e.target.value)}
+                            style={{width:'100%'}} />
                         </section>
+                        <Button style={{marginLeft:'auto', marginRight:40, marginTop:10}} variant="outline-danger"
+                        onClick={()=>{
+                        putStore(storeId, changeAddress, changeSNS, choiceRegion, choiceLittleRegion, fileName, changeName, changeTel)
+                    .then((res) => {
+                        if(res){
+                            alert("수정이 완료되었습니다.")
+                            refetch()
+                        }
+                    })}}
+                        >카페 정보 수정</Button>
                     </article>
                 </div>
             </section>
