@@ -6,11 +6,13 @@ import ThemeCompo from '../../components/ThemeCompo';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { getLikeTheme } from '../../apis/MyPage';
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function ThemeTab() {
   const navigation = useNavigation();
   const { data } = useQuery(['likeTheme'], getLikeTheme)
   console.log(data)
+  console.log(SCREEN_WIDTH)
   // console.log(data)
   //테마 컴포넌트
   function RenderTheme({ item }) {
@@ -48,7 +50,7 @@ const Container = styled.View`
 
 const styles = StyleSheet.create({
   tinyImage: {
-    width: 110,
+    width: SCREEN_WIDTH/4,
     height: 150,
     borderRadius: 10,
     margin: 10,

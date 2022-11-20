@@ -20,6 +20,8 @@ function ReservationChips({ themeId, date }) {
     reservationApi.getReservationDate
   );
 
+  // 1. atom 만들기 -> 2. 만들어놓은 이름 useSetRecoilState에 넣기
+  // 3. set함수 사용해서 데이터 넣기
   // 리코일로 themeTimeId 올리기
   const setReserveData = useSetRecoilState(POSTReservationData)
   
