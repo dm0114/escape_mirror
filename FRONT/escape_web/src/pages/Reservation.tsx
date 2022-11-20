@@ -234,6 +234,8 @@ const ReserveList = css`
 const OkTxt = css`
   color: green ;
   margin: 10px ;
+  font-size:x-large;
+  font-weight: bold;
 `
 
 const IngTxt = css`
