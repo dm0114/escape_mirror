@@ -24,7 +24,7 @@ export default function CafeSearchScreen({ route }) {
   /**
    * 토글
    */
-  console.log(route.params);
+  console.log('파람', route.params);
   const [toggleValue, setToggleValue] = useState(route.params.toggleState);
   
   /**
@@ -37,7 +37,7 @@ export default function CafeSearchScreen({ route }) {
    * API
    */
   const [query, setQuery] = useState(route.params.queryParam);
-  console.log(query);
+  console.log('현재 쿼리', query);
   const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch, {
@@ -66,7 +66,9 @@ export default function CafeSearchScreen({ route }) {
    */
   const SearchResult = () => {
     try {
-      console.log(data);
+      if (data.storeList === null || data.themelist === null ) {
+        return (<ErrorText>검색된 정보가 없어요 😥</ErrorText>)
+      }
       if (toggleValue) {
         return (
           <CafeListScroll
@@ -127,7 +129,7 @@ export default function CafeSearchScreen({ route }) {
       }
     }
 
-    catch {
+    catch(error) {
       return <LoadingScreen />;
     }
   };
