@@ -32,7 +32,6 @@ export const getLikeTheme = async ({ queryKey }) => {
       // Authorization : Token
     }
   })).json()
-  console.log(response);
   return response
 }
 

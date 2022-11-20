@@ -19,7 +19,9 @@ export const getPreloading = async () => {
 // 검색
 const getSearch = async ({ queryKey }) => {
   console.log("getSearch");
+
   let [_, query] = queryKey;
+  console.log(query,'쿼리');
   query = new URLSearchParams({
     searchWord: query,
     page: 0,
@@ -31,6 +33,7 @@ const getSearch = async ({ queryKey }) => {
       },
     })
   ).json();
+  console.log(response);
   return response;
 };
 
