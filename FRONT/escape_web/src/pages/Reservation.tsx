@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react"
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { reservationApi } from "../api/reservation";
 import moment from "moment-timezone";
@@ -48,6 +48,8 @@ export default function Reservation() {
     refetch()
   }
 
+  // const { mutate: putReservation } = useMutation(reservationApi.putReservation);
+  // const { mutate: deleteReservation } = useMutation(reservationApi.deleteReservation);
   // PUT
   const { data: putRes, status: putStatus, refetch: putRefetch } = useQuery(
     ["PutReservation", reservationId],
@@ -55,6 +57,7 @@ export default function Reservation() {
     enabled: false
   }
   );
+
   const putFunction = (reservationNum: number) => {
     setReservationId(reservationNum)
     putRefetch()
@@ -93,7 +96,7 @@ export default function Reservation() {
               <h1 css={CafeTitle}>{data && data.storeName}</h1>
               <div style={{ width: '70vw', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-evenly", marginBottom: 50 }}>
                 {Days.map((item, idx) => {
-                  console.log('days', Days)
+                  // console.log('days', Days)
                   return (
                     <>
                       <button css={DateBtn} key={idx} onClick={() => { getFunction(item) }}>
@@ -133,7 +136,7 @@ export default function Reservation() {
                         <Accordion.Body css={ReserveLists}>
                           {/* <Row xs={1} md={5} className="g-4" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}> */}
                           <Container>
-                            <Row xs={1} sm={3} xxl={4} >
+                            <Row xs={1} sm={3} >
                               {el.timeReservationDto.map((elem: any, idx: number) => {
                                 console.log(el)
                                 return (
