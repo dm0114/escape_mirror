@@ -11,7 +11,7 @@ const BookMain = () => {
     return(
         <ImageBackground source={{uri:'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_book2.gif'}} style={{flex:1}}>
             <MainBookView style={{flex:1}}>
-                <MainBookText>{userInfo.nickname}님을 기다리는 저택이에요.</MainBookText>
+                <MainBookText>저택이 기다리고 있어요.</MainBookText>
                 <MainBookText>모든 방문을 열어</MainBookText>
                 <MainBookText>저택의 주인이 되어주세요.</MainBookText>
             </MainBookView>
