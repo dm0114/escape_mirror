@@ -8,9 +8,10 @@ import Carousel from "react-native-reanimated-carousel";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingScreen from "./LoadingScreen";
 import { getPreloading } from "../apis/api";
-import { LayoutData } from "../store/Atom";
-import { useRecoilValue } from "recoil";
+import { LayoutData, LikeThemeAtom } from "../store/Atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useIsFocused } from "@react-navigation/native";
+import { getLikeTheme } from "../apis/MyPage";
 
 
 const ReservationComponent = React.lazy(() => {
@@ -21,6 +22,7 @@ const ReservationComponent = React.lazy(() => {
 
 
 export default function MainScreen() {
+  const setLikeData = useSetRecoilState(LikeThemeAtom)
   const layoutDatas = useRecoilValue(LayoutData)
   const {Width, Height} = layoutDatas
 
@@ -28,6 +30,12 @@ export default function MainScreen() {
   const { data, refetch } = useQuery(
     ["PreloadingData"],
     getPreloading, {
+      enabled: false
+    }
+  );
+  const { data: likeTheme, refetch: likeRefetch } = useQuery(
+    ["LikeThemeData"],
+    getLikeTheme, {
       enabled: false
     }
   );
@@ -40,12 +48,13 @@ export default function MainScreen() {
   const isFocused = useIsFocused();
     useEffect(() => {
         refetch()
+        likeRefetch().then(setLikeData(likeTheme))
     }, [isFocused])
 
   
     try {
       return (
-        <ImageBackground source={require('../../assets/images/main.gif')} style={{flex:1}}>
+        <ImageBackground source={require('../assets/images/main.gif')} style={{flex:1}}>
           <MainContainer>
             <MainText>
               안녕하세요, {userInfo.nickname}님.{"\n"}

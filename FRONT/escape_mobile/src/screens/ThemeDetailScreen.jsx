@@ -39,7 +39,8 @@ import { likeApi, searchApi } from "../apis/api";
 import LoadingScreen from "./LoadingScreen";
 import ReservationBotttomModal from '../components/Reservation/ReservationBotttomModal';
 import HeaderPosterImage from "../components/HeaderPosterImage";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+
 
 import { useRecoilValue } from "recoil";
 import { LayoutData } from "../store/Atom";
@@ -187,22 +188,19 @@ function ThemeDetailScreen({ route }) {
           {!!data.hintRanking.length ? (
             <RankingContainer>
               <RankingInfoContainer>
-                <RankingSub>
-                  <RankingBody>{data.hintRanking[1] ? data.hintRanking[1].clearTime : '데이터가 없습니다.'}</RankingBody>
-                </RankingSub>
-                <RankingName>{data.hintRanking[1] ? data.hintRanking[1].userNickname : '데이터가 없습니다.'}</RankingName>
+                <MaterialCommunityIcons name="medal" size={24} color="#c0c0c0" />
+                  <RankingBody>{data.hintRanking[1] ? data.hintRanking[1].clearTime : '-'}</RankingBody>
+                <RankingName>{data.hintRanking[1] ? data.hintRanking[1].userNickname : '-'}</RankingName>
               </RankingInfoContainer>
               <RankingInfoContainer>
-                <RankingMain>
-                  <RankingBody>{data.hintRanking[0] ? data.hintRanking[0].clearTime : '데이터가 없습니다.'}</RankingBody>
-                </RankingMain>
-                <RankingName>{data.hintRanking[0] ? data.hintRanking[0].userNickname : '데이터가 없습니다.'}</RankingName>
+                <MaterialCommunityIcons name="medal" size={24} color="#ffd700" />
+                  <RankingBody>{data.hintRanking[0] ? data.hintRanking[0].clearTime : '-'}</RankingBody>
+                <RankingName>{data.hintRanking[0] ? data.hintRanking[0].userNickname : '-'}</RankingName>
               </RankingInfoContainer>
               <RankingInfoContainer>
-                <RankingSub>
-                  <RankingBody>{data.hintRanking[2] ? data.hintRanking[2].clearTime : '데이터가 없습니다.'}</RankingBody>
-                </RankingSub>
-                <RankingName>{data.hintRanking[2] ? data.hintRanking[2].userNickname : '데이터가 없습니다.'}</RankingName>
+                <MaterialCommunityIcons name="medal" size={24} color="#b08d57" />
+                  <RankingBody>{data.hintRanking[2] ? data.hintRanking[2].clearTime : '-'}</RankingBody>
+                <RankingName>{data.hintRanking[2] ? data.hintRanking[2].userNickname : '-'}</RankingName>
               </RankingInfoContainer>
             </RankingContainer>
           ) : (

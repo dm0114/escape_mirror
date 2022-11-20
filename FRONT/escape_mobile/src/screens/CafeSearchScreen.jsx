@@ -208,7 +208,7 @@ const SerachResultView = styled.View`
 const SearchTextInput = styled.TextInput`
   background-color: #fff;
   padding: 8px 16px;
-  margin: 0px 20px 20px 20px;
+  margin: 0px 20px 30px 20px;
   border-color: #fff;
   border-radius: 20px;
 
