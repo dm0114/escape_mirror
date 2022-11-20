@@ -24,5 +24,7 @@ public class ThemeDetailDto {
 
     private int star;
 
+    private String genre;
+
 
 }

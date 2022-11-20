@@ -97,6 +97,7 @@ public class MainpageServiceImpl implements MainpageService{
             searchTheme.setThemeName(theme.getThemeName());
             searchTheme.setThemeImg(theme.getPoster());
             searchTheme.setStoreName(theme.getStore().getStoreName());
+            searchTheme.setGenre(theme.getGenre());
             if (themeReviewRepository.countAllByReviewTheme(theme) == 0) {
                 searchTheme.setStar(-1);
                 searchTheme.setRandomReview("리뷰가 없습니다.");
@@ -138,6 +139,7 @@ public class MainpageServiceImpl implements MainpageService{
             userReservtion.setStoreName(reservation.getThemeTime().getTheme().getStore().getStoreName());
             userReservtion.setReservationTime(reservation.getThemeTime().getTime());
             userReservtion.setReservationDate(reservation.getDate());
+            userReservtion.setStatus(reservation.getStatus());
 
             reservationList.add(userReservtion);
         }
