@@ -223,6 +223,7 @@ public class BookServiceImpl implements BookService {
                 reviewThemeDetailInfoDto.setClearDate(themeReviewRepo.getClearDate());
                 reviewThemeDetailInfoDto.setUsedHint(themeReviewRepo.getUsedHint());
                 reviewThemeDetailInfoDto.setClearTime(themeReviewRepo.getClearTime());
+                reviewThemeDetailInfoDto.setUserName(themeReviewRepo.getReviewUser().getNickname());
                 reviews.add(reviewThemeDetailInfoDto);
             }
             themeDetailInfoDto.setReviews(reviews);
