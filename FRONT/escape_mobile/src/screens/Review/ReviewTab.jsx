@@ -27,7 +27,7 @@ export function RenderReview({ items }) {
   );
 
   return (
-    <RenderView>
+    <RenderView style={{width:SCREEN_WIDTH-10}}>
       {/* 리뷰 이미지 | 이미지 링크가 없을땐 출력 x, 있으면 이미지 o */}
       {item.reviewImg == '' ?
           <></> :

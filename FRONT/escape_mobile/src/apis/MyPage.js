@@ -113,6 +113,22 @@ export const postReview = async ({ queryKey }) => {
   });
   return res;
 }
+//리뷰 삭제 하기
+// export const delReview = async ({ queryKey }) => {
+//   console.log('delReview')
+//   let [_, reviewId] = queryKey;
+
+//   const res = await axios({
+//     url: `${BASE_URL}/review/${reviewId}`,
+//     method: "delete",
+//     data: JSON.stringify(data),
+//     headers: {
+//       Authorization: await SecureState.getData("accessToken"),
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   return res;
+// }
 
 export const delReview = async ({ queryKey }) => {
   console.log('delReview')
