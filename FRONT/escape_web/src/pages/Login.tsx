@@ -36,7 +36,7 @@ export default function Login(){
     const [userPw, setUserPw] = useState<string | undefined>();
     const [isLogin, setIsLogin] = useState(false);
     const UserLogin = async(id:string | undefined, pw:string | undefined) => {
-        const response = await(await fetch(`http://k7c104.p.ssafy.io:8080/api/admin/auth/login`, {
+        const response = await(await fetch(`https://k7c104.p.ssafy.io/api/admin/auth/login`, {
             method:'post',
             headers:{
                 "Content-Type": "application/json"
