@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { ScrollView, Text, useWindowDimensions, View, TouchableOpacity } from "react-native";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useSetRecoilState } from 'recoil';
 
@@ -12,16 +11,11 @@ import { POSTReservationData } from "../../store/Atom";
 
 function ReservationChips({ themeId, date }) {
   const [selectTime, setSelectTime] = useState();
-  /**
-   * 레이아웃
-   */
-  const layout = useWindowDimensions();
-  const Width = layout.width;
 
   /**
    * API (예약 가능한 값)
    */
-  const { isLoading, data, status } = useQuery(
+  const { isLoading, data } = useQuery(
     ["ReservedTime", themeId, date],
     reservationApi.getReservationDate
   );
@@ -43,14 +37,14 @@ function ReservationChips({ themeId, date }) {
   const [timeTable, setTimeTable] = useState({});
   useEffect(() => {
     let tmp = {};
-    data?.map((themeTimeId) => {
-      tmp[themeTimeId] = false;
-    });
     ReservationData.map((item) => {
-      tmp[item.themeTimeId] = true;
+      tmp[item.themeTimeId] = false;
     });
-    setTimeTable(tmp);
+    data?.map((themeTimeId) => {
+      tmp[themeTimeId] = true;
+    });
 
+    setTimeTable(tmp);
     /**
      * POST용 리코일 데이터 셋팅
      */

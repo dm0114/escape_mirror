@@ -35,14 +35,12 @@ const requestToken = async (code, navigation) => {
     const body = {
       accessToken: ACCESS_TOKEN,
     };
-    console.log(1);
     const response = await axios.post(APIURI, body);
-    console.log(2);
-    console.log(response)
     const value = response.data;
     await SecureStore.setItemAsync('accessToken', `Bearer ${value.accessToken}`);
     await SecureStore.getItemAsync('accessToken')
     
+    console.log(2);
     navigation.navigate('Loading');
     
 
@@ -91,7 +89,7 @@ export default function LoginScreen() {
   useEffect(() => {    
     getToken()
     if (token) {
-      navigation.navigate('TabViewExample')
+      navigation.navigate('MainTabView')
     }
   }, [])
 

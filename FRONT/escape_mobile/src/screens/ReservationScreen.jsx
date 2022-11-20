@@ -10,7 +10,9 @@ import LoadingScreen from "./LoadingScreen";
 import BookComponent from "../components/BookComponent";
 import ReservationComponent from "../components/Reservation/ReservationComponent";
 
+
 export default function ReservationScreen() {
+
   const { isLoading, data } = useQuery(
     ["searchCafeAndTheme"], //토큰 추가
     reservationApi.getMypageActs
@@ -27,7 +29,11 @@ export default function ReservationScreen() {
             data={data.reservations}
             ListHeaderComponent={<MainText>받으신 초대장 목록이에요.</MainText>}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingTop: 30 }}
+            style={{ 
+              paddingLeft: 10,
+              paddingRight: 10,
+              marginBottom: 20
+              }}
             renderItem={({ item }) => (
               <ReservationComponent
                 reservationId={item.reservationId}
@@ -35,6 +41,7 @@ export default function ReservationScreen() {
                 storeName={item.storeName}
                 date={item.date}
                 reserveTime={item.reservatedTime}
+                transferStatus={item.status}
               />
             )}
           />

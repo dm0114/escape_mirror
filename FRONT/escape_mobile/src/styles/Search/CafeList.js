@@ -33,7 +33,8 @@ export const IconContainer = styled.View`
 `;
 export const RepThemeContainer = styled.View`
   flex: 1.5;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: flex-end;
   /* position: absolute;
   top: 10px;
   right: -20px; */
@@ -56,6 +57,7 @@ export const MainTitle = styled.Text`
   font-size: ${({ theme }) => theme.fontSizes.title2};
   line-height: ${({ theme }) => theme.fontHeight.title2};
   letter-spacing: -0.5px;
+  overflow: hidden;
 `;
 export const MainSubTitle = styled.Text`
   font-family: "SUIT-Medium";
@@ -82,13 +84,15 @@ export const SubTitle = styled.Text`
 export const styles = StyleSheet.create({
   img: {
     position: 'relative',
-    right: 8,
-    height: 100,
+    right: 0,
+    width: 75,
+    height: 120,
     resizeMode: "contain",
     elevation: 5,
   },
   storeImg: {
     position: "absolute",
+    width: '100%',
     height: 60,
     resizeMode: "cover",
   },

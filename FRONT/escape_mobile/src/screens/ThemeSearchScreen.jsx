@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import theme from "../../theme"
 import { useWindowDimensions, Text, ImageBackground, View } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import Carousel from "react-native-reanimated-carousel";
 import Toggle from "react-native-toggle-element";
 
@@ -11,11 +10,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-
-const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
-import SearchCafeList from "../components/SearchCafeList";
-import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
 import ThemeComponent from "../components/ThemeComponent";
 
@@ -38,7 +32,7 @@ export default function ThemeSearchScreen({ route }) {
   useEffect(()=> {
     setQuery(queryParam)
   }, [])
-  const { isLoading, isFetching, data, refetch, status } = useQuery(
+  const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
     searchApi.getSearch,
   );

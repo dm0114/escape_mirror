@@ -161,7 +161,6 @@ export default function Mypage() {
 
 const Container = styled.View `
   flex: 1;
-  /* background-color: tomato; */
   /* width:SCREEN_WIDTH, */
 `
 
@@ -281,8 +280,7 @@ const CatText = styled.Text`
 const CatTxtView = styled.View`
   /* justify-content: center;
   align-items: center; */
-  padding: 100px 50px;
-  /* background-color: blueviolet; */
+  padding: 120px 30px 120px 0px;
 `
 const SignOutView = styled.View`
   background-color: white;

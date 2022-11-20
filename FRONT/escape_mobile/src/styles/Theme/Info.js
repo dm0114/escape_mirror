@@ -10,7 +10,6 @@ export const RowContainer = styled.View`
 export const IconContainer = styled.View`
   flex-direction: row;
   justify-content: flex-end;
-  margin-bottom: 20px;
 `
 
 export const MainContainer = styled.ScrollView`
@@ -56,7 +55,7 @@ export const CafeImage = styled.View`
 export const RankingWrapper = styled.View`
   background-color: #fff;
   margin-top: 4px;
-  margin-bottom: 4px;
+  margin-bottom: 90px;
   border-radius: 8px;
   padding-top: 20px;
   margin-left: 20px;
@@ -216,19 +215,20 @@ export const Body = styled.Text`
 `;
 export const RankingBody = styled.Text`
   font-family: "SUIT-SemiBold";
-  font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
+  font-size: ${({ theme }) => theme.fontSizes.caption2};
   letter-spacing: 0.5px;
-  color: #fff;
   text-align: center;
+  color: #ccc;
+
 `;
 export const RankingName = styled.Text`
-  font-family: "SUIT-SemiBold";
+  font-family: "SUIT-Bold";
   font-size: ${({ theme }) => theme.fontSizes.caption1};
-  line-height: ${({ theme }) => theme.fontHeight.caption1};
+  margin-top: 6px;
+  margin-bottom: 3px;
   letter-spacing: 0.5px;
   text-align: center;
-  color: #000;
+  color: #fff;
 `;
 export const RatingText = styled.Text`
   font-family: "SUIT-ExtraBold";

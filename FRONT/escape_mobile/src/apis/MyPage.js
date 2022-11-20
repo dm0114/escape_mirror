@@ -25,12 +25,14 @@ export const putNickName = async (nickname) => {
 
 //짬한 테마
 export const getLikeTheme = async ({ queryKey }) => { 
+  console.log('getLikeTheme');
   const response = await (await fetch(`${BASE_URL}/mypage/likes?page=0`, {
     headers: {
       Authorization : await SecureState.getData('accessToken')
       // Authorization : Token
     }
   })).json()
+  console.log(response);
   return response
 }
 
@@ -128,6 +130,23 @@ export const delReview = async ({ queryKey }) => {
   });
   return res;
 }
+
+export const delReview = async ({ queryKey }) => {
+  console.log('delReview')
+  let [_, reviewId] = queryKey;
+
+  const res = await axios({
+    url: `${BASE_URL}/review/${reviewId}`,
+    method: "delete",
+    headers: {
+      Authorization: await SecureState.getData("accessToken"),
+      "Content-Type": "application/json",
+    },
+  });
+  console.log(res);
+  return res;
+}
+
 
 //회원탈퇴
 export const postSignOut = async({ queryKey }) => {

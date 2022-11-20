@@ -2,49 +2,48 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components/native";
 import theme from "../../theme"
-import { useWindowDimensions, Text, ImageBackground } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import Carousel from "react-native-reanimated-carousel";
-import Toggle from "react-native-toggle-element";
 
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { searchApi } from "../apis/api";
 
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Carousel from "react-native-reanimated-carousel";
 
-const testUri = 'https://3blood-img-upload.s3.ap-northeast-1.amazonaws.com/main_search.gif'
+
 import SearchCafeList from "../components/SearchCafeList";
-import SearchThemeList from "../components/SearchThemeList";
 import LoadingScreen from "./LoadingScreen";
-import ThemeComponent from "../components/ThemeComponent";
 import { View } from "native-base";
+import { FocusedButtonLeft, FocusedButtonRight, ToggleButtonLeft, ToggleButtonRight, ToggleContainer } from "./SearchScreen";
+import ThemeComponent from "../components/ThemeComponent";
+import { LayoutData } from "../store/Atom";
+import { useRecoilValue } from "recoil";
 
 
 
 export default function CafeSearchScreen({ route }) {
   /**
-   * 레이아웃
+   * 토글
    */
-  const layout = useWindowDimensions();
-  const Width = layout.width;
-  const Height = layout.height;
-
+  console.log(route.params);
+  const [toggleValue, setToggleValue] = useState(route.params.toggleState);
+  
+  /**
+  * 레이아웃
+  */
+  const layoutDatas = useRecoilValue(LayoutData)
+  const {Width, Height} = layoutDatas
+     
   /**
    * API
    */
-  const navigation = useNavigation();
-  const { queryParam } = route.params;
-  const [query, setQuery] = useState("");
-  useEffect(()=> {
-    setQuery(queryParam)
-  }, [])
-  
+  const [query, setQuery] = useState(route.params.queryParam);
+  console.log(query);
   const { isLoading, isFetching, data, refetch } = useQuery(
     ["searchCafeAndTheme", query], //토큰 추가
-    searchApi.getSearch,
+    searchApi.getSearch, {
+      enabled: false
+    }
   );
-
 
   /**
    * 검색
@@ -57,22 +56,27 @@ export default function CafeSearchScreen({ route }) {
     refetch();
   };
 
+  useEffect(() => {refetch()}, [])
+  useEffect(() => {}, [data])
+  useEffect(() => {}, [toggleValue])
+
 
   /**
    * 검색 결과
    */
   const SearchResult = () => {
-    if (!isLoading && !isFetching) {
-      if ( data.error || !data || (!data.storeList?.length && !data.themeList?.length) ) {
-        return ( <ErrorText>검색된 정보가 없어요 😥</ErrorText>)
-      }
+    try {
+      console.log(data);
+      if (toggleValue) {
         return (
           <CafeListScroll
             data={data.storeList}
             contentContainerStyle={{
+              flexGrow: 1,
               paddingTop: 40,
               marginLeft: 20,
               marginRight: 20,
+              paddingBottom: 480
             }}
             renderItem={({ item }) => (
               <SearchCafeList
@@ -80,44 +84,78 @@ export default function CafeSearchScreen({ route }) {
                 storeName={item.storeName}
                 storeImg={item.storeImg}
                 storeAddress={item.storeAddress}
+                storeTel={item.tel}
+                storeHompage={item.homepage}
                 likeCount={item.likeCount}
                 mostReviewedTheme={item.mostReviewedTheme}
               />
             )}
           />
         )
-    } else if (isLoading && isFetching) return <LoadingScreen />;
+      }
+      else {
+        console.log(data);
+         return (
+         <Carousel
+          loop={false}
+          width={Width}
+          height={Height}
+          autoPlay={false}
+          data={data.themelist}
+          mode={'parallax'}
+          modeConfig={
+            {
+              parallaxScrollingOffset: 140,
+              parallaxScrollingScale: 1,
+              parallaxAdjacentItemScale: 0.9,
+            }
+          }
+          vertical={false}
+          scrollAnimationDuration={1000}
+          renderItem={({item}) => (
+            <ThemeComponent
+              themeId={item.themeId}
+              themeName={item.themeName}
+              storeName={item.storeName}
+              themeImg={item.themeImg}
+              genre={item.genre}
+              likeCount={item.likeCount}
+              star={item.star}
+            />
+        )}
+      />)
+      }
+    }
+
+    catch {
+      return <LoadingScreen />;
+    }
   };
 
   return (
     <View style={{backgroundColor: '#212121'}}>
       <TextContainer>
-        <RowContainer>
-          <MainText>
-            초대 받지 않은 곳을 {"\n"}
-            가는 것도 큰 재미이죠.{"\n"}
-            새로운 곳에 가보시겠어요?
-          </MainText>
-          <Toggle
-            trackBarStyle={{
-              backgroundColor: theme.colors.point,              
-            }}
-            thumbButton={{
-              activeBackgroundColor: '#fff',
-              inActiveBackgroundColor: '#fff',
-              width: 30,
-              height: 30,
-            }}
-            trackBar={{
-              width: 60,
-              height: 20,
-              borderActiveColor: theme.colors.point,
-              borderInActiveColor: theme.colors.point,
-            }}         
-            onPress={()=>{navigation.navigate("ThemeSearchScreen", { queryParam: query });}}
-          />
-        </RowContainer>
+        <ToggleContainer>
+          {toggleValue 
+          ? <ToggleButtonLeft onPress={() => {setToggleValue(false)}}>
+              <ToggleSubText>테마 검색</ToggleSubText>
+            </ToggleButtonLeft>
+          : <FocusedButtonLeft>
+              <ToggleSubText>테마 검색</ToggleSubText>
+            </FocusedButtonLeft>
+           }
+            
+            {toggleValue 
+            ? <FocusedButtonRight>
+                <ToggleSubText>카페 검색</ToggleSubText>
+              </FocusedButtonRight>
+            : <ToggleButtonRight onPress={() => {setToggleValue(true)}}>
+                <ToggleSubText>카페 검색</ToggleSubText>
+              </ToggleButtonRight>
+            }
+        </ToggleContainer>
       </TextContainer>
+      
       <SearchTextInput
         placeholder={"카페를 입력하세요."}
         onChangeText={onChangeText}
@@ -165,7 +203,6 @@ const SerachResultView = styled.View`
   /* background-color: #212121; */
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  height: 100%;
 `
 
 
@@ -175,7 +212,7 @@ const SerachResultView = styled.View`
 const SearchTextInput = styled.TextInput`
   background-color: #fff;
   padding: 8px 16px;
-  margin: 0px 20px 20px 20px;
+  margin: 0px 20px 30px 20px;
   border-color: #fff;
   border-radius: 20px;
 
@@ -200,7 +237,12 @@ const SubText = styled.Text`
   color: #fff;
 `;
 
-
+const ToggleSubText = styled.Text`
+  font-family: "SUIT-SemiBold";
+  font-size: ${({ theme }) => theme.fontSizes.body2};
+  /* color: #ff5f3f; */
+  color: #fff;
+`;
 
 const ErrorText = styled.Text`
   font-family: "SUIT-Bold";
