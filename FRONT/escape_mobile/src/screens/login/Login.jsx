@@ -10,7 +10,7 @@ import { LayoutData } from '../../store/Atom';
 
 
 const REST_API_KEY = '6cb2dd1e35672b64fb0dac71ee59315f'
-const REDIRECT_URI = 'http://localhost:8082'
+const REDIRECT_URI = 'https://k7c104.p.ssafy.io/api/user/kakao'
 const APIURI = 'http://k7c104.p.ssafy.io:8080/api/user/kakao'
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 const qs = require('qs');
