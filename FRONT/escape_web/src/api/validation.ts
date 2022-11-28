@@ -1,6 +1,5 @@
 import { QueryFunctionContext } from '@tanstack/react-query';
 const BASE_URL = "https://k7c104.p.ssafy.io/api/admin";
-const Token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sInVzZXJJZCI6MywiaXNzIjoiZXNjYXBlZGljdGlvbmFyeS5jb20iLCJpYXQiOjE2Njg5MjE4MjgsImV4cCI6MTY2OTAwODIyOH0.k71V0Vcg794MdAlNdXP6W4tG9c5qaha__Ym7W9NlL9s';
 
 
 interface IReqBody {
@@ -31,7 +30,7 @@ export const postValidation = async ({ queryKey }: QueryFunctionContext<[string,
     await fetch(`${BASE_URL}/validation`, {
       method: 'post',
       headers: {
-        Authorization: Token,
+        Authorization: `${localStorage.getItem('accessToken')}`,
         'Content-Type': 'application/json' 
       },
       body: data
